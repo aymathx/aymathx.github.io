@@ -5,20 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>區間計算器</title>
 <style>
-    /* 全域顏色與深色主題設定 (高對比版) */
+    /* 全域顏色與深色主題設定 */
     :root {
-        --bg-color: #040508;    /* 更深邃的背景黑，突顯上方卡片 */
-        --card-bg: #131722;     /* 卡片底色，帶一點極暗的藍灰 */
-        --text-main: #ffffff;   /* 主文字純白 */
-        --text-muted: #a4b1c6;  /* 次要文字提亮，增加可讀性 */
+        --bg-color: #040508;    
+        --card-bg: #131722;     
+        --text-main: #ffffff;   
+        --text-muted: #a4b1c6;  
         
-        /* 狀態顏色改用高飽和度的螢光色系 */
-        --red: #ff3b5c;         /* 鮮豔明亮的紅 */
-        --green: #00e676;       /* 螢光綠 */
-        --blue: #339af0;        /* 亮眼的天藍色 (文字用) */
+        --red: #ff3b5c;         
+        --green: #00e676;       
+        --blue: #339af0;        
         
-        --btn-blue: #1c68f3;    /* 按鈕專用的飽和藍色 */
-        --border: #2c354a;      /* 邊框線條提亮，讓表格分界更清晰 */
+        --btn-blue: #1c68f3;    
+        --border: #2c354a;      
     }
     
     body {
@@ -29,7 +28,6 @@
         padding: 8px; 
         box-sizing: border-box;
         
-        /* 鎖定全螢幕高度，不允許滑動 */
         height: 100vh; 
         height: 100dvh; 
         overflow: hidden; 
@@ -48,7 +46,7 @@
     /* 輸入區塊樣式 */
     .input-group {
         background-color: var(--card-bg);
-        border: 1px solid var(--border); /* 新增邊框增強對比 */
+        border: 1px solid var(--border); 
         border-radius: 12px;
         padding: 12px;
         margin-bottom: 8px; 
@@ -57,7 +55,7 @@
         gap: 15px;
         box-sizing: border-box;
         align-items: flex-end;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* 新增微陰影讓卡片浮現 */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
     }
     .input-field {
         flex: 1;
@@ -73,7 +71,7 @@
         letter-spacing: 0.5px;
     }
     .input-field input {
-        background-color: #07090e; /* 輸入框內使用更深的黑色形成凹陷感 */
+        background-color: #07090e; 
         border: 1px solid var(--border);
         color: white;
         padding: 8px;
@@ -107,7 +105,7 @@
         background-color: #0b57e6;
     }
 
-    /* 輸出圖表樣式 (左三右一排版) */
+    /* 輸出圖表樣式 */
     #output {
         flex: 1 1 auto; 
         min-height: 0; 
@@ -127,11 +125,11 @@
         height: 100%;
     }
     
-    /* 卡片與內容彈性填滿樣式 */
+    /* 基本卡片與各表格專屬背景色 */
     .card {
         background-color: var(--card-bg);
-        border: 1px solid var(--border); /* 新增外框線 */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* 新增陰影 */
+        border: 1px solid var(--border); 
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
         border-radius: 10px;
         padding: 6px 0; 
         box-sizing: border-box;
@@ -140,6 +138,21 @@
         flex: 1; 
         min-height: 0;
     }
+    
+    /* ★ 新增：各卡片專屬色調 (融入深色模式的微透明感) */
+    .card-ubridge {
+        background-color: rgba(41, 121, 255, 0.08) !important; /* 淡藍色底 */
+        border-color: rgba(41, 121, 255, 0.25);
+    }
+    .card-dbridge {
+        background-color: rgba(170, 0, 255, 0.08) !important; /* 淡紫色底 */
+        border-color: rgba(170, 0, 255, 0.25);
+    }
+    .card-fib {
+        background-color: rgba(255, 255, 255, 0.04) !important; /* 淡灰色底 */
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+
     .card-title {
         color: var(--text-muted);
         font-size: 14px;
@@ -169,6 +182,16 @@
         border-bottom: none;
     }
     
+    /* ★ 新增：分界/中線的專屬淡黃色高亮背景 */
+    .row-mid-bg {
+        background-color: rgba(255, 215, 0, 0.15); /* 合適的淡黃色 */
+        border-radius: 6px;
+        padding: 0 10px; /* 增加一點左右內距讓色塊包覆文字 */
+        width: 88%; /* 稍微加寬，讓色塊突出 */
+        border-bottom: 1px solid transparent; /* 隱藏底線避免視覺雜亂 */
+        box-sizing: border-box;
+    }
+
     .row-centered {
         justify-content: center;
     }
@@ -197,7 +220,7 @@
     .text-green { color: var(--green); text-shadow: 0 0 8px rgba(0, 230, 118, 0.3); }
     .text-blue { color: var(--blue); text-shadow: 0 0 8px rgba(51, 154, 240, 0.3); }
 
-    /* --- 手機版最佳化 (滿版螢幕配置) --- */
+    /* --- 手機版最佳化 --- */
     @media (max-width: 768px) {
         .input-group {
             display: grid;
@@ -232,7 +255,6 @@
         .input-field input { font-size: 15px; padding: 6px; }
     }
 
-    /* 針對非常小的舊款手機微調 */
     @media (max-width: 400px) {
         .input-group { gap: 8px; padding: 10px; }
         #output { gap: 6px; }
@@ -248,7 +270,6 @@
 <body>
 
 <div class="container">
-    <!-- 頂部輸入區 -->
     <div class="input-group">
         <div class="input-field">
             <label>Max</label>
@@ -261,12 +282,12 @@
         <button onclick="calculate()">計算</button>
     </div>
 
-    <!-- 結果渲染區 -->
     <div id="output"></div>
 </div>
 
 <script>
-    function createRow(label, val, type) {
+    // ★ 更新：加入 isMid 參數來判斷是否為中線/分界
+    function createRow(label, val, type, isMid = false) {
         if (!label) {
             return `
             <div class="row row-centered">
@@ -279,16 +300,20 @@
         if (type === 'down') colorClass = 'text-green';
         if (type === 'mid') colorClass = 'text-blue';
 
+        // 判斷是否為中線/分界，加上高亮的淡黃色背景 Class
+        let rowClass = isMid ? "row row-mid-bg" : "row";
+
         return `
-        <div class="row">
+        <div class="${rowClass}">
             <div class="col-label ${colorClass}">${label}</div>
             <div class="col-val">${val}</div>
         </div>`;
     }
 
-    function createCard(title, rowsHTML) {
+    // ★ 更新：加入 cardClass 參數來改變整張卡片的背景
+    function createCard(title, rowsHTML, cardClass = "") {
         return `
-        <div class="card">
+        <div class="card ${cardClass}">
             <div class="card-title">${title}</div>
             ${rowsHTML}
         </div>`;
@@ -313,7 +338,7 @@
         let t1_rows = "";
         t1_rows += createRow("", max, ""); 
         t1_rows += createRow("壓力", q3_val, "up");
-        t1_rows += createRow("分界", q2_val, "mid");
+        t1_rows += createRow("分界", q2_val, "mid", true); // ★ 標記為 true
         t1_rows += createRow("支撐", q1_val, "down");
         t1_rows += createRow("", min, ""); 
 
@@ -324,7 +349,7 @@
         let t2_rows = "";
         t2_rows += createRow("", q3_val, "");
         t2_rows += createRow("壓力", Math.round(q2_val + upper_step * 3), "up");
-        t2_rows += createRow("分界", Math.round(q2_val + upper_step * 2), "up");
+        t2_rows += createRow("分界", Math.round(q2_val + upper_step * 2), "up", true); // ★ 標記為 true
         t2_rows += createRow("支撐", Math.round(q2_val + upper_step * 1), "up");
         t2_rows += createRow("", q2_val, "");
 
@@ -332,15 +357,15 @@
         let t3_rows = "";
         t3_rows += createRow("", q2_val, "");
         t3_rows += createRow("壓力", Math.round(q1_val + lower_step * 3), "down");
-        t3_rows += createRow("分界", Math.round(q1_val + lower_step * 2), "down");
+        t3_rows += createRow("分界", Math.round(q1_val + lower_step * 2), "down", true); // ★ 標記為 true
         t3_rows += createRow("支撐", Math.round(q1_val + lower_step * 1), "down");
         t3_rows += createRow("", q1_val, "");
 
-        // --- 建立左側群組 (包含上面三個) ---
+        // --- 建立左側群組 ---
         let leftHtml = `<div class="left-group">`;
-        leftHtml += createCard("Big Bridge", t1_rows);
-        leftHtml += createCard("U - Bridge", t2_rows);
-        leftHtml += createCard("D - Bridge", t3_rows);
+        leftHtml += createCard("Big Bridge", t1_rows, ""); // 預設背景
+        leftHtml += createCard("U - Bridge", t2_rows, "card-ubridge"); // ★ 淡藍色背景
+        leftHtml += createCard("D - Bridge", t3_rows, "card-dbridge"); // ★ 淡紫色背景
         leftHtml += `</div>`;
 
         // --- Fibonacci Retracement ---
@@ -360,17 +385,18 @@
         fib_data.forEach(item => {
             const val = Math.round(min + range * item.ratio);
             let type = item.ratio > 0.5 ? "up" : (item.ratio < 0.5 ? "down" : "mid");
-            t4_rows += createRow(item.label, val, type);
+            let isMid = (item.ratio === 0.5); // ★ 判斷是否為中線 (0.5)
+            
+            t4_rows += createRow(item.label, val, type, isMid);
         });
         
         t4_rows += createRow("", min, ""); 
 
-        // --- 建立右側群組 (包含 Fib) ---
+        // --- 建立右側群組 ---
         let rightHtml = `<div class="right-group">`;
-        rightHtml += createCard("Fibonacci Retracement", t4_rows);
+        rightHtml += createCard("Fibonacci Retracement", t4_rows, "card-fib"); // ★ 淡灰色背景
         rightHtml += `</div>`;
 
-        // 渲染到網頁
         document.getElementById('output').innerHTML = leftHtml + rightHtml;
     }
 
