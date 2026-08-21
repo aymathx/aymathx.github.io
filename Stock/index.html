@@ -5,16 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>區間計算器</title>
 <style>
-    /* 全域顏色與深色主題設定 */
+    /* 全域顏色與深色主題設定 (高對比版) */
     :root {
-        --bg-color: #0b0e14;
-        --card-bg: #151822;
-        --text-main: #ffffff;
-        --text-muted: #8b94a5;
-        --red: #ff4d6d;
-        --green: #00d28f;
-        --blue: #2979ff;
-        --border: #232838;
+        --bg-color: #040508;    /* 更深邃的背景黑，突顯上方卡片 */
+        --card-bg: #131722;     /* 卡片底色，帶一點極暗的藍灰 */
+        --text-main: #ffffff;   /* 主文字純白 */
+        --text-muted: #a4b1c6;  /* 次要文字提亮，增加可讀性 */
+        
+        /* 狀態顏色改用高飽和度的螢光色系 */
+        --red: #ff3b5c;         /* 鮮豔明亮的紅 */
+        --green: #00e676;       /* 螢光綠 */
+        --blue: #339af0;        /* 亮眼的天藍色 (文字用) */
+        
+        --btn-blue: #1c68f3;    /* 按鈕專用的飽和藍色 */
+        --border: #2c354a;      /* 邊框線條提亮，讓表格分界更清晰 */
     }
     
     body {
@@ -22,12 +26,12 @@
         background-color: var(--bg-color);
         color: var(--text-main);
         margin: 0;
-        padding: 8px; /* 極小化外部留白 */
+        padding: 8px; 
         box-sizing: border-box;
         
         /* 鎖定全螢幕高度，不允許滑動 */
-        height: 100vh; /* 備用 */
-        height: 100dvh; /* 動態視窗高度 (解決手機瀏覽器網址列問題) */
+        height: 100vh; 
+        height: 100dvh; 
         overflow: hidden; 
         
         display: flex;
@@ -36,7 +40,7 @@
     .container {
         max-width: 1200px;
         width: 100%;
-        height: 100%; /* 填滿 body */
+        height: 100%; 
         display: flex;
         flex-direction: column;
     }
@@ -44,29 +48,32 @@
     /* 輸入區塊樣式 */
     .input-group {
         background-color: var(--card-bg);
+        border: 1px solid var(--border); /* 新增邊框增強對比 */
         border-radius: 12px;
         padding: 12px;
-        margin-bottom: 8px; /* 縮小與下方圖表的間距 */
-        flex: 0 0 auto; /* 保持自身高度，不被壓縮 */
+        margin-bottom: 8px; 
+        flex: 0 0 auto; 
         display: flex;
         gap: 15px;
         box-sizing: border-box;
         align-items: flex-end;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* 新增微陰影讓卡片浮現 */
     }
     .input-field {
         flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
     }
     .input-field label {
         color: var(--text-muted);
         font-size: 13px;
         font-weight: bold;
         text-align: center;
+        letter-spacing: 0.5px;
     }
     .input-field input {
-        background-color: var(--bg-color);
+        background-color: #07090e; /* 輸入框內使用更深的黑色形成凹陷感 */
         border: 1px solid var(--border);
         color: white;
         padding: 8px;
@@ -76,12 +83,15 @@
         width: 100%;
         box-sizing: border-box;
         text-align: center;
+        font-weight: bold;
+        transition: 0.2s;
     }
     .input-field input:focus {
         border-color: var(--blue);
+        box-shadow: 0 0 5px rgba(51, 154, 240, 0.3);
     }
     button {
-        background-color: var(--blue);
+        background-color: var(--btn-blue);
         color: white;
         border: none;
         border-radius: 6px;
@@ -91,17 +101,18 @@
         padding: 0 25px;
         transition: 0.2s;
         font-weight: bold;
+        letter-spacing: 1px;
     }
     button:hover {
-        opacity: 0.9;
+        background-color: #0b57e6;
     }
 
     /* 輸出圖表樣式 (左三右一排版) */
     #output {
-        flex: 1 1 auto; /* 佔滿剩餘的所有高度 */
-        min-height: 0; /* 關鍵：允許 Flex 子元素內部壓縮 */
+        flex: 1 1 auto; 
+        min-height: 0; 
         display: grid;
-        grid-template-columns: 3fr 1fr; /* 桌機：左區佔3、右區佔1 */
+        grid-template-columns: 3fr 1fr; 
         gap: 10px;
     }
     .left-group {
@@ -119,19 +130,21 @@
     /* 卡片與內容彈性填滿樣式 */
     .card {
         background-color: var(--card-bg);
+        border: 1px solid var(--border); /* 新增外框線 */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* 新增陰影 */
         border-radius: 10px;
         padding: 6px 0; 
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        flex: 1; /* 讓卡片在群組中垂直均分剩餘高度 */
+        flex: 1; 
         min-height: 0;
     }
     .card-title {
         color: var(--text-muted);
         font-size: 14px;
         margin-bottom: 4px;
-        padding-bottom: 4px;
+        padding-bottom: 6px;
         border-bottom: 1px solid var(--border);
         text-align: center;
         font-weight: bold;
@@ -139,6 +152,7 @@
         margin-left: auto;
         margin-right: auto;
         flex: 0 0 auto;
+        letter-spacing: 0.5px;
     }
     
     .row {
@@ -148,7 +162,7 @@
         width: 85%; 
         margin: 0 auto;
         border-bottom: 1px solid var(--border);
-        flex: 1; /* 關鍵：讓每一行「自動平分」卡片內剩下的高度 */
+        flex: 1; 
         min-height: 0;
     }
     .row:last-child {
@@ -168,6 +182,7 @@
     .col-label {
         font-weight: bold;
         font-size: 13px;
+        letter-spacing: 0.5px;
     }
     .col-val {
         text-align: right;
@@ -177,19 +192,18 @@
         color: var(--text-main);
     }
 
-    /* 狀態顏色 */
-    .text-red { color: var(--red); }
-    .text-green { color: var(--green); }
-    .text-blue { color: var(--blue); }
+    /* 狀態高亮顏色 (螢光感) */
+    .text-red { color: var(--red); text-shadow: 0 0 8px rgba(255, 59, 92, 0.3); }
+    .text-green { color: var(--green); text-shadow: 0 0 8px rgba(0, 230, 118, 0.3); }
+    .text-blue { color: var(--blue); text-shadow: 0 0 8px rgba(51, 154, 240, 0.3); }
 
     /* --- 手機版最佳化 (滿版螢幕配置) --- */
     @media (max-width: 768px) {
-        /* 上方 Grid 排版 */
         .input-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            padding: 10px;
+            gap: 10px;
+            padding: 12px;
         }
         .input-group .input-field:nth-child(1) { grid-column: 1 / 2; grid-row: 1 / 2; }
         .input-group .input-field:nth-child(2) { grid-column: 1 / 2; grid-row: 2 / 3; }
@@ -198,37 +212,35 @@
             grid-row: 1 / 3;
             width: 100%;
             height: 100%;
-            font-size: 18px;
+            font-size: 19px;
         }
         
-        /* 下方排版 */
         #output {
             grid-template-columns: 1fr 1fr; 
-            gap: 6px; 
+            gap: 8px; 
         }
         .left-group {
             display: flex;
             flex-direction: column;
-            gap: 6px; 
+            gap: 8px; 
         }
         
-        /* 字體微縮，確保在超小螢幕也不會被切斷 */
         .card-title { font-size: 12px; }
         .col-label { font-size: 12px; }
-        .col-val { font-size: 13px; }
-        .col-val-center { font-size: 14px; }
-        .input-field input { font-size: 14px; padding: 6px; }
+        .col-val { font-size: 14px; }
+        .col-val-center { font-size: 15px; }
+        .input-field input { font-size: 15px; padding: 6px; }
     }
 
     /* 針對非常小的舊款手機微調 */
     @media (max-width: 400px) {
-        .input-group { gap: 6px; padding: 8px; }
-        #output { gap: 4px; }
-        .left-group { gap: 4px; }
+        .input-group { gap: 8px; padding: 10px; }
+        #output { gap: 6px; }
+        .left-group { gap: 6px; }
         .card { padding: 4px 0; border-radius: 8px; }
         .col-label { font-size: 11px; }
-        .col-val { font-size: 12px; }
-        .col-val-center { font-size: 13px; }
+        .col-val { font-size: 13px; }
+        .col-val-center { font-size: 14px; }
         .input-field label { font-size: 12px; }
     }
 </style>
