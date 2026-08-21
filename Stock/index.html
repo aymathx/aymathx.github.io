@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>區間計算器</title>
+<title>Interval Box Plot</title>
 <style>
     /* 全域顏色與深色主題設定 */
     :root {
@@ -88,6 +88,13 @@
         border-color: var(--blue);
         box-shadow: 0 0 5px rgba(51, 154, 240, 0.3);
     }
+    
+    /* 按鈕群組 (清空 與 計算) */
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        flex-direction: row; /* 桌機版並排 */
+    }
     button {
         background-color: var(--btn-blue);
         color: white;
@@ -104,15 +111,28 @@
     button:hover {
         background-color: #0b57e6;
     }
+    
+    /* 清空按鈕的專屬次要樣式 */
+    .btn-clear {
+        background-color: #1a202f;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+    }
+    .btn-clear:hover {
+        background-color: #242c3f;
+        color: var(--text-main);
+    }
 
     /* 輸出圖表樣式 */
     #output {
         flex: 1 1 auto; 
         min-height: 0; 
-        display: grid;
+        /* 預設為隱藏，計算後才會改為 grid */
+        display: none;
         grid-template-columns: 3fr 1fr; 
         gap: 10px;
     }
+    
     .left-group {
         display: grid;
         grid-template-columns: repeat(3, 1fr); 
@@ -213,7 +233,7 @@
         color: var(--text-main);
     }
 
-    /* 狀態高亮顏色 (螢光感) */
+    /* 狀態高亮顏色 */
     .text-red { color: var(--red); text-shadow: 0 0 8px rgba(255, 59, 92, 0.3); }
     .text-green { color: var(--green); text-shadow: 0 0 8px rgba(0, 230, 118, 0.3); }
     .text-blue { color: var(--blue); text-shadow: 0 0 8px rgba(51, 154, 240, 0.3); }
@@ -228,18 +248,29 @@
         }
         .input-group .input-field:nth-child(1) { grid-column: 1 / 2; grid-row: 1 / 2; }
         .input-group .input-field:nth-child(2) { grid-column: 1 / 2; grid-row: 2 / 3; }
-        .input-group button {
+        
+        /* 手機版將按鈕群組放到右側，並改為上下排列 */
+        .btn-group {
             grid-column: 2 / 3;
             grid-row: 1 / 3;
-            width: 100%;
+            flex-direction: column; /* 上下排列 */
+            gap: 8px;
             height: 100%;
-            font-size: 19px;
+        }
+        .btn-group button {
+            flex: 1; /* 按鈕各自佔據 50% 高度 */
+            width: 100%;
+            height: auto;
+            font-size: 16px;
         }
         
-        #output {
+        /* 隱藏狀態覆寫時仍需保持無效狀態，但顯示時改為 grid */
+        #output.show-grid {
+            display: grid !important;
             grid-template-columns: 1fr 1fr; 
             gap: 8px; 
         }
+        
         .left-group {
             display: flex;
             flex-direction: column;
@@ -255,7 +286,10 @@
 
     @media (max-width: 400px) {
         .input-group { gap: 8px; padding: 10px; }
-        #output { gap: 6px; }
+        .btn-group { gap: 6px; }
+        .btn-group button { font-size: 15px; padding: 0; }
+        
+        #output.show-grid { gap: 6px; }
         .left-group { gap: 6px; }
         .card { padding: 4px 0; border-radius: 8px; }
         .col-label { font-size: 11px; }
@@ -271,27 +305,39 @@
     <div class="input-group">
         <div class="input-field">
             <label>Max</label>
-            <input type="number" id="maxVal" value="49243">
+            <input type="number" id="maxVal">
         </div>
         <div class="input-field">
             <label>Min</label>
-            <input type="number" id="minVal" value="39438">
+            <input type="number" id="minVal">
         </div>
-        <button onclick="calculate()">計算</button>
+        <!-- ★ 新增按鈕群組 -->
+        <div class="btn-group">
+            <button class="btn-clear" onclick="clearAll()">清空</button>
+            <button onclick="calculate()">計算</button>
+        </div>
     </div>
 
     <div id="output"></div>
 </div>
 
 <script>
-    // ★ 更新：判斷如果沒有標籤 (label) 且有中線 (isMid)，也要讓它變成跨欄置中的黃色區塊
+    // ★ 清空畫面與數值的函式
+    function clearAll() {
+        document.getElementById('maxVal').value = '';
+        document.getElementById('minVal').value = '';
+        
+        const outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = '';
+        outputDiv.style.display = 'none'; // 隱藏表格區域
+        outputDiv.classList.remove('show-grid');
+    }
+
     function createRow(label, val, type, isMid = false) {
-        // 先決定基礎的 row class
         let rowClass = isMid ? "row row-mid-bg" : "row";
 
-        // 若沒有傳入 label，代表要將數字置中
         if (!label) {
-            rowClass += " row-centered"; // 加上置中對齊的屬性
+            rowClass += " row-centered"; 
             return `
             <div class="${rowClass}">
                 <div class="col-val-center">${val}</div>
@@ -333,41 +379,36 @@
         const q2_val = Math.round(min + range * 0.5);
         const q1_val = Math.round(min + range * 0.25);
 
-        // --- Big Bridge ---
         let t1_rows = "";
         t1_rows += createRow("", max, ""); 
         t1_rows += createRow("壓力", q3_val, "up");
-        t1_rows += createRow("", q2_val, "mid", true); // ★ 將文字 "分界" 改為空字串
+        t1_rows += createRow("", q2_val, "mid", true); 
         t1_rows += createRow("支撐", q1_val, "down");
         t1_rows += createRow("", min, ""); 
 
-        // --- U - Bridge ---
         const upper_step = (q3_val - q2_val) / 4;
         const lower_step = (q2_val - q1_val) / 4;
         
         let t2_rows = "";
         t2_rows += createRow("", q3_val, "");
         t2_rows += createRow("壓力", Math.round(q2_val + upper_step * 3), "up");
-        t2_rows += createRow("", Math.round(q2_val + upper_step * 2), "up", true); // ★ 將文字 "分界" 改為空字串
+        t2_rows += createRow("", Math.round(q2_val + upper_step * 2), "up", true); 
         t2_rows += createRow("支撐", Math.round(q2_val + upper_step * 1), "up");
         t2_rows += createRow("", q2_val, "");
 
-        // --- D - Bridge ---
         let t3_rows = "";
         t3_rows += createRow("", q2_val, "");
         t3_rows += createRow("壓力", Math.round(q1_val + lower_step * 3), "down");
-        t3_rows += createRow("", Math.round(q1_val + lower_step * 2), "down", true); // ★ 將文字 "分界" 改為空字串
+        t3_rows += createRow("", Math.round(q1_val + lower_step * 2), "down", true); 
         t3_rows += createRow("支撐", Math.round(q1_val + lower_step * 1), "down");
         t3_rows += createRow("", q1_val, "");
 
-        // --- 建立左側群組 ---
         let leftHtml = `<div class="left-group">`;
         leftHtml += createCard("Big Bridge", t1_rows, ""); 
         leftHtml += createCard("U - Bridge", t2_rows, "card-ubridge"); 
         leftHtml += createCard("D - Bridge", t3_rows, "card-dbridge"); 
         leftHtml += `</div>`;
 
-        // --- Fibonacci Retracement ---
         const fib_data = [
             { ratio: 0.809, label: "壓力三" },
             { ratio: 0.705, label: "壓力二" },
@@ -386,23 +427,29 @@
             let type = item.ratio > 0.5 ? "up" : (item.ratio < 0.5 ? "down" : "mid");
             let isMid = (item.ratio === 0.5); 
             
-            // ★ 若為中線 (0.5)，將傳入的 label 替換成空字串，以觸發跨欄置中
             let labelText = isMid ? "" : item.label;
-            
             t4_rows += createRow(labelText, val, type, isMid);
         });
         
         t4_rows += createRow("", min, ""); 
 
-        // --- 建立右側群組 ---
         let rightHtml = `<div class="right-group">`;
         rightHtml += createCard("Fibonacci Retracement", t4_rows, "card-fib"); 
         rightHtml += `</div>`;
 
-        document.getElementById('output').innerHTML = leftHtml + rightHtml;
+        const outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = leftHtml + rightHtml;
+        
+        // ★ 計算完畢後顯示表格
+        outputDiv.style.display = 'grid'; 
+        // 在手機版我們需要加上此 class 覆寫 RWD 的版型排列
+        if(window.innerWidth <= 768) {
+            outputDiv.classList.add('show-grid');
+        }
     }
 
-    window.onload = calculate;
+    // ★ 網頁載入完成時，預設執行一次清空(保持初始畫面乾淨)
+    window.onload = clearAll;
 </script>
 </body>
 </html>
