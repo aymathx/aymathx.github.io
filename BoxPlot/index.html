@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>區間計算器</title>
+<style>
+    /* 全域顏色與深色主題設定 */
+    :root {
+        --bg-color: #0b0e14;
+        --card-bg: #151822;
+        --text-main: #ffffff;
+        --text-muted: #8b94a5;
+        --red: #ff4d6d;
+        --green: #00d28f;
+        --blue: #2979ff;
+        --border: #232838;
+    }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+    .container {
+        max-width: 1200px;
+        width: 100%;
+    }
+    
+    /* 輸入區塊樣式 */
+    .input-group {
+        background-color: var(--card-bg);
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 15px;
+        box-sizing: border-box;
+        align-items: flex-end;
+    }
+    .input-field {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 100px;
+    }
+    .input-field label {
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+    .input-field input {
+        background-color: var(--bg-color);
+        border: 1px solid var(--border);
+        color: white;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 16px;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .input-field input:focus {
+        border-color: var(--blue);
+    }
+    button {
+        background-color: var(--blue);
+        color: white;
+        border: none;
+        padding: 0 25px;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        height: 42px;
+        transition: 0.2s;
+        font-weight: bold;
+    }
+    button:hover {
+        opacity: 0.9;
+    }
+
+    /* 輸出圖表樣式 (四欄並排) */
+    #output {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+    .card {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 15px 0; /* 上下留 padding，左右交給 row 處理 */
+        box-sizing: border-box;
+    }
+    .card-title {
+        color: var(--text-muted);
+        font-size: 15px;
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+        text-align: center;
+        font-weight: bold;
+        width: 75%; /* 標題底線也內縮，對齊內容 */
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* 核心排版：將寬度內縮，讓分隔線不碰邊緣，並使文字靠攏 */
+    .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border);
+        width: 70%; /* 控制內文寬度 */
+        margin: 0 auto;
+    }
+    .row:last-child {
+        border-bottom: none;
+    }
+    
+    /* 上下邊界的置中數值樣式 */
+    .row-centered {
+        justify-content: center;
+    }
+    .col-val-center {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--text-main);
+        letter-spacing: 0.5px;
+    }
+    
+    /* 左右欄位對齊與字體設定 */
+    .col-label {
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .col-val {
+        text-align: right;
+        font-size: 17px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        color: var(--text-main);
+    }
+
+    /* 狀態顏色 */
+    .text-red { color: var(--red); }
+    .text-green { color: var(--green); }
+    .text-blue { color: var(--blue); }
+
+    /* --- 手機版最佳化 --- */
+    @media (max-width: 768px) {
+        body { padding: 10px; }
+        .input-group {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 15px;
+            gap: 12px;
+        }
+        button { height: 45px; margin-top: 5px; }
+        
+        #output {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px; 
+        }
+        .card { padding: 12px 0; border-radius: 8px; }
+        .card-title {
+            font-size: 14px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            width: 85%; /* 手機螢幕較小，稍微放寬比例 */
+        }
+        .row {
+            padding: 10px 0;
+            width: 85%; /* 手機螢幕較小，稍微放寬比例 */
+        }
+        .col-label { font-size: 14px; }
+        .col-val { font-size: 15px; }
+        .col-val-center { font-size: 16px; }
+    }
+
+    @media (max-width: 400px) {
+        #output { gap: 6px; }
+        .card { padding: 10px 0; }
+        .row { width: 90%; padding: 8px 0; }
+        .card-title { font-size: 13px; width: 90%; }
+        .col-label { font-size: 13px; }
+        .col-val { font-size: 14px; }
+        .col-val-center { font-size: 15px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 頂部輸入區 -->
+    <div class="input-group">
+        <div class="input-field">
+            <label>最大值 (Max)</label>
+            <input type="number" id="maxVal" value="49243">
+        </div>
+        <div class="input-field">
+            <label>最小值 (Min)</label>
+            <input type="number" id="minVal" value="39438">
+        </div>
+        <button onclick="calculate()">計算</button>
+    </div>
+
+    <!-- 結果渲染區 -->
+    <div id="output"></div>
+</div>
+
+<script>
+    // 動態建立行資料，若 label 為空字串則自動採用「置中放大」樣式
+    function createRow(label, val, type) {
+        if (!label) {
+            return `
+            <div class="row row-centered">
+                <div class="col-val-center">${val}</div>
+            </div>`;
+        }
+
+        let colorClass = '';
+        if (type === 'up') colorClass = 'text-red';
+        if (type === 'down') colorClass = 'text-green';
+        if (type === 'mid') colorClass = 'text-blue';
+
+        return `
+        <div class="row">
+            <div class="col-label ${colorClass}">${label}</div>
+            <div class="col-val">${val}</div>
+        </div>`;
+    }
+
+    function createCard(title, rowsHTML) {
+        return `
+        <div class="card">
+            <div class="card-title">${title}</div>
+            ${rowsHTML}
+        </div>`;
+    }
+
+    function calculate() {
+        const max = parseFloat(document.getElementById('maxVal').value);
+        const min = parseFloat(document.getElementById('minVal').value);
+        
+        if (isNaN(max) || isNaN(min) || max <= min) {
+            alert("請輸入正確的數值 (最大值需大於最小值)");
+            return;
+        }
+
+        const range = max - min;
+        
+        // 四分位數
+        const q3_val = Math.round(min + range * 0.75);
+        const q2_val = Math.round(min + range * 0.5);
+        const q1_val = Math.round(min + range * 0.25);
+
+        let html = "";
+
+        // --- Big Bridge ---
+        let t1_rows = "";
+        t1_rows += createRow("", max, ""); // 上方置中
+        t1_rows += createRow("壓力", q3_val, "up");
+        t1_rows += createRow("分界", q2_val, "mid");
+        t1_rows += createRow("支撐", q1_val, "down");
+        t1_rows += createRow("", min, ""); // 下方置中
+        html += createCard("Big Bridge", t1_rows);
+
+        // --- U - Bridge ---
+        const upper_step = (q3_val - q2_val) / 4;
+        const lower_step = (q2_val - q1_val) / 4;
+        
+        let t2_rows = "";
+        t2_rows += createRow("", q3_val, "");
+        t2_rows += createRow("壓力", Math.round(q2_val + upper_step * 3), "up");
+        t2_rows += createRow("分界", Math.round(q2_val + upper_step * 2), "up");
+        t2_rows += createRow("支撐", Math.round(q2_val + upper_step * 1), "up");
+        t2_rows += createRow("", q2_val, "");
+        html += createCard("U - Bridge", t2_rows);
+
+        // --- D - Bridge ---
+        let t3_rows = "";
+        t3_rows += createRow("", q2_val, "");
+        t3_rows += createRow("壓力", Math.round(q1_val + lower_step * 3), "down");
+        t3_rows += createRow("分界", Math.round(q1_val + lower_step * 2), "down");
+        t3_rows += createRow("支撐", Math.round(q1_val + lower_step * 1), "down");
+        t3_rows += createRow("", q1_val, "");
+        html += createCard("D - Bridge", t3_rows);
+
+        // --- Fibonacci Retracement ---
+        // 這裡可以自訂左側的文字 (label) 與對應的計算比例 (ratio)
+        const fib_data = [
+            { ratio: 0.809, label: "壓力三" },
+            { ratio: 0.705, label: "壓力二" },
+            { ratio: 0.618, label: "壓力一" },
+            { ratio: 0.5,   label: "中線" },
+            { ratio: 0.382, label: "支撐一" },
+            { ratio: 0.295, label: "支撐二" },
+            { ratio: 0.191, label: "支撐三" }
+        ];
+        
+        let t4_rows = "";
+        t4_rows += createRow("", max, ""); // 上方置中
+        
+        fib_data.forEach(item => {
+            const val = Math.round(min + range * item.ratio);
+            let type = item.ratio > 0.5 ? "up" : (item.ratio < 0.5 ? "down" : "mid");
+            
+            // 使用 item.label 顯示你自訂的文字
+            t4_rows += createRow(item.label, val, type);
+        });
+        
+        t4_rows += createRow("", min, ""); // 下方置中
+        html += createCard("Fibonacci Retracement", t4_rows);
+
+        document.getElementById('output').innerHTML = html;
+    }
+
+    window.onload = calculate;
+</script>
+</body>
+</html>
