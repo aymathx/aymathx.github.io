@@ -83,16 +83,28 @@
         opacity: 0.9;
     }
 
-    /* 輸出圖表樣式 (四欄並排) */
+    /* 輸出圖表樣式 (左三右一排版) */
     #output {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 3fr 1fr; /* 桌機：左區佔3、右區佔1 */
         gap: 15px;
+        align-items: start; /* 讓內容靠上對齊，避免被異常拉伸 */
     }
+    .left-group {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 桌機：左側三個並排 */
+        gap: 15px;
+        align-items: start;
+    }
+    .right-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
     .card {
         background-color: var(--card-bg);
         border-radius: 12px;
-        padding: 15px 0; /* 上下留 padding，左右交給 row 處理 */
+        padding: 15px 0; 
         box-sizing: border-box;
     }
     .card-title {
@@ -103,26 +115,24 @@
         border-bottom: 1px solid var(--border);
         text-align: center;
         font-weight: bold;
-        width: 75%; /* 標題底線也內縮，對齊內容 */
+        width: 75%; 
         margin-left: auto;
         margin-right: auto;
     }
     
-    /* 核心排版：將寬度內縮，讓分隔線不碰邊緣，並使文字靠攏 */
     .row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 14px 0;
         border-bottom: 1px solid var(--border);
-        width: 70%; /* 控制內文寬度 */
+        width: 70%; 
         margin: 0 auto;
     }
     .row:last-child {
         border-bottom: none;
     }
     
-    /* 上下邊界的置中數值樣式 */
     .row-centered {
         justify-content: center;
     }
@@ -133,7 +143,6 @@
         letter-spacing: 0.5px;
     }
     
-    /* 左右欄位對齊與字體設定 */
     .col-label {
         font-weight: bold;
         font-size: 15px;
@@ -163,19 +172,24 @@
         button { height: 45px; margin-top: 5px; }
         
         #output {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr; /* 手機版：切成左右各半 */
             gap: 10px; 
         }
+        .left-group {
+            grid-template-columns: 1fr; /* 手機版：左邊的三個表格變為直向排列 */
+            gap: 10px;
+        }
+        
         .card { padding: 12px 0; border-radius: 8px; }
         .card-title {
             font-size: 14px;
             margin-bottom: 8px;
             padding-bottom: 8px;
-            width: 85%; /* 手機螢幕較小，稍微放寬比例 */
+            width: 85%; 
         }
         .row {
             padding: 10px 0;
-            width: 85%; /* 手機螢幕較小，稍微放寬比例 */
+            width: 85%; 
         }
         .col-label { font-size: 14px; }
         .col-val { font-size: 15px; }
@@ -184,6 +198,7 @@
 
     @media (max-width: 400px) {
         #output { gap: 6px; }
+        .left-group { gap: 6px; }
         .card { padding: 10px 0; }
         .row { width: 90%; padding: 8px 0; }
         .card-title { font-size: 13px; width: 90%; }
@@ -214,7 +229,6 @@
 </div>
 
 <script>
-    // 動態建立行資料，若 label 為空字串則自動採用「置中放大」樣式
     function createRow(label, val, type) {
         if (!label) {
             return `
@@ -254,21 +268,17 @@
 
         const range = max - min;
         
-        // 四分位數
         const q3_val = Math.round(min + range * 0.75);
         const q2_val = Math.round(min + range * 0.5);
         const q1_val = Math.round(min + range * 0.25);
 
-        let html = "";
-
         // --- Big Bridge ---
         let t1_rows = "";
-        t1_rows += createRow("", max, ""); // 上方置中
+        t1_rows += createRow("", max, ""); 
         t1_rows += createRow("壓力", q3_val, "up");
         t1_rows += createRow("分界", q2_val, "mid");
         t1_rows += createRow("支撐", q1_val, "down");
-        t1_rows += createRow("", min, ""); // 下方置中
-        html += createCard("Big Bridge", t1_rows);
+        t1_rows += createRow("", min, ""); 
 
         // --- U - Bridge ---
         const upper_step = (q3_val - q2_val) / 4;
@@ -280,7 +290,6 @@
         t2_rows += createRow("分界", Math.round(q2_val + upper_step * 2), "up");
         t2_rows += createRow("支撐", Math.round(q2_val + upper_step * 1), "up");
         t2_rows += createRow("", q2_val, "");
-        html += createCard("U - Bridge", t2_rows);
 
         // --- D - Bridge ---
         let t3_rows = "";
@@ -289,10 +298,15 @@
         t3_rows += createRow("分界", Math.round(q1_val + lower_step * 2), "down");
         t3_rows += createRow("支撐", Math.round(q1_val + lower_step * 1), "down");
         t3_rows += createRow("", q1_val, "");
-        html += createCard("D - Bridge", t3_rows);
+
+        // --- 建立左側群組 (包含上面三個) ---
+        let leftHtml = `<div class="left-group">`;
+        leftHtml += createCard("Big Bridge", t1_rows);
+        leftHtml += createCard("U - Bridge", t2_rows);
+        leftHtml += createCard("D - Bridge", t3_rows);
+        leftHtml += `</div>`;
 
         // --- Fibonacci Retracement ---
-        // 這裡可以自訂左側的文字 (label) 與對應的計算比例 (ratio)
         const fib_data = [
             { ratio: 0.809, label: "壓力三" },
             { ratio: 0.705, label: "壓力二" },
@@ -304,20 +318,23 @@
         ];
         
         let t4_rows = "";
-        t4_rows += createRow("", max, ""); // 上方置中
+        t4_rows += createRow("", max, ""); 
         
         fib_data.forEach(item => {
             const val = Math.round(min + range * item.ratio);
             let type = item.ratio > 0.5 ? "up" : (item.ratio < 0.5 ? "down" : "mid");
-            
-            // 使用 item.label 顯示你自訂的文字
             t4_rows += createRow(item.label, val, type);
         });
         
-        t4_rows += createRow("", min, ""); // 下方置中
-        html += createCard("Fibonacci Retracement", t4_rows);
+        t4_rows += createRow("", min, ""); 
 
-        document.getElementById('output').innerHTML = html;
+        // --- 建立右側群組 (包含 Fib) ---
+        let rightHtml = `<div class="right-group">`;
+        rightHtml += createCard("Fibonacci Retracement", t4_rows);
+        rightHtml += `</div>`;
+
+        // 渲染到網頁
+        document.getElementById('output').innerHTML = leftHtml + rightHtml;
     }
 
     window.onload = calculate;
