@@ -29,8 +29,7 @@ const links = {
 
 };
 
-const code = location.pathname
-  .replace(/^\/+|\/+$/g, "");
+const code = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, "");
 
 if (links[code]) {
 
