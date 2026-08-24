@@ -305,11 +305,13 @@
     <div class="input-group">
         <div class="input-field">
             <label>Max</label>
-            <input type="number" id="maxVal">
+            <!-- ★ 修改：加入預設值 value="49243" -->
+            <input type="number" id="maxVal" value="49243">
         </div>
         <div class="input-field">
             <label>Min</label>
-            <input type="number" id="minVal">
+            <!-- ★ 修改：加入預設值 value="39438" -->
+            <input type="number" id="minVal" value="39438">
         </div>
         <!-- ★ 新增按鈕群組 -->
         <div class="btn-group">
@@ -322,7 +324,7 @@
 </div>
 
 <script>
-    // ★ 清空畫面與數值的函式
+    // ★ 清空畫面與數值的函式 (保留不變，清除時將 input 設為空字串並隱藏輸出)
     function clearAll() {
         document.getElementById('maxVal').value = '';
         document.getElementById('minVal').value = '';
@@ -448,8 +450,9 @@
         }
     }
 
-    // ★ 網頁載入完成時，預設執行一次清空(保持初始畫面乾淨)
-    window.onload = clearAll;
+    // ★ 修改：網頁載入完成時，改為預設執行「計算」，將預設值的結果渲染出來
+    // (如果希望一開始只有數字而不顯示圖表，把這一行拿掉即可)
+    window.onload = calculate;
 </script>
 </body>
 </html>
