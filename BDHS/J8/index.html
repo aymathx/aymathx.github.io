@@ -100,6 +100,18 @@ h1 { font-size: clamp(28px, 3.5vw, 48px); line-height: 1.05; margin: 1vh 0 1.5vh
 .share-btn:active { transform: scale(0.95); }
 .share-btn:disabled { background: #999; color: #fff; cursor: not-allowed; transform: none; }
 
+/* ★ 按鈕完成解鎖時的「呼吸燈閃爍」效果 */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.7); }
+  70% { box-shadow: 0 0 0 12px rgba(46, 160, 67, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0); }
+}
+.ready-to-submit {
+  background: #2ea043 !important; /* 變成綠色 */
+  animation: pulse 1.5s infinite;  /* 閃爍動畫 */
+}
+.ready-to-submit:hover { background: #238636 !important; }
+
 /* 內部動態切換容器 (正常遊戲區 vs 錯題區) */
 .normal-game-area { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
@@ -127,8 +139,6 @@ h1 { font-size: clamp(28px, 3.5vw, 48px); line-height: 1.05; margin: 1vh 0 1.5vh
 .choices button .choice-text { font-size: calc(clamp(16px, 1.8vw, 24px) * var(--text-scale)); }
 .choices button:hover { transform: translateY(-2px); }
 .choices button:active { transform: translateY(0); }
-
-/* A B C D 標籤 */
 .choice-label { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: #20242b; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 950; flex-shrink: 0; }
 .correct { background: #cfe8d5!important; }
 .wrong { background: #f0c8c8!important; }
@@ -140,33 +150,20 @@ h1 { font-size: clamp(28px, 3.5vw, 48px); line-height: 1.05; margin: 1vh 0 1.5vh
 .score { text-align: center; font-size: 15px; font-weight: 900; min-height: 22px; flex-shrink: 0; margin-bottom: 0.5vh; }
 .finish-message { font-size: calc(clamp(24px, 3vw, 40px) * var(--text-scale)); font-weight: 950; }
 
-
-/* =====================================================
-   ★ 錯題本總結區 (取代原本的遊戲區)
-===================================================== */
-.error-summary {
-  display: none; /* 預設隱藏 */
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto; /* ★ 允許在框內獨立滑動 */
-  padding-right: 5px;
-  margin-top: 5px;
-}
+/* 錯題本總結區 */
+.error-summary { display: none; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; padding-right: 5px; margin-top: 5px; }
 .error-summary::-webkit-scrollbar { width: 6px; }
 .error-summary::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-
 .error-item { background: #f9f8f6; border: 2px solid #e3ded4; border-radius: 16px; padding: 14px; margin-bottom: 12px; }
 .error-q { font-size: clamp(18px, 2vw, 24px); font-weight: 950; margin-bottom: 12px; line-height: 1.3; }
 .error-badge { background: #20242b; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 12px; margin-right: 8px; vertical-align: middle; }
 .error-choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
 .error-choice { display: flex; align-items: center; padding: 8px 12px; border-radius: 10px; font-weight: 900; font-size: clamp(14px, 1.5vw, 18px); }
-.error-choice-default { background: #e8e2d8; color: #20242b; opacity: 0.6; } /* 沒選的選項淡化 */
-.error-choice-correct { background: #cfe8d5; color: #155724; border: 2px solid #2ea043; } /* 正確答案 */
-.error-choice-wrong { background: #f0c8c8; color: #721c24; border: 2px solid #da3633; } /* 學生選錯的答案 */
+.error-choice-default { background: #e8e2d8; color: #20242b; opacity: 0.6; }
+.error-choice-correct { background: #cfe8d5; color: #155724; border: 2px solid #2ea043; }
+.error-choice-wrong { background: #f0c8c8; color: #721c24; border: 2px solid #da3633; }
 .error-choice-label { width: 28px; height: 28px; border-radius: 50%; background: #20242b; color: #fff; display: flex; justify-content: center; align-items: center; font-size: 14px; margin-right: 10px; flex-shrink: 0; }
 .error-note { font-size: 14px; font-weight: 800; color: #444; background: #e3ded4; padding: 10px 12px; border-radius: 8px; line-height: 1.4; }
-
 
 /* 平板 / 手機微調 */
 @media(max-width: 900px){
@@ -192,7 +189,7 @@ h1 { font-size: clamp(28px, 3.5vw, 48px); line-height: 1.05; margin: 1vh 0 1.5vh
   .level-select button { height: 42px; font-size: 11px; border-radius: 8px; } .level-select small { display: none; }
   .choices { gap: 6px; } .choices button { padding: 4px 6px 4px 40px; border-radius: 10px; }
   .choice-label { width: 26px; height: 26px; left: 6px; font-size: 13px; }
-  .error-choices { grid-template-columns: 1fr; } /* 手機版錯題本選項改為單欄 */
+  .error-choices { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -229,15 +226,18 @@ h1 { font-size: clamp(28px, 3.5vw, 48px); line-height: 1.05; margin: 1vh 0 1.5vh
       <select id="studentClass" class="info-input class-select">
         <option value="" disabled selected>班級</option>
         <option value="801">801</option><option value="802">802</option><option value="803">803</option><option value="804">804</option>
-        <option value="805">805</option>
+        <option value="805">805</option><option value="806">806</option><option value="807">807</option><option value="808">808</option>
+        <option value="809">809</option><option value="810">810</option><option value="811">811</option><option value="812">812</option>
+        <option value="813">813</option><option value="814">814</option><option value="815">815</option>
       </select>
       <input id="studentSeat" class="info-input seat-input" type="number" placeholder="座號" min="1" max="50">
       <input id="studentName" class="info-input name-input" type="text" placeholder="輸入姓名" autocomplete="off">
       
-      <button class="share-btn" id="submitBtn" onclick="submitScore()">📤 繳交成績</button>
+      <!-- ★ 預設為 disabled 鎖定狀態 -->
+      <button class="share-btn" id="submitBtn" onclick="submitScore()" disabled>🔒 需完成 5 關</button>
     </div>
 
-    <!-- ★ 正常遊戲區塊 (交卷後會隱藏) -->
+    <!-- 正常遊戲區塊 -->
     <div id="normalGameArea" class="normal-game-area">
       <div class="level-select" id="levelSelect">
         <button onclick="chooseLevel(1)">LEVEL 1<br><small>10 題 · 20 分</small></button>
@@ -258,11 +258,10 @@ h1 { font-size: clamp(28px, 3.5vw, 48px); line-height: 1.05; margin: 1vh 0 1.5vh
       <div class="score" id="sc"></div>
     </div>
 
-    <!-- ★ 交卷後出現的錯題本專區 -->
+    <!-- 錯題本專區 -->
     <div id="errorSummaryArea" class="error-summary"></div>
 
   </section>
-
 </section>
 </div>
 
@@ -271,23 +270,15 @@ h1 { font-size: clamp(28px, 3.5vw, 48px); line-height: 1.05; margin: 1vh 0 1.5vh
    ★ 老師專用設定區 (串接 Google 試算表)
 ===================================================== */
 // ⚠️ 請將下方的文字替換成您自己的 Web App 網址
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzWFNen-4dY88FYPRT9R3mojBHss8kI-gzY_0RSa2ciy3z7nCqg628OLeBLDcKVZsiU/exec"; 
+const GAS_URL = "請將這裡替換成您的_Web_App_網址"; 
 
-/* =====================================================
-   錯題紀錄器
-===================================================== */
 let wrongRecords = [];
 
-/* ★ 檢查是否已經繳交過 (防重新整理機制) */
 window.addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('mathAgentSubmitted') === 'true') {
     lockFormAndSubmitBtn();
-    // 試圖從瀏覽器還原錯題本，以免學生不小心重整網頁
     const savedRecords = localStorage.getItem('mathAgentWrongRecords');
-    if (savedRecords) {
-      wrongRecords = JSON.parse(savedRecords);
-      showErrorSummary();
-    }
+    if (savedRecords) { wrongRecords = JSON.parse(savedRecords); showErrorSummary(); }
   }
 });
 
@@ -295,9 +286,11 @@ function lockFormAndSubmitBtn() {
   document.getElementById("studentClass").disabled = true;
   document.getElementById("studentSeat").disabled = true;
   document.getElementById("studentName").disabled = true;
+  
   const btn = document.getElementById("submitBtn");
   btn.innerHTML = "✅ 成績已繳交";
   btn.disabled = true;
+  btn.classList.remove("ready-to-submit"); // 移除閃爍特效
 }
 
 function lockInputsOnly() {
@@ -307,6 +300,13 @@ function lockInputsOnly() {
 }
 
 function submitScore() {
+  // ★ 防呆檢查：確認是否 5 關都打完了
+  const allDone = Object.values(levelCompleted).every(v => v === true);
+  if (!allDone) {
+    alert("⚠️ 必須完成 LEVEL 1 到 LEVEL 5 的所有關卡，才能繳交成績唷！");
+    return;
+  }
+
   if(!GAS_URL || GAS_URL === "請將這裡替換成您的_Web_App_網址") {
     alert("⚠️ 老師尚未設定雲端資料庫網址！");
     return;
@@ -323,9 +323,11 @@ function submitScore() {
 
   const total = Object.values(levelScores).reduce((a, b) => a + b, 0);
   const details = `L1:${levelScores[1]}, L2:${levelScores[2]}, L3:${levelScores[3]}, L4:${levelScores[4]}, L5:${levelScores[5]}`;
+  const wrongDetailsStr = wrongRecords.map(r => `L${r.level}-第${r.qNum}題`).join(", ");
+
   const submitBtn = document.getElementById('submitBtn');
-  
   submitBtn.innerHTML = "⏳ 上傳中...";
+  submitBtn.classList.remove("ready-to-submit"); // 按下後停止閃爍
   submitBtn.disabled = true;
 
   const formData = new URLSearchParams();
@@ -334,6 +336,7 @@ function submitScore() {
   formData.append("name", nameInput);
   formData.append("score", total);
   formData.append("details", details);
+  formData.append("wrongDetails", wrongDetailsStr);
 
   fetch(GAS_URL, {
     method: 'POST',
@@ -342,81 +345,44 @@ function submitScore() {
   })
   .then(() => {
     alert("🎉 繳交成功！\n\n點擊確認後，將為您統整本次測驗的錯誤題目。");
-    
-    // 鎖定與儲存紀錄
     localStorage.setItem('mathAgentSubmitted', 'true');
     localStorage.setItem('mathAgentWrongRecords', JSON.stringify(wrongRecords));
     lockFormAndSubmitBtn();
-    
-    // ★ 呼叫錯題本畫面
     showErrorSummary();
   })
   .catch((err) => {
     alert("❌ 上傳失敗，請檢查網路連線。");
     submitBtn.innerHTML = "📤 再次繳交";
+    submitBtn.classList.add("ready-to-submit"); // 失敗的話恢復閃爍狀態
     submitBtn.disabled = false;
   });
 }
 
-/* =====================================================
-   ★ 顯示錯題本功能
-===================================================== */
 function showErrorSummary() {
-  // 隱藏原本的遊戲區塊，顯示錯題區塊
   document.getElementById('normalGameArea').style.display = 'none';
   const summaryArea = document.getElementById('errorSummaryArea');
   summaryArea.style.display = 'flex';
 
   if (wrongRecords.length === 0) {
-    summaryArea.innerHTML = `
-      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
-        <div style="font-size: 70px; margin-bottom: 15px;">🏆</div>
-        <h2 style="font-size: clamp(24px, 3vw, 36px); margin:0;">太神啦！全對完美通關！</h2>
-        <p style="font-size: 18px; font-weight: bold; color: #555;">本次測驗沒有任何錯誤紀錄。</p>
-      </div>
-    `;
+    summaryArea.innerHTML = `<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;"><div style="font-size: 70px; margin-bottom: 15px;">🏆</div><h2 style="font-size: clamp(24px, 3vw, 36px); margin:0;">太神啦！全對完美通關！</h2><p style="font-size: 18px; font-weight: bold; color: #555;">本次測驗沒有任何錯誤紀錄。</p></div>`;
     return;
   }
 
   let html = `<h2 style="text-align:center; margin:0 0 16px 0; font-size: clamp(20px, 2.5vw, 26px); font-weight:950;">📋 測驗結果分析：錯誤題目統整 (共 ${wrongRecords.length} 題)</h2>`;
-
   wrongRecords.forEach((item) => {
-    html += `<div class="error-item">
-      <div class="error-q">
-        <span class="error-badge">LEVEL ${item.level}</span>${item.q}
-      </div>
-      <div class="error-choices">`;
-
+    html += `<div class="error-item"><div class="error-q"><span class="error-badge">LEVEL ${item.level}</span>${item.q}</div><div class="error-choices">`;
     const labels = ["A", "B", "C", "D"];
     item.choices.forEach((choiceText, cIdx) => {
-      let cls = "error-choice-default";
-      let icon = "";
-      
-      if (cIdx === item.correctChoice) {
-        cls = "error-choice-correct";
-        icon = "✅ ";
-      } else if (cIdx === item.studentChoice) {
-        cls = "error-choice-wrong";
-        icon = "❌ ";
-      }
-
-      html += `<div class="error-choice ${cls}">
-        <div class="error-choice-label">${labels[cIdx]}</div>
-        <div>${icon}${choiceText}</div>
-      </div>`;
+      let cls = "error-choice-default", icon = "";
+      if (cIdx === item.correctChoice) { cls = "error-choice-correct"; icon = "✅ "; }
+      else if (cIdx === item.studentChoice) { cls = "error-choice-wrong"; icon = "❌ "; }
+      html += `<div class="error-choice ${cls}"><div class="error-choice-label">${labels[cIdx]}</div><div>${icon}${choiceText}</div></div>`;
     });
-
-    html += `</div>
-      <div class="error-note">💡 <strong>解析：</strong>${item.n}</div>
-    </div>`;
+    html += `</div><div class="error-note">💡 <strong>解析：</strong>${item.n}</div></div>`;
   });
-
   summaryArea.innerHTML = html;
 }
 
-/* =====================================================
-   字體縮放功能
-===================================================== */
 let currentTextScale = 1;
 function changeFontSize(delta) {
   currentTextScale += delta;
@@ -425,9 +391,6 @@ function changeFontSize(delta) {
   document.documentElement.style.setProperty('--text-scale', currentTextScale);
 }
 
-/* =====================================================
-   題庫
-===================================================== */
 const data = [
 { q:"12×7", c:["(10＋2)×7","10×7＋2","12＋7","10×7＋2×7"], a:3, n:"12×7＝10×7＋2×7。" },
 { q:"19×6", c:["20×6－6","20×6＋6","19＋6","(20－1)＋6"], a:0, n:"19＝20－1。" },
@@ -485,13 +448,9 @@ const data = [
 { q:"1997×2003", c:["(2000－3)(2000＋3)","1997×2000＋3","2000×2003－3","(2000－3)×2000＋3"], a:0, n:"平方差：2000²－3²。" }
 ];
 
-/* =====================================================
-   遊戲邏輯
-===================================================== */
 const ranges={ 1:[0,10], 2:[10,20], 3:[20,30], 4:[30,40], 5:[40,50] };
 const levelScores={ 1:0, 2:0, 3:0, 4:0, 5:0 };
 const levelCompleted = { 1:false, 2:false, 3:false, 4:false, 5:false };
-
 let i=-1; let lock=false; let currentLevel=0; let startQ=0; let endQ=0; let currentQuestions=[];
 
 function shuffleQuestion(question){
@@ -526,12 +485,10 @@ function chooseLevel(level){
   }
 
   lockInputsOnly();
-
   currentLevel=level; [startQ,endQ]=ranges[level]; i=0; prepareLevel();
   document.querySelectorAll("#levelSelect button").forEach((b,n)=>{ b.classList.toggle("active", n===level-1); });
   document.querySelectorAll(".score-card").forEach(card=>{ card.classList.remove("active"); });
   document.getElementById("scoreCard"+level).classList.add("active");
-  
   document.getElementById("lv").textContent="LEVEL "+level;
   document.getElementById("num").textContent="第 1 / 10 題";
   document.getElementById("bar").style.width="0%";
@@ -556,7 +513,6 @@ function show(){
 function ans(k){
   if(lock)return; lock=true;
   const x=currentQuestions[i]; const buttons=document.querySelectorAll(".choices button"); const labels=["A","B","C","D"];
-  
   buttons[k].classList.add(k===x.shuffledAnswer ? "correct" : "wrong");
   
   if(k===x.shuffledAnswer){
@@ -565,16 +521,7 @@ function ans(k){
   }else{
     buttons[x.shuffledAnswer].classList.add("correct");
     document.getElementById("s").innerHTML=`❌ 答案揭曉：${labels[x.shuffledAnswer]} ${x.n}`;
-    
-    // ★ 記錄錯誤題目
-    wrongRecords.push({
-      level: currentLevel,
-      q: x.q,
-      choices: x.shuffledChoices.map(c => c.text),
-      studentChoice: k,
-      correctChoice: x.shuffledAnswer,
-      n: x.n
-    });
+    wrongRecords.push({ level: currentLevel, qNum: i + 1, q: x.q, choices: x.shuffledChoices.map(c => c.text), studentChoice: k, correctChoice: x.shuffledAnswer, n: x.n });
   }
   updateScoreboard();
   document.getElementById("sc").textContent=`本 Level 暫得：${levelScores[currentLevel]} / 20`;
@@ -586,15 +533,21 @@ function finishLevel(){
   document.getElementById("lv").textContent=`LEVEL ${currentLevel} 完成`;
   document.getElementById("num").textContent="10 題完成";
   document.getElementById("q").innerHTML=`<span class="finish-message">🎉 LEVEL ${currentLevel} 挑戰完成！</span>`;
-  
   const total=Object.values(levelScores).reduce((a,b)=>a+b,0);
+  
   levelCompleted[currentLevel] = true;
   document.querySelectorAll("#levelSelect button")[currentLevel-1].classList.add("completed");
   document.querySelectorAll("#levelSelect button")[currentLevel-1].classList.remove("active");
-
+  
   const allDone = Object.values(levelCompleted).every(v => v === true);
   if (allDone) {
     document.getElementById("c").innerHTML=`<div style="grid-column:1 / -1; height: 100%; display:flex; align-items:center; justify-content:center; text-align:center; background:#d4edda; color:#155724; border-radius:14px; font-size:clamp(16px, 2vw, 20px); font-weight:900;">🌟 所有關卡皆已完成，請務必點擊上方「📤 繳交成績」！</div>`;
+    
+    // ★ 5關破完的瞬間：解鎖繳交按鈕並開啟閃爍引導
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = "📤 繳交成績";
+    submitBtn.classList.add("ready-to-submit");
   } else {
     document.getElementById("c").innerHTML=`<button onclick="nextLevel()" style="grid-column:1 / -1; height:100%; font-size:clamp(16px, 2vw, 20px); font-weight:900; background:#e8e2d8; border:0; border-radius:14px; cursor:pointer;">➡️ 選擇下一未挑戰 LEVEL</button>`;
   }
@@ -604,24 +557,17 @@ function finishLevel(){
 
 function nextLevel(){
   let next = currentLevel;
-  for(let j=0; j<5; j++){
-    next = next < 5 ? next + 1 : 1;
-    if(!levelCompleted[next]) { chooseLevel(next); return; }
-  }
+  for(let j=0; j<5; j++){ next = next < 5 ? next + 1 : 1; if(!levelCompleted[next]) { chooseLevel(next); return; } }
 }
 
 function restartGame(){
   for(let lv=1;lv<=5;lv++){ levelScores[lv]=0; levelCompleted[lv]=false; }
-  currentLevel=0; i=-1; wrongRecords=[]; // 重置錯題紀錄
-  
-  // ★ 切換回正常遊戲區
+  currentLevel=0; i=-1; wrongRecords=[]; 
   document.getElementById('normalGameArea').style.display = 'flex';
   document.getElementById('errorSummaryArea').style.display = 'none';
-  
   document.querySelectorAll("#levelSelect button").forEach(b => { b.classList.remove("active", "completed"); });
   document.querySelectorAll(".score-card").forEach(card=>card.classList.remove("active"));
   updateScoreboard();
-  
   document.getElementById("lv").textContent="尚未選擇";
   document.getElementById("num").textContent="請選擇 Level";
   document.getElementById("bar").style.width="0%";
@@ -630,16 +576,17 @@ function restartGame(){
   document.getElementById("s").textContent="";
   document.getElementById("sc").textContent="";
   
-  // 清除鎖定與本地記憶
   localStorage.removeItem('mathAgentSubmitted');
   localStorage.removeItem('mathAgentWrongRecords');
   document.getElementById("studentClass").disabled = false;
   document.getElementById("studentSeat").disabled = false;
   document.getElementById("studentName").disabled = false;
   
+  // ★ 重新開始時，繳交按鈕恢復鎖定狀態
   const btn = document.getElementById("submitBtn");
-  btn.innerHTML = "📤 繳交成績";
-  btn.disabled = false;
+  btn.innerHTML = "🔒 需完成 5 關";
+  btn.disabled = true;
+  btn.classList.remove("ready-to-submit");
 }
 
 updateScoreboard();
