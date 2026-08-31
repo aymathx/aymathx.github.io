@@ -7,31 +7,22 @@
 
 <style>
 :root {
-  /* 控制題目與選項字體的縮放比例 */
   --text-scale: 1;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   width: 100%;
   height: 100%;
   margin: 0;
-  /* ★ 嚴格禁止任何形式的頁面捲動 */
   overflow: hidden; 
 }
 
 body {
   background: #f4f2ed;
   color: #20242b;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Noto Sans TC",
-    "PingFang TC",
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
 }
 
 .wrap {
@@ -73,468 +64,137 @@ h1 {
   flex-shrink: 0;
 }
 
+/* 成績區 */
+.scoreboard { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 0 0 1.2vh; flex-shrink: 0; }
+.score-card { background: #fff; color: #20242b; border-radius: 12px; padding: 6px 4px; text-align: center; border: 3px solid transparent; }
+.score-card.active { border-color: #20242b; box-shadow: inset 0 0 0 3px #fff; }
+.score-card.total { background: #e8e2d8; }
+.score-card .label { font-size: 11px; font-weight: 900; letter-spacing: 1px; opacity: .7; }
+.score-card .value { font-size: clamp(18px, 2vw, 24px); font-weight: 950; line-height: 1.1; margin-top: 2px; }
+.score-card .value span { font-size: 11px; font-weight: 800; opacity: .65; }
 
-/* =====================================================
-   成績區
-===================================================== */
-.scoreboard {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
-  margin: 0 0 1.2vh;
-  flex-shrink: 0;
-}
-
-.score-card {
-  background: #fff;
-  color: #20242b;
-  border-radius: 12px;
-  padding: 6px 4px;
-  text-align: center;
-  border: 3px solid transparent;
-}
-
-.score-card.active {
-  border-color: #20242b;
-  box-shadow: inset 0 0 0 3px #fff;
-}
-
-.score-card.total {
-  background: #e8e2d8;
-}
-
-.score-card .label {
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  opacity: .7;
-}
-
-.score-card .value {
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 950;
-  line-height: 1.1;
-  margin-top: 2px;
-}
-
-.score-card .value span {
-  font-size: 11px;
-  font-weight: 800;
-  opacity: .65;
-}
-
-
-/* =====================================================
-   遊戲主區
-===================================================== */
+/* 遊戲主區 */
 .game {
-  flex: 1;
-  min-height: 0; 
-  background: #fff;
-  color: #20242b;
-  border-radius: 20px;
-  padding: 1.5vh 2vw;
-  border: 3px solid #20242b;
-  box-shadow: 0 5px 20px #0000000b;
-
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; 
+  flex: 1; min-height: 0; background: #fff; color: #20242b; border-radius: 20px;
+  padding: 1.5vh 2vw; border: 3px solid #20242b; box-shadow: 0 5px 20px #0000000b;
+  display: flex; flex-direction: column; overflow: hidden; 
 }
 
-.game-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  margin-bottom: 1vh;
-}
+.game-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-shrink: 0; margin-bottom: 1vh; }
+.game-title { font-size: clamp(18px, 2vw, 22px); font-weight: 950; margin: 0; }
+.header-controls { display: flex; align-items: center; gap: 10px; }
 
-.game-title {
-  font-size: clamp(18px, 2vw, 22px);
-  font-weight: 950;
-  margin: 0;
-}
-
-.header-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.font-controls {
-  display: flex;
-  background: #e8e2d8;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.font-btn {
-  border: 0;
-  background: transparent;
-  color: #20242b;
-  font-size: 15px;
-  font-weight: 900;
-  cursor: pointer;
-  padding: 6px 12px;
-  transition: .15s;
-}
-
+.font-controls { display: flex; background: #e8e2d8; border-radius: 10px; overflow: hidden; }
+.font-btn { border: 0; background: transparent; color: #20242b; font-size: 15px; font-weight: 900; cursor: pointer; padding: 6px 12px; transition: .15s; }
 .font-btn:hover { background: #d4cec4; }
-
-.restart-btn {
-  border: 0;
-  background: transparent;
-  color: #20242b;
-  font-size: 16px;
-  font-weight: 900;
-  cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 10px;
-}
+.restart-btn { border: 0; background: transparent; color: #20242b; font-size: 16px; font-weight: 900; cursor: pointer; padding: 6px 10px; border-radius: 10px; }
 .restart-btn:hover { background: #e8e2d8; }
 
-
-/* =====================================================
-   姓名與分享按鈕
-===================================================== */
-.name-row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 1vh;
-  flex-shrink: 0;
+/* 學生資訊與繳交按鈕 */
+.info-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 1vh; flex-shrink: 0; }
+.info-input {
+  height: clamp(40px, 5vh, 48px); border: 4px solid #e3ded4; border-radius: 12px;
+  padding: 0 10px; font-size: 16px; font-weight: 800; color: #20242b; outline: none; background: #fff;
 }
+.info-input:focus { border-color: #20242b; }
+.info-input::placeholder { color: #aaa; }
+/* ★ 鎖定狀態外觀 */
+.info-input:disabled { background: #f0f0f0; color: #888; border-color: #eee; cursor: not-allowed; }
 
-.name-input {
-  flex: 1;
-  height: clamp(40px, 5vh, 48px);
-  border: 4px solid #e3ded4;
-  border-radius: 12px;
-  padding: 0 14px;
-  font-size: 18px;
-  font-weight: 800;
-  color: #20242b;
-  outline: none;
-}
+.class-select { width: 100px; cursor: pointer; }
+.seat-input { width: 80px; text-align: center; }
+.name-input { flex: 1; min-width: 100px; }
 
-.name-input:focus { border-color: #20242b; }
-.name-input::placeholder { color: #aaa; }
-
-/* ★ 分享按鈕樣式 */
 .share-btn {
-  white-space: nowrap;
-  background: #20242b;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  padding: 0 16px;
-  height: clamp(40px, 5vh, 48px);
-  font-size: 15px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: 0.15s;
+  white-space: nowrap; background: #20242b; color: #fff; border: none; border-radius: 12px;
+  padding: 0 16px; height: clamp(40px, 5vh, 48px); font-size: 15px; font-weight: 900;
+  cursor: pointer; transition: 0.15s;
 }
-.share-btn:hover {
-  background: #363c48;
-}
-.share-btn:active {
-  transform: scale(0.95);
-}
+.share-btn:hover { background: #363c48; }
+.share-btn:active { transform: scale(0.95); }
+.share-btn:disabled { background: #999; color: #fff; cursor: not-allowed; transform: none; }
 
-
-/* =====================================================
-   LEVEL 選擇
-===================================================== */
-.level-select {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
-  margin: 0 0 1vh;
-  flex-shrink: 0;
-}
-
-.level-select button {
-  background: #e8e2d8;
-  border: 3px solid transparent;
-  border-radius: 12px;
-  padding: 6px 4px;
-  height: clamp(50px, 7vh, 64px); 
-
-  font-size: clamp(14px, 1.5vw, 17px);
-  font-weight: 950;
-  cursor: pointer;
-  line-height: 1.15;
-  transition: .15s;
-  color: #20242b;
-}
-
-.level-select button.active {
-  background: #20242b;
-  color: #fff;
-  border-color: #20242b;
-}
+/* LEVEL 選擇 */
+.level-select { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 0 0 1vh; flex-shrink: 0; }
+.level-select button { background: #e8e2d8; border: 3px solid transparent; border-radius: 12px; padding: 6px 4px; height: clamp(50px, 7vh, 64px); font-size: clamp(14px, 1.5vw, 17px); font-weight: 950; cursor: pointer; line-height: 1.15; transition: .15s; color: #20242b; }
+.level-select button.active { background: #20242b; color: #fff; border-color: #20242b; }
 .level-select button:hover { transform: translateY(-2px); }
+.level-select small { font-size: 11px; font-weight: 800; opacity: .78; }
 
-.level-select small {
-  font-size: 11px;
-  font-weight: 800;
-  opacity: .78;
-}
+/* 題目資訊 */
+.top { display: flex; justify-content: space-between; gap: 8px; flex-shrink: 0; }
+.badge { background: #e9e3d8; padding: 4px 12px; border-radius: 999px; font-weight: 900; font-size: 13px; }
+.progress { height: 6px; background: #e3ded4; border-radius: 20px; overflow: hidden; margin-top: 6px; flex-shrink: 0; }
+#bar { height: 100%; width: 0; background: #20242b; transition: .3s; }
 
+/* 題目 */
+.question { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; font-size: calc(clamp(32px, 4.5vw, 56px) * var(--text-scale)); font-weight: 950; text-align: center; margin: 0; padding: 0 10px; line-height: 1.2; overflow-wrap: anywhere; }
 
-/* =====================================================
-   題目資訊
-===================================================== */
-.top {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.badge {
-  background: #e9e3d8;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-weight: 900;
-  font-size: 13px;
-}
-
-.progress {
-  height: 6px;
-  background: #e3ded4;
-  border-radius: 20px;
-  overflow: hidden;
-  margin-top: 6px;
-  flex-shrink: 0;
-}
-
-#bar {
-  height: 100%;
-  width: 0;
-  background: #20242b;
-  transition: .3s;
-}
-
-
-/* =====================================================
-   ★ 題目 
-===================================================== */
-.question {
-  flex: 1; 
-  min-height: 0; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(clamp(32px, 4.5vw, 56px) * var(--text-scale));
-  font-weight: 950;
-  text-align: center;
-  margin: 0;
-  padding: 0 10px;
-  line-height: 1.2;
-  overflow-wrap: anywhere;
-}
-
-
-/* =====================================================
-   ★ 四個選項 
-===================================================== */
-.choices {
-  flex: 1.3; 
-  min-height: 0; 
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr); 
-  gap: 1vh; 
-  width: 100%;
-  flex-shrink: 0;
-}
-
-.choices button {
-  position: relative;
-  border: 0;
-  border-radius: 14px;
-  background: #e8e2d8;
-  color: #20242b;
-  font-weight: 900;
-  height: 100%; 
-  min-height: 0;
-  padding: 6px 10px 6px 54px;
-  cursor: pointer;
-  transition: .15s;
-  line-height: 1.2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.choices button .choice-text {
-  font-size: calc(clamp(16px, 1.8vw, 24px) * var(--text-scale));
-}
-
+/* 選項 */
+.choices { flex: 1.3; min-height: 0; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 1vh; width: 100%; flex-shrink: 0; }
+.choices button { position: relative; border: 0; border-radius: 14px; background: #e8e2d8; color: #20242b; font-weight: 900; height: 100%; min-height: 0; padding: 6px 10px 6px 54px; cursor: pointer; transition: .15s; line-height: 1.2; display: flex; align-items: center; justify-content: center; text-align: center; }
+.choices button .choice-text { font-size: calc(clamp(16px, 1.8vw, 24px) * var(--text-scale)); }
 .choices button:hover { transform: translateY(-2px); }
 .choices button:active { transform: translateY(0); }
 
-
-/* =====================================================
-   A B C D 標籤 
-===================================================== */
-.choice-label {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #20242b;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 950;
-  flex-shrink: 0;
-}
-
+/* A B C D 標籤 */
+.choice-label { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: #20242b; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 950; flex-shrink: 0; }
 .correct { background: #cfe8d5!important; }
 .wrong { background: #f0c8c8!important; }
 .correct .choice-label { background: #20242b; }
 .wrong .choice-label { background: #20242b; }
 
+/* 狀態 / 分數 */
+.status { text-align: center; min-height: 24px; line-height: 1.3; font-weight: 800; font-size: 14px; margin: 1vh 4px 0; flex-shrink: 0; }
+.score { text-align: center; font-size: 15px; font-weight: 900; min-height: 22px; flex-shrink: 0; margin-bottom: 0.5vh; }
+.finish-message { font-size: calc(clamp(24px, 3vw, 40px) * var(--text-scale)); font-weight: 950; }
 
-/* =====================================================
-   狀態 / 分數
-===================================================== */
-.status {
-  text-align: center;
-  min-height: 24px;
-  line-height: 1.3;
-  font-weight: 800;
-  font-size: 14px;
-  margin: 1vh 4px 0;
-  flex-shrink: 0;
-}
-
-.score {
-  text-align: center;
-  font-size: 15px;
-  font-weight: 900;
-  min-height: 22px;
-  flex-shrink: 0;
-  margin-bottom: 0.5vh;
-}
-
-.finish-message {
-  font-size: calc(clamp(24px, 3vw, 40px) * var(--text-scale));
-  font-weight: 950;
-}
-
-
-/* =====================================================
-   平板 / 手機微調
-===================================================== */
+/* 平板 / 手機微調 */
 @media(max-width: 900px){
-  .wrap { padding: 1vh; }
-  .hero { padding: 1.5vh; border-radius: 18px; }
-  h1 { font-size: 26px; margin: 0.5vh 0 1vh; }
-  .scoreboard { gap: 4px; }
-  .score-card { padding: 4px 2px; border-radius: 10px; }
-  .score-card .value { font-size: 18px; }
+  .wrap { padding: 1vh; } .hero { padding: 1.5vh; border-radius: 18px; } h1 { font-size: 26px; margin: 0.5vh 0 1vh; }
+  .scoreboard { gap: 4px; } .score-card { padding: 4px 2px; border-radius: 10px; } .score-card .value { font-size: 18px; }
   .game { padding: 1vh 1.5vw; border-radius: 16px; }
-  
-  .name-input, .share-btn { height: clamp(36px, 4vh, 44px); font-size: 15px; }
-  
-  .level-select { gap: 4px; }
-  .level-select button { height: clamp(44px, 6vh, 56px); font-size: 13px; padding: 4px; }
-  .level-select small { font-size: 10px; }
-  .choices button { padding-left: 46px; }
+  .info-input, .share-btn { height: clamp(36px, 4vh, 44px); font-size: 15px; }
+  .class-select { width: 90px; } .seat-input { width: 70px; }
+  .level-select { gap: 4px; } .level-select button { height: clamp(44px, 6vh, 56px); font-size: 13px; padding: 4px; }
+  .level-select small { font-size: 10px; } .choices button { padding-left: 46px; }
   .choice-label { width: 28px; height: 28px; left: 8px; font-size: 14px; }
 }
-
 @media(max-width: 600px){
-  .wrap { padding: 6px; }
-  .hero { padding: 10px; border-radius: 14px; }
-  h1 { font-size: 22px; margin: 4px 0 8px; }
-  .score-card { padding: 4px 1px; }
-  .score-card .label { font-size: 9px; }
-  .score-card .value { font-size: 15px; }
-  .score-card .value span { font-size: 9px; }
-  .game { padding: 8px; border-radius: 12px; margin-top: 6px; }
-  .game-title { font-size: 15px; }
+  .wrap { padding: 6px; } .hero { padding: 10px; border-radius: 14px; } h1 { font-size: 22px; margin: 4px 0 8px; }
+  .score-card { padding: 4px 1px; } .score-card .label { font-size: 9px; } .score-card .value { font-size: 15px; } .score-card .value span { font-size: 9px; }
+  .game { padding: 8px; border-radius: 12px; margin-top: 6px; } .game-title { font-size: 15px; }
   .restart-btn, .font-btn { font-size: 13px; padding: 4px 8px; }
-  
-  .name-input, .share-btn { height: 38px; font-size: 14px; border-radius: 10px; border-width: 3px;}
-  .name-input { padding: 0 10px; }
-  .share-btn { padding: 0 12px; }
-  
-  .level-select button { height: 42px; font-size: 11px; border-radius: 8px; }
-  .level-select small { display: none; }
-  .choices { gap: 6px; }
-  .choices button { padding: 4px 6px 4px 40px; border-radius: 10px; }
+  .info-row { gap: 6px; } .class-select { flex: 1; padding: 0 4px; font-size: 14px; width: auto; }
+  .seat-input { flex: 1; padding: 0 4px; font-size: 14px; width: auto; }
+  .name-input { flex: 1.5; padding: 0 8px; font-size: 14px; width: auto; }
+  .share-btn { flex-basis: 100%; margin-top: 2px; } 
+  .info-input, .share-btn { height: 38px; border-width: 3px; border-radius: 10px;}
+  .level-select button { height: 42px; font-size: 11px; border-radius: 8px; } .level-select small { display: none; }
+  .choices { gap: 6px; } .choices button { padding: 4px 6px 4px 40px; border-radius: 10px; }
   .choice-label { width: 26px; height: 26px; left: 6px; font-size: 13px; }
 }
 </style>
 </head>
 
 <body>
-
 <div class="wrap">
-
 <section class="hero">
+  <div class="tag">GRADE 8 · FORMATIVE ASSESSMENT</div>
+  <h1>數學特工隊 🕵️‍♂️</h1>
 
-  <div class="tag">
-    GRADE 8 · FORMATIVE ASSESSMENT
-  </div>
-
-  <h1>
-    數學特工隊 🕵️‍♂️
-  </h1>
-
-  <!-- =================================================
-       成績區
-  ================================================== -->
   <div class="scoreboard">
-    <div class="score-card" id="scoreCard1">
-      <div class="label">LEVEL 1</div>
-      <div class="value" id="score1">0<span> / 20</span></div>
-    </div>
-    <div class="score-card" id="scoreCard2">
-      <div class="label">LEVEL 2</div>
-      <div class="value" id="score2">0<span> / 20</span></div>
-    </div>
-    <div class="score-card" id="scoreCard3">
-      <div class="label">LEVEL 3</div>
-      <div class="value" id="score3">0<span> / 20</span></div>
-    </div>
-    <div class="score-card" id="scoreCard4">
-      <div class="label">LEVEL 4</div>
-      <div class="value" id="score4">0<span> / 20</span></div>
-    </div>
-    <div class="score-card" id="scoreCard5">
-      <div class="label">LEVEL 5</div>
-      <div class="value" id="score5">0<span> / 20</span></div>
-    </div>
-    <div class="score-card total">
-      <div class="label">🏆 總分</div>
-      <div class="value" id="totalScore">0<span> / 100</span></div>
-    </div>
+    <div class="score-card" id="scoreCard1"><div class="label">LEVEL 1</div><div class="value" id="score1">0<span> / 20</span></div></div>
+    <div class="score-card" id="scoreCard2"><div class="label">LEVEL 2</div><div class="value" id="score2">0<span> / 20</span></div></div>
+    <div class="score-card" id="scoreCard3"><div class="label">LEVEL 3</div><div class="value" id="score3">0<span> / 20</span></div></div>
+    <div class="score-card" id="scoreCard4"><div class="label">LEVEL 4</div><div class="value" id="score4">0<span> / 20</span></div></div>
+    <div class="score-card" id="scoreCard5"><div class="label">LEVEL 5</div><div class="value" id="score5">0<span> / 20</span></div></div>
+    <div class="score-card total"><div class="label">🏆 總分</div><div class="value" id="totalScore">0<span> / 100</span></div></div>
   </div>
 
-
-  <!-- =================================================
-       遊戲
-  ================================================== -->
   <section class="game">
-
     <div class="game-header">
-      <div class="game-title">
-        🎮 選擇關卡
-      </div>
-      
+      <div class="game-title">🎮 選擇關卡</div>
       <div class="header-controls">
         <div class="font-controls">
           <button class="font-btn" onclick="changeFontSize(-0.1)" title="縮小字體">A-</button>
@@ -544,18 +204,22 @@ h1 {
       </div>
     </div>
 
-    <!-- 姓名與分享功能 -->
-    <div class="name-row">
-      <input
-        id="studentName"
-        class="name-input"
-        type="text"
-        placeholder="請輸入姓名"
-        autocomplete="off">
-      <button class="share-btn" onclick="shareScore()">📤 分享成績</button>
+    <!-- 學生資訊列 -->
+    <div class="info-row">
+      <select id="studentClass" class="info-input class-select">
+        <option value="" disabled selected>班級</option>
+        <option value="1班">1班</option>
+        <option value="2班">2班</option>
+        <option value="3班">3班</option>
+        <option value="4班">4班</option>
+        <option value="5班">5班</option>
+      </select>
+      <input id="studentSeat" class="info-input seat-input" type="number" placeholder="座號" min="1" max="50">
+      <input id="studentName" class="info-input name-input" type="text" placeholder="輸入姓名" autocomplete="off">
+      
+      <button class="share-btn" id="submitBtn" onclick="submitScore()">📤 繳交成績</button>
     </div>
 
-    <!-- LEVEL -->
     <div class="level-select" id="levelSelect">
       <button onclick="chooseLevel(1)">LEVEL 1<br><small>10 題 · 20 分</small></button>
       <button onclick="chooseLevel(2)">LEVEL 2<br><small>10 題 · 20 分</small></button>
@@ -564,75 +228,89 @@ h1 {
       <button onclick="chooseLevel(5)">LEVEL 5<br><small>10 題 · 20 分</small></button>
     </div>
 
-    <!-- 題號 -->
     <div class="top">
       <span class="badge" id="lv">尚未選擇</span>
       <span class="badge" id="num">請選擇 Level</span>
     </div>
-
-    <div class="progress">
-      <div id="bar"></div>
-    </div>
-
-
-    <!-- 題目 -->
-    <div class="question" id="q">
-      選擇一個 LEVEL 開始任務
-    </div>
-
-    <!-- 選項 -->
+    <div class="progress"><div id="bar"></div></div>
+    <div class="question" id="q">選擇一個 LEVEL 開始任務</div>
     <div class="choices" id="c"></div>
-
-    <!-- 回饋 -->
     <div class="status" id="s"></div>
     <div class="score" id="sc"></div>
-
   </section>
 
 </section>
-
 </div>
 
 <script>
 
 /* =====================================================
-   ★ 成績分享功能 (Web Share API + 剪貼簿)
+   ★ 老師專用設定區 (串接 Google 試算表)
 ===================================================== */
-function shareScore() {
-  const nameInput = document.getElementById("studentName").value.trim();
-  const name = nameInput ? nameInput : "神祕特工";
-  
-  // 計算總分
-  const total = Object.values(levelScores).reduce((a, b) => a + b, 0);
+// ⚠️ 請將下方的文字替換成您自己的 Web App 網址
+const GAS_URL = "請將這裡替換成您的_Web_App_網址"; 
 
-  // 組合分享出去的文字內容
-  const shareText = `🕵️‍♂️ 數學特工隊挑戰！\n👤 特工：${name}\n🏆 目前總分：${total} / 100 分\n\n快來挑戰你的分配律極限👇\n${window.location.href}`;
-
-  const shareBtn = document.querySelector('.share-btn');
-  const originalText = shareBtn.innerHTML;
-
-  // 1. 如果是在手機平板等支援分享選單的裝置
-  if (navigator.share) {
-    navigator.share({
-      title: '數學特工隊成績',
-      text: shareText
-    }).catch((err) => {
-      console.log('分享已取消或失敗', err);
-    });
-  } 
-  // 2. 如果是在不支援分享選單的電腦版，改用「複製到剪貼簿」
-  else {
-    navigator.clipboard.writeText(shareText).then(() => {
-      shareBtn.innerHTML = "✅ 已複製文字！";
-      shareBtn.style.background = "#4caf50";
-      setTimeout(() => { 
-        shareBtn.innerHTML = originalText; 
-        shareBtn.style.background = "";
-      }, 2500);
-    }).catch(() => {
-      alert("複製失敗，請手動截圖分享唷！");
-    });
+/* ★ 檢查是否已經繳交過 (防重新整理機制) */
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('mathAgentSubmitted') === 'true') {
+    lockForm();
   }
+});
+
+function lockForm() {
+  document.getElementById("studentClass").disabled = true;
+  document.getElementById("studentSeat").disabled = true;
+  document.getElementById("studentName").disabled = true;
+  const btn = document.getElementById("submitBtn");
+  btn.innerHTML = "✅ 成績已繳交鎖定";
+  btn.disabled = true;
+}
+
+function submitScore() {
+  if(!GAS_URL || GAS_URL === "請將這裡替換成您的_Web_App_網址") {
+    alert("⚠️ 老師尚未設定雲端資料庫網址！");
+    return;
+  }
+
+  const classInput = document.getElementById("studentClass").value;
+  const seatInput = document.getElementById("studentSeat").value.trim();
+  const nameInput = document.getElementById("studentName").value.trim();
+  
+  if (!classInput || !seatInput || !nameInput) {
+    alert("❌ 繳交失敗：請確認「班級」、「座號」與「姓名」都已經填寫完成！");
+    return;
+  }
+
+  const total = Object.values(levelScores).reduce((a, b) => a + b, 0);
+  const details = `L1:${levelScores[1]}, L2:${levelScores[2]}, L3:${levelScores[3]}, L4:${levelScores[4]}, L5:${levelScores[5]}`;
+  const submitBtn = document.getElementById('submitBtn');
+  
+  submitBtn.innerHTML = "⏳ 上傳中...";
+  submitBtn.disabled = true;
+
+  const formData = new URLSearchParams();
+  formData.append("class", classInput);
+  formData.append("seat", seatInput);
+  formData.append("name", nameInput);
+  formData.append("score", total);
+  formData.append("details", details);
+
+  fetch(GAS_URL, {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors'
+  })
+  .then(() => {
+    alert("🎉 繳交成功！\n\n系統已紀錄您的成績，請勿重複提交。");
+    // ★ 繳交成功後，將紀錄存入瀏覽器，並永久鎖定表單
+    localStorage.setItem('mathAgentSubmitted', 'true');
+    lockForm();
+  })
+  .catch((err) => {
+    alert("❌ 上傳失敗，請檢查網路連線。");
+    submitBtn.innerHTML = "📤 再次繳交";
+    submitBtn.disabled = false;
+  });
 }
 
 /* =====================================================
@@ -647,7 +325,7 @@ function changeFontSize(delta) {
 }
 
 /* =====================================================
-   題庫
+   題庫 (保持不變)
 ===================================================== */
 const data = [
 { q:"12×7", c:["(10＋2)×7","10×7＋2","12＋7","10×7＋2×7"], a:3, n:"12×7＝10×7＋2×7。", lv:1 },
@@ -707,100 +385,55 @@ const data = [
 ];
 
 /* =====================================================
-   遊戲資料
+   遊戲邏輯 (保持不變)
 ===================================================== */
 const ranges={ 1:[0,10], 2:[10,20], 3:[20,30], 4:[30,40], 5:[40,50] };
 const levelScores={ 1:0, 2:0, 3:0, 4:0, 5:0 };
 
-let i=-1;
-let lock=false;
-let currentLevel=0;
-let startQ=0;
-let endQ=0;
-let currentQuestions=[];
+let i=-1; let lock=false; let currentLevel=0; let startQ=0; let endQ=0; let currentQuestions=[];
 
 function shuffleQuestion(question){
   const options=question.c.map((text,index)=>({ text:text, correct:index===question.a }));
-  for(let x=options.length-1;x>0;x--){
-    const y=Math.floor(Math.random()*(x+1));
-    [options[x],options[y]]=[options[y],options[x]];
-  }
+  for(let x=options.length-1;x>0;x--){ const y=Math.floor(Math.random()*(x+1)); [options[x],options[y]]=[options[y],options[x]]; }
   return { ...question, shuffledChoices:options, shuffledAnswer:options.findIndex(item=>item.correct) };
 }
-
 function prepareLevel(){
-  const original=data.slice(startQ,endQ);
-  currentQuestions=original.map(q=>shuffleQuestion(q));
+  const original=data.slice(startQ,endQ); currentQuestions=original.map(q=>shuffleQuestion(q));
 }
-
 function updateScoreboard(){
   let total=0;
-  for(let lv=1;lv<=5;lv++){
-    document.getElementById("score"+lv).innerHTML=`${levelScores[lv]}<span> / 20</span>`;
-    total+=levelScores[lv];
-  }
+  for(let lv=1;lv<=5;lv++){ document.getElementById("score"+lv).innerHTML=`${levelScores[lv]}<span> / 20</span>`; total+=levelScores[lv]; }
   document.getElementById("totalScore").innerHTML=`${total}<span> / 100</span>`;
 }
-
 function chooseLevel(level){
-  currentLevel=level;
-  [startQ,endQ]=ranges[level];
-  i=0;
-  prepareLevel();
-
+  currentLevel=level; [startQ,endQ]=ranges[level]; i=0; prepareLevel();
   document.querySelectorAll("#levelSelect button").forEach((b,n)=>{ b.classList.toggle("active", n===level-1); });
   document.querySelectorAll(".score-card").forEach(card=>{ card.classList.remove("active"); });
   document.getElementById("scoreCard"+level).classList.add("active");
-
   document.getElementById("lv").textContent="LEVEL "+level;
   document.getElementById("num").textContent="第 1 / 10 題";
   document.getElementById("bar").style.width="0%";
   document.getElementById("s").textContent="";
   document.getElementById("sc").textContent=`本 Level 目前成績：${levelScores[level]} / 20`;
   document.getElementById("q").textContent=`準備挑戰 LEVEL ${level}`;
-
-  document.getElementById("c").innerHTML=`
-    <button onclick="startLevel()" style="grid-column:1 / -1; height: 100%; border:0; border-radius:14px; background:#e8e2d8; color:#20242b; font-size:20px; font-weight:900; cursor:pointer;">
-      開始 LEVEL ${level} 🚀
-    </button>
-  `;
+  document.getElementById("c").innerHTML=`<button onclick="startLevel()" style="grid-column:1 / -1; height: 100%; border:0; border-radius:14px; background:#e8e2d8; color:#20242b; font-size:20px; font-weight:900; cursor:pointer;">開始 LEVEL ${level} 🚀</button>`;
 }
-
-function startLevel(){
-  i=0; lock=false; prepareLevel(); show();
-}
-
+function startLevel(){ i=0; lock=false; prepareLevel(); show(); }
 function show(){
-  lock=false;
-  const x=currentQuestions[i];
-
+  lock=false; const x=currentQuestions[i];
   document.getElementById("lv").textContent="LEVEL "+currentLevel;
   document.getElementById("num").textContent=`第 ${i+1} / 10 題`;
   document.getElementById("bar").style.width=((i)/10*100)+"%";
   document.getElementById("q").textContent=x.q;
-
   const labels=["A","B","C","D"];
-  document.getElementById("c").innerHTML=
-    x.shuffledChoices.map((item,k)=>`
-      <button onclick="ans(${k})">
-        <span class="choice-label">${labels[k]}</span>
-        <span class="choice-text">${item.text}</span>
-      </button>
-    `).join("");
-
+  document.getElementById("c").innerHTML=x.shuffledChoices.map((item,k)=>`<button onclick="ans(${k})"><span class="choice-label">${labels[k]}</span><span class="choice-text">${item.text}</span></button>`).join("");
   document.getElementById("s").textContent="";
   document.getElementById("sc").textContent=`本 Level 暫得：${levelScores[currentLevel]} / 20`;
 }
-
 function ans(k){
   if(lock)return; lock=true;
-
-  const x=currentQuestions[i];
-  const buttons=document.querySelectorAll(".choices button");
-  const labels=["A","B","C","D"];
-
+  const x=currentQuestions[i]; const buttons=document.querySelectorAll(".choices button"); const labels=["A","B","C","D"];
   buttons[k].classList.add(k===x.shuffledAnswer ? "correct" : "wrong");
-
   if(k===x.shuffledAnswer){
     levelScores[currentLevel]+=2;
     document.getElementById("s").innerHTML=`✅ 答對！ ${x.n}<br>本題 2 分。`;
@@ -808,45 +441,27 @@ function ans(k){
     buttons[x.shuffledAnswer].classList.add("correct");
     document.getElementById("s").innerHTML=`❌ 答案揭曉：${labels[x.shuffledAnswer]} ${x.n}`;
   }
-
   updateScoreboard();
   document.getElementById("sc").textContent=`本 Level 暫得：${levelScores[currentLevel]} / 20`;
-
-  setTimeout(()=>{
-    i++;
-    if(i<10){ show(); } else { finishLevel(); }
-  },1700);
+  setTimeout(()=>{ i++; if(i<10){ show(); } else { finishLevel(); } },1700);
 }
-
 function finishLevel(){
   document.getElementById("bar").style.width="100%";
   document.getElementById("lv").textContent=`LEVEL ${currentLevel} 完成`;
   document.getElementById("num").textContent="10 題完成";
-
   document.getElementById("q").innerHTML=`<span class="finish-message">🎉 LEVEL ${currentLevel} 挑戰完成！</span>`;
-
   const total=Object.values(levelScores).reduce((a,b)=>a+b,0);
-  document.getElementById("c").innerHTML=`
-    <button onclick="startLevel()" style="font-size:18px; height:100%;">🔁 重玩 LEVEL ${currentLevel}</button>
-    <button onclick="nextLevel()" style="font-size:18px; height:100%;">➡️ 選擇下一 LEVEL</button>
-  `;
-
+  document.getElementById("c").innerHTML=`<button onclick="startLevel()" style="font-size:18px; height:100%;">🔁 重玩 LEVEL ${currentLevel}</button><button onclick="nextLevel()" style="font-size:18px; height:100%;">➡️ 選擇下一 LEVEL</button>`;
   document.getElementById("s").innerHTML=`本 Level 得分：<strong>${levelScores[currentLevel]} / 20</strong><br>目前總分：<strong>${total} / 100</strong>`;
-  document.getElementById("sc").textContent="每題 2 分，總分滿分 100 分。";
+  document.getElementById("sc").textContent="若全部過關，記得在上方點擊「📤 繳交成績」唷！";
 }
-
-function nextLevel(){
-  const n = currentLevel<5 ? currentLevel+1 : 1; chooseLevel(n);
-}
-
+function nextLevel(){ const n = currentLevel<5 ? currentLevel+1 : 1; chooseLevel(n); }
 function restartGame(){
   for(let lv=1;lv<=5;lv++){ levelScores[lv]=0; }
   currentLevel=0; i=-1;
-
   document.querySelectorAll("#levelSelect button").forEach(b=>b.classList.remove("active"));
   document.querySelectorAll(".score-card").forEach(card=>card.classList.remove("active"));
   updateScoreboard();
-
   document.getElementById("lv").textContent="尚未選擇";
   document.getElementById("num").textContent="請選擇 Level";
   document.getElementById("bar").style.width="0%";
@@ -857,7 +472,6 @@ function restartGame(){
 }
 
 updateScoreboard();
-
 </script>
 </body>
 </html>
