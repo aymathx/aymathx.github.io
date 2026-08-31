@@ -213,6 +213,16 @@ h1 {
         <option value="803">803</option>
         <option value="804">804</option>
         <option value="805">805</option>
+        <option value="806">806</option>
+        <option value="807">807</option>
+        <option value="808">808</option>
+        <option value="809">809</option>
+        <option value="810">810</option>
+        <option value="811">811</option>
+        <option value="812">812</option>
+        <option value="813">813</option>
+        <option value="814">814</option>
+        <option value="815">815</option>
       </select>
       <input id="studentSeat" class="info-input seat-input" type="number" placeholder="座號" min="1" max="50">
       <input id="studentName" class="info-input name-input" type="text" placeholder="輸入姓名" autocomplete="off">
@@ -233,7 +243,7 @@ h1 {
       <span class="badge" id="num">請選擇 Level</span>
     </div>
     <div class="progress"><div id="bar"></div></div>
-    <div class="question" id="q">選擇一個 LEVEL 開始任務</div>
+    <div class="question" id="q">請先填寫上方身分資料，再選擇 LEVEL 任務</div>
     <div class="choices" id="c"></div>
     <div class="status" id="s"></div>
     <div class="score" id="sc"></div>
@@ -248,23 +258,32 @@ h1 {
    ★ 老師專用設定區 (串接 Google 試算表)
 ===================================================== */
 // ⚠️ 請將下方的文字替換成您自己的 Web App 網址
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzWFNen-4dY88FYPRT9R3mojBHss8kI-gzY_0RSa2ciy3z7nCqg628OLeBLDcKVZsiU/exec"; 
+const GAS_URL = "請將這裡替換成您的_Web_App_網址"; 
 
 /* ★ 檢查是否已經繳交過 (防重新整理機制) */
 window.addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('mathAgentSubmitted') === 'true') {
-    lockForm();
+    lockFormAndSubmitBtn();
   }
 });
 
-function lockForm() {
+// 永久鎖定表單與按鈕
+function lockFormAndSubmitBtn() {
   document.getElementById("studentClass").disabled = true;
   document.getElementById("studentSeat").disabled = true;
   document.getElementById("studentName").disabled = true;
   const btn = document.getElementById("submitBtn");
-  btn.innerHTML = "✅ 成績已繳交鎖定";
+  btn.innerHTML = "✅ 成績已繳交";
   btn.disabled = true;
 }
+
+// 僅鎖定輸入框 (測驗中防呆)
+function lockInputsOnly() {
+  document.getElementById("studentClass").disabled = true;
+  document.getElementById("studentSeat").disabled = true;
+  document.getElementById("studentName").disabled = true;
+}
+
 
 function submitScore() {
   if(!GAS_URL || GAS_URL === "請將這裡替換成您的_Web_App_網址") {
@@ -302,9 +321,9 @@ function submitScore() {
   })
   .then(() => {
     alert("🎉 繳交成功！\n\n系統已紀錄您的成績，請勿重複提交。");
-    // ★ 繳交成功後，將紀錄存入瀏覽器，並永久鎖定表單
+    // 繳交成功後，將紀錄存入瀏覽器，並永久鎖定表單
     localStorage.setItem('mathAgentSubmitted', 'true');
-    lockForm();
+    lockFormAndSubmitBtn();
   })
   .catch((err) => {
     alert("❌ 上傳失敗，請檢查網路連線。");
@@ -325,7 +344,7 @@ function changeFontSize(delta) {
 }
 
 /* =====================================================
-   題庫 (保持不變)
+   題庫
 ===================================================== */
 const data = [
 { q:"12×7", c:["(10＋2)×7","10×7＋2","12＋7","10×7＋2×7"], a:3, n:"12×7＝10×7＋2×7。", lv:1 },
@@ -385,7 +404,7 @@ const data = [
 ];
 
 /* =====================================================
-   遊戲邏輯 (保持不變)
+   遊戲邏輯
 ===================================================== */
 const ranges={ 1:[0,10], 2:[10,20], 3:[20,30], 4:[30,40], 5:[40,50] };
 const levelScores={ 1:0, 2:0, 3:0, 4:0, 5:0 };
@@ -405,7 +424,26 @@ function updateScoreboard(){
   for(let lv=1;lv<=5;lv++){ document.getElementById("score"+lv).innerHTML=`${levelScores[lv]}<span> / 20</span>`; total+=levelScores[lv]; }
   document.getElementById("totalScore").innerHTML=`${total}<span> / 100</span>`;
 }
+
+// 選擇關卡時，強制驗證學生身分
 function chooseLevel(level){
+  // ★ 強制驗證：檢查是否填寫資料
+  const classInput = document.getElementById("studentClass").value;
+  const seatInput = document.getElementById("studentSeat").value.trim();
+  const nameInput = document.getElementById("studentName").value.trim();
+  
+  if (!classInput || !seatInput || !nameInput) {
+    alert("⚠️ 請先填寫完整的「班級」、「座號」與「姓名」才能開始測驗！");
+    // 自動將游標移動到未填寫的欄位
+    if (!classInput) document.getElementById("studentClass").focus();
+    else if (!seatInput) document.getElementById("studentSeat").focus();
+    else document.getElementById("studentName").focus();
+    return; // 終止，不讓學生進入關卡
+  }
+
+  // ★ 如果檢查通過，立刻鎖定輸入框，防止學生中途修改
+  lockInputsOnly();
+
   currentLevel=level; [startQ,endQ]=ranges[level]; i=0; prepareLevel();
   document.querySelectorAll("#levelSelect button").forEach((b,n)=>{ b.classList.toggle("active", n===level-1); });
   document.querySelectorAll(".score-card").forEach(card=>{ card.classList.remove("active"); });
@@ -418,6 +456,7 @@ function chooseLevel(level){
   document.getElementById("q").textContent=`準備挑戰 LEVEL ${level}`;
   document.getElementById("c").innerHTML=`<button onclick="startLevel()" style="grid-column:1 / -1; height: 100%; border:0; border-radius:14px; background:#e8e2d8; color:#20242b; font-size:20px; font-weight:900; cursor:pointer;">開始 LEVEL ${level} 🚀</button>`;
 }
+
 function startLevel(){ i=0; lock=false; prepareLevel(); show(); }
 function show(){
   lock=false; const x=currentQuestions[i];
@@ -456,6 +495,8 @@ function finishLevel(){
   document.getElementById("sc").textContent="若全部過關，記得在上方點擊「📤 繳交成績」唷！";
 }
 function nextLevel(){ const n = currentLevel<5 ? currentLevel+1 : 1; chooseLevel(n); }
+
+// 重新開始遊戲
 function restartGame(){
   for(let lv=1;lv<=5;lv++){ levelScores[lv]=0; }
   currentLevel=0; i=-1;
@@ -465,10 +506,17 @@ function restartGame(){
   document.getElementById("lv").textContent="尚未選擇";
   document.getElementById("num").textContent="請選擇 Level";
   document.getElementById("bar").style.width="0%";
-  document.getElementById("q").textContent="選擇一個 LEVEL 開始任務";
+  document.getElementById("q").textContent="請先填寫上方身分資料，再選擇 LEVEL 任務";
   document.getElementById("c").innerHTML="";
   document.getElementById("s").textContent="";
   document.getElementById("sc").textContent="";
+  
+  // ★ 解鎖輸入框：只有在「尚未繳交」的情況下，重新開始才會解鎖讓學生改名字
+  if (localStorage.getItem('mathAgentSubmitted') !== 'true') {
+    document.getElementById("studentClass").disabled = false;
+    document.getElementById("studentSeat").disabled = false;
+    document.getElementById("studentName").disabled = false;
+  }
 }
 
 updateScoreboard();
