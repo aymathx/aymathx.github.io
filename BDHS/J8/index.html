@@ -48,287 +48,1092 @@ body {
   overflow: hidden;
 }
 
-.tag { font-size: 13px; letter-spacing: 3px; opacity: .62; line-height: 1; flex-shrink: 0; }
-h1 { font-size: clamp(28px, 3.5vw, 48px); line-height: 1.05; margin: 1vh 0 1.5vh; font-weight: 950; flex-shrink: 0; }
+.tag {
+  font-size: 13px;
+  letter-spacing: 3px;
+  opacity: .62;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+h1 {
+  font-size: clamp(28px, 3.5vw, 48px);
+  line-height: 1.05;
+  margin: 1vh 0 1.5vh;
+  font-weight: 950;
+  flex-shrink: 0;
+}
 
 /* 成績區 */
-.scoreboard { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 0 0 1.2vh; flex-shrink: 0; }
-.score-card { background: #fff; color: #20242b; border-radius: 12px; padding: 6px 4px; text-align: center; border: 3px solid transparent; }
-.score-card.active { border-color: #20242b; box-shadow: inset 0 0 0 3px #fff; }
-.score-card.total { background: #e8e2d8; }
-.score-card .label { font-size: 11px; font-weight: 900; letter-spacing: 1px; opacity: .7; }
-.score-card .value { font-size: clamp(18px, 2vw, 24px); font-weight: 950; line-height: 1.1; margin-top: 2px; }
-.score-card .value span { font-size: 11px; font-weight: 800; opacity: .65; }
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin: 0 0 1.2vh;
+  flex-shrink: 0;
+}
+
+.score-card {
+  background: #fff;
+  color: #20242b;
+  border-radius: 12px;
+  padding: 6px 4px;
+  text-align: center;
+  border: 3px solid transparent;
+}
+
+.score-card.active {
+  border-color: #20242b;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+.score-card.total {
+  background: #e8e2d8;
+}
+
+.score-card .label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  opacity: .7;
+}
+
+.score-card .value {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 950;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+.score-card .value span {
+  font-size: 11px;
+  font-weight: 800;
+  opacity: .65;
+}
 
 /* 遊戲主區 */
 .game {
-  flex: 1; min-height: 0; background: #fff; color: #20242b; border-radius: 20px;
-  padding: 1.5vh 2vw; border: 3px solid #20242b; box-shadow: 0 5px 20px #0000000b;
-  display: flex; flex-direction: column; overflow: hidden; 
+  flex: 1;
+  min-height: 0;
+  background: #fff;
+  color: #20242b;
+  border-radius: 20px;
+  padding: 1.5vh 2vw;
+  border: 3px solid #20242b;
+  box-shadow: 0 5px 20px #0000000b;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
 }
 
-.game-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-shrink: 0; margin-bottom: 1vh; }
-.game-title { font-size: clamp(18px, 2vw, 22px); font-weight: 950; margin: 0; }
-.header-controls { display: flex; align-items: center; gap: 10px; }
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-bottom: 1vh;
+}
 
-.font-controls { display: flex; background: #e8e2d8; border-radius: 10px; overflow: hidden; }
-.font-btn { border: 0; background: transparent; color: #20242b; font-size: 15px; font-weight: 900; cursor: pointer; padding: 6px 12px; transition: .15s; }
-.font-btn:hover { background: #d4cec4; }
-.restart-btn { border: 0; background: transparent; color: #20242b; font-size: 16px; font-weight: 900; cursor: pointer; padding: 6px 10px; border-radius: 10px; }
-.restart-btn:hover { background: #e8e2d8; }
+.game-title {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 950;
+  margin: 0;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.font-controls {
+  display: flex;
+  background: #e8e2d8;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.font-btn {
+  border: 0;
+  background: transparent;
+  color: #20242b;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: .15s;
+}
+
+.font-btn:hover {
+  background: #d4cec4;
+}
+
+.restart-btn {
+  border: 0;
+  background: transparent;
+  color: #20242b;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.restart-btn:hover {
+  background: #e8e2d8;
+}
 
 /* 學生資訊與繳交按鈕 */
-.info-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 1vh; flex-shrink: 0; }
-.info-input {
-  height: clamp(40px, 5vh, 48px); border: 4px solid #e3ded4; border-radius: 12px;
-  padding: 0 10px; font-size: 16px; font-weight: 800; color: #20242b; outline: none; background: #fff;
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 1vh;
+  flex-shrink: 0;
 }
-.info-input:focus { border-color: #20242b; }
-.info-input::placeholder { color: #aaa; }
-.info-input:disabled { background: #f0f0f0; color: #888; border-color: #eee; cursor: not-allowed; }
 
-.class-select { width: 100px; cursor: pointer; }
-.seat-input { width: 80px; text-align: center; }
-.name-input { flex: 1; min-width: 100px; }
+.info-input {
+  height: clamp(40px, 5vh, 48px);
+  border: 4px solid #e3ded4;
+  border-radius: 12px;
+  padding: 0 10px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #20242b;
+  outline: none;
+  background: #fff;
+}
+
+.info-input:focus {
+  border-color: #20242b;
+}
+
+.info-input::placeholder {
+  color: #aaa;
+}
+
+.info-input:disabled {
+  background: #f0f0f0;
+  color: #888;
+  border-color: #eee;
+  cursor: not-allowed;
+}
+
+.class-select {
+  width: 100px;
+  cursor: pointer;
+}
+
+.seat-input {
+  width: 80px;
+  text-align: center;
+}
+
+.name-input {
+  flex: 1;
+  min-width: 100px;
+}
 
 .share-btn {
-  white-space: nowrap; background: #20242b; color: #fff; border: none; border-radius: 12px;
-  padding: 0 16px; height: clamp(40px, 5vh, 48px); font-size: 15px; font-weight: 900;
-  cursor: pointer; transition: 0.15s;
+  white-space: nowrap;
+  background: #20242b;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0 16px;
+  height: clamp(40px, 5vh, 48px);
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.15s;
 }
-.share-btn:hover { background: #363c48; }
-.share-btn:active { transform: scale(0.95); }
-.share-btn:disabled { background: #999; color: #fff; cursor: not-allowed; transform: none; }
 
-/* ★ 按鈕完成解鎖時的「呼吸燈閃爍」效果 */
+.share-btn:hover {
+  background: #363c48;
+}
+
+.share-btn:active {
+  transform: scale(0.95);
+}
+
+.share-btn:disabled {
+  background: #999;
+  color: #fff;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 完成解鎖時的呼吸燈 */
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.7); }
-  70% { box-shadow: 0 0 0 12px rgba(46, 160, 67, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(46, 160, 67, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 160, 67, 0);
+  }
 }
-.ready-to-submit {
-  background: #2ea043 !important; /* 變成綠色 */
-  animation: pulse 1.5s infinite;  /* 閃爍動畫 */
-}
-.ready-to-submit:hover { background: #238636 !important; }
 
-/* 內部動態切換容器 (正常遊戲區 vs 錯題區) */
-.normal-game-area { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.ready-to-submit {
+  background: #2ea043 !important;
+  animation: pulse 1.5s infinite;
+}
+
+.ready-to-submit:hover {
+  background: #238636 !important;
+}
+
+/* 內部動態切換容器 */
+.normal-game-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
 
 /* LEVEL 選擇 */
-.level-select { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 0 0 1vh; flex-shrink: 0; }
-.level-select button { background: #e8e2d8; border: 3px solid transparent; border-radius: 12px; padding: 6px 4px; height: clamp(50px, 7vh, 64px); font-size: clamp(14px, 1.5vw, 17px); font-weight: 950; cursor: pointer; line-height: 1.15; transition: .15s; color: #20242b; }
-.level-select button.active { background: #20242b; color: #fff; border-color: #20242b; }
-.level-select button:hover { transform: translateY(-2px); }
-.level-select small { font-size: 11px; font-weight: 800; opacity: .78; }
-.level-select button.completed { background: #f0f0f0; color: #a0a0a0; opacity: 0.7; cursor: not-allowed; border-color: transparent; }
-.level-select button.completed:hover { transform: none; }
+.level-select {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin: 0 0 1vh;
+  flex-shrink: 0;
+}
+
+.level-select button {
+  background: #e8e2d8;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  padding: 6px 4px;
+  height: clamp(50px, 7vh, 64px);
+  font-size: clamp(14px, 1.5vw, 17px);
+  font-weight: 950;
+  cursor: pointer;
+  line-height: 1.15;
+  transition: .15s;
+  color: #20242b;
+}
+
+.level-select button.active {
+  background: #20242b;
+  color: #fff;
+  border-color: #20242b;
+}
+
+.level-select button:hover {
+  transform: translateY(-2px);
+}
+
+.level-select small {
+  font-size: 11px;
+  font-weight: 800;
+  opacity: .78;
+}
+
+.level-select button.completed {
+  background: #f0f0f0;
+  color: #a0a0a0;
+  opacity: 0.7;
+  cursor: not-allowed;
+  border-color: transparent;
+}
+
+.level-select button.completed:hover {
+  transform: none;
+}
 
 /* 題目資訊 */
-.top { display: flex; justify-content: space-between; gap: 8px; flex-shrink: 0; }
-.badge { background: #e9e3d8; padding: 4px 12px; border-radius: 999px; font-weight: 900; font-size: 13px; }
-.progress { height: 6px; background: #e3ded4; border-radius: 20px; overflow: hidden; margin-top: 6px; flex-shrink: 0; }
-#bar { height: 100%; width: 0; background: #20242b; transition: .3s; }
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.badge {
+  background: #e9e3d8;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.progress {
+  height: 6px;
+  background: #e3ded4;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+#bar {
+  height: 100%;
+  width: 0;
+  background: #20242b;
+  transition: .3s;
+}
 
 /* 題目 */
-.question { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; font-size: calc(clamp(32px, 4.5vw, 56px) * var(--text-scale)); font-weight: 950; text-align: center; margin: 0; padding: 0 10px; line-height: 1.2; overflow-wrap: anywhere; }
+.question {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(clamp(32px, 4.5vw, 56px) * var(--text-scale));
+  font-weight: 950;
+  text-align: center;
+  margin: 0;
+  padding: 0 10px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
 
 /* 選項 */
-.choices { flex: 1.3; min-height: 0; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 1vh; width: 100%; flex-shrink: 0; }
-.choices button { position: relative; border: 0; border-radius: 14px; background: #e8e2d8; color: #20242b; font-weight: 900; height: 100%; min-height: 0; padding: 6px 10px 6px 54px; cursor: pointer; transition: .15s; line-height: 1.2; display: flex; align-items: center; justify-content: center; text-align: center; }
-.choices button .choice-text { font-size: calc(clamp(16px, 1.8vw, 24px) * var(--text-scale)); }
-.choices button:hover { transform: translateY(-2px); }
-.choices button:active { transform: translateY(0); }
-.choice-label { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: #20242b; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 950; flex-shrink: 0; }
-.correct { background: #cfe8d5!important; }
-.wrong { background: #f0c8c8!important; }
-.correct .choice-label { background: #20242b; }
-.wrong .choice-label { background: #20242b; }
+.choices {
+  flex: 1.3;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1vh;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.choices button {
+  position: relative;
+  border: 0;
+  border-radius: 14px;
+  background: #e8e2d8;
+  color: #20242b;
+  font-weight: 900;
+  height: 100%;
+  min-height: 0;
+  padding: 6px 10px 6px 54px;
+  cursor: pointer;
+  transition: .15s;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.choices button .choice-text {
+  font-size: calc(clamp(16px, 1.8vw, 24px) * var(--text-scale));
+}
+
+.choices button:hover {
+  transform: translateY(-2px);
+}
+
+.choices button:active {
+  transform: translateY(0);
+}
+
+.choice-label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #20242b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 950;
+  flex-shrink: 0;
+}
+
+.correct {
+  background: #cfe8d5!important;
+}
+
+.wrong {
+  background: #f0c8c8!important;
+}
+
+.correct .choice-label,
+.wrong .choice-label {
+  background: #20242b;
+}
 
 /* 狀態 / 分數 */
-.status { text-align: center; min-height: 24px; line-height: 1.3; font-weight: 800; font-size: 14px; margin: 1vh 4px 0; flex-shrink: 0; }
-.score { text-align: center; font-size: 15px; font-weight: 900; min-height: 22px; flex-shrink: 0; margin-bottom: 0.5vh; }
-.finish-message { font-size: calc(clamp(24px, 3vw, 40px) * var(--text-scale)); font-weight: 950; }
+.status {
+  text-align: center;
+  min-height: 24px;
+  line-height: 1.3;
+  font-weight: 800;
+  font-size: 14px;
+  margin: 1vh 4px 0;
+  flex-shrink: 0;
+}
+
+.score {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 900;
+  min-height: 22px;
+  flex-shrink: 0;
+  margin-bottom: 0.5vh;
+}
+
+.finish-message {
+  font-size: calc(clamp(24px, 3vw, 40px) * var(--text-scale));
+  font-weight: 950;
+}
 
 /* 錯題本總結區 */
-.error-summary { display: none; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; padding-right: 5px; margin-top: 5px; }
-.error-summary::-webkit-scrollbar { width: 6px; }
-.error-summary::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-.error-item { background: #f9f8f6; border: 2px solid #e3ded4; border-radius: 16px; padding: 14px; margin-bottom: 12px; }
-.error-q { font-size: clamp(18px, 2vw, 24px); font-weight: 950; margin-bottom: 12px; line-height: 1.3; }
-.error-badge { background: #20242b; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 12px; margin-right: 8px; vertical-align: middle; }
-.error-choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
-.error-choice { display: flex; align-items: center; padding: 8px 12px; border-radius: 10px; font-weight: 900; font-size: clamp(14px, 1.5vw, 18px); }
-.error-choice-default { background: #e8e2d8; color: #20242b; opacity: 0.6; }
-.error-choice-correct { background: #cfe8d5; color: #155724; border: 2px solid #2ea043; }
-.error-choice-wrong { background: #f0c8c8; color: #721c24; border: 2px solid #da3633; }
-.error-choice-label { width: 28px; height: 28px; border-radius: 50%; background: #20242b; color: #fff; display: flex; justify-content: center; align-items: center; font-size: 14px; margin-right: 10px; flex-shrink: 0; }
-.error-note { font-size: 14px; font-weight: 800; color: #444; background: #e3ded4; padding: 10px 12px; border-radius: 8px; line-height: 1.4; }
-
-/* 平板 / 手機微調 */
-@media(max-width: 900px){
-  .wrap { padding: 1vh; } .hero { padding: 1.5vh; border-radius: 18px; } h1 { font-size: 26px; margin: 0.5vh 0 1vh; }
-  .scoreboard { gap: 4px; } .score-card { padding: 4px 2px; border-radius: 10px; } .score-card .value { font-size: 18px; }
-  .game { padding: 1vh 1.5vw; border-radius: 16px; }
-  .info-input, .share-btn { height: clamp(36px, 4vh, 44px); font-size: 15px; }
-  .class-select { width: 90px; } .seat-input { width: 70px; }
-  .level-select { gap: 4px; } .level-select button { height: clamp(44px, 6vh, 56px); font-size: 13px; padding: 4px; }
-  .level-select small { font-size: 10px; } .choices button { padding-left: 46px; }
-  .choice-label { width: 28px; height: 28px; left: 8px; font-size: 14px; }
+.error-summary {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-top: 5px;
 }
+
+.error-summary::-webkit-scrollbar {
+  width: 6px;
+}
+
+.error-summary::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.error-item {
+  background: #f9f8f6;
+  border: 2px solid #e3ded4;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.error-q {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 950;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.error-badge {
+  background: #20242b;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.error-choices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.error-choice {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 900;
+  font-size: clamp(14px, 1.5vw, 18px);
+}
+
+.error-choice-default {
+  background: #e8e2d8;
+  color: #20242b;
+  opacity: 0.6;
+}
+
+.error-choice-correct {
+  background: #cfe8d5;
+  color: #155724;
+  border: 2px solid #2ea043;
+}
+
+.error-choice-wrong {
+  background: #f0c8c8;
+  color: #721c24;
+  border: 2px solid #da3633;
+}
+
+.error-choice-label {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #20242b;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.error-note {
+  font-size: 14px;
+  font-weight: 800;
+  color: #444;
+  background: #e3ded4;
+  padding: 10px 12px;
+  border-radius: 8px;
+  line-height: 1.4;
+}
+
+/* 平板 */
+@media(max-width: 900px){
+  .wrap {
+    padding: 1vh;
+  }
+
+  .hero {
+    padding: 1.5vh;
+    border-radius: 18px;
+  }
+
+  h1 {
+    font-size: 26px;
+    margin: 0.5vh 0 1vh;
+  }
+
+  .scoreboard {
+    gap: 4px;
+  }
+
+  .score-card {
+    padding: 4px 2px;
+    border-radius: 10px;
+  }
+
+  .score-card .value {
+    font-size: 18px;
+  }
+
+  .game {
+    padding: 1vh 1.5vw;
+    border-radius: 16px;
+  }
+
+  .info-input,
+  .share-btn {
+    height: clamp(36px, 4vh, 44px);
+    font-size: 15px;
+  }
+
+  .class-select {
+    width: 90px;
+  }
+
+  .seat-input {
+    width: 70px;
+  }
+
+  .level-select {
+    gap: 4px;
+  }
+
+  .level-select button {
+    height: clamp(44px, 6vh, 56px);
+    font-size: 13px;
+    padding: 4px;
+  }
+
+  .level-select small {
+    font-size: 10px;
+  }
+
+  .choices button {
+    padding-left: 46px;
+  }
+
+  .choice-label {
+    width: 28px;
+    height: 28px;
+    left: 8px;
+    font-size: 14px;
+  }
+}
+
+/* 手機 */
 @media(max-width: 600px){
-  .wrap { padding: 6px; } .hero { padding: 10px; border-radius: 14px; } h1 { font-size: 22px; margin: 4px 0 8px; }
-  .score-card { padding: 4px 1px; } .score-card .label { font-size: 9px; } .score-card .value { font-size: 15px; } .score-card .value span { font-size: 9px; }
-  .game { padding: 8px; border-radius: 12px; margin-top: 6px; } .game-title { font-size: 15px; }
-  .restart-btn, .font-btn { font-size: 13px; padding: 4px 8px; }
-  .info-row { gap: 6px; } .class-select { flex: 1; padding: 0 4px; font-size: 14px; width: auto; }
-  .seat-input { flex: 1; padding: 0 4px; font-size: 14px; width: auto; }
-  .name-input { flex: 1.5; padding: 0 8px; font-size: 14px; width: auto; }
-  .share-btn { flex-basis: 100%; margin-top: 2px; } 
-  .info-input, .share-btn { height: 38px; border-width: 3px; border-radius: 10px;}
-  .level-select button { height: 42px; font-size: 11px; border-radius: 8px; } .level-select small { display: none; }
-  .choices { gap: 6px; } .choices button { padding: 4px 6px 4px 40px; border-radius: 10px; }
-  .choice-label { width: 26px; height: 26px; left: 6px; font-size: 13px; }
-  .error-choices { grid-template-columns: 1fr; }
+  .wrap {
+    padding: 6px;
+  }
+
+  .hero {
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin: 4px 0 8px;
+  }
+
+  .score-card {
+    padding: 4px 1px;
+  }
+
+  .score-card .label {
+    font-size: 9px;
+  }
+
+  .score-card .value {
+    font-size: 15px;
+  }
+
+  .score-card .value span {
+    font-size: 9px;
+  }
+
+  .game {
+    padding: 8px;
+    border-radius: 12px;
+    margin-top: 6px;
+  }
+
+  .game-title {
+    font-size: 15px;
+  }
+
+  .restart-btn,
+  .font-btn {
+    font-size: 13px;
+    padding: 4px 8px;
+  }
+
+  .info-row {
+    gap: 6px;
+  }
+
+  .class-select {
+    flex: 1;
+    padding: 0 4px;
+    font-size: 14px;
+    width: auto;
+  }
+
+  .seat-input {
+    flex: 1;
+    padding: 0 4px;
+    font-size: 14px;
+    width: auto;
+  }
+
+  .name-input {
+    flex: 1.5;
+    padding: 0 8px;
+    font-size: 14px;
+    width: auto;
+  }
+
+  .share-btn {
+    flex-basis: 100%;
+    margin-top: 2px;
+  }
+
+  .info-input,
+  .share-btn {
+    height: 38px;
+    border-width: 3px;
+    border-radius: 10px;
+  }
+
+  .level-select button {
+    height: 42px;
+    font-size: 11px;
+    border-radius: 8px;
+  }
+
+  .level-select small {
+    display: none;
+  }
+
+  .choices {
+    gap: 6px;
+  }
+
+  .choices button {
+    padding: 4px 6px 4px 40px;
+    border-radius: 10px;
+  }
+
+  .choice-label {
+    width: 26px;
+    height: 26px;
+    left: 6px;
+    font-size: 13px;
+  }
+
+  .error-choices {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="wrap">
 <section class="hero">
+
   <div class="tag">GRADE 8 · FORMATIVE ASSESSMENT</div>
   <h1>數學特工隊 🕵️‍♂️</h1>
 
   <div class="scoreboard">
-    <div class="score-card" id="scoreCard1"><div class="label">LEVEL 1</div><div class="value" id="score1">0<span> / 20</span></div></div>
-    <div class="score-card" id="scoreCard2"><div class="label">LEVEL 2</div><div class="value" id="score2">0<span> / 20</span></div></div>
-    <div class="score-card" id="scoreCard3"><div class="label">LEVEL 3</div><div class="value" id="score3">0<span> / 20</span></div></div>
-    <div class="score-card" id="scoreCard4"><div class="label">LEVEL 4</div><div class="value" id="score4">0<span> / 20</span></div></div>
-    <div class="score-card" id="scoreCard5"><div class="label">LEVEL 5</div><div class="value" id="score5">0<span> / 20</span></div></div>
-    <div class="score-card total"><div class="label">🏆 總分</div><div class="value" id="totalScore">0<span> / 100</span></div></div>
+
+    <div class="score-card" id="scoreCard1">
+      <div class="label">LEVEL 1</div>
+      <div class="value" id="score1">0<span> / 20</span></div>
+    </div>
+
+    <div class="score-card" id="scoreCard2">
+      <div class="label">LEVEL 2</div>
+      <div class="value" id="score2">0<span> / 20</span></div>
+    </div>
+
+    <div class="score-card" id="scoreCard3">
+      <div class="label">LEVEL 3</div>
+      <div class="value" id="score3">0<span> / 20</span></div>
+    </div>
+
+    <div class="score-card" id="scoreCard4">
+      <div class="label">LEVEL 4</div>
+      <div class="value" id="score4">0<span> / 20</span></div>
+    </div>
+
+    <div class="score-card" id="scoreCard5">
+      <div class="label">LEVEL 5</div>
+      <div class="value" id="score5">0<span> / 20</span></div>
+    </div>
+
+    <div class="score-card total">
+      <div class="label">🏆 總分</div>
+      <div class="value" id="totalScore">0<span> / 100</span></div>
+    </div>
+
   </div>
 
   <section class="game">
+
     <div class="game-header">
       <div class="game-title">🎮 選擇關卡</div>
+
       <div class="header-controls">
+
         <div class="font-controls">
-          <button class="font-btn" onclick="changeFontSize(-0.1)" title="縮小字體">A-</button>
-          <button class="font-btn" onclick="changeFontSize(0.1)" title="放大字體">A+</button>
+          <button class="font-btn"
+                  onclick="changeFontSize(-0.1)"
+                  title="縮小字體">
+            A-
+          </button>
+
+          <button class="font-btn"
+                  onclick="changeFontSize(0.1)"
+                  title="放大字體">
+            A+
+          </button>
         </div>
-        <button class="restart-btn" onclick="restartGame()">↻ 重新開始</button>
+
+        <button class="restart-btn"
+                onclick="restartGame()">
+          ↻ 重新開始
+        </button>
+
       </div>
     </div>
 
-    <!-- 學生資訊列 -->
+    <!-- 學生資訊 -->
     <div class="info-row">
-      <select id="studentClass" class="info-input class-select">
-        <option value="" disabled selected>班級</option>
-        <option value="801">801</option><option value="802">802</option><option value="803">803</option><option value="804">804</option>
+
+      <select id="studentClass"
+              class="info-input class-select">
+
+        <option value=""
+                disabled
+                selected>
+          班級
+        </option>
+
+        <option value="801">801</option>
+        <option value="802">802</option>
+        <option value="803">803</option>
+        <option value="804">804</option>
         <option value="805">805</option>
+
       </select>
-      <input id="studentSeat" class="info-input seat-input" type="number" placeholder="座號" min="1" max="50">
-      <input id="studentName" class="info-input name-input" type="text" placeholder="輸入姓名" autocomplete="off">
-      
-      <!-- ★ 預設為 disabled 鎖定狀態 -->
-      <button class="share-btn" id="submitBtn" onclick="submitScore()" disabled>🔒 需完成 5 關</button>
+
+      <input
+        id="studentSeat"
+        class="info-input seat-input"
+        type="number"
+        placeholder="座號"
+        min="1"
+        max="50"
+      >
+
+      <input
+        id="studentName"
+        class="info-input name-input"
+        type="text"
+        placeholder="輸入姓名"
+        autocomplete="off"
+      >
+
+      <button
+        class="share-btn"
+        id="submitBtn"
+        onclick="submitScore()"
+        disabled>
+        🔒 需完成 5 關
+      </button>
+
     </div>
 
-    <!-- 正常遊戲區塊 -->
-    <div id="normalGameArea" class="normal-game-area">
-      <div class="level-select" id="levelSelect">
-        <button onclick="chooseLevel(1)">LEVEL 1<br><small>10 題 · 20 分</small></button>
-        <button onclick="chooseLevel(2)">LEVEL 2<br><small>10 題 · 20 分</small></button>
-        <button onclick="chooseLevel(3)">LEVEL 3<br><small>10 題 · 20 分</small></button>
-        <button onclick="chooseLevel(4)">LEVEL 4<br><small>10 題 · 20 分</small></button>
-        <button onclick="chooseLevel(5)">LEVEL 5<br><small>10 題 · 20 分</small></button>
+    <!-- 正常遊戲區 -->
+    <div id="normalGameArea"
+         class="normal-game-area">
+
+      <div class="level-select"
+           id="levelSelect">
+
+        <button onclick="chooseLevel(1)">
+          LEVEL 1<br>
+          <small>10 題 · 20 分</small>
+        </button>
+
+        <button onclick="chooseLevel(2)">
+          LEVEL 2<br>
+          <small>10 題 · 20 分</small>
+        </button>
+
+        <button onclick="chooseLevel(3)">
+          LEVEL 3<br>
+          <small>10 題 · 20 分</small>
+        </button>
+
+        <button onclick="chooseLevel(4)">
+          LEVEL 4<br>
+          <small>10 題 · 20 分</small>
+        </button>
+
+        <button onclick="chooseLevel(5)">
+          LEVEL 5<br>
+          <small>10 題 · 20 分</small>
+        </button>
+
       </div>
 
       <div class="top">
-        <span class="badge" id="lv">尚未選擇</span>
-        <span class="badge" id="num">請選擇 Level</span>
+
+        <span class="badge"
+              id="lv">
+          尚未選擇
+        </span>
+
+        <span class="badge"
+              id="num">
+          請選擇 Level
+        </span>
+
       </div>
-      <div class="progress"><div id="bar"></div></div>
-      <div class="question" id="q">請先填寫上方身分資料，再選擇 LEVEL 任務</div>
-      <div class="choices" id="c"></div>
-      <div class="status" id="s"></div>
-      <div class="score" id="sc"></div>
+
+      <div class="progress">
+        <div id="bar"></div>
+      </div>
+
+      <div class="question"
+           id="q">
+        請先填寫上方身分資料，再選擇 LEVEL 任務
+      </div>
+
+      <div class="choices"
+           id="c">
+      </div>
+
+      <div class="status"
+           id="s">
+      </div>
+
+      <div class="score"
+           id="sc">
+      </div>
+
     </div>
 
-    <!-- 錯題本專區 -->
-    <div id="errorSummaryArea" class="error-summary"></div>
+    <!-- 錯題本 -->
+    <div id="errorSummaryArea"
+         class="error-summary">
+    </div>
 
   </section>
+
 </section>
 </div>
 
 <script>
+
 /* =====================================================
-   ★ 老師專用設定區 (串接 Google 試算表)
-===================================================== */
-// ⚠️ 請將下方的文字替換成您自己的 Web App 網址
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzna-O0XRASlYRE32ZVI6klmkDVXInbXCDMRt38VVhlS2SGMTXNarq5C7Hue7Xm6p58/exec"; 
+   老師專用設定區
+   ===================================================== */
+
+const GAS_URL =
+"https://script.google.com/macros/s/AKfycbzna-O0XRASlYRE32ZVI6klmkDVXInbXCDMRt38VVhlS2SGMTXNarq5C7Hue7Xm6p58/exec";
 
 let wrongRecords = [];
 
+
+/* =====================================================
+   LocalStorage
+   ===================================================== */
+
 window.addEventListener('DOMContentLoaded', () => {
+
   if (localStorage.getItem('mathAgentSubmitted') === 'true') {
+
     lockFormAndSubmitBtn();
-    const savedRecords = localStorage.getItem('mathAgentWrongRecords');
-    if (savedRecords) { wrongRecords = JSON.parse(savedRecords); showErrorSummary(); }
+
+    const savedRecords =
+      localStorage.getItem('mathAgentWrongRecords');
+
+    if (savedRecords) {
+
+      wrongRecords = JSON.parse(savedRecords);
+
+      showErrorSummary();
+
+    }
+
   }
+
 });
 
+
+/* =====================================================
+   鎖定表單
+   ===================================================== */
+
 function lockFormAndSubmitBtn() {
+
   document.getElementById("studentClass").disabled = true;
   document.getElementById("studentSeat").disabled = true;
   document.getElementById("studentName").disabled = true;
-  
-  const btn = document.getElementById("submitBtn");
+
+  const btn =
+    document.getElementById("submitBtn");
+
   btn.innerHTML = "✅ 成績已繳交";
   btn.disabled = true;
-  btn.classList.remove("ready-to-submit"); // 移除閃爍特效
+
+  btn.classList.remove("ready-to-submit");
+
 }
 
+
 function lockInputsOnly() {
+
   document.getElementById("studentClass").disabled = true;
   document.getElementById("studentSeat").disabled = true;
   document.getElementById("studentName").disabled = true;
+
 }
 
+
+/* =====================================================
+   繳交成績
+   ===================================================== */
+
 function submitScore() {
-  // ★ 防呆檢查：確認是否 5 關都打完了
-  const allDone = Object.values(levelCompleted).every(v => v === true);
+
+  const allDone =
+    Object.values(levelCompleted)
+      .every(v => v === true);
+
   if (!allDone) {
-    alert("⚠️ 必須完成 LEVEL 1 到 LEVEL 5 的所有關卡，才能繳交成績唷！");
+
+    alert(
+      "⚠️ 必須完成 LEVEL 1 到 LEVEL 5 的所有關卡，才能繳交成績唷！"
+    );
+
     return;
   }
 
-  if(!GAS_URL || GAS_URL === "請將這裡替換成您的_Web_App_網址") {
+
+  if (
+    !GAS_URL ||
+    GAS_URL === "請將這裡替換成您的_Web_App_網址"
+  ) {
+
     alert("⚠️ 老師尚未設定雲端資料庫網址！");
+
     return;
+
   }
 
-  const classInput = document.getElementById("studentClass").value;
-  const seatInput = document.getElementById("studentSeat").value.trim();
-  const nameInput = document.getElementById("studentName").value.trim();
-  
+
+  const classInput =
+    document.getElementById("studentClass").value;
+
+  const seatInput =
+    document.getElementById("studentSeat").value.trim();
+
+  const nameInput =
+    document.getElementById("studentName").value.trim();
+
+
   if (!classInput || !seatInput || !nameInput) {
-    alert("❌ 繳交失敗：請確認「班級」、「座號」與「姓名」都已經填寫完成！");
+
+    alert(
+      "❌ 繳交失敗：請確認「班級」、「座號」與「姓名」都已經填寫完成！"
+    );
+
     return;
+
   }
 
-  const total = Object.values(levelScores).reduce((a, b) => a + b, 0);
-  const details = `L1:${levelScores[1]}, L2:${levelScores[2]}, L3:${levelScores[3]}, L4:${levelScores[4]}, L5:${levelScores[5]}`;
-  const wrongDetailsStr = wrongRecords.map(r => `L${r.level}-第${r.qNum}題`).join(", ");
 
-  const submitBtn = document.getElementById('submitBtn');
+  const total =
+    Object.values(levelScores)
+      .reduce((a, b) => a + b, 0);
+
+
+  const details =
+    `L1:${levelScores[1]}, L2:${levelScores[2]}, L3:${levelScores[3]}, L4:${levelScores[4]}, L5:${levelScores[5]}`;
+
+
+  const wrongDetailsStr =
+    wrongRecords
+      .map(r => `L${r.level}-第${r.qNum}題`)
+      .join(", ");
+
+
+  const submitBtn =
+    document.getElementById('submitBtn');
+
   submitBtn.innerHTML = "⏳ 上傳中...";
-  submitBtn.classList.remove("ready-to-submit"); // 按下後停止閃爍
+  submitBtn.classList.remove("ready-to-submit");
   submitBtn.disabled = true;
 
-  const formData = new URLSearchParams();
+
+  const formData =
+    new URLSearchParams();
+
   formData.append("class", classInput);
   formData.append("seat", seatInput);
   formData.append("name", nameInput);
@@ -336,258 +1141,1806 @@ function submitScore() {
   formData.append("details", details);
   formData.append("wrongDetails", wrongDetailsStr);
 
+
   fetch(GAS_URL, {
+
     method: 'POST',
     body: formData,
     mode: 'no-cors'
+
   })
+
   .then(() => {
-    alert("🎉 繳交成功！\n\n點擊確認後，將為您統整本次測驗的錯誤題目。");
-    localStorage.setItem('mathAgentSubmitted', 'true');
-    localStorage.setItem('mathAgentWrongRecords', JSON.stringify(wrongRecords));
+
+    alert(
+      "🎉 繳交成功！\n\n點擊確認後，將為您統整本次測驗的錯誤題目。"
+    );
+
+    localStorage.setItem(
+      'mathAgentSubmitted',
+      'true'
+    );
+
+    localStorage.setItem(
+      'mathAgentWrongRecords',
+      JSON.stringify(wrongRecords)
+    );
+
     lockFormAndSubmitBtn();
+
     showErrorSummary();
+
   })
+
   .catch((err) => {
-    alert("❌ 上傳失敗，請檢查網路連線。");
-    submitBtn.innerHTML = "📤 再次繳交";
-    submitBtn.classList.add("ready-to-submit"); // 失敗的話恢復閃爍狀態
+
+    alert(
+      "❌ 上傳失敗，請檢查網路連線。"
+    );
+
+    submitBtn.innerHTML =
+      "📤 再次繳交";
+
+    submitBtn.classList.add(
+      "ready-to-submit"
+    );
+
     submitBtn.disabled = false;
+
   });
+
 }
+
+
+/* =====================================================
+   錯題本
+   ===================================================== */
 
 function showErrorSummary() {
-  document.getElementById('normalGameArea').style.display = 'none';
-  const summaryArea = document.getElementById('errorSummaryArea');
+
+  document.getElementById(
+    'normalGameArea'
+  ).style.display = 'none';
+
+
+  const summaryArea =
+    document.getElementById(
+      'errorSummaryArea'
+    );
+
   summaryArea.style.display = 'flex';
 
+
   if (wrongRecords.length === 0) {
-    summaryArea.innerHTML = `<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;"><div style="font-size: 70px; margin-bottom: 15px;">🏆</div><h2 style="font-size: clamp(24px, 3vw, 36px); margin:0;">太神啦！全對完美通關！</h2><p style="font-size: 18px; font-weight: bold; color: #555;">本次測驗沒有任何錯誤紀錄。</p></div>`;
+
+    summaryArea.innerHTML = `
+
+      <div style="
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+      ">
+
+        <div style="
+          font-size:70px;
+          margin-bottom:15px;
+        ">
+          🏆
+        </div>
+
+        <h2 style="
+          font-size:clamp(24px,3vw,36px);
+          margin:0;
+        ">
+          太神啦！全對完美通關！
+        </h2>
+
+        <p style="
+          font-size:18px;
+          font-weight:bold;
+          color:#555;
+        ">
+          本次測驗沒有任何錯誤紀錄。
+        </p>
+
+      </div>
+
+    `;
+
     return;
+
   }
 
-  let html = `<h2 style="text-align:center; margin:0 0 16px 0; font-size: clamp(20px, 2.5vw, 26px); font-weight:950;">📋 測驗結果分析：錯誤題目統整 (共 ${wrongRecords.length} 題)</h2>`;
+
+  let html = `
+
+    <h2 style="
+      text-align:center;
+      margin:0 0 16px 0;
+      font-size:clamp(20px,2.5vw,26px);
+      font-weight:950;
+    ">
+      📋 測驗結果分析：錯誤題目統整
+      （共 ${wrongRecords.length} 題）
+    </h2>
+
+  `;
+
+
   wrongRecords.forEach((item) => {
-    html += `<div class="error-item"><div class="error-q"><span class="error-badge">LEVEL ${item.level}</span>${item.q}</div><div class="error-choices">`;
-    const labels = ["A", "B", "C", "D"];
-    item.choices.forEach((choiceText, cIdx) => {
-      let cls = "error-choice-default", icon = "";
-      if (cIdx === item.correctChoice) { cls = "error-choice-correct"; icon = "✅ "; }
-      else if (cIdx === item.studentChoice) { cls = "error-choice-wrong"; icon = "❌ "; }
-      html += `<div class="error-choice ${cls}"><div class="error-choice-label">${labels[cIdx]}</div><div>${icon}${choiceText}</div></div>`;
-    });
-    html += `</div><div class="error-note">💡 <strong>解析：</strong>${item.n}</div></div>`;
+
+    html += `
+
+      <div class="error-item">
+
+        <div class="error-q">
+
+          <span class="error-badge">
+            LEVEL ${item.level}
+          </span>
+
+          ${item.q}
+
+        </div>
+
+        <div class="error-choices">
+
+    `;
+
+
+    const labels =
+      ["A", "B", "C", "D"];
+
+
+    item.choices.forEach(
+      (choiceText, cIdx) => {
+
+        let cls =
+          "error-choice-default";
+
+        let icon = "";
+
+
+        if (
+          cIdx === item.correctChoice
+        ) {
+
+          cls =
+            "error-choice-correct";
+
+          icon = "✅ ";
+
+        }
+
+        else if (
+          cIdx === item.studentChoice
+        ) {
+
+          cls =
+            "error-choice-wrong";
+
+          icon = "❌ ";
+
+        }
+
+
+        html += `
+
+          <div class="
+            error-choice ${cls}
+          ">
+
+            <div class="
+              error-choice-label
+            ">
+              ${labels[cIdx]}
+            </div>
+
+            <div>
+              ${icon}${choiceText}
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    );
+
+
+    html += `
+
+        </div>
+
+        <div class="error-note">
+
+          💡 <strong>解析：</strong>
+          ${item.n}
+
+        </div>
+
+      </div>
+
+    `;
+
   });
+
+
   summaryArea.innerHTML = html;
+
 }
+
+
+/* =====================================================
+   字體控制
+   ===================================================== */
 
 let currentTextScale = 1;
+
+
 function changeFontSize(delta) {
+
   currentTextScale += delta;
-  if (currentTextScale < 0.6) currentTextScale = 0.6;
-  if (currentTextScale > 2.2) currentTextScale = 2.2;
-  document.documentElement.style.setProperty('--text-scale', currentTextScale);
+
+  if (currentTextScale < 0.6) {
+    currentTextScale = 0.6;
+  }
+
+  if (currentTextScale > 2.2) {
+    currentTextScale = 2.2;
+  }
+
+  document.documentElement
+    .style
+    .setProperty(
+      '--text-scale',
+      currentTextScale
+    );
+
 }
+
+
+/* =====================================================
+   ★★★ 重新檢查後的 50 題題庫 ★★★
+   
+   核心原則：
+   每一道題 A～D 僅有一個數學等價答案。
+   ===================================================== */
 
 const data = [
-{ q:"12×7", c:["(10＋2)×7","10×7＋2","12＋7","10×7＋2×7"], a:3, n:"12×7＝10×7＋2×7。" },
-{ q:"19×6", c:["20×6－6","20×6＋6","19＋6","(20－1)＋6"], a:0, n:"19＝20－1。" },
-{ q:"31×8", c:["30×8＋8","30×8－8","31＋8","30×8＋31"], a:0, n:"31＝30＋1。" },
-{ q:"49×7", c:["50×7－7","50×7＋7","49＋7","50×7－1"], a:0, n:"49＝50－1。" },
-{ q:"98×6", c:["100×6－2","100×6－12","100×6＋2","98＋6"], a:1, n:"98＝100－2，所以100×6－2×6＝600－12。" },
-{ q:"102×9", c:["100×9＋2","100×9＋18","102＋9","100×9－18"], a:1, n:"102＝100＋2，所以100×9＋2×9＝918。" },
-{ q:"47×11", c:["47×(10＋1)","47×10＋1","40×11＋7","50×11－3"], a:0, n:"把11拆成10＋1。" },
-{ q:"25×18", c:["25×(20－2)","25×20－2","(25－2)×20","25×20＋2"], a:0, n:"把18改成20－2。" },
-{ q:"39×12", c:["39×(10＋2)","40×12－12","39×10＋2","(40－1)×10"], a:0, n:"39×12＝39×10＋39×2。" },
-{ q:"61×19", c:["61×(20－1)","60×19＋1","61×20－1","60×20＋19"], a:0, n:"19＝20－1。" },
 
-{ q:"97×8", c:["(100－3)×8","100×8－3","(100－3)×8＋3","97×(10－2)"], a:0, n:"97＝100－3。" },
-{ q:"103×7", c:["(100＋3)×7","100×7＋3","103×(5＋2)","100×7－3"], a:0, n:"103＝100＋3。" },
-{ q:"48×15", c:["48×(10＋5)","50×15－2","48×10＋5","(50－2)×10"], a:0, n:"把15拆成10＋5。" },
-{ q:"76×25", c:["76×(100÷4)","(75＋1)×25","76×20＋5","(80－4)×20"], a:0, n:"25＝100÷4，所以76×25＝1900。" },
-{ q:"125×16", c:["125×(8×2)","(100＋25)×16","125×10＋6","(120＋5)×16"], a:0, n:"125×8＝1000，再×2＝2000。" },
-{ q:"199×6", c:["(200－1)×6","200×6－1","(200＋1)×6","199×(5＋1)"], a:0, n:"199＝200－1。" },
-{ q:"301×9", c:["(300＋1)×9","300×9＋1","(300－1)×9","301×(10－1)"], a:0, n:"301＝300＋1。" },
-{ q:"398×7", c:["(400－2)×7","400×7－2","(400＋2)×7","398×(5＋2)"], a:0, n:"398＝400－2。" },
-{ q:"602×8", c:["(600＋2)×8","600×8＋2","(600－2)×8","602×(10－2)"], a:0, n:"602＝600＋2。" },
-{ q:"999×13", c:["(1000－1)×13","1000×13－1","(1000＋1)×13","999×(10＋3)"], a:0, n:"999＝1000－1。" },
+/* =====================================================
+   LEVEL 1
+   基礎分配律
+   ===================================================== */
 
-{ q:"1001×27", c:["(1000＋1)×27","1000×27＋1","(1000－1)×27","1001×(30－3)"], a:0, n:"1001＝1000＋1。" },
-{ q:"49×98", c:["(50－1)×(100－2)","50×98－1","49×(100－2)","(50＋1)×(100－2)"], a:2, n:"98＝100－2，所以49×100－49×2＝4802。" },
-{ q:"102×97", c:["(100＋2)×(100－3)","100×97＋2","102×(100－3)","(100＋2)×100－3"], a:0, n:"兩個數都接近100，可利用分配律展開。" },
-{ q:"48×102", c:["48×(100＋2)","(50－2)×100","48×100＋2","50×102－2"], a:0, n:"102＝100＋2。" },
-{ q:"75×104", c:["75×(100＋4)","(75＋4)×100","75×100＋4","(80－5)×104"], a:0, n:"104＝100＋4。" },
-{ q:"198×25", c:["(200－2)×25","200×25－2","(200＋2)×25","198×(100÷4)"], a:0, n:"198＝200－2。" },
-{ q:"24×125", c:["24×(1000÷8)","(20＋4)×125","24×100＋25","(25－1)×125"], a:0, n:"125×8＝1000，所以24×125＝3000。" },
-{ q:"997×18", c:["(1000－3)×18","1000×18－3","(1000＋3)×18","997×(20－2)"], a:0, n:"997＝1000－3。" },
-{ q:"1003×19", c:["(1000＋3)×19","1000×19＋3","(1000－3)×19","1003×(20－1)"], a:0, n:"1003＝1000＋3。" },
-{ q:"498×21", c:["(500－2)×21","500×21－2","(500＋2)×21","498×(20＋1)"], a:0, n:"498＝500－2。" },
+{
+  q:"12×7",
+  c:[
+    "(10＋2)×7",
+    "10×7＋2",
+    "12＋7",
+    "10×7＋2×6"
+  ],
+  a:0,
+  n:"12＝10＋2，所以12×7＝(10＋2)×7＝10×7＋2×7＝84。"
+},
 
-{ q:"999×999", c:["(1000－1)²","1000²－1","(1000＋1)²","999×(1000＋1)"], a:0, n:"平方公式來自分配律：(1000－1)²。" },
-{ q:"1001×999", c:["(1000＋1)(1000－1)","1000×999＋1","1000²＋1","(1000－1)²"], a:0, n:"利用平方差：1000²－1。" },
-{ q:"48×51", c:["(50－2)(50＋1)","50×51－2","48×(50＋1)","(50－2)×50＋1"], a:0, n:"可利用分配律改寫兩個因數。" },
-{ q:"125×96", c:["125×(100－4)","(100＋25)×96","125×100－4","125×(100＋4)"], a:0, n:"96＝100－4。" },
-{ q:"32×98", c:["32×(100－2)","(30＋2)×98","32×100－2","32×(100＋2)"], a:0, n:"98＝100－2。" },
-{ q:"64×102", c:["64×(100＋2)","(60＋4)×102","64×100＋2","64×(100－2)"], a:0, n:"102＝100＋2。" },
-{ q:"997×103", c:["(1000－3)(100＋3)","1000×103－3","997×(100＋3)","(1000－3)×100＋3"], a:0, n:"兩數分別接近1000與100。" },
-{ q:"1004×996", c:["(1000＋4)(1000－4)","1004×(1000－4)","(1000＋4)×1000－4","1000²－4"], a:0, n:"平方差：1000²－16。" },
-{ q:"49×51", c:["(50－1)(50＋1)","50×51－1","49×(50＋1)","(50－1)×50＋1"], a:0, n:"平方差：50²－1。" },
-{ q:"198×202", c:["(200－2)(200＋2)","198×(200＋2)","200×202－2","(200－2)×200＋2"], a:0, n:"平方差：200²－2²。" },
+{
+  q:"19×6",
+  c:[
+    "20×6－1",
+    "(20－1)×6",
+    "19＋6",
+    "19×5＋6"
+  ],
+  a:1,
+  n:"19＝20－1，所以19×6＝(20－1)×6＝120－6＝114。"
+},
 
-{ q:"10001×9999", c:["(10000＋1)(10000－1)","10001×10000－1","10000²－1","(10000－1)²"], a:0, n:"平方差：10000²－1。" },
-{ q:"9998×1002", c:["(10000－2)(1000＋2)","9998×1000＋2","10000×1002－2","(10000－2)×1000＋2"], a:0, n:"可分別靠近10000與1000，再利用分配律整理。" },
-{ q:"2498×25", c:["(2500－2)×25","2500×25－2","(2500＋2)×25","2498×(100÷4)"], a:0, n:"2500×25－2×25。" },
-{ q:"5004×125", c:["(5000＋4)×125","5000×125＋4","(5000－4)×125","5004×(100＋25)"], a:0, n:"5000×125＋4×125。" },
-{ q:"1996×75", c:["(2000－4)×75","2000×75－4","(2000＋4)×75","1996×(3×25)"], a:0, n:"2000×75－4×75。" },
-{ q:"9996×125", c:["(10000－4)×125","10000×125－4","(10000＋4)×125","9996×(100＋25)"], a:0, n:"10000×125－4×125。" },
-{ q:"1002×998", c:["(1000＋2)(1000－2)","1002×1000－2","1000×998＋2","(1000＋2)×1000－2"], a:0, n:"平方差：1000²－4。" },
-{ q:"2003×1997", c:["(2000＋3)(2000－3)","2003×2000－3","2000×1997＋3","(2000＋3)×2000－3"], a:0, n:"平方差：2000²－9。" },
-{ q:"9997×10003", c:["(10000－3)(10000＋3)","9997×10000＋3","10000×10003－3","(10000－3)×10000＋3"], a:0, n:"平方差：10000²－9。" },
-{ q:"1997×2003", c:["(2000－3)(2000＋3)","1997×2000＋3","2000×2003－3","(2000－3)×2000＋3"], a:0, n:"平方差：2000²－3²。" }
+{
+  q:"31×8",
+  c:[
+    "30×8＋1",
+    "31＋8",
+    "(30＋1)×8",
+    "30×8－1×8"
+  ],
+  a:2,
+  n:"31＝30＋1，所以31×8＝(30＋1)×8＝30×8＋1×8＝248。"
+},
+
+{
+  q:"49×7",
+  c:[
+    "50×7－1",
+    "49＋7",
+    "50×7＋1",
+    "(50－1)×7"
+  ],
+  a:3,
+  n:"49＝50－1，所以49×7＝(50－1)×7＝350－7＝343。"
+},
+
+{
+  q:"98×6",
+  c:[
+    "100×6－2",
+    "98＋6",
+    "100×6＋2×6",
+    "(100－2)×6"
+  ],
+  a:3,
+  n:"98＝100－2，所以98×6＝(100－2)×6＝600－12＝588。"
+},
+
+{
+  q:"102×9",
+  c:[
+    "100×9＋2",
+    "102＋9",
+    "100×9－2×9",
+    "(100＋2)×9"
+  ],
+  a:3,
+  n:"102＝100＋2，所以102×9＝(100＋2)×9＝900＋18＝918。"
+},
+
+{
+  q:"47×11",
+  c:[
+    "47×10＋1",
+    "47×10＋2",
+    "50×11－47",
+    "47×(10＋1)"
+  ],
+  a:3,
+  n:"11＝10＋1，所以47×11＝47×(10＋1)＝470＋47＝517。"
+},
+
+{
+  q:"25×18",
+  c:[
+    "25×20－2",
+    "(25－2)×20",
+    "25×20＋2",
+    "25×(20－2)"
+  ],
+  a:3,
+  n:"18＝20－2，所以25×18＝25×(20－2)＝500－50＝450。"
+},
+
+{
+  q:"39×12",
+  c:[
+    "40×12－2",
+    "39×10＋2",
+    "(40－1)×10",
+    "39×(10＋2)"
+  ],
+  a:3,
+  n:"12＝10＋2，所以39×12＝39×(10＋2)＝390＋78＝468。"
+},
+
+{
+  q:"61×19",
+  c:[
+    "60×19＋1",
+    "61×20－1",
+    "60×20＋19",
+    "61×(20－1)"
+  ],
+  a:3,
+  n:"19＝20－1，所以61×19＝61×(20－1)＝1220－61＝1159。"
+},
+
+
+/* =====================================================
+   LEVEL 2
+   分配律＋接近整百
+   ===================================================== */
+
+{
+  q:"97×8",
+  c:[
+    "100×8－3",
+    "97×(10－2)",
+    "(100＋3)×8",
+    "(100－3)×8"
+  ],
+  a:3,
+  n:"97＝100－3，所以97×8＝(100－3)×8＝800－24＝776。"
+},
+
+{
+  q:"103×7",
+  c:[
+    "100×7＋3",
+    "103×(7－1)",
+    "100×7－3",
+    "(100＋3)×7"
+  ],
+  a:3,
+  n:"103＝100＋3，所以103×7＝(100＋3)×7＝700＋21＝721。"
+},
+
+{
+  q:"48×15",
+  c:[
+    "50×15－2",
+    "48×10＋5",
+    "(48＋15)×10",
+    "48×(10＋5)"
+  ],
+  a:3,
+  n:"15＝10＋5，所以48×15＝48×(10＋5)＝480＋240＝720。"
+},
+
+{
+  q:"76×25",
+  c:[
+    "75×25＋1",
+    "76×20＋5",
+    "(80－4)×20",
+    "76×(100÷4)"
+  ],
+  a:3,
+  n:"25＝100÷4，所以76×25＝76×100÷4＝1900。"
+},
+
+{
+  q:"125×16",
+  c:[
+    "125×10＋6",
+    "(125＋16)×10",
+    "125×8＋8",
+    "125×(10＋6)"
+  ],
+  a:3,
+  n:"16＝10＋6，所以125×16＝125×(10＋6)＝1250＋750＝2000。"
+},
+
+{
+  q:"199×6",
+  c:[
+    "200×6－1",
+    "(200－1)×6",
+    "199×5＋1",
+    "200×5＋199"
+  ],
+  a:1,
+  n:"199＝200－1，所以199×6＝(200－1)×6＝1200－6＝1194。"
+},
+
+{
+  q:"301×9",
+  c:[
+    "300×9＋1",
+    "300×9－1",
+    "301×10－1",
+    "(300＋1)×9"
+  ],
+  a:3,
+  n:"301＝300＋1，所以301×9＝(300＋1)×9＝2700＋9＝2709。"
+},
+
+{
+  q:"398×7",
+  c:[
+    "400×7－2",
+    "400×7＋2",
+    "398×5＋2",
+    "(400－2)×7"
+  ],
+  a:3,
+  n:"398＝400－2，所以398×7＝(400－2)×7＝2800－14＝2786。"
+},
+
+{
+  q:"602×8",
+  c:[
+    "600×8＋2",
+    "(600－2)×8",
+    "602×6＋8",
+    "(600＋2)×8"
+  ],
+  a:3,
+  n:"602＝600＋2，所以602×8＝(600＋2)×8＝4800＋16＝4816。"
+},
+
+{
+  q:"999×13",
+  c:[
+    "1000×13－1",
+    "999×12＋1",
+    "1000×13＋1",
+    "(1000－1)×13"
+  ],
+  a:3,
+  n:"999＝1000－1，所以999×13＝(1000－1)×13＝13000－13＝12987。"
+},
+
+
+/* =====================================================
+   LEVEL 3
+   兩數接近整數
+   ===================================================== */
+
+{
+  q:"1001×27",
+  c:[
+    "1000×27＋1",
+    "1000×27－1",
+    "1001×20＋7",
+    "(1000＋1)×27"
+  ],
+  a:3,
+  n:"1001＝1000＋1，所以1001×27＝(1000＋1)×27＝27000＋27＝27027。"
+},
+
+{
+  q:"49×98",
+  c:[
+    "50×98－1",
+    "49×100－2",
+    "50×100－49×2",
+    "(50－1)×(100－2)"
+  ],
+  a:3,
+  n:"49＝50－1，98＝100－2，所以49×98＝(50－1)(100－2)＝4802。"
+},
+
+{
+  q:"102×97",
+  c:[
+    "100×97＋2",
+    "102×100－3",
+    "100×97－2×3",
+    "(100＋2)×(100－3)"
+  ],
+  a:3,
+  n:"102＝100＋2，97＝100－3，所以102×97＝(100＋2)(100－3)＝9894。"
+},
+
+{
+  q:"48×102",
+  c:[
+    "(50－2)×100",
+    "48×100＋2",
+    "50×102－2",
+    "48×(100＋2)"
+  ],
+  a:3,
+  n:"102＝100＋2，所以48×102＝48×(100＋2)＝4800＋96＝4896。"
+},
+
+{
+  q:"75×104",
+  c:[
+    "(75＋4)×100",
+    "75×100＋4",
+    "75×(100＋5)",
+    "75×(100＋4)"
+  ],
+  a:3,
+  n:"104＝100＋4，所以75×104＝75×(100＋4)＝7500＋300＝7800。"
+},
+
+{
+  q:"198×25",
+  c:[
+    "200×25－2",
+    "(200＋2)×25",
+    "198×20＋25",
+    "(200－2)×25"
+  ],
+  a:3,
+  n:"198＝200－2，所以198×25＝(200－2)×25＝5000－50＝4950。"
+},
+
+{
+  q:"24×125",
+  c:[
+    "24×100＋25",
+    "20×125＋4",
+    "24×(100＋25)",
+    "24×(1000÷8)"
+  ],
+  a:3,
+  n:"125＝1000÷8，所以24×125＝24×1000÷8＝3000。"
+},
+
+{
+  q:"997×18",
+  c:[
+    "1000×18－3",
+    "997×20－2",
+    "1000×18＋3",
+    "(1000－3)×18"
+  ],
+  a:3,
+  n:"997＝1000－3，所以997×18＝(1000－3)×18＝18000－54＝17946。"
+},
+
+{
+  q:"1003×19",
+  c:[
+    "1000×19＋3",
+    "1003×20－1",
+    "1000×19－3",
+    "(1000＋3)×19"
+  ],
+  a:3,
+  n:"1003＝1000＋3，所以1003×19＝(1000＋3)×19＝19000＋57＝19057。"
+},
+
+{
+  q:"498×21",
+  c:[
+    "500×21－2",
+    "498×20＋1",
+    "500×21＋2",
+    "(500－2)×21"
+  ],
+  a:3,
+  n:"498＝500－2，所以498×21＝(500－2)×21＝10500－42＝10458。"
+},
+
+
+/* =====================================================
+   LEVEL 4
+   平方差與較複雜分配
+   ===================================================== */
+
+{
+  q:"999×999",
+  c:[
+    "1000²－1",
+    "999×1000－1",
+    "(1000＋1)(1000－1)",
+    "(1000－1)²"
+  ],
+  a:3,
+  n:"999＝1000－1，所以999×999＝(1000－1)²＝998001。"
+},
+
+{
+  q:"1001×999",
+  c:[
+    "1000×999＋1",
+    "1000²＋1",
+    "999²",
+    "(1000＋1)(1000－1)"
+  ],
+  a:3,
+  n:"1001＝1000＋1，999＝1000－1，所以1001×999＝1000²－1＝999999。"
+},
+
+{
+  q:"48×51",
+  c:[
+    "50×51－2",
+    "48×50＋1",
+    "50×51＋2",
+    "(50－2)(50＋1)"
+  ],
+  a:3,
+  n:"48＝50－2，51＝50＋1，所以48×51＝(50－2)(50＋1)＝2448。"
+},
+
+{
+  q:"125×96",
+  c:[
+    "125×100－4",
+    "(100＋25)×96",
+    "125×90＋6",
+    "125×95＋1"
+  ],
+  a:1,
+  n:"125×96＝(100＋25)×96＝9600＋2400＝12000。"
+},
+
+{
+  q:"32×98",
+  c:[
+    "32×100－2",
+    "(30＋2)×98",
+    "30×98＋2",
+    "32×(100－3)"
+  ],
+  a:1,
+  n:"32＝30＋2，所以32×98＝(30＋2)×98＝2940＋196＝3136。"
+},
+
+{
+  q:"64×102",
+  c:[
+    "64×100＋2",
+    "60×102＋4",
+    "(64＋2)×100",
+    "64×(100＋2)"
+  ],
+  a:3,
+  n:"102＝100＋2，所以64×102＝64×(100＋2)＝6400＋128＝6528。"
+},
+
+{
+  q:"997×103",
+  c:[
+    "997×100＋3",
+    "1000×103－3",
+    "997×100＋30",
+    "(1000－3)(100＋3)"
+  ],
+  a:3,
+  n:"997＝1000－3，103＝100＋3，所以997×103＝(1000－3)(100＋3)＝102691。"
+},
+
+{
+  q:"1004×996",
+  c:[
+    "1000²－4",
+    "1004×1000－4",
+    "1000×996＋4",
+    "(1000＋4)(1000－4)"
+  ],
+  a:3,
+  n:"1004＝1000＋4，996＝1000－4，所以1004×996＝1000²－4²＝999984。"
+},
+
+{
+  q:"49×51",
+  c:[
+    "50×51－1",
+    "49×50＋1",
+    "50²＋1",
+    "(50－1)(50＋1)"
+  ],
+  a:3,
+  n:"49＝50－1，51＝50＋1，所以49×51＝(50－1)(50＋1)＝50²－1＝2499。"
+},
+
+{
+  q:"198×202",
+  c:[
+    "200×202－2",
+    "198×200＋2",
+    "200²－2",
+    "(200－2)(200＋2)"
+  ],
+  a:3,
+  n:"198＝200－2，202＝200＋2，所以198×202＝200²－2²＝39996。"
+},
+
+
+/* =====================================================
+   LEVEL 5
+   高階分配律與平方差
+   ===================================================== */
+
+{
+  q:"10001×9999",
+  c:[
+    "10001×10000－1",
+    "10000×9999＋1",
+    "9999²",
+    "(10000＋1)(10000－1)"
+  ],
+  a:3,
+  n:"10001＝10000＋1，9999＝10000－1，所以10001×9999＝10000²－1＝99999999。"
+},
+
+{
+  q:"9998×1002",
+  c:[
+    "9998×1000＋2",
+    "10000×1002－2",
+    "10000×1000－2",
+    "(10000－2)(1000＋2)"
+  ],
+  a:3,
+  n:"9998＝10000－2，1002＝1000＋2，所以9998×1002＝(10000－2)(1000＋2)＝10017996。"
+},
+
+{
+  q:"2498×25",
+  c:[
+    "2500×25－2",
+    "2500×25－4",
+    "2498×20＋50",
+    "2498×20＋25"
+  ],
+  a:0,
+  n:"2498＝2500－2，所以2498×25＝(2500－2)×25＝62500－50＝62450。"
+},
+
+{
+  q:"5004×125",
+  c:[
+    "5000×125＋4",
+    "5000×125－4",
+    "5004×100＋25",
+    "(5000＋4)×125"
+  ],
+  a:3,
+  n:"5004＝5000＋4，所以5004×125＝(5000＋4)×125＝625000＋500＝625500。"
+},
+
+{
+  q:"1996×75",
+  c:[
+    "2000×75＋4",
+    "1996×70＋5",
+    "2000×75－4",
+    "(2000－4)×75"
+  ],
+  a:3,
+  n:"1996＝2000－4，所以1996×75＝(2000－4)×75＝150000－300＝149700。"
+},
+
+{
+  q:"9996×125",
+  c:[
+    "10000×125－4",
+    "9996×100＋25",
+    "10000×125－4×100",
+    "(10000－4)×125"
+  ],
+  a:3,
+  n:"9996＝10000－4，所以9996×125＝(10000－4)×125＝1250000－500＝1249500。"
+},
+
+{
+  q:"1002×998",
+  c:[
+    "1002×1000－2",
+    "1000×998＋2",
+    "1000²－2",
+    "(1000＋2)(1000－2)"
+  ],
+  a:3,
+  n:"1002＝1000＋2，998＝1000－2，所以1002×998＝1000²－2²＝999996。"
+},
+
+{
+  q:"2003×1997",
+  c:[
+    "2003×2000－3",
+    "2000×1997＋3",
+    "2000²－3",
+    "(2000＋3)(2000－3)"
+  ],
+  a:3,
+  n:"2003＝2000＋3，1997＝2000－3，所以2003×1997＝2000²－3²＝3999991。"
+},
+
+{
+  q:"9997×10003",
+  c:[
+    "9997×10000＋3",
+    "10000×10003－3",
+    "10000²－3",
+    "(10000－3)(10000＋3)"
+  ],
+  a:3,
+  n:"9997＝10000－3，10003＝10000＋3，所以9997×10003＝10000²－3²＝99999991。"
+},
+
+{
+  q:"1997×2003",
+  c:[
+    "1997×2000＋3",
+    "2000×2003－3",
+    "2000²＋3",
+    "(2000－3)(2000＋3)"
+  ],
+  a:3,
+  n:"1997＝2000－3，2003＝2000＋3，所以1997×2003＝2000²－3²＝3999991。"
+}
+
 ];
 
-const ranges={ 1:[0,10], 2:[10,20], 3:[20,30], 4:[30,40], 5:[40,50] };
-const levelScores={ 1:0, 2:0, 3:0, 4:0, 5:0 };
-const levelCompleted = { 1:false, 2:false, 3:false, 4:false, 5:false };
-let i=-1; let lock=false; let currentLevel=0; let startQ=0; let endQ=0; let currentQuestions=[];
 
-function shuffleQuestion(question){
-  const options=question.c.map((text,index)=>({ text:text, correct:index===question.a }));
-  for(let x=options.length-1;x>0;x--){ const y=Math.floor(Math.random()*(x+1)); [options[x],options[y]]=[options[y],options[x]]; }
-  return { ...question, shuffledChoices:options, shuffledAnswer:options.findIndex(item=>item.correct) };
-}
-function prepareLevel(){
-  const original=data.slice(startQ,endQ); currentQuestions=original.map(q=>shuffleQuestion(q));
-}
-function updateScoreboard(){
-  let total=0;
-  for(let lv=1;lv<=5;lv++){ document.getElementById("score"+lv).innerHTML=`${levelScores[lv]}<span> / 20</span>`; total+=levelScores[lv]; }
-  document.getElementById("totalScore").innerHTML=`${total}<span> / 100</span>`;
-}
+/* =====================================================
+   LEVEL 範圍
+   ===================================================== */
 
-function chooseLevel(level){
-  const classInput = document.getElementById("studentClass").value;
-  const seatInput = document.getElementById("studentSeat").value.trim();
-  const nameInput = document.getElementById("studentName").value.trim();
-  
-  if (!classInput || !seatInput || !nameInput) {
-    alert("⚠️ 請先填寫完整的「班級」、「座號」與「姓名」才能開始測驗！");
-    if (!classInput) document.getElementById("studentClass").focus();
-    else if (!seatInput) document.getElementById("studentSeat").focus();
-    else document.getElementById("studentName").focus();
-    return;
+const ranges = {
+  1:[0,10],
+  2:[10,20],
+  3:[20,30],
+  4:[30,40],
+  5:[40,50]
+};
+
+
+const levelScores = {
+  1:0,
+  2:0,
+  3:0,
+  4:0,
+  5:0
+};
+
+
+const levelCompleted = {
+  1:false,
+  2:false,
+  3:false,
+  4:false,
+  5:false
+};
+
+
+let i = -1;
+let lock = false;
+let currentLevel = 0;
+let startQ = 0;
+let endQ = 0;
+let currentQuestions = [];
+
+
+/* =====================================================
+   題目選項隨機排序
+   ===================================================== */
+
+function shuffleQuestion(question) {
+
+  const options =
+    question.c.map(
+      (text, index) => ({
+        text:text,
+        correct:index === question.a
+      })
+    );
+
+
+  for (
+    let x = options.length - 1;
+    x > 0;
+    x--
+  ) {
+
+    const y =
+      Math.floor(
+        Math.random() * (x + 1)
+      );
+
+    [
+      options[x],
+      options[y]
+    ] =
+    [
+      options[y],
+      options[x]
+    ];
+
   }
+
+
+  return {
+    ...question,
+    shuffledChoices:options,
+    shuffledAnswer:
+      options.findIndex(
+        item => item.correct
+      )
+  };
+
+}
+
+
+/* =====================================================
+   準備 Level
+   ===================================================== */
+
+function prepareLevel() {
+
+  const original =
+    data.slice(startQ, endQ);
+
+  currentQuestions =
+    original.map(
+      q => shuffleQuestion(q)
+    );
+
+}
+
+
+/* =====================================================
+   更新成績
+   ===================================================== */
+
+function updateScoreboard() {
+
+  let total = 0;
+
+  for (
+    let lv = 1;
+    lv <= 5;
+    lv++
+  ) {
+
+    document.getElementById(
+      "score" + lv
+    ).innerHTML =
+      `${levelScores[lv]}<span> / 20</span>`;
+
+    total += levelScores[lv];
+
+  }
+
+
+  document.getElementById(
+    "totalScore"
+  ).innerHTML =
+    `${total}<span> / 100</span>`;
+
+}
+
+
+/* =====================================================
+   選擇 Level
+   ===================================================== */
+
+function chooseLevel(level) {
+
+  const classInput =
+    document.getElementById(
+      "studentClass"
+    ).value;
+
+  const seatInput =
+    document.getElementById(
+      "studentSeat"
+    ).value.trim();
+
+  const nameInput =
+    document.getElementById(
+      "studentName"
+    ).value.trim();
+
+
+  if (
+    !classInput ||
+    !seatInput ||
+    !nameInput
+  ) {
+
+    alert(
+      "⚠️ 請先填寫完整的「班級」、「座號」與「姓名」才能開始測驗！"
+    );
+
+
+    if (!classInput) {
+
+      document.getElementById(
+        "studentClass"
+      ).focus();
+
+    }
+
+    else if (!seatInput) {
+
+      document.getElementById(
+        "studentSeat"
+      ).focus();
+
+    }
+
+    else {
+
+      document.getElementById(
+        "studentName"
+      ).focus();
+
+    }
+
+    return;
+
+  }
+
+
   if (levelCompleted[level]) {
-    alert("⚠️ 此 LEVEL 已經挑戰過了唷！\n每個關卡只能挑戰一次，請選擇其他尚未挑戰的 LEVEL。");
+
+    alert(
+      "⚠️ 此 LEVEL 已經挑戰過了唷！\n每個關卡只能挑戰一次，請選擇其他尚未挑戰的 LEVEL。"
+    );
+
     return;
+
   }
+
 
   lockInputsOnly();
-  currentLevel=level; [startQ,endQ]=ranges[level]; i=0; prepareLevel();
-  document.querySelectorAll("#levelSelect button").forEach((b,n)=>{ b.classList.toggle("active", n===level-1); });
-  document.querySelectorAll(".score-card").forEach(card=>{ card.classList.remove("active"); });
-  document.getElementById("scoreCard"+level).classList.add("active");
-  document.getElementById("lv").textContent="LEVEL "+level;
-  document.getElementById("num").textContent="第 1 / 10 題";
-  document.getElementById("bar").style.width="0%";
-  document.getElementById("s").textContent="";
-  document.getElementById("sc").textContent=`本 Level 目前成績：${levelScores[level]} / 20`;
-  document.getElementById("q").textContent=`準備挑戰 LEVEL ${level}`;
-  document.getElementById("c").innerHTML=`<button onclick="startLevel()" style="grid-column:1 / -1; height: 100%; border:0; border-radius:14px; background:#e8e2d8; color:#20242b; font-size:20px; font-weight:900; cursor:pointer;">開始 LEVEL ${level} 🚀</button>`;
+
+
+  currentLevel = level;
+
+  [startQ, endQ] =
+    ranges[level];
+
+  i = 0;
+
+  prepareLevel();
+
+
+  document
+    .querySelectorAll(
+      "#levelSelect button"
+    )
+    .forEach(
+      (b, n) => {
+
+        b.classList.toggle(
+          "active",
+          n === level - 1
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".score-card"
+    )
+    .forEach(
+      card => {
+        card.classList.remove("active");
+      }
+    );
+
+
+  document.getElementById(
+    "scoreCard" + level
+  ).classList.add("active");
+
+
+  document.getElementById(
+    "lv"
+  ).textContent =
+    "LEVEL " + level;
+
+
+  document.getElementById(
+    "num"
+  ).textContent =
+    "第 1 / 10 題";
+
+
+  document.getElementById(
+    "bar"
+  ).style.width =
+    "0%";
+
+
+  document.getElementById(
+    "s"
+  ).textContent = "";
+
+
+  document.getElementById(
+    "sc"
+  ).textContent =
+    `本 Level 目前成績：${levelScores[level]} / 20`;
+
+
+  document.getElementById(
+    "q"
+  ).textContent =
+    `準備挑戰 LEVEL ${level}`;
+
+
+  document.getElementById(
+    "c"
+  ).innerHTML = `
+
+    <button
+      onclick="startLevel()"
+      style="
+        grid-column:1 / -1;
+        height:100%;
+        border:0;
+        border-radius:14px;
+        background:#e8e2d8;
+        color:#20242b;
+        font-size:20px;
+        font-weight:900;
+        cursor:pointer;
+      "
+    >
+      開始 LEVEL ${level} 🚀
+    </button>
+
+  `;
+
 }
 
-function startLevel(){ i=0; lock=false; prepareLevel(); show(); }
-function show(){
-  lock=false; const x=currentQuestions[i];
-  document.getElementById("lv").textContent="LEVEL "+currentLevel;
-  document.getElementById("num").textContent=`第 ${i+1} / 10 題`;
-  document.getElementById("bar").style.width=((i)/10*100)+"%";
-  document.getElementById("q").textContent=x.q;
-  const labels=["A","B","C","D"];
-  document.getElementById("c").innerHTML=x.shuffledChoices.map((item,k)=>`<button onclick="ans(${k})"><span class="choice-label">${labels[k]}</span><span class="choice-text">${item.text}</span></button>`).join("");
-  document.getElementById("s").textContent="";
-  document.getElementById("sc").textContent=`本 Level 暫得：${levelScores[currentLevel]} / 20`;
+
+/* =====================================================
+   開始 Level
+   ===================================================== */
+
+function startLevel() {
+
+  i = 0;
+  lock = false;
+
+  prepareLevel();
+
+  show();
+
 }
-function ans(k){
-  if(lock)return; lock=true;
-  const x=currentQuestions[i]; const buttons=document.querySelectorAll(".choices button"); const labels=["A","B","C","D"];
-  buttons[k].classList.add(k===x.shuffledAnswer ? "correct" : "wrong");
-  
-  if(k===x.shuffledAnswer){
-    levelScores[currentLevel]+=2;
-    document.getElementById("s").innerHTML=`✅ 答對！ ${x.n}<br>本題 2 分。`;
-  }else{
-    buttons[x.shuffledAnswer].classList.add("correct");
-    document.getElementById("s").innerHTML=`❌ 答案揭曉：${labels[x.shuffledAnswer]} ${x.n}`;
-    wrongRecords.push({ level: currentLevel, qNum: i + 1, q: x.q, choices: x.shuffledChoices.map(c => c.text), studentChoice: k, correctChoice: x.shuffledAnswer, n: x.n });
+
+
+/* =====================================================
+   顯示題目
+   ===================================================== */
+
+function show() {
+
+  lock = false;
+
+  const x =
+    currentQuestions[i];
+
+
+  document.getElementById(
+    "lv"
+  ).textContent =
+    "LEVEL " + currentLevel;
+
+
+  document.getElementById(
+    "num"
+  ).textContent =
+    `第 ${i + 1} / 10 題`;
+
+
+  document.getElementById(
+    "bar"
+  ).style.width =
+    ((i) / 10 * 100) + "%";
+
+
+  document.getElementById(
+    "q"
+  ).textContent =
+    x.q;
+
+
+  const labels =
+    ["A","B","C","D"];
+
+
+  document.getElementById(
+    "c"
+  ).innerHTML =
+
+    x.shuffledChoices
+      .map(
+        (item,k) => `
+
+          <button
+            onclick="ans(${k})"
+          >
+
+            <span class="choice-label">
+              ${labels[k]}
+            </span>
+
+            <span class="choice-text">
+              ${item.text}
+            </span>
+
+          </button>
+
+        `
+      )
+      .join("");
+
+
+  document.getElementById(
+    "s"
+  ).textContent = "";
+
+
+  document.getElementById(
+    "sc"
+  ).textContent =
+    `本 Level 暫得：${levelScores[currentLevel]} / 20`;
+
+}
+
+
+/* =====================================================
+   作答
+   ===================================================== */
+
+function ans(k) {
+
+  if (lock) return;
+
+  lock = true;
+
+
+  const x =
+    currentQuestions[i];
+
+
+  const buttons =
+    document.querySelectorAll(
+      ".choices button"
+    );
+
+
+  const labels =
+    ["A","B","C","D"];
+
+
+  buttons[k]
+    .classList.add(
+      k === x.shuffledAnswer
+        ? "correct"
+        : "wrong"
+    );
+
+
+  if (
+    k === x.shuffledAnswer
+  ) {
+
+    levelScores[currentLevel] += 2;
+
+
+    document.getElementById(
+      "s"
+    ).innerHTML =
+      `✅ 答對！ ${x.n}<br>本題 2 分。`;
+
   }
+
+  else {
+
+    buttons[
+      x.shuffledAnswer
+    ].classList.add(
+      "correct"
+    );
+
+
+    document.getElementById(
+      "s"
+    ).innerHTML =
+      `❌ 答案揭曉：${labels[x.shuffledAnswer]} ${x.n}`;
+
+
+    wrongRecords.push({
+
+      level:currentLevel,
+
+      qNum:i + 1,
+
+      q:x.q,
+
+      choices:
+        x.shuffledChoices
+          .map(c => c.text),
+
+      studentChoice:k,
+
+      correctChoice:
+        x.shuffledAnswer,
+
+      n:x.n
+
+    });
+
+  }
+
+
   updateScoreboard();
-  document.getElementById("sc").textContent=`本 Level 暫得：${levelScores[currentLevel]} / 20`;
-  setTimeout(()=>{ i++; if(i<10){ show(); } else { finishLevel(); } },1700);
+
+
+  document.getElementById(
+    "sc"
+  ).textContent =
+    `本 Level 暫得：${levelScores[currentLevel]} / 20`;
+
+
+  setTimeout(
+    () => {
+
+      i++;
+
+      if (i < 10) {
+
+        show();
+
+      }
+
+      else {
+
+        finishLevel();
+
+      }
+
+    },
+    1700
+  );
+
 }
 
-function finishLevel(){
-  document.getElementById("bar").style.width="100%";
-  document.getElementById("lv").textContent=`LEVEL ${currentLevel} 完成`;
-  document.getElementById("num").textContent="10 題完成";
-  document.getElementById("q").innerHTML=`<span class="finish-message">🎉 LEVEL ${currentLevel} 挑戰完成！</span>`;
-  const total=Object.values(levelScores).reduce((a,b)=>a+b,0);
-  
-  levelCompleted[currentLevel] = true;
-  document.querySelectorAll("#levelSelect button")[currentLevel-1].classList.add("completed");
-  document.querySelectorAll("#levelSelect button")[currentLevel-1].classList.remove("active");
-  
-  const allDone = Object.values(levelCompleted).every(v => v === true);
+
+/* =====================================================
+   Level 完成
+   ===================================================== */
+
+function finishLevel() {
+
+  document.getElementById(
+    "bar"
+  ).style.width =
+    "100%";
+
+
+  document.getElementById(
+    "lv"
+  ).textContent =
+    `LEVEL ${currentLevel} 完成`;
+
+
+  document.getElementById(
+    "num"
+  ).textContent =
+    "10 題完成";
+
+
+  document.getElementById(
+    "q"
+  ).innerHTML = `
+
+    <span class="finish-message">
+      🎉 LEVEL ${currentLevel} 挑戰完成！
+    </span>
+
+  `;
+
+
+  const total =
+    Object.values(levelScores)
+      .reduce(
+        (a,b) => a + b,
+        0
+      );
+
+
+  levelCompleted[
+    currentLevel
+  ] = true;
+
+
+  document
+    .querySelectorAll(
+      "#levelSelect button"
+    )[currentLevel - 1]
+    .classList.add(
+      "completed"
+    );
+
+
+  document
+    .querySelectorAll(
+      "#levelSelect button"
+    )[currentLevel - 1]
+    .classList.remove(
+      "active"
+    );
+
+
+  const allDone =
+    Object.values(
+      levelCompleted
+    ).every(
+      v => v === true
+    );
+
+
   if (allDone) {
-    document.getElementById("c").innerHTML=`<div style="grid-column:1 / -1; height: 100%; display:flex; align-items:center; justify-content:center; text-align:center; background:#d4edda; color:#155724; border-radius:14px; font-size:clamp(16px, 2vw, 20px); font-weight:900;">🌟 所有關卡皆已完成，請務必點擊上方「📤 繳交成績」！</div>`;
-    
-    // ★ 5關破完的瞬間：解鎖繳交按鈕並開啟閃爍引導
-    const submitBtn = document.getElementById("submitBtn");
+
+    document.getElementById(
+      "c"
+    ).innerHTML = `
+
+      <div
+        style="
+          grid-column:1 / -1;
+          height:100%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          text-align:center;
+          background:#d4edda;
+          color:#155724;
+          border-radius:14px;
+          font-size:clamp(16px,2vw,20px);
+          font-weight:900;
+        "
+      >
+
+        🌟 所有關卡皆已完成，
+        請務必點擊上方「📤 繳交成績」！
+
+      </div>
+
+    `;
+
+
+    const submitBtn =
+      document.getElementById(
+        "submitBtn"
+      );
+
+
     submitBtn.disabled = false;
-    submitBtn.innerHTML = "📤 繳交成績";
-    submitBtn.classList.add("ready-to-submit");
-  } else {
-    document.getElementById("c").innerHTML=`<button onclick="nextLevel()" style="grid-column:1 / -1; height:100%; font-size:clamp(16px, 2vw, 20px); font-weight:900; background:#e8e2d8; border:0; border-radius:14px; cursor:pointer;">➡️ 選擇下一未挑戰 LEVEL</button>`;
+
+    submitBtn.innerHTML =
+      "📤 繳交成績";
+
+    submitBtn.classList.add(
+      "ready-to-submit"
+    );
+
   }
-  document.getElementById("s").innerHTML=`本 Level 得分：<strong>${levelScores[currentLevel]} / 20</strong><br>目前總分：<strong>${total} / 100</strong>`;
-  document.getElementById("sc").textContent="若全部過關，記得在上方點擊「📤 繳交成績」唷！";
+
+  else {
+
+    document.getElementById(
+      "c"
+    ).innerHTML = `
+
+      <button
+        onclick="nextLevel()"
+        style="
+          grid-column:1 / -1;
+          height:100%;
+          font-size:clamp(16px,2vw,20px);
+          font-weight:900;
+          background:#e8e2d8;
+          border:0;
+          border-radius:14px;
+          cursor:pointer;
+        "
+      >
+
+        ➡️ 選擇下一未挑戰 LEVEL
+
+      </button>
+
+    `;
+
+  }
+
+
+  document.getElementById(
+    "s"
+  ).innerHTML =
+
+    `本 Level 得分：
+     <strong>
+       ${levelScores[currentLevel]} / 20
+     </strong>
+     <br>
+     目前總分：
+     <strong>
+       ${total} / 100
+     </strong>`;
+
+
+  document.getElementById(
+    "sc"
+  ).textContent =
+    "若全部過關，記得在上方點擊「📤 繳交成績」唷！";
+
 }
 
-function nextLevel(){
-  let next = currentLevel;
-  for(let j=0; j<5; j++){ next = next < 5 ? next + 1 : 1; if(!levelCompleted[next]) { chooseLevel(next); return; } }
+
+/* =====================================================
+   下一關
+   ===================================================== */
+
+function nextLevel() {
+
+  let next =
+    currentLevel;
+
+
+  for (
+    let j = 0;
+    j < 5;
+    j++
+  ) {
+
+    next =
+      next < 5
+        ? next + 1
+        : 1;
+
+
+    if (
+      !levelCompleted[next]
+    ) {
+
+      chooseLevel(next);
+
+      return;
+
+    }
+
+  }
+
 }
 
-function restartGame(){
-  for(let lv=1;lv<=5;lv++){ levelScores[lv]=0; levelCompleted[lv]=false; }
-  currentLevel=0; i=-1; wrongRecords=[]; 
-  document.getElementById('normalGameArea').style.display = 'flex';
-  document.getElementById('errorSummaryArea').style.display = 'none';
-  document.querySelectorAll("#levelSelect button").forEach(b => { b.classList.remove("active", "completed"); });
-  document.querySelectorAll(".score-card").forEach(card=>card.classList.remove("active"));
+
+/* =====================================================
+   重新開始
+   ===================================================== */
+
+function restartGame() {
+
+  for (
+    let lv = 1;
+    lv <= 5;
+    lv++
+  ) {
+
+    levelScores[lv] = 0;
+
+    levelCompleted[lv] =
+      false;
+
+  }
+
+
+  currentLevel = 0;
+  i = -1;
+  wrongRecords = [];
+
+
+  document.getElementById(
+    'normalGameArea'
+  ).style.display = 'flex';
+
+
+  document.getElementById(
+    'errorSummaryArea'
+  ).style.display = 'none';
+
+
+  document
+    .querySelectorAll(
+      "#levelSelect button"
+    )
+    .forEach(
+      b => {
+
+        b.classList.remove(
+          "active",
+          "completed"
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".score-card"
+    )
+    .forEach(
+      card =>
+        card.classList.remove(
+          "active"
+        )
+    );
+
+
   updateScoreboard();
-  document.getElementById("lv").textContent="尚未選擇";
-  document.getElementById("num").textContent="請選擇 Level";
-  document.getElementById("bar").style.width="0%";
-  document.getElementById("q").textContent="請先填寫上方身分資料，再選擇 LEVEL 任務";
-  document.getElementById("c").innerHTML="";
-  document.getElementById("s").textContent="";
-  document.getElementById("sc").textContent="";
-  
-  localStorage.removeItem('mathAgentSubmitted');
-  localStorage.removeItem('mathAgentWrongRecords');
-  document.getElementById("studentClass").disabled = false;
-  document.getElementById("studentSeat").disabled = false;
-  document.getElementById("studentName").disabled = false;
-  
-  // ★ 重新開始時，繳交按鈕恢復鎖定狀態
-  const btn = document.getElementById("submitBtn");
-  btn.innerHTML = "🔒 需完成 5 關";
+
+
+  document.getElementById(
+    "lv"
+  ).textContent =
+    "尚未選擇";
+
+
+  document.getElementById(
+    "num"
+  ).textContent =
+    "請選擇 Level";
+
+
+  document.getElementById(
+    "bar"
+  ).style.width =
+    "0%";
+
+
+  document.getElementById(
+    "q"
+  ).textContent =
+    "請先填寫上方身分資料，再選擇 LEVEL 任務";
+
+
+  document.getElementById(
+    "c"
+  ).innerHTML = "";
+
+
+  document.getElementById(
+    "s"
+  ).textContent = "";
+
+
+  document.getElementById(
+    "sc"
+  ).textContent = "";
+
+
+  localStorage.removeItem(
+    'mathAgentSubmitted'
+  );
+
+  localStorage.removeItem(
+    'mathAgentWrongRecords'
+  );
+
+
+  document.getElementById(
+    "studentClass"
+  ).disabled = false;
+
+
+  document.getElementById(
+    "studentSeat"
+  ).disabled = false;
+
+
+  document.getElementById(
+    "studentName"
+  ).disabled = false;
+
+
+  const btn =
+    document.getElementById(
+      "submitBtn"
+    );
+
+
+  btn.innerHTML =
+    "🔒 需完成 5 關";
+
+
   btn.disabled = true;
-  btn.classList.remove("ready-to-submit");
+
+  btn.classList.remove(
+    "ready-to-submit"
+  );
+
 }
+
+
+/* =====================================================
+   初始化
+   ===================================================== */
 
 updateScoreboard();
+
 </script>
+
 </body>
 </html>
