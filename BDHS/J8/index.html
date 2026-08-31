@@ -4,136 +4,821 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>數學特工隊｜分配律 50 題・100 分</title>
+
 <style>
 *{box-sizing:border-box}
-html,body{width:100%;height:100%;margin:0}
-body{background:#f4f2ed;color:#20242b;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif}
-button,input,textarea{font:inherit}
-button{-webkit-tap-highlight-color:transparent}
-.wrap{width:min(1240px,100%);min-height:100dvh;margin:auto;padding:10px 16px}
-.hero{min-height:calc(100dvh - 20px);background:#20242b;color:#fff;border-radius:24px;padding:16px 24px;display:flex;flex-direction:column}
-.tag{font-size:11px;letter-spacing:2px;opacity:.62;line-height:1}
-h1{font-size:clamp(30px,3.5vw,48px);line-height:1.05;margin:6px 0 8px}
-.toolbar{display:flex;gap:7px;justify-content:flex-end;margin:-2px 0 8px;flex-wrap:wrap}
-.toolbtn{border:0;border-radius:999px;padding:7px 12px;background:#e8e2d8;color:#20242b;font-weight:900;cursor:pointer}
-.toolbtn.dark{background:#fff}
-.scoreboard{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:0 0 9px}
-.score-card{background:#fff;color:#20242b;border-radius:11px;min-height:48px;padding:6px 8px;text-align:center;border:2px solid transparent}
-.score-card.active{border-color:#20242b;box-shadow:inset 0 0 0 2px #fff}
-.score-card.total{background:#e8e2d8}
-.score-card .label{font-size:10px;font-weight:900;letter-spacing:.5px;opacity:.7}
-.score-card .value{font-size:21px;font-weight:950;line-height:1.05;margin-top:2px}
-.score-card .value span{font-size:11px;font-weight:800;opacity:.65}
-.game{flex:1;min-height:0;background:#fff;color:#20242b;border-radius:18px;padding:12px 16px 10px;border:2px solid #20242b;box-shadow:0 5px 20px #0000000b;display:flex;flex-direction:column}
-.game-title{font-size:17px;font-weight:900;margin:0 0 7px}
-.studentbar{display:flex;gap:7px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
-.nameinput{flex:1;min-width:180px;border:2px solid #e3ded4;border-radius:10px;padding:8px 10px;font-weight:800;color:#20242b;background:#faf9f6}
-.level-select{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:0 0 8px}
-.level-select button{background:#e8e2d8;border:2px solid transparent;border-radius:11px;padding:7px 5px;min-height:52px;font-size:15px;font-weight:900;cursor:pointer;line-height:1.15;transition:.15s;color:#20242b}
-.level-select button.active{background:#20242b;color:#fff;border-color:#20242b}
-.level-select button.done{background:#d8eadb}
-.level-select button:hover{transform:translateY(-1px)}
-.level-select small{font-size:10px;font-weight:700;opacity:.78}
-.top{display:flex;justify-content:space-between;gap:7px;flex-wrap:wrap}
-.badge{background:#e9e3d8;padding:5px 10px;border-radius:999px;font-weight:800;font-size:13px}
-.progress{height:7px;background:#e3ded4;border-radius:20px;overflow:hidden;margin-top:6px}
-#bar{height:100%;width:0;background:#20242b;transition:.3s}
-.question{flex:1;min-height:78px;display:flex;align-items:center;justify-content:center;font-size:clamp(32px,4.7vw,56px);font-weight:900;text-align:center;margin:4px 0}
-.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.choices button,.main-actions button{border:0;border-radius:11px;padding:10px 12px;min-height:49px;font-size:16px;font-weight:800;cursor:pointer;background:#e8e2d8;color:#20242b;transition:.15s}
-.choices button:hover,.main-actions button:hover{transform:translateY(-2px)}
-.correct{background:#cfe8d5!important}.wrong{background:#f0c8c8!important}
-.status{text-align:center;min-height:31px;line-height:1.35;font-weight:700;font-size:13px;margin:5px 4px 1px}
-.score{text-align:center;font-size:14px;font-weight:800;min-height:20px}
-.main-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.overlay{position:fixed;inset:0;background:#20242bf2;z-index:50;padding:18px;display:none;overflow:auto}
-.overlay.show{display:block}
-.panel{width:min(1100px,100%);margin:auto;background:#fff;color:#20242b;border-radius:20px;padding:18px;min-height:calc(100dvh - 36px)}
-.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
-.panel h2{margin:0;font-size:28px}
-.close{border:0;border-radius:999px;padding:8px 13px;background:#e8e2d8;font-weight:900;cursor:pointer}
-.teacher-input{width:100%;min-height:120px;border:2px solid #ddd7cc;border-radius:12px;padding:10px;resize:vertical}
-.primary{border:0;border-radius:10px;padding:9px 14px;background:#20242b;color:#fff;font-weight:900;cursor:pointer}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
-.stat{background:#f4f2ed;border-radius:12px;padding:10px;text-align:center}
-.stat b{display:block;font-size:24px}
-.levelstats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0 14px}
-.lstat{background:#e8e2d8;border-radius:12px;padding:10px;text-align:center}
-.lstat .big{font-size:22px;font-weight:950}
-.tablewrap{overflow:auto;border:1px solid #e3ded4;border-radius:12px}
-table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{padding:9px 8px;border-bottom:1px solid #e3ded4;text-align:center;font-size:13px}
-th{background:#f4f2ed;font-weight:950}
-.empty{padding:24px;text-align:center;font-weight:800;opacity:.65}
-.notice{background:#f4f2ed;border-radius:12px;padding:10px;margin:8px 0;font-size:13px;line-height:1.5}
-.small{font-size:12px;opacity:.68}
+
+html,body{
+  width:100%;
+  height:100%;
+  margin:0
+}
+
+body{
+  background:#f4f2ed;
+  color:#20242b;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif
+}
+
+button,input,textarea{
+  font:inherit
+}
+
+button{
+  -webkit-tap-highlight-color:transparent
+}
+
+.wrap{
+  width:min(1240px,100%);
+  min-height:100dvh;
+  margin:auto;
+  padding:10px 16px
+}
+
+.hero{
+  min-height:calc(100dvh - 20px);
+  background:#20242b;
+  color:#fff;
+  border-radius:24px;
+  padding:16px 24px;
+  display:flex;
+  flex-direction:column
+}
+
+.tag{
+  font-size:11px;
+  letter-spacing:2px;
+  opacity:.62;
+  line-height:1
+}
+
+h1{
+  font-size:clamp(30px,3.5vw,48px);
+  line-height:1.05;
+  margin:6px 0 8px
+}
+
+.toolbar{
+  display:flex;
+  gap:7px;
+  justify-content:flex-end;
+  margin:-2px 0 8px;
+  flex-wrap:wrap
+}
+
+.toolbtn{
+  border:0;
+  border-radius:999px;
+  padding:7px 12px;
+  background:#e8e2d8;
+  color:#20242b;
+  font-weight:900;
+  cursor:pointer
+}
+
+.toolbtn.dark{
+  background:#fff
+}
+
+.scoreboard{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:7px;
+  margin:0 0 9px
+}
+
+.score-card{
+  background:#fff;
+  color:#20242b;
+  border-radius:11px;
+  min-height:48px;
+  padding:6px 8px;
+  text-align:center;
+  border:2px solid transparent
+}
+
+.score-card.active{
+  border-color:#20242b;
+  box-shadow:inset 0 0 0 2px #fff
+}
+
+.score-card.total{
+  background:#e8e2d8
+}
+
+.score-card .label{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.5px;
+  opacity:.7
+}
+
+.score-card .value{
+  font-size:21px;
+  font-weight:950;
+  line-height:1.05;
+  margin-top:2px
+}
+
+.score-card .value span{
+  font-size:11px;
+  font-weight:800;
+  opacity:.65
+}
+
+.game{
+  flex:1;
+  min-height:0;
+  background:#fff;
+  color:#20242b;
+  border-radius:18px;
+  padding:12px 16px 10px;
+  border:2px solid #20242b;
+  box-shadow:0 5px 20px #0000000b;
+  display:flex;
+  flex-direction:column
+}
+
+.game-title{
+  font-size:17px;
+  font-weight:900;
+  margin:0 0 7px
+}
+
+.studentbar{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  margin-bottom:8px;
+  flex-wrap:wrap
+}
+
+.nameinput{
+  flex:1;
+  min-width:180px;
+  border:2px solid #e3ded4;
+  border-radius:10px;
+  padding:8px 10px;
+  font-weight:800;
+  color:#20242b;
+  background:#faf9f6
+}
+
+.level-select{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+  margin:0 0 8px
+}
+
+.level-select button{
+  background:#e8e2d8;
+  border:2px solid transparent;
+  border-radius:11px;
+  padding:7px 5px;
+  min-height:52px;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  line-height:1.15;
+  transition:.15s;
+  color:#20242b
+}
+
+.level-select button.active{
+  background:#20242b;
+  color:#fff;
+  border-color:#20242b
+}
+
+.level-select button.done{
+  background:#d8eadb
+}
+
+.level-select button:hover{
+  transform:translateY(-1px)
+}
+
+.level-select small{
+  font-size:10px;
+  font-weight:700;
+  opacity:.78
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:7px;
+  flex-wrap:wrap
+}
+
+.badge{
+  background:#e9e3d8;
+  padding:5px 10px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:13px
+}
+
+.progress{
+  height:7px;
+  background:#e3ded4;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:6px
+}
+
+#bar{
+  height:100%;
+  width:0;
+  background:#20242b;
+  transition:.3s
+}
+
+.question{
+  flex:1;
+  min-height:78px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(32px,4.7vw,56px);
+  font-weight:900;
+  text-align:center;
+  margin:4px 0
+}
+
+.choices{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px
+}
+
+.choices button,
+.main-actions button{
+  border:0;
+  border-radius:11px;
+  padding:10px 12px;
+  min-height:49px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  background:#e8e2d8;
+  color:#20242b;
+  transition:.15s
+}
+
+.choices button:hover,
+.main-actions button:hover{
+  transform:translateY(-2px)
+}
+
+.correct{
+  background:#cfe8d5!important
+}
+
+.wrong{
+  background:#f0c8c8!important
+}
+
+.status{
+  text-align:center;
+  min-height:31px;
+  line-height:1.35;
+  font-weight:700;
+  font-size:13px;
+  margin:5px 4px 1px
+}
+
+.score{
+  text-align:center;
+  font-size:14px;
+  font-weight:800;
+  min-height:20px
+}
+
+.main-actions{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:#20242bf2;
+  z-index:50;
+  padding:18px;
+  display:none;
+  overflow:auto
+}
+
+.overlay.show{
+  display:block
+}
+
+.panel{
+  width:min(1100px,100%);
+  margin:auto;
+  background:#fff;
+  color:#20242b;
+  border-radius:20px;
+  padding:18px;
+  min-height:calc(100dvh - 36px)
+}
+
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px
+}
+
+.panel h2{
+  margin:0;
+  font-size:28px
+}
+
+.close{
+  border:0;
+  border-radius:999px;
+  padding:8px 13px;
+  background:#e8e2d8;
+  font-weight:900;
+  cursor:pointer
+}
+
+.teacher-input{
+  width:100%;
+  min-height:120px;
+  border:2px solid #ddd7cc;
+  border-radius:12px;
+  padding:10px;
+  resize:vertical
+}
+
+.primary{
+  border:0;
+  border-radius:10px;
+  padding:9px 14px;
+  background:#20242b;
+  color:#fff;
+  font-weight:900;
+  cursor:pointer
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin:12px 0
+}
+
+.stat{
+  background:#f4f2ed;
+  border-radius:12px;
+  padding:10px;
+  text-align:center
+}
+
+.stat b{
+  display:block;
+  font-size:24px
+}
+
+.levelstats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin:10px 0 14px
+}
+
+.lstat{
+  background:#e8e2d8;
+  border-radius:12px;
+  padding:10px;
+  text-align:center
+}
+
+.lstat .big{
+  font-size:22px;
+  font-weight:950
+}
+
+.tablewrap{
+  overflow:auto;
+  border:1px solid #e3ded4;
+  border-radius:12px
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px
+}
+
+th,td{
+  padding:9px 8px;
+  border-bottom:1px solid #e3ded4;
+  text-align:center;
+  font-size:13px
+}
+
+th{
+  background:#f4f2ed;
+  font-weight:950
+}
+
+.empty{
+  padding:24px;
+  text-align:center;
+  font-weight:800;
+  opacity:.65
+}
+
+.notice{
+  background:#f4f2ed;
+  border-radius:12px;
+  padding:10px;
+  margin:8px 0;
+  font-size:13px;
+  line-height:1.5
+}
+
+.small{
+  font-size:12px;
+  opacity:.68
+}
+
 @media(max-width:760px){
- .wrap{padding:6px}.hero{min-height:calc(100dvh - 12px);padding:11px;border-radius:17px}
- h1{font-size:30px;margin-bottom:6px}.scoreboard{gap:4px;margin-bottom:6px}
- .score-card{min-height:43px;padding:5px 2px;border-radius:9px}.score-card .label{font-size:8px}.score-card .value{font-size:17px}.score-card .value span{font-size:9px}
- .game{padding:9px}.game-title{font-size:15px}.level-select{gap:4px}.level-select button{min-height:49px;font-size:11px;padding:6px 1px}.level-select small{font-size:8px}
- .badge{font-size:11px;padding:4px 7px}.question{font-size:33px;min-height:65px}.choices{grid-template-columns:1fr}
- .choices button,.main-actions button{min-height:42px;font-size:14px;padding:8px}.status{font-size:12px;min-height:28px}.score{font-size:13px}
- .stats{grid-template-columns:repeat(2,1fr)}.levelstats{grid-template-columns:repeat(5,1fr);gap:4px}.lstat{padding:7px 3px}.lstat .big{font-size:16px}.panel{padding:12px;border-radius:16px}
+
+  .wrap{
+    padding:6px
+  }
+
+  .hero{
+    min-height:calc(100dvh - 12px);
+    padding:11px;
+    border-radius:17px
+  }
+
+  h1{
+    font-size:30px;
+    margin-bottom:6px
+  }
+
+  .scoreboard{
+    gap:4px;
+    margin-bottom:6px
+  }
+
+  .score-card{
+    min-height:43px;
+    padding:5px 2px;
+    border-radius:9px
+  }
+
+  .score-card .label{
+    font-size:8px
+  }
+
+  .score-card .value{
+    font-size:17px
+  }
+
+  .score-card .value span{
+    font-size:9px
+  }
+
+  .game{
+    padding:9px
+  }
+
+  .game-title{
+    font-size:15px
+  }
+
+  .level-select{
+    gap:4px
+  }
+
+  .level-select button{
+    min-height:49px;
+    font-size:11px;
+    padding:6px 1px
+  }
+
+  .level-select small{
+    font-size:8px
+  }
+
+  .badge{
+    font-size:11px;
+    padding:4px 7px
+  }
+
+  .question{
+    font-size:33px;
+    min-height:65px
+  }
+
+  .choices{
+    grid-template-columns:1fr
+  }
+
+  .choices button,
+  .main-actions button{
+    min-height:42px;
+    font-size:14px;
+    padding:8px
+  }
+
+  .status{
+    font-size:12px;
+    min-height:28px
+  }
+
+  .score{
+    font-size:13px
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr)
+  }
+
+  .levelstats{
+    grid-template-columns:repeat(5,1fr);
+    gap:4px
+  }
+
+  .lstat{
+    padding:7px 3px
+  }
+
+  .lstat .big{
+    font-size:16px
+  }
+
+  .panel{
+    padding:12px;
+    border-radius:16px
+  }
 }
 </style>
 </head>
+
 <body>
+
 <div class="wrap">
+
 <section class="hero">
-  <div class="tag">GRADE 8 · FORMATIVE ASSESSMENT</div>
-  <h1>數學特工隊 🕵️‍♂️</h1>
+
+  <div class="tag">
+    GRADE 8 · FORMATIVE ASSESSMENT
+  </div>
+
+  <h1>
+    數學特工隊 🕵️‍♂️
+  </h1>
+
   <div class="toolbar">
-    <button class="toolbtn" onclick="openTeacher()">🧑‍🏫 教師模式</button>
-    <button class="toolbtn dark" onclick="resetAll()">↻ 重新開始</button>
+
+    <button class="toolbtn"
+            onclick="openTeacher()">
+      🧑‍🏫 教師模式
+    </button>
+
+    <button class="toolbtn dark"
+            onclick="resetAll()">
+      ↻ 重新開始
+    </button>
+
   </div>
+
   <div class="scoreboard">
-    <div class="score-card" id="scoreCard1"><div class="label">LEVEL 1</div><div class="value" id="score1">0<span> / 20</span></div></div>
-    <div class="score-card" id="scoreCard2"><div class="label">LEVEL 2</div><div class="value" id="score2">0<span> / 20</span></div></div>
-    <div class="score-card" id="scoreCard3"><div class="label">LEVEL 3</div><div class="value" id="score3">0<span> / 20</span></div></div>
-    <div class="score-card" id="scoreCard4"><div class="label">LEVEL 4</div><div class="value" id="score4">0<span> / 20</span></div></div>
-    <div class="score-card" id="scoreCard5"><div class="label">LEVEL 5</div><div class="value" id="score5">0<span> / 20</span></div></div>
-    <div class="score-card total"><div class="label">🏆 總分</div><div class="value" id="totalScore">0<span> / 100</span></div></div>
+
+    <div class="score-card" id="scoreCard1">
+      <div class="label">LEVEL 1</div>
+      <div class="value" id="score1">
+        0<span> / 20</span>
+      </div>
+    </div>
+
+    <div class="score-card" id="scoreCard2">
+      <div class="label">LEVEL 2</div>
+      <div class="value" id="score2">
+        0<span> / 20</span>
+      </div>
+    </div>
+
+    <div class="score-card" id="scoreCard3">
+      <div class="label">LEVEL 3</div>
+      <div class="value" id="score3">
+        0<span> / 20</span>
+      </div>
+    </div>
+
+    <div class="score-card" id="scoreCard4">
+      <div class="label">LEVEL 4</div>
+      <div class="value" id="score4">
+        0<span> / 20</span>
+      </div>
+    </div>
+
+    <div class="score-card" id="scoreCard5">
+      <div class="label">LEVEL 5</div>
+      <div class="value" id="score5">
+        0<span> / 20</span>
+      </div>
+    </div>
+
+    <div class="score-card total">
+
+      <div class="label">
+        🏆 總分
+      </div>
+
+      <div class="value" id="totalScore">
+        0<span> / 100</span>
+      </div>
+
+    </div>
+
   </div>
+
   <section class="game">
-    <div class="game-title">🎮 選擇關卡</div>
+
+    <div class="game-title">
+      🎮 選擇關卡
+    </div>
+
     <div class="studentbar">
-      <input id="studentName" class="nameinput" placeholder="請輸入姓名（成績分享需要）" maxlength="20">
-      <span class="badge" id="saveState">本機自動記錄</span>
+
+      <input
+        id="studentName"
+        class="nameinput"
+        placeholder="請輸入姓名（成績分享需要）"
+        maxlength="20"
+      >
+
+      <span class="badge" id="saveState">
+        本機自動記錄
+      </span>
+
     </div>
+
     <div class="level-select" id="levelSelect">
-      <button onclick="chooseLevel(1)">LEVEL 1<br><small>10 題 · 20 分</small></button>
-      <button onclick="chooseLevel(2)">LEVEL 2<br><small>10 題 · 20 分</small></button>
-      <button onclick="chooseLevel(3)">LEVEL 3<br><small>10 題 · 20 分</small></button>
-      <button onclick="chooseLevel(4)">LEVEL 4<br><small>10 題 · 20 分</small></button>
-      <button onclick="chooseLevel(5)">LEVEL 5<br><small>10 題 · 20 分</small></button>
+
+      <button onclick="chooseLevel(1)">
+        LEVEL 1<br>
+        <small>10 題 · 20 分</small>
+      </button>
+
+      <button onclick="chooseLevel(2)">
+        LEVEL 2<br>
+        <small>10 題 · 20 分</small>
+      </button>
+
+      <button onclick="chooseLevel(3)">
+        LEVEL 3<br>
+        <small>10 題 · 20 分</small>
+      </button>
+
+      <button onclick="chooseLevel(4)">
+        LEVEL 4<br>
+        <small>10 題 · 20 分</small>
+      </button>
+
+      <button onclick="chooseLevel(5)">
+        LEVEL 5<br>
+        <small>10 題 · 20 分</small>
+      </button>
+
     </div>
-    <div class="top"><span class="badge" id="lv">尚未選擇</span><span class="badge" id="num">請選擇 Level</span></div>
-    <div class="progress"><div id="bar"></div></div>
-    <div class="question" id="q">選擇一個 LEVEL 開始任務</div>
+
+    <div class="top">
+
+      <span class="badge" id="lv">
+        尚未選擇
+      </span>
+
+      <span class="badge" id="num">
+        請選擇 Level
+      </span>
+
+    </div>
+
+    <div class="progress">
+      <div id="bar"></div>
+    </div>
+
+    <div class="question" id="q">
+      選擇一個 LEVEL 開始任務
+    </div>
+
     <div class="choices" id="c"></div>
+
     <div class="status" id="s"></div>
+
     <div class="score" id="sc"></div>
+
   </section>
+
 </section>
+
 </div>
+
+
+<!-- ========================= -->
+<!-- 教師模式 -->
+<!-- ========================= -->
 
 <div class="overlay" id="teacherOverlay">
- <section class="panel">
-  <div class="panel-head"><h2>🧑‍🏫 教師模式｜班級成績儀表板</h2><button class="close" onclick="closeTeacher()">✕ 關閉</button></div>
-  <div class="notice"><b>使用方式：</b>學生完成 50 題後，按「複製成績碼」；老師把所有學生的成績碼貼到下方（每位學生一行），即可看到全班 LEVEL 表現。<br><span class="small">這個版本不需要伺服器，適合直接用學校平板＋電子白板。每位學生的題目仍會隨機分配。</span></div>
-  <textarea id="codes" class="teacher-input" placeholder="請貼上學生的成績碼，每位學生一行"></textarea>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-   <button class="primary" onclick="analyzeClass()">📊 分析全班成績</button>
-   <button class="primary" onclick="clearTeacher()">清除</button>
-   <button class="primary" onclick="exportCSV()">⬇️ 匯出 CSV</button>
-  </div>
-  <div id="dashboard"><div class="empty">尚未匯入班級資料</div></div>
- </section>
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <h2>
+        🧑‍🏫 教師模式｜班級成績儀表板
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeTeacher()">
+        ✕ 關閉
+      </button>
+
+    </div>
+
+    <div class="notice">
+
+      <b>使用方式：</b>
+
+      學生完成 50 題後，
+      按「複製成績碼」；
+      老師把所有學生的成績碼貼到下方
+      （每位學生一行），
+      即可看到全班 LEVEL 表現。
+
+      <br>
+
+      <span class="small">
+
+        這個版本不需要伺服器，
+        適合直接用學校平板＋電子白板。
+        每位學生的題目仍會隨機分配。
+
+      </span>
+
+    </div>
+
+    <textarea
+      id="codes"
+      class="teacher-input"
+      placeholder="請貼上學生的成績碼，每位學生一行">
+    </textarea>
+
+    <div
+      style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+
+      <button
+        class="primary"
+        onclick="analyzeClass()">
+        📊 分析全班成績
+      </button>
+
+      <button
+        class="primary"
+        onclick="clearTeacher()">
+        清除
+      </button>
+
+      <button
+        class="primary"
+        onclick="exportCSV()">
+        ⬇️ 匯出 CSV
+      </button>
+
+    </div>
+
+    <div id="dashboard">
+
+      <div class="empty">
+        尚未匯入班級資料
+      </div>
+
+    </div>
+
+  </section>
+
 </div>
 
+
 <script>
+
 const data=[
+
 {"q":"12×7","c":["(10+2)×7","10×7+2","12+7","(12×7)+2"],"a":0,"n":"12×7＝10×7＋2×7。"},
 {"q":"19×6","c":["20×6－6","20×6＋6","19+6","(20－1)+6"],"a":0,"n":"19＝20－1。"},
 {"q":"31×8","c":["30×8+8","30×8－8","31+8","30×8+31"],"a":0,"n":"31＝30＋1。"},
@@ -144,7 +829,6 @@ const data=[
 {"q":"25×18","c":["25×(20－2)","25×20－2","(25－2)×20","25×20+2"],"a":0,"n":"把18改成20－2。"},
 {"q":"39×12","c":["39×(10+2)","40×12－12","39×10+2","(40－1)×10"],"a":0,"n":"39×12＝39×10＋39×2。"},
 {"q":"61×19","c":["61×(20－1)","60×19+1","61×20－1","60×20+19"],"a":0,"n":"19＝20－1。"},
-
 {"q":"97×8","c":["(100－3)×8","100×8－3","(100－3)×8+3","97×(10－2)"],"a":0,"n":"97＝100－3。"},
 {"q":"103×7","c":["(100+3)×7","100×7+3","103×(5+2)","100×7－3"],"a":0,"n":"103＝100＋3。"},
 {"q":"48×15","c":["48×(10+5)","50×15－2","48×10+5","(50－2)×10"],"a":0,"n":"把15拆成10＋5。"},
@@ -155,7 +839,6 @@ const data=[
 {"q":"398×7","c":["(400－2)×7","400×7－2","(400+2)×7","398×(5+2)"],"a":0,"n":"398＝400－2。"},
 {"q":"602×8","c":["(600+2)×8","600×8+2","(600－2)×8","602×(10－2)"],"a":0,"n":"602＝600＋2。"},
 {"q":"999×13","c":["(1000－1)×13","1000×13－1","(1000+1)×13","999×(10+3)"],"a":0,"n":"999＝1000－1。"},
-
 {"q":"1001×27","c":["(1000+1)×27","1000×27+1","(1000－1)×27","1001×(30－3)"],"a":0,"n":"1001＝1000＋1。"},
 {"q":"49×98","c":["(50－1)(100－2)","50×98－1","49×(100－2)","(50+1)(100－2)"],"a":2,"n":"可先把98改成100－2：49×100－49×2＝4802。"},
 {"q":"102×97","c":["(100+2)(100－3)","100×97+2","102×(100－3)","(100+2)×100－3"],"a":0,"n":"兩個數都接近100，可先用分配律展開。"},
@@ -166,7 +849,6 @@ const data=[
 {"q":"997×18","c":["(1000－3)×18","1000×18－3","(1000+3)×18","997×(20－2)"],"a":0,"n":"997＝1000－3。"},
 {"q":"1003×19","c":["(1000+3)×19","1000×19+3","(1000－3)×19","1003×(20－1)"],"a":0,"n":"1003＝1000＋3。"},
 {"q":"498×21","c":["(500－2)×21","500×21－2","(500+2)×21","498×(20+1)"],"a":0,"n":"498＝500－2。"},
-
 {"q":"1002×48","c":["1002×(50－2)","(1000+2)×48","1000×48+2","1002×50－2"],"a":0,"n":"可以同時利用1002接近1000或48接近50。"},
 {"q":"999×999","c":["(1000－1)^2","1000^2－1","(1000+1)^2","999×(1000+1)"],"a":0,"n":"平方公式本質上來自分配律：(1000－1)(1000－1)。"},
 {"q":"1001×999","c":["(1000+1)(1000－1)","1000×999+1","1001×(1000+1)","(1000−1)^2"],"a":0,"n":"利用平方差：1000²－1。"},
@@ -177,7 +859,6 @@ const data=[
 {"q":"9997×23","c":["(10000−3)×23","10000×23−3","(10000+3)×23","9997×(20+3)"],"a":0,"n":"9997＝10000－3。"},
 {"q":"10004×17","c":["(10000+4)×17","10000×17+4","(10000−4)×17","10004×(20−3)"],"a":0,"n":"10004＝10000＋4。"},
 {"q":"1998×35","c":["(2000−2)×35","2000×35−2","(2000+2)×35","1998×(30+5)"],"a":0,"n":"1998＝2000－2。"},
-
 {"q":"2502×16","c":["(2500+2)×16","2500×16+2","(2500−2)×16","2502×(8×2)"],"a":0,"n":"2502＝2500＋2。"},
 {"q":"498×125","c":["(500−2)×125","500×125−2","(500+2)×125","498×(100+25)"],"a":0,"n":"500×125很漂亮，再扣掉2×125。"},
 {"q":"1008×125","c":["(1000+8)×125","1000×125+8","(1000−8)×125","1008×(100+25)"],"a":0,"n":"1008＝1000＋8，而8×125＝1000。"},
@@ -188,135 +869,1190 @@ const data=[
 {"q":"10001×9999","c":["(10000+1)(10000−1)","10001×10000−1","10000²−1","(10000−1)²"],"a":0,"n":"平方差：10000²－1。"},
 {"q":"9998×1002","c":["(10000−2)(1000+2)","9998×1000+2","10000×1002−2","(10000−2)×1000+2"],"a":0,"n":"可分別靠近10000與1000，展開後仍可快速整理。"},
 {"q":"2498×25","c":["(2500−2)×25","2500×25−2","(2500+2)×25","2498×(100÷4)"],"a":0,"n":"62500－50＝62450。"}
+
 ];
 
-// 每次載入都重新隨機分配：50 題 → 5 個 LEVEL，每級 10 題。
-function shuffle(arr){for(let j=arr.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[arr[j],arr[k]]=[arr[k],arr[j]]}return arr}
+
+/* =========================================
+   50 題 → 隨機分配到 5 個 LEVEL
+========================================= */
+
+function shuffle(arr){
+
+  for(let j=arr.length-1;j>0;j--){
+
+    const k=Math.floor(Math.random()*(j+1));
+
+    [arr[j],arr[k]]=[arr[k],arr[j]];
+
+  }
+
+  return arr;
+}
+
 shuffle(data);
-data.forEach((x,index)=>x.lv=Math.floor(index/10)+1);
-const ranges={1:[0,10],2:[10,20],3:[20,30],4:[30,40],5:[40,50]};
-let levelScores={1:0,2:0,3:0,4:0,5:0};
-let levelAnswered={1:0,2:0,3:0,4:0,5:0};
-let levelCorrect={1:0,2:0,3:0,4:0,5:0};
-let i=-1,lock=false,currentLevel=0,startQ=0,endQ=0,completed=false;
+
+data.forEach((x,index)=>{
+
+  x.lv=Math.floor(index/10)+1;
+
+});
+
+const ranges={
+  1:[0,10],
+  2:[10,20],
+  3:[20,30],
+  4:[30,40],
+  5:[40,50]
+};
+
+
+/* =========================================
+   成績資料
+========================================= */
+
+let levelScores={
+  1:0,
+  2:0,
+  3:0,
+  4:0,
+  5:0
+};
+
+let levelAnswered={
+  1:0,
+  2:0,
+  3:0,
+  4:0,
+  5:0
+};
+
+let levelCorrect={
+  1:0,
+  2:0,
+  3:0,
+  4:0,
+  5:0
+};
+
+let i=-1;
+let lock=false;
+let currentLevel=0;
+let startQ=0;
+let endQ=0;
+let completed=false;
+
 let classData=[];
 
 const $=id=>document.getElementById(id);
+
+
+/* =========================================
+   更新成績板
+========================================= */
+
 function updateScoreboard(){
- let total=0;
- for(let lv=1;lv<=5;lv++){
-  $("score"+lv).innerHTML=`${levelScores[lv]}<span> / 20</span>`;
-  total+=levelScores[lv];
- }
- $("totalScore").innerHTML=`${total}<span> / 100</span>`;
- for(let lv=1;lv<=5;lv++) $("scoreCard"+lv).classList.toggle("active",currentLevel===lv);
+
+  let total=0;
+
+  for(let lv=1;lv<=5;lv++){
+
+    $("score"+lv).innerHTML=
+      `${levelScores[lv]}<span> / 20</span>`;
+
+    total+=levelScores[lv];
+
+  }
+
+  $("totalScore").innerHTML=
+    `${total}<span> / 100</span>`;
+
+  for(let lv=1;lv<=5;lv++){
+
+    $("scoreCard"+lv)
+      .classList
+      .toggle(
+        "active",
+        currentLevel===lv
+      );
+
+  }
+
 }
+
+
+/* =========================================
+   LEVEL 完成狀態
+========================================= */
+
 function updateLevelButtons(){
- for(let lv=1;lv<=5;lv++){
-  const b=$("levelSelect").children[lv-1];
-  b.classList.toggle("done",levelAnswered[lv]===10);
- }
+
+  for(let lv=1;lv<=5;lv++){
+
+    const b=
+      $("levelSelect").children[lv-1];
+
+    b.classList.toggle(
+      "done",
+      levelAnswered[lv]===10
+    );
+
+  }
+
 }
+
+
+/* =========================================
+   選擇 LEVEL
+========================================= */
+
 function chooseLevel(level){
- currentLevel=level;[startQ,endQ]=ranges[level];i=startQ;
- document.querySelectorAll("#levelSelect button").forEach((b,n)=>b.classList.toggle("active",n===level-1));
- $("lv").textContent="LEVEL "+level;$("num").textContent=`10 題 · 每題 2 分`;
- $("bar").style.width="0%";$("s").textContent="";
- $("sc").textContent=`本 Level：${levelScores[level]} / 20 分 · 已作答 ${levelAnswered[level]} / 10 題`;
- $("c").innerHTML=`<button onclick="startLevel()">開始 LEVEL ${level} 🚀</button>`;
- $("q").textContent=`準備挑戰 LEVEL ${level}`;
- updateScoreboard();
+
+  currentLevel=level;
+
+  [startQ,endQ]=ranges[level];
+
+  i=startQ;
+
+  document
+    .querySelectorAll("#levelSelect button")
+    .forEach(
+      (b,n)=>
+        b.classList.toggle(
+          "active",
+          n===level-1
+        )
+    );
+
+  $("lv").textContent=
+    "LEVEL "+level;
+
+  $("num").textContent=
+    "10 題 · 每題 2 分";
+
+  $("bar").style.width="0%";
+
+  $("s").textContent="";
+
+  $("sc").textContent=
+    `本 Level：${levelScores[level]} / 20 分 · 已作答 ${levelAnswered[level]} / 10 題`;
+
+  $("c").innerHTML=
+    `<button onclick="startLevel()">開始 LEVEL ${level} 🚀</button>`;
+
+  $("q").textContent=
+    `準備挑戰 LEVEL ${level}`;
+
+  updateScoreboard();
+
 }
-function startLevel(){i=startQ;lock=false;show()}
+
+
+/* =========================================
+   ★ 答案選項隨機化
+   每次開始 LEVEL 都重新洗牌
+========================================= */
+
+function shuffleQuestionChoices(){
+
+  data.forEach(x=>{
+
+    const correct=
+      x.c[x.a];
+
+    const arr=
+      [...x.c];
+
+    for(
+      let j=arr.length-1;
+      j>0;
+      j--
+    ){
+
+      const k=
+        Math.floor(
+          Math.random()*(j+1)
+        );
+
+      [arr[j],arr[k]]=
+        [arr[k],arr[j]];
+
+    }
+
+    x.c=arr;
+
+    x.a=
+      arr.indexOf(correct);
+
+  });
+
+}
+
+
+/* =========================================
+   第一次載入頁面先隨機一次
+========================================= */
+
+shuffleQuestionChoices();
+
+
+/* =========================================
+   開始 LEVEL
+   ★ 每次重新開始都重新洗牌
+========================================= */
+
+function startLevel(){
+
+  shuffleQuestionChoices();
+
+  i=startQ;
+
+  lock=false;
+
+  show();
+
+}
+
+
+/* =========================================
+   顯示題目
+========================================= */
+
 function show(){
- lock=false;const x=data[i];
- $("lv").textContent="LEVEL "+currentLevel;$("num").textContent=`第 ${i-startQ+1} / 10 題`;
- $("bar").style.width=((i-startQ)/(endQ-startQ)*100)+"%";
- $("q").textContent=x.q;
- $("c").innerHTML=x.c.map((v,k)=>`<button onclick="ans(${k})">${v}</button>`).join("");
- $("s").textContent="";$("sc").textContent=`本 Level：${levelScores[currentLevel]} / 20 分 · 已作答 ${levelAnswered[currentLevel]} / 10 題`;
+
+  lock=false;
+
+  const x=data[i];
+
+  $("lv").textContent=
+    "LEVEL "+currentLevel;
+
+  $("num").textContent=
+    `第 ${i-startQ+1} / 10 題`;
+
+  $("bar").style.width=
+    (
+      (i-startQ)/
+      (endQ-startQ)*
+      100
+    )+"%";
+
+  $("q").textContent=
+    x.q;
+
+  $("c").innerHTML=
+    x.c
+      .map(
+        (v,k)=>
+          `<button onclick="ans(${k})">${v}</button>`
+      )
+      .join("");
+
+  $("s").textContent="";
+
+  $("sc").textContent=
+    `本 Level：${levelScores[currentLevel]} / 20 分 · 已作答 ${levelAnswered[currentLevel]} / 10 題`;
+
 }
+
+
+/* =========================================
+   答題
+========================================= */
+
 function ans(k){
- if(lock)return;lock=true;const x=data[i],b=document.querySelectorAll(".choices button");
- const correct=k===x.a;b[k].classList.add(correct?"correct":"wrong");
- levelAnswered[currentLevel]++;
- if(correct){levelCorrect[currentLevel]++;levelScores[currentLevel]+=2;$("s").innerHTML=`✅ 答對！ ${x.n}<br>本題 <b>+2 分</b>。`;}
- else{b[x.a].classList.add("correct");$("s").textContent=`❌ 答案揭曉：${x.n}`;}
- updateScoreboard();updateLevelButtons();
- $("sc").textContent=`本 Level：${levelScores[currentLevel]} / 20 分 · 已作答 ${levelAnswered[currentLevel]} / 10 題`;
- saveLocal();
- setTimeout(()=>{i++;if(i<endQ)show();else finishLevel()},1600);
+
+  if(lock)return;
+
+  lock=true;
+
+  const x=data[i];
+
+  const b=
+    document.querySelectorAll(
+      ".choices button"
+    );
+
+  const correct=
+    k===x.a;
+
+  b[k].classList.add(
+    correct?"correct":"wrong"
+  );
+
+  levelAnswered[currentLevel]++;
+
+  if(correct){
+
+    levelCorrect[currentLevel]++;
+
+    levelScores[currentLevel]+=2;
+
+    $("s").innerHTML=
+      `✅ 答對！ ${x.n}<br>
+       本題 <b>+2 分</b>。`;
+
+  }else{
+
+    b[x.a].classList.add("correct");
+
+    $("s").textContent=
+      `❌ 答案揭曉：${x.n}`;
+
+  }
+
+  updateScoreboard();
+
+  updateLevelButtons();
+
+  $("sc").textContent=
+    `本 Level：${levelScores[currentLevel]} / 20 分 · 已作答 ${levelAnswered[currentLevel]} / 10 題`;
+
+  saveLocal();
+
+  setTimeout(()=>{
+
+    i++;
+
+    if(i<endQ){
+
+      show();
+
+    }else{
+
+      finishLevel();
+
+    }
+
+  },1600);
+
 }
+
+
+/* =========================================
+   LEVEL 完成
+========================================= */
+
 function finishLevel(){
- $("bar").style.width="100%";$("lv").textContent=`LEVEL ${currentLevel} 完成`;$("num").textContent="10 / 10 題";
- const total=Object.values(levelScores).reduce((a,b)=>a+b,0);
- const doneAll=Object.values(levelAnswered).every(v=>v===10);completed=doneAll;
- $("q").textContent=doneAll?"🏆 全部任務完成！":"🎉 LEVEL "+currentLevel+" 挑戰完成！";
- $("c").innerHTML=`<div class="main-actions"><button onclick="startLevel()">🔁 重玩本 LEVEL</button><button onclick="nextLevel()">➡️ 下一 LEVEL</button></div>`;
- if(doneAll){$("c").innerHTML+=`<button style="margin-top:8px" onclick="copyResult()">📋 複製我的成績碼</button>`;}
- $("s").innerHTML=`本 Level 得分：<strong>${levelScores[currentLevel]} / 20</strong><br>目前總分：<strong>${total} / 100</strong>`;
- $("sc").textContent=doneAll?"50 題全部完成！可以複製成績碼交給老師。":"每題 2 分，繼續挑戰其他 LEVEL。";
- updateLevelButtons();saveLocal();
+
+  $("bar").style.width="100%";
+
+  $("lv").textContent=
+    `LEVEL ${currentLevel} 完成`;
+
+  $("num").textContent=
+    "10 / 10 題";
+
+  const total=
+    Object.values(levelScores)
+      .reduce(
+        (a,b)=>a+b,
+        0
+      );
+
+  const doneAll=
+    Object.values(levelAnswered)
+      .every(v=>v===10);
+
+  completed=
+    doneAll;
+
+  $("q").textContent=
+    doneAll
+      ?"🏆 全部任務完成！"
+      :"🎉 LEVEL "+currentLevel+" 挑戰完成！";
+
+  $("c").innerHTML=`
+
+    <div class="main-actions">
+
+      <button onclick="startLevel()">
+        🔁 重玩本 LEVEL
+      </button>
+
+      <button onclick="nextLevel()">
+        ➡️ 下一 LEVEL
+      </button>
+
+    </div>
+
+  `;
+
+  if(doneAll){
+
+    $("c").innerHTML+=`
+
+      <button
+        style="margin-top:8px"
+        onclick="copyResult()">
+
+        📋 複製我的成績碼
+
+      </button>
+
+    `;
+
+  }
+
+  $("s").innerHTML=
+    `本 Level 得分：
+     <strong>${levelScores[currentLevel]} / 20</strong>
+     <br>
+     目前總分：
+     <strong>${total} / 100</strong>`;
+
+  $("sc").textContent=
+    doneAll
+      ?"50 題全部完成！可以複製成績碼交給老師。"
+      :"每題 2 分，繼續挑戰其他 LEVEL。";
+
+  updateLevelButtons();
+
+  saveLocal();
+
 }
-function nextLevel(){let n=currentLevel<5?currentLevel+1:1;chooseLevel(n)}
-function totalScore(){return Object.values(levelScores).reduce((a,b)=>a+b,0)}
+
+
+/* =========================================
+   下一 LEVEL
+========================================= */
+
+function nextLevel(){
+
+  let n=
+    currentLevel<5
+      ?currentLevel+1
+      :1;
+
+  chooseLevel(n);
+
+}
+
+
+/* =========================================
+   總分
+========================================= */
+
+function totalScore(){
+
+  return Object
+    .values(levelScores)
+    .reduce(
+      (a,b)=>a+b,
+      0
+    );
+
+}
+
+
+/* =========================================
+   重新開始
+   ★ 題目重新分配 LEVEL
+   ★ 選項重新洗牌
+========================================= */
+
 function resetAll(){
- if(!confirm("確定要重新開始嗎？目前成績將清除。"))return;
- levelScores={1:0,2:0,3:0,4:0,5:0};levelAnswered={1:0,2:0,3:0,4:0,5:0};levelCorrect={1:0,2:0,3:0,4:0,5:0};completed=false;currentLevel=0;i=-1;
- shuffle(data);data.forEach((x,index)=>x.lv=Math.floor(index/10)+1);
- updateScoreboard();updateLevelButtons();$("lv").textContent="尚未選擇";$("num").textContent="請選擇 Level";$("bar").style.width="0%";$("q").textContent="選擇一個 LEVEL 開始任務";$("c").innerHTML="";$("s").textContent="";$("sc").textContent="";saveLocal();
+
+  if(
+    !confirm(
+      "確定要重新開始嗎？目前成績將清除。"
+    )
+  )return;
+
+  levelScores={
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0
+  };
+
+  levelAnswered={
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0
+  };
+
+  levelCorrect={
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0
+  };
+
+  completed=false;
+
+  currentLevel=0;
+
+  i=-1;
+
+  /* 題目重新隨機分配到 5 個 LEVEL */
+  shuffle(data);
+
+  data.forEach(
+    (x,index)=>
+      x.lv=
+        Math.floor(index/10)+1
+  );
+
+  /* 答案選項重新隨機 */
+  shuffleQuestionChoices();
+
+  updateScoreboard();
+
+  updateLevelButtons();
+
+  $("lv").textContent=
+    "尚未選擇";
+
+  $("num").textContent=
+    "請選擇 Level";
+
+  $("bar").style.width="0%";
+
+  $("q").textContent=
+    "選擇一個 LEVEL 開始任務";
+
+  $("c").innerHTML="";
+
+  $("s").textContent="";
+
+  $("sc").textContent="";
+
+  saveLocal();
+
 }
+
+
+/* =========================================
+   儲存學生本機資料
+========================================= */
+
 function saveLocal(){
- const state={name:$("studentName").value.trim(),scores:levelScores,answered:levelAnswered,correct:levelCorrect};
- localStorage.setItem("mathAgentState",JSON.stringify(state));$("saveState").textContent="✓ 已自動記錄";
+
+  const state={
+
+    name:
+      $("studentName")
+        .value
+        .trim(),
+
+    scores:
+      levelScores,
+
+    answered:
+      levelAnswered,
+
+    correct:
+      levelCorrect
+
+  };
+
+  localStorage.setItem(
+    "mathAgentState",
+    JSON.stringify(state)
+  );
+
+  $("saveState").textContent=
+    "✓ 已自動記錄";
+
 }
+
+
+/* =========================================
+   讀取本機資料
+========================================= */
+
 function loadLocal(){
- try{const st=JSON.parse(localStorage.getItem("mathAgentState"));if(!st)return;
-  if(st.name)$("studentName").value=st.name; if(st.scores)levelScores={...levelScores,...st.scores};if(st.answered)levelAnswered={...levelAnswered,...st.answered};if(st.correct)levelCorrect={...levelCorrect,...st.correct};
-  updateScoreboard();updateLevelButtons();
- }catch(e){}
+
+  try{
+
+    const st=
+      JSON.parse(
+        localStorage.getItem(
+          "mathAgentState"
+        )
+      );
+
+    if(!st)return;
+
+    if(st.name)
+      $("studentName").value=
+        st.name;
+
+    if(st.scores)
+      levelScores={
+        ...levelScores,
+        ...st.scores
+      };
+
+    if(st.answered)
+      levelAnswered={
+        ...levelAnswered,
+        ...st.answered
+      };
+
+    if(st.correct)
+      levelCorrect={
+        ...levelCorrect,
+        ...st.correct
+      };
+
+    updateScoreboard();
+
+    updateLevelButtons();
+
+  }catch(e){}
+
 }
-$("studentName").addEventListener("input",saveLocal);
+
+
+$("studentName")
+  .addEventListener(
+    "input",
+    saveLocal
+  );
+
+
+/* =========================================
+   產生成績資料
+========================================= */
 
 function makeResult(){
- return {v:1,name:$("studentName").value.trim()||"未命名",scores:levelScores,answered:levelAnswered,correct:levelCorrect,total:totalScore(),time:new Date().toISOString()};
-}
-function copyResult(){
- const text=btoa(unescape(encodeURIComponent(JSON.stringify(makeResult()))));
- navigator.clipboard?.writeText(text).then(()=>alert("成績碼已複製！請貼給老師。"),()=>prompt("請複製以下成績碼：",text));
-}
-function openTeacher(){$("teacherOverlay").classList.add("show");}
-function closeTeacher(){$("teacherOverlay").classList.remove("show");}
-function clearTeacher(){$("codes").value="";$("dashboard").innerHTML='<div class="empty">尚未匯入班級資料</div>';classData=[];}
-function parseCodes(){
- return $("codes").value.split(/\s+/).map(s=>s.trim()).filter(Boolean).map(s=>{try{return JSON.parse(decodeURIComponent(escape(atob(s))))}catch(e){return null}}).filter(Boolean);
-}
-function analyzeClass(){
- classData=parseCodes();
- if(!classData.length){$("dashboard").innerHTML='<div class="empty">沒有讀取到有效成績碼。</div>';return}
- const n=classData.length;
- const avgTotal=classData.reduce((a,x)=>a+(+x.total||0),0)/n;
- const completed=classData.filter(x=>Object.values(x.answered||{}).every(v=>v===10)).length;
- const avgLevels=[1,2,3,4,5].map(lv=>classData.reduce((a,x)=>a+(+(x.scores?.[lv]||0)),0)/n);
- let html=`<div class="stats"><div class="stat"><span>學生人數</span><b>${n}</b></div><div class="stat"><span>平均總分</span><b>${avgTotal.toFixed(1)}</b></div><div class="stat"><span>最高分</span><b>${Math.max(...classData.map(x=>+x.total||0))}</b></div><div class="stat"><span>全數完成</span><b>${completed} / ${n}</b></div></div>`;
- html+=`<h3 style="margin:10px 0 5px">📊 全班各 LEVEL 平均</h3><div class="levelstats">`;
- avgLevels.forEach((v,idx)=>html+=`<div class="lstat"><div>LEVEL ${idx+1}</div><div class="big">${v.toFixed(1)}<span class="small"> / 20</span></div></div>`);html+='</div>';
- const sorted=[...classData].sort((a,b)=>(b.total||0)-(a.total||0));
- html+=`<h3 style="margin:10px 0 5px">🏆 班級排行榜</h3><div class="tablewrap"><table><thead><tr><th>排名</th><th>姓名</th><th>L1</th><th>L2</th><th>L3</th><th>L4</th><th>L5</th><th>總分</th><th>完成</th></tr></thead><tbody>`;
- sorted.forEach((x,idx)=>{const done=Object.values(x.answered||{}).every(v=>v===10);html+=`<tr><td>${idx+1}</td><td>${escapeHtml(x.name||"未命名")}</td><td>${x.scores?.[1]||0}</td><td>${x.scores?.[2]||0}</td><td>${x.scores?.[3]||0}</td><td>${x.scores?.[4]||0}</td><td>${x.scores?.[5]||0}</td><td><b>${x.total||0}</b></td><td>${done?"✓":"進行中"}</td></tr>`});
- html+='</tbody></table></div>';
- $("dashboard").innerHTML=html;
-}
-function escapeHtml(s){return String(s).replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
-function exportCSV(){
- if(!classData.length){alert("請先分析全班成績。");return}
- const rows=[["姓名","LEVEL 1","LEVEL 2","LEVEL 3","LEVEL 4","LEVEL 5","總分","完成題數"]];
- classData.forEach(x=>rows.push([x.name||"未命名",x.scores?.[1]||0,x.scores?.[2]||0,x.scores?.[3]||0,x.scores?.[4]||0,x.scores?.[5]||0,x.total||0,Object.values(x.answered||{}).reduce((a,b)=>a+b,0)]));
- const csv="\ufeff"+rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
- const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="數學特工隊_班級成績.csv";a.click();URL.revokeObjectURL(a.href);
+
+  return{
+
+    v:1,
+
+    name:
+      $("studentName")
+        .value
+        .trim()
+        ||
+        "未命名",
+
+    scores:
+      levelScores,
+
+    answered:
+      levelAnswered,
+
+    correct:
+      levelCorrect,
+
+    total:
+      totalScore(),
+
+    time:
+      new Date().toISOString()
+
+  };
+
 }
 
-loadLocal();updateScoreboard();updateLevelButtons();
+
+/* =========================================
+   複製成績碼
+========================================= */
+
+function copyResult(){
+
+  const text=
+    btoa(
+      unescape(
+        encodeURIComponent(
+          JSON.stringify(
+            makeResult()
+          )
+        )
+      )
+    );
+
+  navigator
+    .clipboard
+    ?.writeText(text)
+    .then(
+      ()=>
+        alert(
+          "成績碼已複製！請貼給老師。"
+        ),
+      ()=>
+        prompt(
+          "請複製以下成績碼：",
+          text
+        )
+    );
+
+}
+
+
+/* =========================================
+   教師模式
+========================================= */
+
+function openTeacher(){
+
+  $("teacherOverlay")
+    .classList
+    .add("show");
+
+}
+
+function closeTeacher(){
+
+  $("teacherOverlay")
+    .classList
+    .remove("show");
+
+}
+
+function clearTeacher(){
+
+  $("codes").value="";
+
+  $("dashboard").innerHTML=
+    '<div class="empty">尚未匯入班級資料</div>';
+
+  classData=[];
+
+}
+
+
+/* =========================================
+   讀取成績碼
+========================================= */
+
+function parseCodes(){
+
+  return $("codes")
+    .value
+    .split(/\s+/)
+    .map(
+      s=>s.trim()
+    )
+    .filter(Boolean)
+    .map(
+      s=>{
+
+        try{
+
+          return JSON.parse(
+            decodeURIComponent(
+              escape(
+                atob(s)
+              )
+            )
+          );
+
+        }catch(e){
+
+          return null;
+
+        }
+
+      }
+    )
+    .filter(Boolean);
+
+}
+
+
+/* =========================================
+   分析全班成績
+========================================= */
+
+function analyzeClass(){
+
+  classData=
+    parseCodes();
+
+  if(!classData.length){
+
+    $("dashboard").innerHTML=
+      '<div class="empty">沒有讀取到有效成績碼。</div>';
+
+    return;
+
+  }
+
+  const n=
+    classData.length;
+
+  const avgTotal=
+    classData.reduce(
+      (a,x)=>
+        a+(+x.total||0),
+      0
+    )/n;
+
+  const completed=
+    classData.filter(
+      x=>
+        Object
+          .values(
+            x.answered||{}
+          )
+          .every(
+            v=>v===10
+          )
+    ).length;
+
+  const avgLevels=
+    [1,2,3,4,5]
+      .map(
+        lv=>
+          classData.reduce(
+            (a,x)=>
+              a+
+              (+(x.scores?.[lv]||0)),
+            0
+          )/n
+      );
+
+  let html=`
+
+    <div class="stats">
+
+      <div class="stat">
+        <span>學生人數</span>
+        <b>${n}</b>
+      </div>
+
+      <div class="stat">
+        <span>平均總分</span>
+        <b>${avgTotal.toFixed(1)}</b>
+      </div>
+
+      <div class="stat">
+        <span>最高分</span>
+        <b>
+          ${Math.max(
+            ...classData.map(
+              x=>+x.total||0
+            )
+          )}
+        </b>
+      </div>
+
+      <div class="stat">
+        <span>全數完成</span>
+        <b>${completed} / ${n}</b>
+      </div>
+
+    </div>
+
+  `;
+
+  html+=`
+
+    <h3 style="margin:10px 0 5px">
+      📊 全班各 LEVEL 平均
+    </h3>
+
+    <div class="levelstats">
+
+  `;
+
+  avgLevels.forEach(
+    (v,idx)=>
+      html+=`
+
+        <div class="lstat">
+
+          <div>
+            LEVEL ${idx+1}
+          </div>
+
+          <div class="big">
+            ${v.toFixed(1)}
+            <span class="small">
+              / 20
+            </span>
+          </div>
+
+        </div>
+
+      `
+  );
+
+  html+=`
+    </div>
+  `;
+
+
+  const sorted=
+    [...classData]
+      .sort(
+        (a,b)=>
+          (b.total||0)-
+          (a.total||0)
+      );
+
+
+  html+=`
+
+    <h3 style="margin:10px 0 5px">
+      🏆 班級排行榜
+    </h3>
+
+    <div class="tablewrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>排名</th>
+            <th>姓名</th>
+            <th>L1</th>
+            <th>L2</th>
+            <th>L3</th>
+            <th>L4</th>
+            <th>L5</th>
+            <th>總分</th>
+            <th>完成</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+  `;
+
+
+  sorted.forEach(
+    (x,idx)=>{
+
+      const done=
+        Object
+          .values(
+            x.answered||{}
+          )
+          .every(
+            v=>v===10
+          );
+
+      html+=`
+
+        <tr>
+
+          <td>
+            ${idx+1}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              x.name||"未命名"
+            )}
+          </td>
+
+          <td>
+            ${x.scores?.[1]||0}
+          </td>
+
+          <td>
+            ${x.scores?.[2]||0}
+          </td>
+
+          <td>
+            ${x.scores?.[3]||0}
+          </td>
+
+          <td>
+            ${x.scores?.[4]||0}
+          </td>
+
+          <td>
+            ${x.scores?.[5]||0}
+          </td>
+
+          <td>
+            <b>
+              ${x.total||0}
+            </b>
+          </td>
+
+          <td>
+            ${done?"✓":"進行中"}
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+  );
+
+
+  html+=`
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+
+
+  $("dashboard")
+    .innerHTML=
+      html;
+
+}
+
+
+/* =========================================
+   HTML 防注入
+========================================= */
+
+function escapeHtml(s){
+
+  return String(s)
+    .replace(
+      /[&<>'"]/g,
+      m=>({
+
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        "'":'&#39;',
+        '"':'&quot;'
+
+      }[m])
+    );
+
+}
+
+
+/* =========================================
+   匯出 CSV
+========================================= */
+
+function exportCSV(){
+
+  if(!classData.length){
+
+    alert(
+      "請先分析全班成績。"
+    );
+
+    return;
+
+  }
+
+  const rows=[
+
+    [
+      "姓名",
+      "LEVEL 1",
+      "LEVEL 2",
+      "LEVEL 3",
+      "LEVEL 4",
+      "LEVEL 5",
+      "總分",
+      "完成題數"
+    ]
+
+  ];
+
+
+  classData.forEach(
+    x=>
+
+      rows.push([
+
+        x.name||"未命名",
+
+        x.scores?.[1]||0,
+
+        x.scores?.[2]||0,
+
+        x.scores?.[3]||0,
+
+        x.scores?.[4]||0,
+
+        x.scores?.[5]||0,
+
+        x.total||0,
+
+        Object
+          .values(
+            x.answered||{}
+          )
+          .reduce(
+            (a,b)=>a+b,
+            0
+          )
+
+      ])
+
+  );
+
+
+  const csv=
+    "\ufeff"+
+    rows
+      .map(
+        r=>
+          r
+            .map(
+              v=>
+                `"${String(v)
+                  .replace(
+                    /"/g,
+                    '""'
+                  )}"`
+            )
+            .join(",")
+      )
+      .join("\n");
+
+
+  const blob=
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8"
+      }
+    );
+
+
+  const a=
+    document.createElement("a");
+
+  a.href=
+    URL.createObjectURL(blob);
+
+  a.download=
+    "數學特工隊_班級成績.csv";
+
+  a.click();
+
+  URL.revokeObjectURL(
+    a.href
+  );
+
+}
+
+
+/* =========================================
+   初始化
+========================================= */
+
+loadLocal();
+
+updateScoreboard();
+
+updateLevelButtons();
+
 </script>
+
 </body>
 </html>
