@@ -11,20 +11,21 @@
   --text-scale: 1;
 }
 
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-html,body{
-  width:100%;
-  height:100%; /* 確保滿版高度 */
-  margin:0;
-  overflow: hidden; /* 防止整頁捲動，確保一頁顯示 */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  /* ★ 嚴格禁止任何形式的頁面捲動 */
+  overflow: hidden; 
 }
 
-body{
-  background:#f4f2ed;
-  color:#20242b;
+body {
+  background: #f4f2ed;
+  color: #20242b;
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -33,139 +34,136 @@ body{
     sans-serif;
 }
 
-.wrap{
-  width:min(1500px,100%);
-  height:100dvh; /* 強制最高 100dvh */
-  margin:auto;
-  padding:14px 18px;
+.wrap {
+  width: min(1500px, 100%);
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: auto;
+  padding: 1.5vh 1.5vw; /* 改用 vh 讓小螢幕自動縮小邊距 */
   display: flex;
   flex-direction: column;
-}
-
-.hero{
-  flex: 1; /* 佔滿剩餘高度 */
-  background:#20242b;
-  color:#fff;
-  border-radius:28px;
-  padding:20px 24px;
-  display:flex;
-  flex-direction:column;
   overflow: hidden;
 }
 
-.tag{
-  font-size:13px;
-  letter-spacing:3px;
-  opacity:.62;
-  line-height:1;
+.hero {
+  flex: 1;
+  min-height: 0; /* 允許向內擠壓 */
+  background: #20242b;
+  color: #fff;
+  border-radius: 24px;
+  padding: 2vh 2vw; /* 改用 vh */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tag {
+  font-size: 13px;
+  letter-spacing: 3px;
+  opacity: .62;
+  line-height: 1;
   flex-shrink: 0;
 }
 
-h1{
-  font-size:clamp(32px,4vw,56px);
-  line-height:1.05;
-  margin:8px 0 12px;
-  font-weight:950;
+h1 {
+  font-size: clamp(28px, 3.5vw, 48px);
+  line-height: 1.05;
+  margin: 1vh 0 1.5vh;
+  font-weight: 950;
   flex-shrink: 0;
 }
 
 
 /* =====================================================
-   成績區
+   成績區 (縮減固定高度)
 ===================================================== */
-
-.scoreboard{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:8px;
-  margin:0 0 10px;
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin: 0 0 1.2vh;
   flex-shrink: 0;
 }
 
-.score-card{
-  background:#fff;
-  color:#20242b;
-  border-radius:15px;
-  min-height:60px;
-  padding:8px 6px;
-  text-align:center;
-  border:3px solid transparent;
+.score-card {
+  background: #fff;
+  color: #20242b;
+  border-radius: 12px;
+  /* 移除 min-height，改用 padding 撐開 */
+  padding: 6px 4px;
+  text-align: center;
+  border: 3px solid transparent;
 }
 
-.score-card.active{
-  border-color:#20242b;
-  box-shadow:inset 0 0 0 3px #fff;
+.score-card.active {
+  border-color: #20242b;
+  box-shadow: inset 0 0 0 3px #fff;
 }
 
-.score-card.total{
-  background:#e8e2d8;
+.score-card.total {
+  background: #e8e2d8;
 }
 
-.score-card .label{
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:1px;
-  opacity:.7;
+.score-card .label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  opacity: .7;
 }
 
-.score-card .value{
-  font-size:24px;
-  font-weight:950;
-  line-height:1.05;
-  margin-top:2px;
+.score-card .value {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 950;
+  line-height: 1.1;
+  margin-top: 2px;
 }
 
-.score-card .value span{
-  font-size:13px;
-  font-weight:800;
-  opacity:.65;
+.score-card .value span {
+  font-size: 11px;
+  font-weight: 800;
+  opacity: .65;
 }
 
 
 /* =====================================================
-   遊戲主區
+   遊戲主區 (保證不超出)
 ===================================================== */
+.game {
+  flex: 1;
+  min-height: 0; /* ★ 這是讓內容不被擠出黑框的關鍵 */
+  background: #fff;
+  color: #20242b;
+  border-radius: 20px;
+  padding: 1.5vh 2vw;
+  border: 3px solid #20242b;
+  box-shadow: 0 5px 20px #0000000b;
 
-.game{
-  flex:1;
-  min-height:0; /* 重要：讓 flex 子元素可以正常縮小 */
-  background:#fff;
-  color:#20242b;
-  border-radius:24px;
-  padding:14px 20px 14px;
-  margin-top:0;
-  border:3px solid #20242b;
-  box-shadow:0 5px 20px #0000000b;
-
-  display:flex;
-  flex-direction:column;
-  overflow-y:auto; /* 萬一螢幕過小，允許在框內捲動 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* ★ 嚴格禁止框內滑動 */
 }
 
-.game-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
   flex-shrink: 0;
-  margin-bottom: 8px;
+  margin-bottom: 1vh;
 }
 
-.game-title{
-  font-size:22px;
-  font-weight:950;
-  margin:0;
+.game-title {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 950;
+  margin: 0;
 }
 
 .header-controls {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-/* =====================================================
-   字體控制按鈕
-===================================================== */
 .font-controls {
   display: flex;
   background: #e8e2d8;
@@ -177,465 +175,314 @@ h1{
   border: 0;
   background: transparent;
   color: #20242b;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 900;
   cursor: pointer;
   padding: 6px 12px;
   transition: .15s;
 }
 
-.font-btn:hover {
-  background: #d4cec4;
-}
+.font-btn:hover { background: #d4cec4; }
 
-.restart-btn{
-  border:0;
-  background:transparent;
-  color:#20242b;
-  font-size:18px;
-  font-weight:900;
-  cursor:pointer;
-  padding:6px 10px;
-  border-radius:10px;
+.restart-btn {
+  border: 0;
+  background: transparent;
+  color: #20242b;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
 }
-
-.restart-btn:hover{
-  background:#e8e2d8;
-}
+.restart-btn:hover { background: #e8e2d8; }
 
 
 /* =====================================================
    姓名
 ===================================================== */
-
-.name-row{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  margin-bottom:10px;
+.name-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 1vh;
   flex-shrink: 0;
 }
 
-.name-input{
-  flex:1;
-  height:48px;
-  border:4px solid #e3ded4;
-  border-radius:14px;
-  padding:0 18px;
-  font-size:20px;
-  font-weight:800;
-  color:#20242b;
-  outline:none;
+.name-input {
+  flex: 1;
+  height: clamp(40px, 5vh, 48px);
+  border: 4px solid #e3ded4;
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #20242b;
+  outline: none;
 }
 
-.name-input:focus{
-  border-color:#20242b;
-}
+.name-input:focus { border-color: #20242b; }
+.name-input::placeholder { color: #aaa; }
 
-.name-input::placeholder{
-  color:#aaa;
-}
-
-.auto-save{
-  white-space:nowrap;
-  background:#e9e3d8;
-  border-radius:999px;
-  padding:10px 18px;
-  font-size:15px;
-  font-weight:900;
+.auto-save {
+  white-space: nowrap;
+  background: #e9e3d8;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 900;
 }
 
 
 /* =====================================================
    LEVEL 選擇
 ===================================================== */
-
-.level-select{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  margin:0 0 10px;
+.level-select {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin: 0 0 1vh;
   flex-shrink: 0;
 }
 
-.level-select button{
-  background:#e8e2d8;
-  border:3px solid transparent;
-  border-radius:14px;
-  padding:8px;
-  min-height:64px;
+.level-select button {
+  background: #e8e2d8;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  padding: 6px 4px;
+  height: clamp(50px, 7vh, 64px); /* 彈性高度 */
 
-  font-size:18px;
-  font-weight:950;
-
-  cursor:pointer;
-  line-height:1.15;
-  transition:.15s;
-  color:#20242b;
+  font-size: clamp(14px, 1.5vw, 17px);
+  font-weight: 950;
+  cursor: pointer;
+  line-height: 1.15;
+  transition: .15s;
+  color: #20242b;
 }
 
-.level-select button.active{
-  background:#20242b;
-  color:#fff;
-  border-color:#20242b;
+.level-select button.active {
+  background: #20242b;
+  color: #fff;
+  border-color: #20242b;
 }
+.level-select button:hover { transform: translateY(-2px); }
 
-.level-select button:hover{
-  transform:translateY(-2px);
-}
-
-.level-select small{
-  font-size:12px;
-  font-weight:800;
-  opacity:.78;
+.level-select small {
+  font-size: 11px;
+  font-weight: 800;
+  opacity: .78;
 }
 
 
 /* =====================================================
    題目資訊
 ===================================================== */
-
-.top{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  flex-wrap:wrap;
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-.badge{
-  background:#e9e3d8;
-  padding:5px 12px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:14px;
+.badge {
+  background: #e9e3d8;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 13px;
 }
 
-.progress{
-  height:8px;
-  background:#e3ded4;
-  border-radius:20px;
-  overflow:hidden;
-  margin-top:6px;
+.progress {
+  height: 6px;
+  background: #e3ded4;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 6px;
   flex-shrink: 0;
 }
 
-#bar{
-  height:100%;
-  width:0;
-  background:#20242b;
-  transition:.3s;
+#bar {
+  height: 100%;
+  width: 0;
+  background: #20242b;
+  transition: .3s;
 }
 
 
 /* =====================================================
-   ★ 題目
+   ★ 題目 (動態填滿剩餘高度)
 ===================================================== */
+.question {
+  flex: 1; /* ★ 吸收所有剩餘空間 */
+  min-height: 0; 
 
-.question{
-  flex:1; /* 讓題目區塊吸收剩餘空間 */
-  min-height: 80px; 
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   /* ★ 套用字體縮放變數 */
-  font-size: calc(clamp(36px, 4vw, 58px) * var(--text-scale));
+  font-size: calc(clamp(32px, 4.5vw, 56px) * var(--text-scale));
+  font-weight: 950;
+  text-align: center;
+  margin: 0;
+  padding: 0 10px;
 
-  font-weight:950;
-  text-align:center;
-
-  margin:4px 0;
-  padding:4px 10px;
-
-  line-height:1.2;
-  overflow-wrap:anywhere;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 
 /* =====================================================
-   ★ 四個選項
+   ★ 四個選項 (彈性網格，絕對不破版)
 ===================================================== */
-
-.choices{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-  width:100%;
+.choices {
+  flex: 1.3; /* ★ 高度比例略大於題目區 */
+  min-height: 0; 
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr); /* 強制上下平分兩列 */
+  gap: 1vh; /* 動態間距 */
+  width: 100%;
   flex-shrink: 0;
 }
 
-.choices button{
-  position:relative;
-  border:0;
-  border-radius:14px;
-  background:#e8e2d8;
-  color:#20242b;
+.choices button {
+  position: relative;
+  border: 0;
+  border-radius: 14px;
+  background: #e8e2d8;
+  color: #20242b;
   
-  font-weight:900;
-  min-height:64px;
-  padding:10px 14px 10px 60px;
-  cursor:pointer;
-  transition:.15s;
-  line-height:1.25;
+  font-weight: 900;
+  height: 100%; /* ★ 完全貼齊網格，不寫死高度 */
+  min-height: 0;
+  
+  padding: 6px 10px 6px 54px;
+  cursor: pointer;
+  transition: .15s;
+  line-height: 1.2;
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .choices button .choice-text {
   /* ★ 只有文字區域會受縮放變數影響 */
-  font-size: calc(clamp(17px, 1.55vw, 25px) * var(--text-scale));
+  font-size: calc(clamp(16px, 1.8vw, 24px) * var(--text-scale));
 }
 
-.choices button:hover{
-  transform:translateY(-2px);
-}
-
-.choices button:active{
-  transform:translateY(0);
-}
+.choices button:hover { transform: translateY(-2px); }
+.choices button:active { transform: translateY(0); }
 
 
 /* =====================================================
-   A B C D 標籤
+   A B C D 標籤 (保持大小不變)
 ===================================================== */
-
-.choice-label{
-  position:absolute;
-  left:12px;
-  top:50%;
-  transform:translateY(-50%);
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  background:#20242b;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  font-weight:950;
-  flex-shrink:0;
+.choice-label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #20242b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 950;
+  flex-shrink: 0;
 }
 
 
-/* =====================================================
-   答對 / 答錯
-===================================================== */
-
-.correct{
-  background:#cfe8d5!important;
-}
-
-.wrong{
-  background:#f0c8c8!important;
-}
-
-.correct .choice-label{
-  background:#20242b;
-}
-
-.wrong .choice-label{
-  background:#20242b;
-}
+/* 答對 / 答錯 */
+.correct { background: #cfe8d5!important; }
+.wrong { background: #f0c8c8!important; }
+.correct .choice-label { background: #20242b; }
+.wrong .choice-label { background: #20242b; }
 
 
 /* =====================================================
    狀態 / 分數
 ===================================================== */
-
-.status{
-  text-align:center;
-  min-height:36px;
-  line-height:1.4;
-  font-weight:800;
-  font-size:15px;
-  margin:6px 4px 0;
+.status {
+  text-align: center;
+  min-height: 24px;
+  line-height: 1.3;
+  font-weight: 800;
+  font-size: 14px;
+  margin: 1vh 4px 0;
   flex-shrink: 0;
 }
 
-.score{
-  text-align:center;
-  font-size:16px;
-  font-weight:900;
-  min-height:22px;
+.score {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 900;
+  min-height: 22px;
   flex-shrink: 0;
+  margin-bottom: 0.5vh;
 }
 
 
 /* =====================================================
    完成畫面
 ===================================================== */
-
-.finish-message{
-  /* ★ 完成訊息也套用縮放變數 */
-  font-size: calc(clamp(28px, 3vw, 44px) * var(--text-scale));
-  font-weight:950;
+.finish-message {
+  font-size: calc(clamp(24px, 3vw, 40px) * var(--text-scale));
+  font-weight: 950;
 }
 
 
 /* =====================================================
-   平板
+   平板 / 手機微調 (同樣嚴格禁止捲動)
 ===================================================== */
-
-@media(max-width:900px){
-  html,body { overflow: auto; } /* 窄螢幕允許整頁捲動 */
-  .wrap{
-    height: auto;
-    min-height: 100dvh;
-    padding:8px;
-  }
-  .hero{
-    padding:14px;
-    border-radius:20px;
-    height: auto;
-  }
-  h1{
-    font-size:32px;
-  }
-  .scoreboard{
-    gap:5px;
-  }
-  .score-card{
-    min-height:55px;
-    padding:7px 4px;
-    border-radius:11px;
-  }
-  .score-card .value{
-    font-size:20px;
-  }
-  .score-card .value span{
-    font-size:11px;
-  }
-  .game{
-    padding:12px;
-    border-radius:18px;
-  }
-  .game-title{
-    font-size:18px;
-  }
-  .name-input{
-    height:46px;
-    font-size:18px;
-  }
-  .auto-save{
-    font-size:13px;
-    padding:10px 13px;
-  }
-  .level-select{
-    gap:5px;
-  }
-  .level-select button{
-    min-height:54px;
-    font-size:14px;
-    padding:7px 3px;
-    border-radius:11px;
-  }
-  .badge{
-    font-size:12px;
-    padding:5px 9px;
-  }
-  .question{
-    font-size:calc(clamp(32px, 5vw, 48px) * var(--text-scale));
-    min-height:100px;
-  }
-  .choices{
-    gap:8px;
-  }
-  .choices button{
-    min-height:60px;
-    padding:8px 10px 8px 48px;
-    border-radius:12px;
-  }
-  .choices button .choice-text{
-    font-size:calc(clamp(15px, 2.3vw, 21px) * var(--text-scale));
-  }
-  .choice-label{
-    left:8px;
-    width:32px;
-    height:32px;
-    font-size:15px;
-  }
+@media(max-width: 900px){
+  .wrap { padding: 1vh; }
+  .hero { padding: 1.5vh; border-radius: 18px; }
+  h1 { font-size: 26px; margin: 0.5vh 0 1vh; }
+  
+  .scoreboard { gap: 4px; }
+  .score-card { padding: 4px 2px; border-radius: 10px; }
+  .score-card .value { font-size: 18px; }
+  
+  .game { padding: 1vh 1.5vw; border-radius: 16px; }
+  
+  .name-input { height: clamp(36px, 4vh, 44px); font-size: 16px; }
+  .auto-save { padding: 6px 12px; font-size: 12px; }
+  
+  .level-select { gap: 4px; }
+  .level-select button { height: clamp(44px, 6vh, 56px); font-size: 13px; padding: 4px; }
+  .level-select small { font-size: 10px; }
+  
+  .choices button { padding-left: 46px; }
+  .choice-label { width: 28px; height: 28px; left: 8px; font-size: 14px; }
 }
 
-
-/* =====================================================
-   手機
-===================================================== */
-
-@media(max-width:600px){
-  .wrap{
-    padding:6px;
-  }
-  .hero{
-    padding:10px;
-    border-radius:17px;
-  }
-  h1{
-    font-size:26px;
-  }
-  .score-card{
-    min-height:45px;
-    border-radius:9px;
-  }
-  .score-card .label{
-    font-size:8px;
-  }
-  .score-card .value{
-    font-size:16px;
-  }
-  .score-card .value span{
-    font-size:9px;
-  }
-  .game{
-    padding:9px;
-  }
-  .game-title{
-    font-size:15px;
-  }
-  .restart-btn{
-    font-size:14px;
-  }
-  .font-btn {
-    font-size: 14px;
-    padding: 5px 10px;
-  }
-  .name-input{
-    height:42px;
-    font-size:15px;
-    border-width:3px;
-    border-radius:12px;
-  }
-  .auto-save{
-    font-size:11px;
-  }
-  .level-select button{
-    min-height:46px;
-    font-size:11px;
-    border-radius:9px;
-  }
-  .question{
-    font-size:calc(32px * var(--text-scale));
-    min-height:80px;
-  }
-  .choices button{
-    min-height:56px;
-    padding:8px 6px 8px 42px;
-    border-radius:10px;
-  }
-  .choices button .choice-text{
-    font-size:calc(15px * var(--text-scale));
-  }
-  .choice-label{
-    left:7px;
-    width:28px;
-    height:28px;
-    font-size:13px;
-  }
+@media(max-width: 600px){
+  .wrap { padding: 6px; }
+  .hero { padding: 10px; border-radius: 14px; }
+  h1 { font-size: 22px; margin: 4px 0 8px; }
+  
+  .score-card { padding: 4px 1px; }
+  .score-card .label { font-size: 9px; }
+  .score-card .value { font-size: 15px; }
+  .score-card .value span { font-size: 9px; }
+  
+  .game { padding: 8px; border-radius: 12px; margin-top: 6px; }
+  .game-title { font-size: 15px; }
+  .restart-btn, .font-btn { font-size: 13px; padding: 4px 8px; }
+  
+  .name-input { height: 36px; border-width: 3px; font-size: 14px; border-radius: 10px; }
+  .level-select button { height: 42px; font-size: 11px; border-radius: 8px; }
+  .level-select small { font-size: 8px; display: none; /* 手機極小螢幕隱藏副標題省空間 */ }
+  
+  .choices { gap: 6px; }
+  .choices button { padding: 4px 6px 4px 40px; border-radius: 10px; }
+  .choice-label { width: 26px; height: 26px; left: 6px; font-size: 13px; }
 }
 </style>
 </head>
@@ -654,62 +501,40 @@ h1{
     數學特工隊 🕵️‍♂️
   </h1>
 
-
   <!-- =================================================
        成績區
   ================================================== -->
-
   <div class="scoreboard">
-
     <div class="score-card" id="scoreCard1">
       <div class="label">LEVEL 1</div>
-      <div class="value" id="score1">
-        0<span> / 20</span>
-      </div>
+      <div class="value" id="score1">0<span> / 20</span></div>
     </div>
-
     <div class="score-card" id="scoreCard2">
       <div class="label">LEVEL 2</div>
-      <div class="value" id="score2">
-        0<span> / 20</span>
-      </div>
+      <div class="value" id="score2">0<span> / 20</span></div>
     </div>
-
     <div class="score-card" id="scoreCard3">
       <div class="label">LEVEL 3</div>
-      <div class="value" id="score3">
-        0<span> / 20</span>
-      </div>
+      <div class="value" id="score3">0<span> / 20</span></div>
     </div>
-
     <div class="score-card" id="scoreCard4">
       <div class="label">LEVEL 4</div>
-      <div class="value" id="score4">
-        0<span> / 20</span>
-      </div>
+      <div class="value" id="score4">0<span> / 20</span></div>
     </div>
-
     <div class="score-card" id="scoreCard5">
       <div class="label">LEVEL 5</div>
-      <div class="value" id="score5">
-        0<span> / 20</span>
-      </div>
+      <div class="value" id="score5">0<span> / 20</span></div>
     </div>
-
     <div class="score-card total">
       <div class="label">🏆 總分</div>
-      <div class="value" id="totalScore">
-        0<span> / 100</span>
-      </div>
+      <div class="value" id="totalScore">0<span> / 100</span></div>
     </div>
-
   </div>
 
 
   <!-- =================================================
        遊戲
   ================================================== -->
-
   <section class="game">
 
     <div class="game-header">
@@ -717,20 +542,14 @@ h1{
         🎮 選擇關卡
       </div>
       
-      <!-- ★ 新增：右上角字體縮放與重新開始按鈕 -->
       <div class="header-controls">
         <div class="font-controls">
           <button class="font-btn" onclick="changeFontSize(-0.1)" title="縮小字體">A-</button>
           <button class="font-btn" onclick="changeFontSize(0.1)" title="放大字體">A+</button>
         </div>
-        <button
-          class="restart-btn"
-          onclick="restartGame()">
-          ↻ 重新開始
-        </button>
+        <button class="restart-btn" onclick="restartGame()">↻ 重新開始</button>
       </div>
     </div>
-
 
     <!-- 姓名 -->
     <div class="name-row">
@@ -740,40 +559,17 @@ h1{
         type="text"
         placeholder="請輸入姓名（成績分享需要）"
         autocomplete="off">
-
-      <div class="auto-save">
-        ✓ 已自動記錄
-      </div>
+      <div class="auto-save">✓ 已自動記錄</div>
     </div>
-
 
     <!-- LEVEL -->
-    <div
-      class="level-select"
-      id="levelSelect">
-
-      <button onclick="chooseLevel(1)">
-        LEVEL 1<br><small>10 題 · 20 分</small>
-      </button>
-
-      <button onclick="chooseLevel(2)">
-        LEVEL 2<br><small>10 題 · 20 分</small>
-      </button>
-
-      <button onclick="chooseLevel(3)">
-        LEVEL 3<br><small>10 題 · 20 分</small>
-      </button>
-
-      <button onclick="chooseLevel(4)">
-        LEVEL 4<br><small>10 題 · 20 分</small>
-      </button>
-
-      <button onclick="chooseLevel(5)">
-        LEVEL 5<br><small>10 題 · 20 分</small>
-      </button>
-
+    <div class="level-select" id="levelSelect">
+      <button onclick="chooseLevel(1)">LEVEL 1<br><small>10 題 · 20 分</small></button>
+      <button onclick="chooseLevel(2)">LEVEL 2<br><small>10 題 · 20 分</small></button>
+      <button onclick="chooseLevel(3)">LEVEL 3<br><small>10 題 · 20 分</small></button>
+      <button onclick="chooseLevel(4)">LEVEL 4<br><small>10 題 · 20 分</small></button>
+      <button onclick="chooseLevel(5)">LEVEL 5<br><small>10 題 · 20 分</small></button>
     </div>
-
 
     <!-- 題號 -->
     <div class="top">
@@ -791,10 +587,8 @@ h1{
       選擇一個 LEVEL 開始任務
     </div>
 
-
     <!-- 選項 -->
     <div class="choices" id="c"></div>
-
 
     <!-- 回饋 -->
     <div class="status" id="s"></div>
@@ -806,7 +600,6 @@ h1{
 
 </div>
 
-
 <script>
 
 /* =====================================================
@@ -815,16 +608,14 @@ h1{
 let currentTextScale = 1;
 function changeFontSize(delta) {
   currentTextScale += delta;
-  // 限制縮放比例在 0.6 到 2.5 之間，防止字體過大或過小
   if (currentTextScale < 0.6) currentTextScale = 0.6;
-  if (currentTextScale > 2.5) currentTextScale = 2.5;
+  if (currentTextScale > 2.2) currentTextScale = 2.2;
   document.documentElement.style.setProperty('--text-scale', currentTextScale);
 }
 
 /* =====================================================
    題庫
 ===================================================== */
-
 const data = [
 { q:"12×7", c:["(10＋2)×7","10×7＋2","12＋7","10×7＋2×7"], a:3, n:"12×7＝10×7＋2×7。", lv:1 },
 { q:"19×6", c:["20×6－6","20×6＋6","19＋6","(20－1)＋6"], a:0, n:"19＝20－1。", lv:1 },
@@ -886,18 +677,8 @@ const data = [
 /* =====================================================
    遊戲資料
 ===================================================== */
-
-const ranges={
-  1:[0,10],
-  2:[10,20],
-  3:[20,30],
-  4:[30,40],
-  5:[40,50]
-};
-
-const levelScores={
-  1:0, 2:0, 3:0, 4:0, 5:0
-};
+const ranges={ 1:[0,10], 2:[10,20], 3:[20,30], 4:[30,40], 5:[40,50] };
+const levelScores={ 1:0, 2:0, 3:0, 4:0, 5:0 };
 
 let i=-1;
 let lock=false;
@@ -906,38 +687,19 @@ let startQ=0;
 let endQ=0;
 let currentQuestions=[];
 
-
-/* =====================================================
-   選項隨機
-===================================================== */
-
 function shuffleQuestion(question){
-  const options=question.c.map((text,index)=>({
-    text:text,
-    correct:index===question.a
-  }));
-
+  const options=question.c.map((text,index)=>({ text:text, correct:index===question.a }));
   for(let x=options.length-1;x>0;x--){
     const y=Math.floor(Math.random()*(x+1));
     [options[x],options[y]]=[options[y],options[x]];
   }
-
-  return {
-    ...question,
-    shuffledChoices:options,
-    shuffledAnswer:options.findIndex(item=>item.correct)
-  };
+  return { ...question, shuffledChoices:options, shuffledAnswer:options.findIndex(item=>item.correct) };
 }
 
 function prepareLevel(){
   const original=data.slice(startQ,endQ);
   currentQuestions=original.map(q=>shuffleQuestion(q));
 }
-
-
-/* =====================================================
-   更新成績
-===================================================== */
 
 function updateScoreboard(){
   let total=0;
@@ -948,24 +710,14 @@ function updateScoreboard(){
   document.getElementById("totalScore").innerHTML=`${total}<span> / 100</span>`;
 }
 
-
-/* =====================================================
-   選擇 Level
-===================================================== */
-
 function chooseLevel(level){
   currentLevel=level;
   [startQ,endQ]=ranges[level];
   i=0;
   prepareLevel();
 
-  document.querySelectorAll("#levelSelect button").forEach((b,n)=>{
-    b.classList.toggle("active", n===level-1);
-  });
-
-  document.querySelectorAll(".score-card").forEach(card=>{
-    card.classList.remove("active");
-  });
+  document.querySelectorAll("#levelSelect button").forEach((b,n)=>{ b.classList.toggle("active", n===level-1); });
+  document.querySelectorAll(".score-card").forEach(card=>{ card.classList.remove("active"); });
   document.getElementById("scoreCard"+level).classList.add("active");
 
   document.getElementById("lv").textContent="LEVEL "+level;
@@ -976,35 +728,14 @@ function chooseLevel(level){
   document.getElementById("q").textContent=`準備挑戰 LEVEL ${level}`;
 
   document.getElementById("c").innerHTML=`
-    <button
-      onclick="startLevel()"
-      style="
-        grid-column:1 / -1;
-        padding:18px;
-        min-height:65px;
-        border:0;
-        border-radius:14px;
-        background:#e8e2d8;
-        color:#20242b;
-        font-size:20px;
-        font-weight:900;
-        cursor:pointer;
-      ">
+    <button onclick="startLevel()" style="grid-column:1 / -1; height: 100%; border:0; border-radius:14px; background:#e8e2d8; color:#20242b; font-size:20px; font-weight:900; cursor:pointer;">
       開始 LEVEL ${level} 🚀
     </button>
   `;
 }
 
-
-/* =====================================================
-   開始 Level / 顯示題目
-===================================================== */
-
 function startLevel(){
-  i=0;
-  lock=false;
-  prepareLevel();
-  show();
+  i=0; lock=false; prepareLevel(); show();
 }
 
 function show(){
@@ -1017,8 +748,6 @@ function show(){
   document.getElementById("q").textContent=x.q;
 
   const labels=["A","B","C","D"];
-
-  /* ★ 在此將選項文字用 <span class="choice-text"> 包起來，只對它做縮放 */
   document.getElementById("c").innerHTML=
     x.shuffledChoices.map((item,k)=>`
       <button onclick="ans(${k})">
@@ -1031,14 +760,8 @@ function show(){
   document.getElementById("sc").textContent=`本 Level 暫得：${levelScores[currentLevel]} / 20`;
 }
 
-
-/* =====================================================
-   作答
-===================================================== */
-
 function ans(k){
-  if(lock)return;
-  lock=true;
+  if(lock)return; lock=true;
 
   const x=currentQuestions[i];
   const buttons=document.querySelectorAll(".choices button");
@@ -1059,62 +782,37 @@ function ans(k){
 
   setTimeout(()=>{
     i++;
-    if(i<10){
-      show();
-    }else{
-      finishLevel();
-    }
+    if(i<10){ show(); } else { finishLevel(); }
   },1700);
 }
-
-
-/* =====================================================
-   Level 完成
-===================================================== */
 
 function finishLevel(){
   document.getElementById("bar").style.width="100%";
   document.getElementById("lv").textContent=`LEVEL ${currentLevel} 完成`;
   document.getElementById("num").textContent="10 題完成";
 
-  document.getElementById("q").innerHTML=`
-    <span class="finish-message">
-      🎉 LEVEL ${currentLevel} 挑戰完成！
-    </span>`;
+  document.getElementById("q").innerHTML=`<span class="finish-message">🎉 LEVEL ${currentLevel} 挑戰完成！</span>`;
 
   const total=Object.values(levelScores).reduce((a,b)=>a+b,0);
-
   document.getElementById("c").innerHTML=`
-    <button onclick="startLevel()" style="font-size:18px;">🔁 重玩 LEVEL ${currentLevel}</button>
-    <button onclick="nextLevel()" style="font-size:18px;">➡️ 選擇下一 LEVEL</button>
+    <button onclick="startLevel()" style="font-size:18px; height:100%;">🔁 重玩 LEVEL ${currentLevel}</button>
+    <button onclick="nextLevel()" style="font-size:18px; height:100%;">➡️ 選擇下一 LEVEL</button>
   `;
 
-  document.getElementById("s").innerHTML=`
-    本 Level 得分：<strong>${levelScores[currentLevel]} / 20</strong><br>
-    目前總分：<strong>${total} / 100</strong>`;
+  document.getElementById("s").innerHTML=`本 Level 得分：<strong>${levelScores[currentLevel]} / 20</strong><br>目前總分：<strong>${total} / 100</strong>`;
   document.getElementById("sc").textContent="每題 2 分，總分滿分 100 分。";
 }
 
-
-/* =====================================================
-   下一 Level / 重新開始
-===================================================== */
-
 function nextLevel(){
-  const n = currentLevel<5 ? currentLevel+1 : 1;
-  chooseLevel(n);
+  const n = currentLevel<5 ? currentLevel+1 : 1; chooseLevel(n);
 }
 
 function restartGame(){
-  for(let lv=1;lv<=5;lv++){
-    levelScores[lv]=0;
-  }
-  currentLevel=0;
-  i=-1;
+  for(let lv=1;lv<=5;lv++){ levelScores[lv]=0; }
+  currentLevel=0; i=-1;
 
   document.querySelectorAll("#levelSelect button").forEach(b=>b.classList.remove("active"));
   document.querySelectorAll(".score-card").forEach(card=>card.classList.remove("active"));
-
   updateScoreboard();
 
   document.getElementById("lv").textContent="尚未選擇";
@@ -1125,11 +823,6 @@ function restartGame(){
   document.getElementById("s").textContent="";
   document.getElementById("sc").textContent="";
 }
-
-
-/* =====================================================
-   啟動
-===================================================== */
 
 updateScoreboard();
 
