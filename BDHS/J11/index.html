@@ -14,94 +14,101 @@
             --text-muted: #9aa0a6;
             --separator: #3c4043;
             
-            /* 數值強調色 */
-            --color-r: #fbbc04;     /* 黃色 */
-            --color-rad: #81c995;   /* 綠色 */
-            --color-arc: #8ab4f8;   /* 藍色 */
+            --color-r: #fbbc04;     
+            --color-rad: #81c995;   
+            --color-arc: #8ab4f8;   
         }
 
+        /* 鎖定頁面高度，強制隱藏捲動軸 */
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             padding: 0;
+            height: 100vh; 
+            overflow: hidden; 
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             box-sizing: border-box;
         }
 
-        /* 滿版左右並排佈局 */
+        /* 調整佈局以適應單一頁面 */
         .main-layout {
             display: flex;
             flex-direction: row;
-            gap: 40px;
+            gap: 30px; /* 縮小間距 */
             width: 100%;
             max-width: 1400px;
-            padding: 40px;
+            height: 100vh; 
+            padding: 20px 40px; /* 縮小上下留白 */
             box-sizing: border-box;
-            align-items: stretch;
+            align-items: center;
         }
 
         /* 左側：圖形區 */
         .canvas-section {
             flex: 1;
+            height: 100%;
+            max-height: 90vh; /* 確保不超出螢幕 */
             background-color: var(--panel-bg);
             border-radius: 16px;
-            overflow: hidden;
             border: 1px solid var(--separator);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
+        /* 確保畫布保持方形並自動縮放 */
         canvas {
             display: block;
-            width: 100%;
-            max-width: 800px;
+            max-width: 100%;
+            max-height: 100%;
             aspect-ratio: 1 / 1;
+            width: auto;
             height: auto;
+            object-fit: contain;
         }
 
         /* 右側：控制區 */
         .controls-section {
-            width: 550px; 
+            width: 500px; 
             display: flex;
             flex-direction: column;
-            gap: 32px;
+            gap: 24px; /* 縮小垂直間距 */
         }
 
         /* 數據面板 (2x2 網格) */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 16px; /* 縮小網格間距 */
         }
 
         .stat-card {
             background-color: var(--panel-bg);
             border: 1px solid var(--separator);
             border-radius: 12px;
-            padding: 24px 20px;
+            padding: 16px 16px; /* 縮小卡片內距 */
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .stat-label {
-            font-size: 28px; 
+            font-size: 24px; /* 稍微微調字體大小以確保塞入畫面 */
             color: var(--text-muted);
             font-weight: 500;
         }
 
         .stat-value {
-            font-size: 52px; 
+            font-size: 48px; 
             font-weight: 600;
             font-family: 'SF Pro Display', Arial, sans-serif;
         }
@@ -116,17 +123,17 @@
             background-color: var(--panel-bg);
             border: 1px solid var(--separator);
             border-radius: 12px;
-            padding: 32px;
+            padding: 24px; /* 縮小內距 */
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 30px; /* 縮小滑桿間距 */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .slider-group {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
         .slider-header {
@@ -137,18 +144,18 @@
 
         .slider-label {
             color: var(--text-muted);
-            font-size: 30px;
+            font-size: 26px;
             font-weight: 500;
         }
 
         .slider-value-box {
             background-color: var(--card-bg);
             color: var(--text-main);
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 8px;
-            font-size: 28px;
+            font-size: 26px;
             font-family: monospace;
-            min-width: 80px;
+            min-width: 70px;
             text-align: center;
             border: 1px solid #444;
         }
@@ -170,12 +177,12 @@
         
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 30px;
-            width: 30px;
+            height: 28px;
+            width: 28px;
             border-radius: 50%;
             background: #ffffff;
             cursor: pointer;
-            margin-top: -12px;
+            margin-top: -11px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
             border: 2px solid #fff;
         }
@@ -192,11 +199,11 @@
         @media (max-width: 1100px) {
             .main-layout {
                 flex-direction: column;
-                padding: 20px;
+                height: auto;
+                overflow-y: auto;
             }
-            .controls-section {
-                width: 100%;
-            }
+            body { overflow: auto; }
+            .controls-section { width: 100%; }
         }
     </style>
 </head>
@@ -211,19 +218,19 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-label">半徑 (r)</span>
-                    <span class="stat-value val-r" id="valRadius">2.0</span>
+                    <span class="stat-value val-r" id="valRadius">2.2</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">弳度 (θ)</span>
-                    <span class="stat-value val-rad" id="valRad">1.00</span>
+                    <span class="stat-value val-rad" id="valRad">2.99</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">角度 (°)</span>
-                    <span class="stat-value val-deg" id="valDeg">57.3°</span>
+                    <span class="stat-value val-deg" id="valDeg">171.3°</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">弧長 (s)</span>
-                    <span class="stat-value val-arc" id="valArc">2.00</span>
+                    <span class="stat-value val-arc" id="valArc">6.58</span>
                 </div>
             </div>
 
@@ -231,20 +238,20 @@
                 <div class="slider-group">
                     <div class="slider-header">
                         <span class="slider-label">角度 (θ) 控制</span>
-                        <div class="slider-value-box" id="sliderValAngle">1.00</div>
+                        <div class="slider-value-box" id="sliderValAngle">2.99</div>
                     </div>
                     <div class="slider-control-row">
-                        <input type="range" id="angleSlider" min="0" max="6.28" step="0.01" value="1.00">
+                        <input type="range" id="angleSlider" min="0" max="6.28" step="0.01" value="2.99">
                     </div>
                 </div>
                 
                 <div class="slider-group">
                     <div class="slider-header">
                         <span class="slider-label">半徑 (r) 控制</span>
-                        <div class="slider-value-box" id="sliderValRadius">2.0</div>
+                        <div class="slider-value-box" id="sliderValRadius">2.2</div>
                     </div>
                     <div class="slider-control-row">
-                        <input type="range" id="radiusSlider" min="1" max="5" step="0.1" value="2.0">
+                        <input type="range" id="radiusSlider" min="1" max="5" step="0.1" value="2.2">
                     </div>
                 </div>
             </div>
@@ -270,7 +277,6 @@
 
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
-            // 加大基礎比例尺，讓預設的圓形在畫布上更大
             const PIXELS_PER_UNIT = 85;
 
             const colors = {
@@ -280,7 +286,6 @@
                 radiusLine: '#cccccc',
                 arc: '#8ab4f8',
                 angleArc: '#81c995',
-                rText: '#fbbc04',
                 pointFill: '#ffffff'
             };
 
@@ -323,11 +328,12 @@
                 const px = cx + visualRadius * Math.cos(angle);
                 const py = cy - visualRadius * Math.sin(angle); 
 
+                // 綠色弧線的半徑大小計算
+                const angleVisRadius = Math.min(60, Math.max(35, visualRadius - 20)); 
+
                 // 3. 畫圓心角 (綠色弧線與箭頭)
                 if (angle > 0) {
                     ctx.beginPath();
-                    // 控制角度綠線的半徑大小 (最大 60, 不小於 35)
-                    const angleVisRadius = Math.min(60, Math.max(35, visualRadius - 20)); 
                     ctx.arc(cx, cy, angleVisRadius, 0, -angle, true);
                     ctx.strokeStyle = colors.angleArc;
                     ctx.lineWidth = 4;
@@ -337,7 +343,6 @@
                         const ax = cx + angleVisRadius * Math.cos(-angle);
                         const ay = cy + angleVisRadius * Math.sin(-angle);
                         const arrowAngle = -angle - Math.PI / 2; 
-                        // 箭頭大小縮小為 0.8 倍 (適配 1000px 畫布)
                         drawArrow(ctx, ax, ay, arrowAngle, colors.angleArc, 34);
                     }
                 }
@@ -367,7 +372,6 @@
 
                     if (angle > 0.05) {
                         const arrowAngle = -angle - Math.PI / 2;
-                        // 箭頭大小縮小為 0.8 倍 (適配 1000px 畫布)
                         drawArrow(ctx, px, py, arrowAngle, colors.arc, 48);
                     }
                 }
@@ -379,34 +383,27 @@
                 ctx.fill();
 
                 // 7. 畫文字標籤
-                const radStr = angle.toFixed(2);
-                
-                // [排版技巧] 使用 center 讓座標計算完美置中，不需手動針對各象限調整
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
+                const radStr = angle.toFixed(2);
                 
-                // 標示 半徑 r
-                ctx.fillStyle = colors.rText;
-                ctx.font = '40px monospace';
-                // 當半徑縮小時，文字依然保持最小距離以免擠到圓心
-                const rTextX = cx + Math.max(50, visualRadius / 2);
-                ctx.fillText(`r = ${r.toFixed(1)}`, rTextX, cy - 25);
+                // (移除半徑 r 文字的要求已實作：不繪製 r 文字)
 
                 if (angle > 0) {
-                    // 標示 角度 θ
+                    // 標示 角度 θ (跟隨綠色弧線，靠近外側)
                     ctx.fillStyle = colors.angleArc;
-                    ctx.font = '40px monospace';
-                    // 建立最小半徑距離，防止 r 極小時文字互相重疊
-                    const textRad = Math.max(130, visualRadius + 50);
+                    ctx.font = '36px monospace';
+                    // 設定文字半徑緊貼在綠色弧線外圍 35px 處
+                    const textRad = angleVisRadius + 35;
                     const tx = cx + textRad * Math.cos(-angle/2);
                     const ty = cy + textRad * Math.sin(-angle/2);
                     ctx.fillText(`θ = ${radStr}`, tx, ty);
 
-                    // 標示 弧長 s
+                    // 標示 弧長 s (靠近藍色弧線，緊貼外側)
                     ctx.fillStyle = colors.arc;
                     ctx.font = 'bold 44px monospace';
-                    // 建立最小半徑距離，確保永遠比角度文字更靠外側
-                    const arcMidRad = Math.max(190, visualRadius + 110);
+                    // 設定文字半徑緊貼在藍色弧線外圍 45px 處
+                    const arcMidRad = visualRadius + 45;
                     const arcX = cx + arcMidRad * Math.cos(-angle/2);
                     const arcY = cy + arcMidRad * Math.sin(-angle/2);
                     ctx.fillText(`s = ${arcLength.toFixed(2)}`, arcX, arcY);
@@ -436,7 +433,6 @@
             angleSlider.addEventListener('input', updateUI);
             radiusSlider.addEventListener('input', updateUI);
 
-            // 初始化
             updateUI();
         });
     </script>
