@@ -33,7 +33,7 @@
             box-sizing: border-box;
         }
 
-        /* 滿版左右並排佈局（配合大字體加寬） */
+        /* 滿版左右並排佈局 */
         .main-layout {
             display: flex;
             flex-direction: row;
@@ -62,12 +62,12 @@
         canvas {
             display: block;
             width: 100%;
-            max-width: 700px;
+            max-width: 800px;
             aspect-ratio: 1 / 1;
             height: auto;
         }
 
-        /* 右側：控制區（配合大字體加寬） */
+        /* 右側：控制區 */
         .controls-section {
             width: 550px; 
             display: flex;
@@ -95,13 +95,13 @@
         }
 
         .stat-label {
-            font-size: 28px; /* 放大2倍 (原本 14px) */
+            font-size: 28px; 
             color: var(--text-muted);
             font-weight: 500;
         }
 
         .stat-value {
-            font-size: 52px; /* 放大2倍 (原本 26px) */
+            font-size: 52px; 
             font-weight: 600;
             font-family: 'SF Pro Display', Arial, sans-serif;
         }
@@ -137,7 +137,7 @@
 
         .slider-label {
             color: var(--text-muted);
-            font-size: 30px; /* 放大2倍 (原本 15px) */
+            font-size: 30px;
             font-weight: 500;
         }
 
@@ -146,7 +146,7 @@
             color: var(--text-main);
             padding: 8px 16px;
             border-radius: 8px;
-            font-size: 28px; /* 放大2倍 (原本 14px) */
+            font-size: 28px;
             font-family: monospace;
             min-width: 80px;
             text-align: center;
@@ -188,7 +188,7 @@
             border-radius: 3px;
         }
 
-        /* 響應式：螢幕過窄時改為上下堆疊 */
+        /* 響應式設定 */
         @media (max-width: 1100px) {
             .main-layout {
                 flex-direction: column;
@@ -197,9 +197,6 @@
             .controls-section {
                 width: 100%;
             }
-            .canvas-section {
-                max-height: 50vh;
-            }
         }
     </style>
 </head>
@@ -207,14 +204,14 @@
 
     <div class="main-layout">
         <div class="canvas-section">
-            <canvas id="mathCanvas" width="700" height="700"></canvas>
+            <canvas id="mathCanvas" width="1000" height="1000"></canvas>
         </div>
 
         <div class="controls-section">
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-label">半徑 (r)</span>
-                    <span class="stat-value val-r" id="valRadius">1.0</span>
+                    <span class="stat-value val-r" id="valRadius">2.0</span>
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">弳度 (θ)</span>
@@ -226,7 +223,7 @@
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">弧長 (s)</span>
-                    <span class="stat-value val-arc" id="valArc">1.00</span>
+                    <span class="stat-value val-arc" id="valArc">2.00</span>
                 </div>
             </div>
 
@@ -244,10 +241,10 @@
                 <div class="slider-group">
                     <div class="slider-header">
                         <span class="slider-label">半徑 (r) 控制</span>
-                        <div class="slider-value-box" id="sliderValRadius">1.0</div>
+                        <div class="slider-value-box" id="sliderValRadius">2.0</div>
                     </div>
                     <div class="slider-control-row">
-                        <input type="range" id="radiusSlider" min="1" max="5" step="0.1" value="1.0">
+                        <input type="range" id="radiusSlider" min="1" max="5" step="0.1" value="2.0">
                     </div>
                 </div>
             </div>
@@ -273,7 +270,8 @@
 
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
-            const PIXELS_PER_UNIT = 55;
+            // 加大基礎比例尺，讓預設的圓形在畫布上更大
+            const PIXELS_PER_UNIT = 85;
 
             const colors = {
                 bg: '#1e1e20',
@@ -305,13 +303,13 @@
                 
                 // 1. 畫坐標軸
                 ctx.beginPath();
-                ctx.setLineDash([5, 5]);
+                ctx.setLineDash([8, 8]);
                 ctx.strokeStyle = colors.axis;
-                ctx.lineWidth = 2;
-                ctx.moveTo(cx - 320, cy);
-                ctx.lineTo(cx + 320, cy);
-                ctx.moveTo(cx, cy - 320);
-                ctx.lineTo(cx, cy + 320);
+                ctx.lineWidth = 2.5;
+                ctx.moveTo(cx - 450, cy);
+                ctx.lineTo(cx + 450, cy);
+                ctx.moveTo(cx, cy - 450);
+                ctx.lineTo(cx, cy + 450);
                 ctx.stroke();
                 ctx.setLineDash([]);
 
@@ -319,7 +317,7 @@
                 ctx.beginPath();
                 ctx.arc(cx, cy, visualRadius, 0, 2 * Math.PI);
                 ctx.strokeStyle = colors.circle;
-                ctx.lineWidth = 1.5;
+                ctx.lineWidth = 2.5;
                 ctx.stroke();
 
                 const px = cx + visualRadius * Math.cos(angle);
@@ -328,18 +326,19 @@
                 // 3. 畫圓心角 (綠色弧線與箭頭)
                 if (angle > 0) {
                     ctx.beginPath();
-                    const angleVisRadius = Math.min(45, visualRadius - 10); 
+                    // 控制角度綠線的半徑大小 (最大 60, 不小於 35)
+                    const angleVisRadius = Math.min(60, Math.max(35, visualRadius - 20)); 
                     ctx.arc(cx, cy, angleVisRadius, 0, -angle, true);
                     ctx.strokeStyle = colors.angleArc;
-                    ctx.lineWidth = 3;
+                    ctx.lineWidth = 4;
                     ctx.stroke();
 
                     if (angle > 0.05) {
                         const ax = cx + angleVisRadius * Math.cos(-angle);
                         const ay = cy + angleVisRadius * Math.sin(-angle);
                         const arrowAngle = -angle - Math.PI / 2; 
-                        // 箭頭放大3倍：原本 10 -> 30
-                        drawArrow(ctx, ax, ay, arrowAngle, colors.angleArc, 30);
+                        // 箭頭大小縮小為 0.8 倍 (適配 1000px 畫布)
+                        drawArrow(ctx, ax, ay, arrowAngle, colors.angleArc, 34);
                     }
                 }
 
@@ -348,14 +347,14 @@
                 ctx.moveTo(cx, cy);
                 ctx.lineTo(cx + visualRadius, cy); 
                 ctx.strokeStyle = colors.circle;
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 3;
                 ctx.stroke();
                 
                 ctx.beginPath();
                 ctx.moveTo(cx, cy);
                 ctx.lineTo(px, py); 
                 ctx.strokeStyle = colors.radiusLine;
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 3;
                 ctx.stroke();
 
                 // 5. 畫實際弧長 (藍色粗弧線與箭頭)
@@ -363,52 +362,53 @@
                     ctx.beginPath();
                     ctx.arc(cx, cy, visualRadius, 0, -angle, true);
                     ctx.strokeStyle = colors.arc;
-                    ctx.lineWidth = 4;
+                    ctx.lineWidth = 6;
                     ctx.stroke();
 
                     if (angle > 0.05) {
                         const arrowAngle = -angle - Math.PI / 2;
-                        // 箭頭放大3倍：原本 14 -> 42
-                        drawArrow(ctx, px, py, arrowAngle, colors.arc, 42);
+                        // 箭頭大小縮小為 0.8 倍 (適配 1000px 畫布)
+                        drawArrow(ctx, px, py, arrowAngle, colors.arc, 48);
                     }
                 }
 
                 // 6. 畫端點
                 ctx.beginPath();
-                ctx.arc(px, py, 6, 0, 2 * Math.PI);
+                ctx.arc(px, py, 8, 0, 2 * Math.PI);
                 ctx.fillStyle = colors.pointFill;
                 ctx.fill();
 
                 // 7. 畫文字標籤
                 const radStr = angle.toFixed(2);
                 
-                // 標示 半徑 r (字體放大2倍：16px -> 32px)
+                // [排版技巧] 使用 center 讓座標計算完美置中，不需手動針對各象限調整
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // 標示 半徑 r
                 ctx.fillStyle = colors.rText;
-                ctx.font = '32px monospace';
-                ctx.fillText(`r = ${r.toFixed(1)}`, cx + visualRadius/2 - 40, cy - 20);
+                ctx.font = '40px monospace';
+                // 當半徑縮小時，文字依然保持最小距離以免擠到圓心
+                const rTextX = cx + Math.max(50, visualRadius / 2);
+                ctx.fillText(`r = ${r.toFixed(1)}`, rTextX, cy - 25);
 
                 if (angle > 0) {
-                    // 標示 角度 θ (字體放大2倍：16px -> 32px)
+                    // 標示 角度 θ
                     ctx.fillStyle = colors.angleArc;
-                    ctx.font = '32px monospace';
-                    const textRad = Math.min(85, visualRadius + 45);
-                    const tx = cx + textRad * Math.cos(-angle/2) - 20;
-                    const ty = cy + textRad * Math.sin(-angle/2) + 15;
+                    ctx.font = '40px monospace';
+                    // 建立最小半徑距離，防止 r 極小時文字互相重疊
+                    const textRad = Math.max(130, visualRadius + 50);
+                    const tx = cx + textRad * Math.cos(-angle/2);
+                    const ty = cy + textRad * Math.sin(-angle/2);
                     ctx.fillText(`θ = ${radStr}`, tx, ty);
 
-                    // 標示 弧長 s (字體放大2倍：18px -> 36px)
+                    // 標示 弧長 s
                     ctx.fillStyle = colors.arc;
-                    ctx.font = 'bold 36px monospace';
-                    const arcMidRad = visualRadius + 35;
-                    let arcX = cx + arcMidRad * Math.cos(-angle/2) - 40;
-                    let arcY = cy + arcMidRad * Math.sin(-angle/2) + 15;
-                    
-                    // 根據放大後的字體微調排版位置
-                    if(angle < 1.5) { arcX += 15; arcY -= 15; }
-                    else if(angle >= 1.5 && angle < 3) { arcX -= 80; arcY -= 30; }
-                    else if(angle >= 3 && angle < 4.5) { arcX -= 120; arcY += 30; }
-                    else { arcX -= 40; arcY += 45; }
-                    
+                    ctx.font = 'bold 44px monospace';
+                    // 建立最小半徑距離，確保永遠比角度文字更靠外側
+                    const arcMidRad = Math.max(190, visualRadius + 110);
+                    const arcX = cx + arcMidRad * Math.cos(-angle/2);
+                    const arcY = cy + arcMidRad * Math.sin(-angle/2);
                     ctx.fillText(`s = ${arcLength.toFixed(2)}`, arcX, arcY);
                 }
             }
@@ -436,6 +436,7 @@
             angleSlider.addEventListener('input', updateUI);
             radiusSlider.addEventListener('input', updateUI);
 
+            // 初始化
             updateUI();
         });
     </script>
