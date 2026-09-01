@@ -33,13 +33,13 @@
             box-sizing: border-box;
         }
 
-        /* 滿版左右並排佈局 */
+        /* 滿版左右並排佈局（配合大字體加寬） */
         .main-layout {
             display: flex;
             flex-direction: row;
-            gap: 32px;
+            gap: 40px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             padding: 40px;
             box-sizing: border-box;
             align-items: stretch;
@@ -47,7 +47,7 @@
 
         /* 左側：圖形區 */
         .canvas-section {
-            flex: 1; /* 佔據剩餘全部空間 */
+            flex: 1;
             background-color: var(--panel-bg);
             border-radius: 16px;
             overflow: hidden;
@@ -63,45 +63,45 @@
             display: block;
             width: 100%;
             max-width: 700px;
-            aspect-ratio: 1 / 1; /* 保持正方形 */
+            aspect-ratio: 1 / 1;
             height: auto;
         }
 
-        /* 右側：控制區 */
+        /* 右側：控制區（配合大字體加寬） */
         .controls-section {
-            width: 380px; /* 固定寬度 */
+            width: 550px; 
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 32px;
         }
 
         /* 數據面板 (2x2 網格) */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 20px;
         }
 
         .stat-card {
             background-color: var(--panel-bg);
             border: 1px solid var(--separator);
             border-radius: 12px;
-            padding: 20px;
+            padding: 24px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 16px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .stat-label {
-            font-size: 14px;
+            font-size: 28px; /* 放大2倍 (原本 14px) */
             color: var(--text-muted);
             font-weight: 500;
         }
 
         .stat-value {
-            font-size: 26px;
+            font-size: 52px; /* 放大2倍 (原本 26px) */
             font-weight: 600;
             font-family: 'SF Pro Display', Arial, sans-serif;
         }
@@ -116,17 +116,17 @@
             background-color: var(--panel-bg);
             border: 1px solid var(--separator);
             border-radius: 12px;
-            padding: 24px;
+            padding: 32px;
             display: flex;
             flex-direction: column;
-            gap: 28px;
+            gap: 40px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .slider-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 20px;
         }
 
         .slider-header {
@@ -137,18 +137,18 @@
 
         .slider-label {
             color: var(--text-muted);
-            font-size: 15px;
+            font-size: 30px; /* 放大2倍 (原本 15px) */
             font-weight: 500;
         }
 
         .slider-value-box {
             background-color: var(--card-bg);
             color: var(--text-main);
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 28px; /* 放大2倍 (原本 14px) */
             font-family: monospace;
-            min-width: 50px;
+            min-width: 80px;
             text-align: center;
             border: 1px solid #444;
         }
@@ -163,33 +163,33 @@
             -webkit-appearance: none;
             width: 100%;
             background: transparent;
-            height: 24px;
+            height: 32px;
         }
         
         input[type=range]:focus { outline: none; }
         
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 22px;
-            width: 22px;
+            height: 30px;
+            width: 30px;
             border-radius: 50%;
             background: #ffffff;
             cursor: pointer;
-            margin-top: -9px;
+            margin-top: -12px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
             border: 2px solid #fff;
         }
         
         input[type=range]::-webkit-slider-runnable-track {
             width: 100%;
-            height: 4px;
+            height: 6px;
             cursor: pointer;
             background: var(--separator);
-            border-radius: 2px;
+            border-radius: 3px;
         }
 
         /* 響應式：螢幕過窄時改為上下堆疊 */
-        @media (max-width: 900px) {
+        @media (max-width: 1100px) {
             .main-layout {
                 flex-direction: column;
                 padding: 20px;
@@ -273,7 +273,7 @@
 
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
-            const PIXELS_PER_UNIT = 55; // 放大比例尺適應大畫布
+            const PIXELS_PER_UNIT = 55;
 
             const colors = {
                 bg: '#1e1e20',
@@ -286,11 +286,9 @@
                 pointFill: '#ffffff'
             };
 
-            // 繪製箭頭的輔助函數
             function drawArrow(ctx, x, y, angle, color, size = 12) {
                 ctx.beginPath();
                 ctx.moveTo(x, y);
-                // 計算箭頭的兩個尾翼 (向外擴展 30 度)
                 ctx.lineTo(x - size * Math.cos(angle - Math.PI / 6), y - size * Math.sin(angle - Math.PI / 6));
                 ctx.lineTo(x - size * Math.cos(angle + Math.PI / 6), y - size * Math.sin(angle + Math.PI / 6));
                 ctx.closePath();
@@ -302,7 +300,6 @@
                 const visualRadius = r * PIXELS_PER_UNIT;
                 const arcLength = r * angle;
 
-                // 清空畫布
                 ctx.fillStyle = colors.bg;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
@@ -326,7 +323,7 @@
                 ctx.stroke();
 
                 const px = cx + visualRadius * Math.cos(angle);
-                const py = cy - visualRadius * Math.sin(angle); // Canvas Y 軸向下，所以用負值對應數學象限
+                const py = cy - visualRadius * Math.sin(angle); 
 
                 // 3. 畫圓心角 (綠色弧線與箭頭)
                 if (angle > 0) {
@@ -337,27 +334,26 @@
                     ctx.lineWidth = 3;
                     ctx.stroke();
 
-                    // 如果角度大於極小值才畫箭頭（避免起始重疊）
                     if (angle > 0.05) {
                         const ax = cx + angleVisRadius * Math.cos(-angle);
                         const ay = cy + angleVisRadius * Math.sin(-angle);
-                        // 箭頭方向 = 半徑角度 - 90度 (因在 Canvas 中順應逆時針繪圖)
                         const arrowAngle = -angle - Math.PI / 2; 
-                        drawArrow(ctx, ax, ay, arrowAngle, colors.angleArc, 10);
+                        // 箭頭放大3倍：原本 10 -> 30
+                        drawArrow(ctx, ax, ay, arrowAngle, colors.angleArc, 30);
                     }
                 }
 
                 // 4. 畫半徑線
                 ctx.beginPath();
                 ctx.moveTo(cx, cy);
-                ctx.lineTo(cx + visualRadius, cy); // 基準線 (X軸)
+                ctx.lineTo(cx + visualRadius, cy); 
                 ctx.strokeStyle = colors.circle;
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 
                 ctx.beginPath();
                 ctx.moveTo(cx, cy);
-                ctx.lineTo(px, py); // 動態半徑線
+                ctx.lineTo(px, py); 
                 ctx.strokeStyle = colors.radiusLine;
                 ctx.lineWidth = 2;
                 ctx.stroke();
@@ -372,7 +368,8 @@
 
                     if (angle > 0.05) {
                         const arrowAngle = -angle - Math.PI / 2;
-                        drawArrow(ctx, px, py, arrowAngle, colors.arc, 14);
+                        // 箭頭放大3倍：原本 14 -> 42
+                        drawArrow(ctx, px, py, arrowAngle, colors.arc, 42);
                     }
                 }
 
@@ -385,31 +382,32 @@
                 // 7. 畫文字標籤
                 const radStr = angle.toFixed(2);
                 
-                // 標示 半徑 r
+                // 標示 半徑 r (字體放大2倍：16px -> 32px)
                 ctx.fillStyle = colors.rText;
-                ctx.font = '16px monospace';
-                ctx.fillText(`r = ${r.toFixed(1)}`, cx + visualRadius/2 - 25, cy - 12);
+                ctx.font = '32px monospace';
+                ctx.fillText(`r = ${r.toFixed(1)}`, cx + visualRadius/2 - 40, cy - 20);
 
                 if (angle > 0) {
-                    // 標示 角度 θ
+                    // 標示 角度 θ (字體放大2倍：16px -> 32px)
                     ctx.fillStyle = colors.angleArc;
-                    const textRad = Math.min(65, visualRadius + 25);
-                    const tx = cx + textRad * Math.cos(-angle/2);
-                    const ty = cy + textRad * Math.sin(-angle/2);
+                    ctx.font = '32px monospace';
+                    const textRad = Math.min(85, visualRadius + 45);
+                    const tx = cx + textRad * Math.cos(-angle/2) - 20;
+                    const ty = cy + textRad * Math.sin(-angle/2) + 15;
                     ctx.fillText(`θ = ${radStr}`, tx, ty);
 
-                    // 標示 弧長 s
+                    // 標示 弧長 s (字體放大2倍：18px -> 36px)
                     ctx.fillStyle = colors.arc;
-                    ctx.font = 'bold 18px monospace';
-                    const arcMidRad = visualRadius + 20;
-                    let arcX = cx + arcMidRad * Math.cos(-angle/2);
-                    let arcY = cy + arcMidRad * Math.sin(-angle/2);
+                    ctx.font = 'bold 36px monospace';
+                    const arcMidRad = visualRadius + 35;
+                    let arcX = cx + arcMidRad * Math.cos(-angle/2) - 40;
+                    let arcY = cy + arcMidRad * Math.sin(-angle/2) + 15;
                     
-                    // 稍微微調文字位置避免重疊
-                    if(angle < 1.5) { arcX += 5; arcY -= 5; }
-                    else if(angle >= 1.5 && angle < 3) { arcX -= 40; arcY -= 15; }
-                    else if(angle >= 3 && angle < 4.5) { arcX -= 60; arcY += 15; }
-                    else { arcX -= 20; arcY += 25; }
+                    // 根據放大後的字體微調排版位置
+                    if(angle < 1.5) { arcX += 15; arcY -= 15; }
+                    else if(angle >= 1.5 && angle < 3) { arcX -= 80; arcY -= 30; }
+                    else if(angle >= 3 && angle < 4.5) { arcX -= 120; arcY += 30; }
+                    else { arcX -= 40; arcY += 45; }
                     
                     ctx.fillText(`s = ${arcLength.toFixed(2)}`, arcX, arcY);
                 }
@@ -435,11 +433,9 @@
                 draw(angle, r);
             }
 
-            // 綁定事件監聽
             angleSlider.addEventListener('input', updateUI);
             radiusSlider.addEventListener('input', updateUI);
 
-            // 畫面載入時初始化繪圖
             updateUI();
         });
     </script>
