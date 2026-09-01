@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動態圓：探索 s = r × θ</title>
+    <style>
+        :root {
+            --bg-color: #0f0f11;
+            --panel-bg: #1e1e20;
+            --input-bg: #2d2d30;
+            --text-main: #ffffff;
+            --text-muted: #9aa0a6;
+            --separator: #3c4043;
+            
+            /* 數值強調色 */
+            --color-r: #fbbc04;     /* 黃色 */
+            --color-rad: #81c995;   /* 綠色 */
+            --color-arc: #8ab4f8;   /* 藍色 */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 畫布區域 */
+        .canvas-wrapper {
+            background-color: var(--panel-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--separator);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+        }
+
+        /* 數據面板 */
+        .stats-panel {
+            background-color: var(--panel-bg);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            border: 1px solid transparent; /* 保持對齊 */
+        }
+
+        .stat-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .stat-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 30px;
+            width: 1px;
+            background-color: var(--separator);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            font-family: 'SF Pro Display', sans-serif;
+        }
+
+        .val-r { color: var(--color-r); }
+        .val-rad { color: var(--color-rad); }
+        .val-arc { color: var(--color-arc); }
+        .val-deg { color: var(--text-main); }
+
+        /* 控制面板 */
+        .controls-panel {
+            background-color: var(--panel-bg);
+            border-radius: 12px;
+            padding: 24px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .slider-label {
+            color: var(--text-muted);
+            font-size: 15px;
+            width: 60px;
+        }
+
+        /* 系統預設滑桿美化 */
+        input[type=range] {
+            -webkit-appearance: none;
+            flex: 1;
+            background: transparent;
+            height: 24px;
+        }
+        
+        input[type=range]:focus {
+            outline: none;
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: var(--separator);
+            border-radius: 2px;
+        }
+
+        .slider-value-box {
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: monospace;
+            min-width: 45px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="canvas-wrapper">
+            <canvas id="mathCanvas" width="800" height="400"></canvas>
+        </div>
+
+        <div class="stats-panel">
+            <div class="stat-item">
+                <span class="stat-label">半徑 (r)</span>
+                <span class="stat-value val-r" id="valRadius">1.0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">弳度 (θ)</span>
+                <span class="stat-value val-rad" id="valRad">1.00</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">角度 (°)</span>
+                <span class="stat-value val-deg" id="valDeg">57.3°</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">弧長 (s)</span>
+                <span class="stat-value val-arc" id="valArc">1.00</span>
+            </div>
+        </div>
+
+        <div class="controls-panel">
+            <div class="slider-row">
+                <span class="slider-label">角度 (θ)</span>
+                <input type="range" id="angleSlider" min="0" max="6.28318" step="0.01" value="1.0">
+                <div class="slider-value-box" id="sliderValAngle">1.00</div>
+            </div>
+            
+            <div class="slider-row">
+                <span class="slider-label">半徑 (r)</span>
+                <input type="range" id="radiusSlider" min="1" max="5" step="0.1" value="1">
+                <div class="slider-value-box" id="sliderValRadius">1.0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('mathCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const angleSlider = document.getElementById('angleSlider');
+        const radiusSlider = document.getElementById('radiusSlider');
+        
+        const valRad = document.getElementById('valRad');
+        const valDeg = document.getElementById('valDeg');
+        const valRadius = document.getElementById('valRadius');
+        const valArc = document.getElementById('valArc');
+        
+        const sliderValAngle = document.getElementById('sliderValAngle');
+        const sliderValRadius = document.getElementById('sliderValRadius');
+
+        // 中心點
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        // 視覺比例尺
+        const PIXELS_PER_UNIT = 45; 
+
+        // 配色對應 CSS 變數
+        const colors = {
+            axis: '#3c4043',
+            circle: '#555555',
+            radiusLine: '#cccccc',
+            arc: '#8ab4f8',      // 藍色
+            angleArc: '#81c995', // 綠色
+            rText: '#fbbc04',    // 黃色
+            pointFill: '#ffffff'
+        };
+
+        function draw() {
+            const angle = parseFloat(angleSlider.value);
+            const r = parseFloat(radiusSlider.value);
+            
+            const visualRadius = r * PIXELS_PER_UNIT;
+            const arcLength = r * angle;
+
+            // 清空畫布 (背景色由 CSS 控制)
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 1. 畫坐標軸
+            ctx.beginPath();
+            ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = colors.axis;
+            ctx.lineWidth = 1;
+            ctx.moveTo(cx - 300, cy);
+            ctx.lineTo(cx + 300, cy);
+            ctx.moveTo(cx, cy - 180);
+            ctx.lineTo(cx, cy + 180);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 2. 畫基準圓
+            ctx.beginPath();
+            ctx.arc(cx, cy, visualRadius, 0, 2 * Math.PI);
+            ctx.strokeStyle = colors.circle;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 計算端點
+            const px = cx + visualRadius * Math.cos(angle);
+            const py = cy - visualRadius * Math.sin(angle);
+
+            // 3. 畫圓心角 (綠色弧線)
+            if (angle > 0) {
+                ctx.beginPath();
+                const angleVisRadius = Math.min(30, visualRadius - 5); 
+                ctx.arc(cx, cy, angleVisRadius, 0, -angle, true);
+                ctx.strokeStyle = colors.angleArc;
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+
+            // 4. 畫半徑線 (X軸正向 與 動態半徑)
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx + visualRadius, cy);
+            ctx.strokeStyle = colors.circle;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(px, py);
+            ctx.strokeStyle = colors.radiusLine;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 5. 畫實際弧長 (藍色弧線)
+            if (angle > 0) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, visualRadius, 0, -angle, true);
+                ctx.strokeStyle = colors.arc;
+                ctx.lineWidth = 4;
+                ctx.stroke();
+            }
+
+            // 6. 畫端點
+            ctx.beginPath();
+            ctx.arc(px, py, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = colors.pointFill;
+            ctx.fill();
+
+            // 7. 畫文字標籤
+            const radStr = angle.toFixed(2);
+            
+            // 半徑 r
+            ctx.fillStyle = colors.rText;
+            ctx.font = '14px monospace';
+            ctx.fillText(`r = ${r.toFixed(1)}`, cx + visualRadius/2 - 20, cy - 10);
+
+            // 角度 θ
+            if (angle > 0) {
+                ctx.fillStyle = colors.angleArc;
+                const textRad = Math.min(50, visualRadius + 20);
+                const tx = cx + textRad * Math.cos(-angle/2);
+                const ty = cy + textRad * Math.sin(-angle/2);
+                ctx.fillText(`θ = ${radStr}`, tx, ty);
+            }
+
+            // 弧長 s
+            if (angle > 0) {
+                ctx.fillStyle = colors.arc;
+                ctx.font = 'bold 15px monospace';
+                const arcMidRad = visualRadius + 15;
+                let arcX = cx + arcMidRad * Math.cos(-angle/2);
+                let arcY = cy + arcMidRad * Math.sin(-angle/2);
+                
+                if(angle < 1.5) { arcX += 5; arcY -= 5; }
+                else if(angle > 1.5 && angle < 3) { arcX -= 40; arcY -= 15; }
+                else if(angle > 3 && angle < 4.5) { arcX -= 60; arcY += 15; }
+                
+                ctx.fillText(`s = ${arcLength.toFixed(2)}`, arcX, arcY);
+            }
+        }
+
+        function updateUI() {
+            const angle = parseFloat(angleSlider.value);
+            const r = parseFloat(radiusSlider.value);
+            
+            const degrees = (angle * 180 / Math.PI).toFixed(1);
+            const radStr = angle.toFixed(2);
+            const rStr = r.toFixed(1);
+            const arcStr = (angle * r).toFixed(2);
+
+            // 更新面板文字
+            valRad.textContent = radStr;
+            valDeg.textContent = `${degrees}°`;
+            valRadius.textContent = rStr;
+            valArc.textContent = arcStr;
+            
+            // 更新滑桿數值框
+            sliderValAngle.textContent = radStr;
+            sliderValRadius.textContent = rStr;
+
+            // 重繪畫布
+            draw();
+        }
+
+        // 綁定事件監聽
+        angleSlider.addEventListener('input', updateUI);
+        radiusSlider.addEventListener('input', updateUI);
+
+        // 畫面載入時初始化
+        updateUI();
+    </script>
+</body>
+</html>
