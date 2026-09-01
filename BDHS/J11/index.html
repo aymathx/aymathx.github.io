@@ -13,10 +13,9 @@
             --text-muted: #9aa0a6;
             --separator: #3c4043;
             
-            /* 數值強調色 */
-            --color-r: #fbbc04;     /* 黃色 */
-            --color-rad: #81c995;   /* 綠色 */
-            --color-arc: #8ab4f8;   /* 藍色 */
+            --color-r: #fbbc04;
+            --color-rad: #81c995;
+            --color-arc: #8ab4f8;
         }
 
         body {
@@ -40,7 +39,6 @@
             gap: 20px;
         }
 
-        /* 畫布區域 */
         .canvas-wrapper {
             background-color: var(--panel-bg);
             border-radius: 16px;
@@ -52,14 +50,15 @@
             align-items: center;
         }
 
+        /* 確保 Canvas 正確縮放 */
         canvas {
             display: block;
             width: 100%;
             max-width: 800px;
-            height: 400px;
+            height: auto;
+            aspect-ratio: 2 / 1;
         }
 
-        /* 數據面板 */
         .stats-panel {
             background-color: var(--panel-bg);
             border-radius: 12px;
@@ -67,7 +66,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 24px 0;
-            border: 1px solid transparent; /* 保持對齊 */
+            border: 1px solid transparent;
         }
 
         .stat-item {
@@ -99,7 +98,7 @@
         .stat-value {
             font-size: 24px;
             font-weight: 600;
-            font-family: 'SF Pro Display', sans-serif;
+            font-family: 'SF Pro Display', Arial, sans-serif;
         }
 
         .val-r { color: var(--color-r); }
@@ -107,7 +106,6 @@
         .val-arc { color: var(--color-arc); }
         .val-deg { color: var(--text-main); }
 
-        /* 控制面板 */
         .controls-panel {
             background-color: var(--panel-bg);
             border-radius: 12px;
@@ -129,7 +127,6 @@
             width: 60px;
         }
 
-        /* 系統預設滑桿美化 */
         input[type=range] {
             -webkit-appearance: none;
             flex: 1;
@@ -137,9 +134,7 @@
             height: 24px;
         }
         
-        input[type=range]:focus {
-            outline: none;
-        }
+        input[type=range]:focus { outline: none; }
         
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
@@ -170,16 +165,17 @@
             min-width: 45px;
             text-align: center;
         }
-
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- 畫布區域 -->
         <div class="canvas-wrapper">
             <canvas id="mathCanvas" width="800" height="400"></canvas>
         </div>
 
+        <!-- 數據面板 -->
         <div class="stats-panel">
             <div class="stat-item">
                 <span class="stat-label">半徑 (r)</span>
@@ -199,188 +195,181 @@
             </div>
         </div>
 
+        <!-- 控制面板 -->
         <div class="controls-panel">
             <div class="slider-row">
                 <span class="slider-label">角度 (θ)</span>
-                <input type="range" id="angleSlider" min="0" max="6.28318" step="0.01" value="1.0">
+                <input type="range" id="angleSlider" min="0" max="6.28" step="0.01" value="1.00">
                 <div class="slider-value-box" id="sliderValAngle">1.00</div>
             </div>
             
             <div class="slider-row">
                 <span class="slider-label">半徑 (r)</span>
-                <input type="range" id="radiusSlider" min="1" max="5" step="0.1" value="1">
+                <input type="range" id="radiusSlider" min="1" max="5" step="0.1" value="1.0">
                 <div class="slider-value-box" id="sliderValRadius">1.0</div>
             </div>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('mathCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        const angleSlider = document.getElementById('angleSlider');
-        const radiusSlider = document.getElementById('radiusSlider');
-        
-        const valRad = document.getElementById('valRad');
-        const valDeg = document.getElementById('valDeg');
-        const valRadius = document.getElementById('valRadius');
-        const valArc = document.getElementById('valArc');
-        
-        const sliderValAngle = document.getElementById('sliderValAngle');
-        const sliderValRadius = document.getElementById('sliderValRadius');
-
-        // 中心點
-        const cx = canvas.width / 2;
-        const cy = canvas.height / 2;
-        // 視覺比例尺
-        const PIXELS_PER_UNIT = 45; 
-
-        // 配色對應 CSS 變數
-        const colors = {
-            axis: '#3c4043',
-            circle: '#555555',
-            radiusLine: '#cccccc',
-            arc: '#8ab4f8',      // 藍色
-            angleArc: '#81c995', // 綠色
-            rText: '#fbbc04',    // 黃色
-            pointFill: '#ffffff'
-        };
-
-        function draw() {
-            const angle = parseFloat(angleSlider.value);
-            const r = parseFloat(radiusSlider.value);
+        // 確保網頁所有元素載入後才執行 JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('mathCanvas');
+            const ctx = canvas.getContext('2d');
             
-            const visualRadius = r * PIXELS_PER_UNIT;
-            const arcLength = r * angle;
-
-            // 清空畫布 (背景色由 CSS 控制)
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const angleSlider = document.getElementById('angleSlider');
+            const radiusSlider = document.getElementById('radiusSlider');
             
-            // 1. 畫坐標軸
-            ctx.beginPath();
-            ctx.setLineDash([4, 4]);
-            ctx.strokeStyle = colors.axis;
-            ctx.lineWidth = 1;
-            ctx.moveTo(cx - 300, cy);
-            ctx.lineTo(cx + 300, cy);
-            ctx.moveTo(cx, cy - 180);
-            ctx.lineTo(cx, cy + 180);
-            ctx.stroke();
-            ctx.setLineDash([]);
+            const elements = {
+                rad: document.getElementById('valRad'),
+                deg: document.getElementById('valDeg'),
+                r: document.getElementById('valRadius'),
+                arc: document.getElementById('valArc'),
+                sAngle: document.getElementById('sliderValAngle'),
+                sRadius: document.getElementById('sliderValRadius')
+            };
 
-            // 2. 畫基準圓
-            ctx.beginPath();
-            ctx.arc(cx, cy, visualRadius, 0, 2 * Math.PI);
-            ctx.strokeStyle = colors.circle;
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const PIXELS_PER_UNIT = 45; 
 
-            // 計算端點
-            const px = cx + visualRadius * Math.cos(angle);
-            const py = cy - visualRadius * Math.sin(angle);
+            const colors = {
+                bg: '#1e1e20',
+                axis: '#3c4043',
+                circle: '#555555',
+                radiusLine: '#cccccc',
+                arc: '#8ab4f8',
+                angleArc: '#81c995',
+                rText: '#fbbc04',
+                pointFill: '#ffffff'
+            };
 
-            // 3. 畫圓心角 (綠色弧線)
-            if (angle > 0) {
-                ctx.beginPath();
-                const angleVisRadius = Math.min(30, visualRadius - 5); 
-                ctx.arc(cx, cy, angleVisRadius, 0, -angle, true);
-                ctx.strokeStyle = colors.angleArc;
-                ctx.lineWidth = 3;
-                ctx.stroke();
-            }
+            function draw(angle, r) {
+                const visualRadius = r * PIXELS_PER_UNIT;
+                const arcLength = r * angle;
 
-            // 4. 畫半徑線 (X軸正向 與 動態半徑)
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.lineTo(cx + visualRadius, cy);
-            ctx.strokeStyle = colors.circle;
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.lineTo(px, py);
-            ctx.strokeStyle = colors.radiusLine;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // 5. 畫實際弧長 (藍色弧線)
-            if (angle > 0) {
-                ctx.beginPath();
-                ctx.arc(cx, cy, visualRadius, 0, -angle, true);
-                ctx.strokeStyle = colors.arc;
-                ctx.lineWidth = 4;
-                ctx.stroke();
-            }
-
-            // 6. 畫端點
-            ctx.beginPath();
-            ctx.arc(px, py, 5, 0, 2 * Math.PI);
-            ctx.fillStyle = colors.pointFill;
-            ctx.fill();
-
-            // 7. 畫文字標籤
-            const radStr = angle.toFixed(2);
-            
-            // 半徑 r
-            ctx.fillStyle = colors.rText;
-            ctx.font = '14px monospace';
-            ctx.fillText(`r = ${r.toFixed(1)}`, cx + visualRadius/2 - 20, cy - 10);
-
-            // 角度 θ
-            if (angle > 0) {
-                ctx.fillStyle = colors.angleArc;
-                const textRad = Math.min(50, visualRadius + 20);
-                const tx = cx + textRad * Math.cos(-angle/2);
-                const ty = cy + textRad * Math.sin(-angle/2);
-                ctx.fillText(`θ = ${radStr}`, tx, ty);
-            }
-
-            // 弧長 s
-            if (angle > 0) {
-                ctx.fillStyle = colors.arc;
-                ctx.font = 'bold 15px monospace';
-                const arcMidRad = visualRadius + 15;
-                let arcX = cx + arcMidRad * Math.cos(-angle/2);
-                let arcY = cy + arcMidRad * Math.sin(-angle/2);
+                // 強制填滿背景色，避免透明畫布無法顯示
+                ctx.fillStyle = colors.bg;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                if(angle < 1.5) { arcX += 5; arcY -= 5; }
-                else if(angle > 1.5 && angle < 3) { arcX -= 40; arcY -= 15; }
-                else if(angle > 3 && angle < 4.5) { arcX -= 60; arcY += 15; }
+                // 1. 畫坐標軸
+                ctx.beginPath();
+                ctx.setLineDash([4, 4]);
+                ctx.strokeStyle = colors.axis;
+                ctx.lineWidth = 1;
+                ctx.moveTo(cx - 300, cy);
+                ctx.lineTo(cx + 300, cy);
+                ctx.moveTo(cx, cy - 180);
+                ctx.lineTo(cx, cy + 180);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // 2. 畫基準圓
+                ctx.beginPath();
+                ctx.arc(cx, cy, visualRadius, 0, 2 * Math.PI);
+                ctx.strokeStyle = colors.circle;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                const px = cx + visualRadius * Math.cos(angle);
+                const py = cy - visualRadius * Math.sin(angle);
+
+                // 3. 畫圓心角 (綠色弧線)
+                if (angle > 0) {
+                    ctx.beginPath();
+                    const angleVisRadius = Math.min(30, visualRadius - 5); 
+                    ctx.arc(cx, cy, angleVisRadius, 0, -angle, true);
+                    ctx.strokeStyle = colors.angleArc;
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                }
+
+                // 4. 畫半徑線
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(cx + visualRadius, cy);
+                ctx.strokeStyle = colors.circle;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
                 
-                ctx.fillText(`s = ${arcLength.toFixed(2)}`, arcX, arcY);
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(px, py);
+                ctx.strokeStyle = colors.radiusLine;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // 5. 畫實際弧長 (藍色弧線)
+                if (angle > 0) {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, visualRadius, 0, -angle, true);
+                    ctx.strokeStyle = colors.arc;
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+                }
+
+                // 6. 畫端點
+                ctx.beginPath();
+                ctx.arc(px, py, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = colors.pointFill;
+                ctx.fill();
+
+                // 7. 畫文字標籤
+                const radStr = angle.toFixed(2);
+                
+                ctx.fillStyle = colors.rText;
+                ctx.font = '14px monospace';
+                ctx.fillText(`r = ${r.toFixed(1)}`, cx + visualRadius/2 - 20, cy - 10);
+
+                if (angle > 0) {
+                    ctx.fillStyle = colors.angleArc;
+                    const textRad = Math.min(50, visualRadius + 20);
+                    const tx = cx + textRad * Math.cos(-angle/2);
+                    const ty = cy + textRad * Math.sin(-angle/2);
+                    ctx.fillText(`θ = ${radStr}`, tx, ty);
+
+                    ctx.fillStyle = colors.arc;
+                    ctx.font = 'bold 15px monospace';
+                    const arcMidRad = visualRadius + 15;
+                    let arcX = cx + arcMidRad * Math.cos(-angle/2);
+                    let arcY = cy + arcMidRad * Math.sin(-angle/2);
+                    
+                    if(angle < 1.5) { arcX += 5; arcY -= 5; }
+                    else if(angle >= 1.5 && angle < 3) { arcX -= 40; arcY -= 15; }
+                    else if(angle >= 3 && angle < 4.5) { arcX -= 60; arcY += 15; }
+                    
+                    ctx.fillText(`s = ${arcLength.toFixed(2)}`, arcX, arcY);
+                }
             }
-        }
 
-        function updateUI() {
-            const angle = parseFloat(angleSlider.value);
-            const r = parseFloat(radiusSlider.value);
-            
-            const degrees = (angle * 180 / Math.PI).toFixed(1);
-            const radStr = angle.toFixed(2);
-            const rStr = r.toFixed(1);
-            const arcStr = (angle * r).toFixed(2);
+            function updateUI() {
+                // 確保數值能正確被解析，如果出現異常則給預設值
+                const angle = parseFloat(angleSlider.value) || 1.0;
+                const r = parseFloat(radiusSlider.value) || 1.0;
+                
+                const degrees = (angle * 180 / Math.PI).toFixed(1);
+                const radStr = angle.toFixed(2);
+                const rStr = r.toFixed(1);
+                const arcStr = (angle * r).toFixed(2);
 
-            // 更新面板文字
-            valRad.textContent = radStr;
-            valDeg.textContent = `${degrees}°`;
-            valRadius.textContent = rStr;
-            valArc.textContent = arcStr;
-            
-            // 更新滑桿數值框
-            sliderValAngle.textContent = radStr;
-            sliderValRadius.textContent = rStr;
+                elements.rad.textContent = radStr;
+                elements.deg.textContent = `${degrees}°`;
+                elements.r.textContent = rStr;
+                elements.arc.textContent = arcStr;
+                
+                elements.sAngle.textContent = radStr;
+                elements.sRadius.textContent = rStr;
 
-            // 重繪畫布
-            draw();
-        }
+                draw(angle, r);
+            }
 
-        // 綁定事件監聽
-        angleSlider.addEventListener('input', updateUI);
-        radiusSlider.addEventListener('input', updateUI);
+            // 綁定事件監聽
+            angleSlider.addEventListener('input', updateUI);
+            radiusSlider.addEventListener('input', updateUI);
 
-        // 畫面載入時初始化
-        updateUI();
+            // 畫面載入時初始化繪圖
+            updateUI();
+        });
     </script>
 </body>
 </html>
