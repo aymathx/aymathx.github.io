@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>洗衣機最終購買比較報告｜Panasonic NA-V120HDH-G vs LG WD-S15TBD</title>
+<style>
+:root{
+  --bg:#f5f7fb; --card:#fff; --text:#172033; --muted:#657089;
+  --line:#e6eaf2; --blue:#3157c8; --blue2:#eef3ff;
+  --green:#16834a; --green2:#eaf8f0; --red:#c83d4f; --red2:#fff0f2;
+  --gold:#a66a00; --gold2:#fff7e5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.7}
+.container{max-width:980px;margin:auto;padding:18px}
+.hero{background:linear-gradient(135deg,#243f9d,#4167d8);color:#fff;border-radius:24px;padding:28px 24px;box-shadow:0 10px 30px #1e3d9925}
+.hero .tag{display:inline-block;background:#ffffff22;border:1px solid #ffffff45;border-radius:999px;padding:3px 11px;font-size:13px;margin-bottom:8px}
+h1{font-size:28px;line-height:1.3;margin:4px 0 8px}
+.hero p{margin:5px 0;opacity:.94}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 4px 16px #23355d08}
+.card h2{font-size:20px;margin:0 0 12px}
+.card h3{font-size:16px;margin:18px 0 7px}
+.badge{display:inline-block;border-radius:999px;padding:4px 10px;font-size:13px;font-weight:700}
+.badge.green{background:var(--green2);color:var(--green)}
+.badge.blue{background:var(--blue2);color:var(--blue)}
+.badge.red{background:var(--red2);color:var(--red)}
+.badge.gold{background:var(--gold2);color:var(--gold)}
+.price{font-size:31px;font-weight:900;letter-spacing:-1px}
+.small{font-size:13px;color:var(--muted)}
+.highlight{background:#fffbe8;border-left:5px solid #e5b12b;border-radius:12px;padding:14px 16px;margin:12px 0}
+.decision{background:linear-gradient(135deg,#edf7f0,#fff);border:2px solid #8ac8a4}
+.decision strong{color:#087a3f}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:10px 8px;vertical-align:top}
+th{background:#f7f9fd;text-align:left;position:sticky;top:0}
+td:first-child{font-weight:700;width:25%}
+.win{font-weight:800;color:var(--green)}
+.lose{color:#9a4b55}
+.neutral{color:var(--muted)}
+.score{display:flex;gap:12px;align-items:center;margin:10px 0}
+.scorebar{height:12px;background:#e9edf5;border-radius:99px;overflow:hidden;flex:1}
+.scorefill{height:100%;background:var(--blue);border-radius:99px}
+.num{font-size:22px;font-weight:900;width:52px;text-align:right}
+ul{margin:7px 0 7px 20px;padding:0}
+li{margin:4px 0}
+.verdict{font-size:18px;font-weight:800;line-height:1.6}
+footer{color:var(--muted);font-size:12px;padding:8px 4px 30px}
+a{color:var(--blue);text-decoration:none}
+@media(max-width:700px){
+  .container{padding:11px}
+  .hero{border-radius:18px;padding:22px 18px}
+  h1{font-size:23px}
+  .grid{grid-template-columns:1fr}
+  .card{padding:16px;border-radius:15px}
+  table{font-size:13px}
+  th,td{padding:8px 6px}
+  .price{font-size:27px}
+}
+@media print{
+  body{background:#fff}.hero{box-shadow:none}.card{break-inside:avoid;box-shadow:none}
+  .container{max-width:none}.no-print{display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<section class="hero">
+  <span class="tag">2026/09/12 最終決策版</span>
+  <h1>洗衣機最終購買比較報告</h1>
+  <p><b>Panasonic NA-V120HDH-G</b>　vs　<b>LG WD-S15TBD</b></p>
+  <p>以「2人家庭＋可洗棉被＋希望洗脫烘＋長期使用＋價格合理」為主要決策條件。</p>
+</section>
+
+<div class="grid">
+  <section class="card">
+    <span class="badge blue">Panasonic</span>
+    <h2>NA-V120HDH-G</h2>
+    <div class="price">NT$21,912</div>
+    <p class="small">你之前看到的 momo 限時折後價；實際下單價格仍以當下頁面為準。</p>
+    <ul>
+      <li>洗／脫水：<b>12 kg</b></li>
+      <li>烘衣：<b>8 kg</b></li>
+      <li>5 段溫水洗</li>
+      <li>泡洗淨、30°C 溫水槽洗淨</li>
+      <li>16 種洗衣行程</li>
+      <li>尺寸：595 × 850 × 595 mm（寬×高×深）</li>
+    </ul>
+  </section>
+
+  <section class="card decision">
+    <span class="badge green">目前較推薦</span>
+    <h2>LG WD-S15TBD</h2>
+    <div class="price">NT$27,400</div>
+    <p class="small">你目前全電商購物車：$27,900 − $500 折價券；運費 $0。</p>
+    <ul>
+      <li>洗衣：<b>15 kg</b></li>
+      <li>烘衣：<b>8 kg</b></li>
+      <li><b>Wi-Fi / ThinQ</b></li>
+      <li><b>AI DD 直驅變頻</b></li>
+      <li><b>60°C 蒸氣＋5種蒸氣行程</b></li>
+      <li><b>官方列有「被子」行程</b></li>
+      <li>尺寸：645 × 940 × 770 mm（寬×高×深）</li>
+    </ul>
+  </section>
+</div>
+
+<section class="card">
+<h2>① 先看「真正價格」</h2>
+<table>
+<tr><th>項目</th><th>Panasonic</th><th>LG</th></tr>
+<tr><td>目前比較價格</td><td>NT$21,912</td><td>NT$27,400 實際付款</td></tr>
+<tr><td>額外回饋</td><td>—</td><td>5,000 全聯福利點</td></tr>
+<tr><td>福利點折抵價值</td><td>—</td><td>約 NT$500</td></tr>
+<tr><td>計入點數後的實質成本</td><td><b>NT$21,912</b></td><td><b>約 NT$26,900</b></td></tr>
+<tr><td>實質價差</td><td colspan="2"><b>LG 約多 NT$4,988</b></td></tr>
+</table>
+<div class="highlight">
+<b>重點：</b>不要把 5,000 福利點當成 5,000 元。你已確認「5,000 點＝500 元折抵」，所以 LG 的實質成本是約 26,900 元，而不是 22,400 元。
+</div>
+</section>
+
+<section class="card">
+<h2>② 核心規格一覽</h2>
+<table>
+<tr><th>比較項目</th><th>Panasonic NA-V120HDH-G</th><th>LG WD-S15TBD</th><th>誰較有利</th></tr>
+<tr><td>洗衣容量</td><td>12 kg</td><td><b>15 kg</b></td><td class="win">LG</td></tr>
+<tr><td>烘衣容量</td><td>8 kg</td><td>8 kg</td><td class="neutral">平手</td></tr>
+<tr><td>洗脫烘</td><td>✓</td><td>✓</td><td class="neutral">平手</td></tr>
+<tr><td>溫水洗</td><td><b>5 段</b></td><td>5 段溫度設定</td><td class="win">Panasonic偏強</td></tr>
+<tr><td>蒸氣</td><td>—</td><td><b>✓ 60°C</b></td><td class="win">LG</td></tr>
+<tr><td>Wi-Fi</td><td>—</td><td><b>✓ ThinQ</b></td><td class="win">LG</td></tr>
+<tr><td>AI DD</td><td>—</td><td><b>✓</b></td><td class="win">LG</td></tr>
+<tr><td>被子行程</td><td>官方目前產品頁未列出</td><td><b>✓</b></td><td class="win">LG</td></tr>
+<tr><td>尺寸（寬×高×深）</td><td><b>595×850×595 mm</b></td><td>645×940×770 mm</td><td class="win">Panasonic</td></tr>
+<tr><td>空間友善度</td><td><b>明顯較省空間</b></td><td>較深、較高</td><td class="win">Panasonic</td></tr>
+</table>
+</section>
+
+<section class="grid">
+<section class="card">
+<h2>③ Panasonic 的優點</h2>
+<ul>
+<li><b>價格最低：</b>目前約 21,912 元，明顯省約 4,988 元。</li>
+<li><b>機身非常漂亮：</b>深度只有 595 mm，若洗衣機位置有限，優勢很大。</li>
+<li><b>溫水洗：</b>官方列出 5 段溫水洗。</li>
+<li><b>洗脫烘完整：</b>12kg 洗＋8kg 烘，已能滿足一般小家庭。</li>
+<li><b>功能不花俏：</b>如果不在乎 Wi-Fi、AI、蒸氣，CP 值很好。</li>
+</ul>
+<h3>Panasonic 的缺點</h3>
+<ul>
+<li>洗衣容量比 LG 少 3 kg。</li>
+<li>沒有 Wi-Fi / ThinQ。</li>
+<li>沒有 LG 的 AI DD 與蒸氣功能。</li>
+<li>官方產品頁目前未明列「被子」行程，因此若「棉被」是核心需求，需再依棉被材質與尺寸確認使用限制。</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>④ LG 的優點</h2>
+<ul>
+<li><b>15kg 洗衣容量：</b>洗大件床單、被類的餘裕更大。</li>
+<li><b>官方有「被子」行程：</b>這點對你的需求非常直接。</li>
+<li><b>8kg 烘衣：</b>與 Panasonic 相同。</li>
+<li><b>Wi-Fi / ThinQ：</b>可遠端遙控、監控、下載行程。</li>
+<li><b>蒸氣：</b>60°C 蒸氣，官方標示 BAF 過敏防護相關功能。</li>
+<li><b>AI DD＋直驅變頻：</b>屬於 LG 的核心洗衣技術配置。</li>
+<li><b>你現在的促銷價格很漂亮：</b>實付 27,400 元＋5,000 福利點。</li>
+</ul>
+<h3>LG 的缺點</h3>
+<ul>
+<li><b>機身明顯較大：</b>深度 770 mm，比 Panasonic 多 175 mm。</li>
+<li>高度也高約 90 mm。</li>
+<li>雖然洗 15kg，但<b>烘衣仍只有 8kg</b>，不能把 15kg 洗完全部直接塞進去烘。</li>
+<li>沒有自動洗劑投入 ezDispense。</li>
+</ul>
+</section>
+</section>
+
+<section class="card">
+<h2>⑤ 「棉被」是這次最重要的差異</h2>
+<div class="highlight">
+<b>如果買洗脫烘的核心理由之一，就是希望偶爾處理棉被，我會偏向 LG。</b>
+</div>
+<p>LG 官方規格明列「被子」行程，且洗衣容量 15kg；Panasonic NA-V120HDH-G 則是 12kg 洗、8kg 烘，官方產品頁沒有在目前公開規格中列出「被子」行程。</p>
+<p><b>但要注意：</b>「15kg」不代表任何超厚冬被都能一次洗完並一次烘乾。洗衣與烘衣是兩個不同的容量限制；兩台都是 8kg 烘衣上限。厚重羽絨被、羊毛被或大型冬被，仍應以材質、尺寸及原廠行程／說明書限制為準。</p>
+</section>
+
+<section class="card">
+<h2>⑥ 以你們的需求打分</h2>
+<p class="small">評分不是原廠數據，而是依「2人家庭＋棉被＋洗脫烘＋價格＋長期使用」做的決策權重。</p>
+
+<div class="score"><b>Panasonic</b><div class="scorebar"><div class="scorefill" style="width:84%"></div></div><div class="num">84</div></div>
+<div class="score"><b>LG</b><div class="scorebar"><div class="scorefill" style="width:92%"></div></div><div class="num">92</div></div>
+
+<table>
+<tr><th>權重</th><th>Panasonic</th><th>LG</th></tr>
+<tr><td>價格／CP值 20%</td><td>★★★★★</td><td>★★★★☆</td></tr>
+<tr><td>棉被需求 25%</td><td>★★★★☆</td><td>★★★★★</td></tr>
+<tr><td>洗脫烘能力 20%</td><td>★★★★☆</td><td>★★★★★</td></tr>
+<tr><td>智慧／附加功能 15%</td><td>★★★☆☆</td><td>★★★★★</td></tr>
+<tr><td>空間需求 10%</td><td>★★★★★</td><td>★★★☆☆</td></tr>
+<tr><td>長期使用價值 10%</td><td>★★★★☆</td><td>★★★★★</td></tr>
+</table>
+</section>
+
+<section class="card decision">
+<h2>⑦ 最終結論</h2>
+<p class="verdict">如果「預算優先」，選 <strong>Panasonic NA-V120HDH-G</strong>。</p>
+<p>它的最大優勢就是便宜、機身小、12kg＋8kg 已經足夠一般兩人家庭使用。如果你們其實很少洗棉被，也不在乎 Wi-Fi、蒸氣與智慧功能，Panasonic 是很理性的省錢選擇。</p>
+
+<p class="verdict">如果「希望一次買好、棉被需求重要」，我會選 <strong>LG WD-S15TBD</strong>。</p>
+<p>你現在拿到的條件是 <strong>實付 NT$27,400＋5,000 全聯福利點（價值約 NT$500）＋運費 0 元＋基本安裝</strong>。以約 NT$26,900 的實質成本，比 Panasonic 多約 NT$4,988，換到 15kg 洗衣容量、Wi-Fi、蒸氣、AI DD，以及官方明列的「被子」行程。</p>
+
+<div class="highlight">
+<b>一句話給另一半：</b><br>
+「Panasonic 是比較便宜、比較小的理性選擇；LG 是多花約 5,000 元，把容量、棉被彈性、智慧功能一次補齊。我們如果會用到棉被洗滌與烘乾，我會選 LG。」
+</div>
+</section>
+
+<section class="card">
+<h2>⑧ 下單前最後 5 項確認</h2>
+<ol>
+<li><b>確認洗衣機空間：</b>LG 深度約 770mm，請量「牆面到前方可用空間」，並預留門片開啟與管線空間。</li>
+<li><b>確認 5,000 福利點：</b>你已確認 5,000 點可折 500 元；請確認點數入帳時間與使用期限。</li>
+<li><b>確認基本安裝範圍：</b>尤其是排水、進水、水龍頭與特殊環境是否可能產生額外費用。</li>
+<li><b>確認舊機回收：</b>若有舊洗衣機，先確認全電商此次配送是否包含搬運／回收及樓層限制。</li>
+<li><b>棉被先確認材質：</b>如果主要是大型冬被、羽絨被或特殊材質，不要只看 15kg 數字，依被子洗滌標示與原廠限制操作。</li>
+</ol>
+</section>
+
+</div>
+</body>
+</html>
