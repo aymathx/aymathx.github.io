@@ -1,1 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1-1 數線 & 絕對值</title>
+<style>
+  :root{
+    --ink:#16212b; --dim:#5d6b79; --line:#d8e0e9;
+    --blue:#1a5276; --blue-soft:#eaf1f7; --red:#c0392b;
+    --bg:#f4f6f9; --card:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.8;
+    min-height:100vh; display:flex; flex-direction:column;
+  }
 
+  header{
+    background:var(--blue); color:#fff; padding:14px 20px;
+    display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  }
+  header h1{font-size:1.15rem; font-weight:700; letter-spacing:.02em}
+  header .sub{font-size:.82rem; opacity:.82}
+  header .spacer{flex:1}
+  header .count{font-size:.82rem; opacity:.82; font-variant-numeric:tabular-nums}
+
+  nav{
+    background:var(--card); border-bottom:1px solid var(--line);
+    padding:10px 20px; display:flex; gap:8px; flex-wrap:wrap;
+    position:sticky; top:0; z-index:10;
+  }
+  nav button{
+    font:inherit; font-size:.95rem; font-weight:700; font-variant-numeric:tabular-nums;
+    min-width:46px; padding:7px 10px; cursor:pointer;
+    background:#fff; color:var(--blue);
+    border:1.5px solid var(--line); border-radius:8px;
+    transition:background .12s, border-color .12s, color .12s;
+  }
+  nav button:hover{border-color:var(--blue); background:var(--blue-soft)}
+  nav button[aria-current="true"]{background:var(--blue); border-color:var(--blue); color:#fff}
+  nav button.seen:not([aria-current="true"]){background:var(--blue-soft)}
+
+  main{flex:1; padding:26px 20px 40px; display:flex; justify-content:center}
+  .card{
+    width:100%; max-width:860px; background:var(--card);
+    border:1px solid var(--line); border-radius:14px;
+    padding:30px 34px 34px; box-shadow:0 1px 3px rgba(22,33,43,.06);
+  }
+  .meta{
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    padding-bottom:14px; margin-bottom:20px; border-bottom:2px solid var(--blue);
+  }
+  .badge{
+    background:var(--blue); color:#fff; font-weight:700;
+    font-size:1.05rem; padding:5px 14px; border-radius:7px;
+    font-variant-numeric:tabular-nums;
+  }
+  .skill{color:var(--dim); font-size:.88rem}
+  .stem{font-size:1.24rem; line-height:2.05}
+  .stem .disp{margin:22px 0 6px; font-size:1.12rem; overflow-x:auto}
+  .stem .fig{margin:20px 0 4px; text-align:center}
+  .stem .fig img{max-width:100%; width:560px; height:auto}
+
+  .tools{margin-top:28px; display:flex; gap:10px; flex-wrap:wrap}
+  .btn{
+    font:inherit; font-size:.95rem; font-weight:600; cursor:pointer;
+    padding:9px 18px; border-radius:9px; border:1.5px solid var(--blue);
+    background:#fff; color:var(--blue); transition:background .12s,color .12s;
+  }
+  .btn:hover{background:var(--blue); color:#fff}
+  .btn.ghost{border-color:var(--line); color:var(--dim)}
+  .btn.ghost:hover{background:var(--line); color:var(--ink)}
+  .sol{
+    margin-top:22px; padding:20px 24px; border-radius:11px;
+    background:#f7f9fb; border:1px solid var(--line); border-left:5px solid var(--blue);
+    font-size:1.04rem; line-height:2.0;
+  }
+  .sol[hidden]{display:none}
+  .sol ol{margin:0; padding-left:1.35em}
+  .sol li{margin:.4em 0}
+  .sol .note{
+    margin-top:14px; padding-top:12px; border-top:1px dashed var(--line);
+    color:var(--dim); font-size:.92rem; line-height:1.85;
+  }
+  .ans{
+    margin-top:16px; padding-top:14px; border-top:1px solid var(--line);
+    color:var(--red); font-weight:700; font-size:1.12rem;
+  }
+
+  .pager{
+    max-width:860px; width:100%; margin:20px auto 0;
+    display:flex; justify-content:space-between; gap:10px;
+  }
+  .pager button:disabled{opacity:.35; cursor:default}
+  .pager button:disabled:hover{background:#fff; color:var(--blue)}
+  footer{
+    padding:16px 20px 30px; text-align:center;
+    color:var(--dim); font-size:.8rem; line-height:1.7;
+  }
+
+  @media (max-width:640px){
+    .card{padding:22px 18px 26px; border-radius:11px}
+    .stem{font-size:1.1rem; line-height:1.95}
+    nav{padding:9px 12px; gap:6px}
+    nav button{min-width:40px; padding:6px 8px; font-size:.88rem}
+    main{padding:16px 12px 30px}
+  }
+</style>
+<script>
+window.MathJax = {
+  tex: {inlineMath: [['$','$']], displayMath: [['$$','$$']]},
+  chtml: {scale: 1.05},
+  options: {renderActions: {addMenu: []}}
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>Chapter 1 · 數線與絕對值</h1>
+  <span class="sub">國中資優加強課程 ｜ 45 分鐘 10 題</span>
+  <span class="spacer"></span>
+  <span class="count" id="count"></span>
+</header>
+
+<nav id="nav" aria-label="題號"></nav>
+
+<main>
+  <div style="width:100%;max-width:860px">
+    <article class="card">
+      <div class="meta">
+        <span class="badge" id="badge"></span>
+        <span class="skill" id="skill"></span>
+      </div>
+      <div class="stem" id="stem"></div>
+
+      <div class="tools">
+        <button class="btn" id="toggle">顯示解答</button>
+        <button class="btn ghost" id="reset">收合全部解答</button>
+      </div>
+
+      <div class="sol" id="sol" hidden></div>
+    </article>
+
+    <div class="pager">
+      <button class="btn" id="prev">← 上一題</button>
+      <button class="btn" id="next">下一題 →</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  題目原題取自《〔博志〕縱橫天下國中資優 數學 1》第一章，僅供課堂教學使用。<br>
+  鍵盤：← → 切換題目 ｜ 空白鍵 顯示／收合解答
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    "n": 1,
+    "skill": "數線比例定位",
+    "stem": "如下圖，在數線上 $A$ 點表示的數為 $1$，$B$ 點表示的數為 $3$。若 $\\overline{AC}=\\dfrac{\\overline{AB}}{3}$，$\\overline{AD}=2\\overline{AB}$，求 $C$、$D$ 兩點所表示的數是多少？<div class=\"fig\"><img src=\"figs/fig_q1.png\" alt=\"Q1 附圖\"></div>",
+    "sol": [
+      "$\\overline{AB}=3-1=2$，故 $\\overline{AC}=\\dfrac{\\overline{AB}}{3}=\\dfrac{2}{3}$。",
+      "$C$ 在 $A$ 的右側，所以 $C$ 點表示 $1+\\dfrac{2}{3}=\\dfrac{5}{3}$。",
+      "又 $\\overline{AD}=2\\overline{AB}=2\\times 2=4$，由圖 $D$ 在 $A$ 的左側。",
+      "所以 $D$ 點表示 $1-4=-3$。"
+    ],
+    "ans": "$C$ 點表示 $\\dfrac{5}{3}$，$D$ 點表示 $-3$"
+  },
+  {
+    "n": 2,
+    "skill": "連比分割求坐標",
+    "stem": "$A(-3)$、$B(x)$、$C(y)$、$D(8)$ 是數線上由左而右的四個點，已知 $\\overline{AB}=2\\overline{BC}=3\\overline{CD}$，求數對 $(x,y)=$?",
+    "sol": [
+      "設 $\\overline{AB}=2\\overline{BC}=3\\overline{CD}=6k$，則 $\\overline{AB}:\\overline{BC}:\\overline{CD}=6:3:2$。",
+      "又 $\\overline{AD}=8-(-3)=11$。",
+      "所以 $\\overline{AB}=11\\times \\dfrac{6}{6+3+2}=6$，$\\overline{BC}=11\\times \\dfrac{3}{6+3+2}=3$。",
+      "四點由左而右，故 $x=(-3)+6=3$，$y=3+3=6$。"
+    ],
+    "ans": "$(x,y)=(3,6)$"
+  },
+  {
+    "n": 3,
+    "skill": "比例＋距離求全長",
+    "stem": "點 $P$、$Q$ 在 $\\overline{AB}$ 上，且在 $\\overline{AB}$ 中點之同側，若 $\\overline{AP}:\\overline{PB}=2:3$，$\\overline{AQ}:\\overline{QB}=3:4$，已知 $\\overline{PQ}$ 的長為 $4$，則 $\\overline{AB}$ 長為____________。",
+    "sol": [
+      "設 $\\overline{AB}=L$。由 $\\overline{AP}:\\overline{PB}=2:3$ 得 $\\overline{AP}=\\dfrac{2L}{5}$；由 $\\overline{AQ}:\\overline{QB}=3:4$ 得 $\\overline{AQ}=\\dfrac{3L}{7}$。",
+      "因 $\\dfrac{2}{5}$ 與 $\\dfrac{3}{7}$ 都小於 $\\dfrac{1}{2}$，$P$、$Q$ 確實都在中點的左側，符合同側的條件。",
+      "又 $\\dfrac{2}{5}<\\dfrac{3}{7}$，所以 $P$ 在 $Q$ 的左側，$\\overline{PQ}=\\dfrac{3L}{7}-\\dfrac{2L}{5}=\\dfrac{L}{35}$。",
+      "由 $\\overline{PQ}=4$ 得 $\\dfrac{L}{35}=4$，故 $L=140$。"
+    ],
+    "ans": "$\\overline{AB}=140$"
+  },
+  {
+    "n": 4,
+    "skill": "新原點與新單位長",
+    "stem": "數線上有 $A$、$B$、$C$ 三點，其坐標分別為 $-5$、$-2$、$3$。　$(1)$ 若以 $C$ 為新原點，單位長不變，則 $A$ 點的坐標為多少？　$(2)$ 若以 $B$ 為新原點，$\\overline{AB}$ 的長為新單位長，則 $C$ 點的坐標為多少？　$(3)$ 若以 $B$ 為新原點，$\\overline{BC}$ 的長為新單位長，若 $D$ 點的坐標為 $-3$，求 $D$ 點在原數線上的坐標是多少？",
+    "sol": [
+      "$(1)\\overline{AC}=3-(-5)=8$，$A$ 在 $C$ 的左側，故 $A$ 點的新坐標為 $-8$。",
+      "$(2)$ 新單位長 $\\overline{AB}=(-2)-(-5)=3$，而 $\\overline{BC}=3-(-2)=5$。",
+      "$C$ 在 $B$ 的右側，$5\\div 3=\\dfrac{5}{3}$，故 $C$ 點的新坐標為 $\\dfrac{5}{3}$。",
+      "$(3)$ 新單位長 $\\overline{BC}=5$。$D$ 的新坐標 $-3$ 表示 $D$ 在 $B$ 左側 $3$ 個新單位。",
+      "$3\\times 5=15$，故 $D$ 在原數線上的坐標為 $(-2)-15=-17$。"
+    ],
+    "ans": "$(1)-8$　$\\dfrac{(2)5}{3}$　$(3)-17$"
+  },
+  {
+    "n": 5,
+    "skill": "相向而行的相遇位置",
+    "stem": "小華與小明分別在數線上表示 $-15$、$55$ 的位置上，且同時相向而行，若小華速率的 $2$ 倍等於小明速率的 $5$ 倍，則兩人在數線上表示____________的位置上相遇。",
+    "sol": [
+      "設小華、小明的速率分別為 $a$、$b$。由 $2a=5b$ 得 $a:b=5:2$。",
+      "兩人同時出發、相向而行，到相遇為止所走的時間相同，故所走距離比等於速率比 $5:2$。",
+      "兩人相距 $55-(-15)=70$，小華走了 $70\\times \\dfrac{5}{5+2}=50$。",
+      "小華由左往右走，故相遇位置為 $(-15)+50=35$。"
+    ],
+    "ans": "$35$"
+  },
+  {
+    "n": 6,
+    "skill": "由數線範圍推論比大小",
+    "stem": "如下圖，用字母 $a$、$b$、$c$ 依次表示點 $A$、$B$、$C$ 所對應的數。試比較 $\\dfrac{1}{ab}$、$\\dfrac{1}{b-a}$、$\\dfrac{1}{c}$ 這三個數的大小關係。<div class=\"fig\"><img src=\"figs/fig_q6.png\" alt=\"Q6 附圖\"></div>",
+    "sol": [
+      "由圖，$C$ 點在 $1$ 的右邊，所以 $c>1$。",
+      "$A$ 點在 $-1$ 與 $-\\dfrac{2}{3}$ 之間，$B$ 點在 $-\\dfrac{1}{3}$ 與 $0$ 之間，故 $\\dfrac{2}{3}<\\left|a\\right|<1$，$0<\\left|b\\right|<\\dfrac{1}{3}$。",
+      "$a$、$b$ 同為負數，兩負相乘得正，且 $\\left|a\\right|<1$、$\\left|b\\right|<\\dfrac{1}{3}$，故 $0<ab<\\dfrac{1}{3}$。",
+      "又 $b-a$ 介於 $(-\\dfrac{1}{3})-(-\\dfrac{2}{3})=\\dfrac{1}{3}$ 與 $0-(-1)=1$ 之間，即 $\\dfrac{1}{3}<b-a<1$。",
+      "三者合起來得 $0<ab<b-a<1<c$。",
+      "正數取倒數會顛倒大小，故 $\\dfrac{1}{ab}>\\dfrac{1}{b-a}>\\dfrac{1}{c}$。"
+    ],
+    "ans": "$\\dfrac{1}{ab}>\\dfrac{1}{b-a}>\\dfrac{1}{c}$",
+    "note": "本題不能代入特定數值計算——圖上只標出 $A$、$B$、$C$ 的所在區間，沒有給定值。訓練重點就是「先用範圍夾出三個數的大小，再取倒數」。"
+  },
+  {
+    "n": 7,
+    "skill": "絕對值裂項相消",
+    "stem": "求下式的值：<div class=\"disp\">$$\\left|\\dfrac{1}{3}-\\dfrac{1}{2}\\right|+\\left|\\dfrac{1}{4}-\\dfrac{1}{3}\\right|+\\left|\\dfrac{1}{5}-\\dfrac{1}{4}\\right|+\\left|\\dfrac{1}{6}-\\dfrac{1}{5}\\right|$$</div>",
+    "sol": [
+      "每一項都是相鄰兩個單位分數的差，且後面那個比較小，所以絕對值打開後要把大的放前面。",
+      "原式$=(\\dfrac{1}{2}-\\dfrac{1}{3})+(\\dfrac{1}{3}-\\dfrac{1}{4})+(\\dfrac{1}{4}-\\dfrac{1}{5})+(\\dfrac{1}{5}-\\dfrac{1}{6})$。",
+      "中間的 $\\dfrac{1}{3}$、$\\dfrac{1}{4}$、$\\dfrac{1}{5}$ 各出現一正一負，兩兩相消。",
+      "所以原式$=\\dfrac{1}{2}-\\dfrac{1}{6}=\\dfrac{3}{6}-\\dfrac{1}{6}=\\dfrac{2}{6}=\\dfrac{1}{3}$。"
+    ],
+    "ans": "$\\dfrac{1}{3}$"
+  },
+  {
+    "n": 8,
+    "skill": "符號商的分類討論",
+    "stem": "如果 $a$、$b$、$c$ 均不等於 $0$，求下式的所有可能值。<div class=\"disp\">$$\\dfrac{a}{\\left|a\\right|}+\\dfrac{b}{\\left|b\\right|}+\\dfrac{c}{\\left|c\\right|}+\\dfrac{abc}{\\left|abc\\right|}$$</div>",
+    "sol": [
+      "前三項每一項都只能是 $+1$（該數為正）或 $-1$（該數為負）。",
+      "第四項 $\\dfrac{abc}{\\left|abc\\right|}$ 的正負由 $a$、$b$、$c$ 三個符號相乘決定。",
+      "若 $a$、$b$、$c$ 均為正：原式$=1+1+1+1=4$。",
+      "若其中恰有一個為負：三項和為 $1$，$abc$ 為負，原式$=1+1-1-1=0$。",
+      "若其中恰有兩個為負：三項和為 $-1$，$abc$ 為正，原式$=1-1-1+1=0$。",
+      "若 $a$、$b$、$c$ 均為負：原式$=(-1)+(-1)+(-1)+(-1)=-4$。",
+      "故所有可能值為 $-4$、$0$、$4$。"
+    ],
+    "ans": "$-4,0,4$",
+    "note": "四種情形只由「負數的個數」決定，共 $0$、$1$、$2$、$3$ 四類，不必窮舉 $8$ 種符號組合。"
+  },
+  {
+    "n": 9,
+    "skill": "由數線位置去絕對值",
+    "stem": "如下圖，$A$、$B$、$C$ 三點所代表的數分別為 $a$、$b$、$c$。若 $m=\\left|a+b\\right|-\\left|b-1\\right|-\\left|a-c\\right|-\\left|1-c\\right|$，求 $1000m$ 之值。<div class=\"fig\"><img src=\"figs/fig_q9.png\" alt=\"Q9 附圖\"></div>",
+    "sol": [
+      "由圖可知 $b<a<0<c<1$。",
+      "逐項判斷正負：$a+b<0$，$b-1<0$，$a-c<0$，$1-c>0$。",
+      "所以 $m=-(a+b)+(b-1)+(a-c)-(1-c)$。",
+      "$=-a-b+b-1+a-c-1+c=-2$。",
+      "故 $1000m=1000\\times (-2)=-2000$。"
+    ],
+    "ans": "$1000m=-2000$",
+    "note": "四個絕對值裡的字母全部消掉，$m$ 是一個定值。去絕對值前一定要先逐項判斷正負，不可直接把絕對值符號拿掉。"
+  },
+  {
+    "n": 10,
+    "skill": "絕對值條件鎖定正負",
+    "stem": "已知 $\\left|a\\right|=1$、$\\left|b\\right|=2$、$\\left|c\\right|=3$，且 $a>b>c$，求 ${(a+b-c)}^{2}$ 之值。",
+    "sol": [
+      "由 $\\left|c\\right|>\\left|b\\right|$ 且 $c<b$，可知 $c$ 必為負，故 $c=-3$。",
+      "由 $\\left|b\\right|>\\left|a\\right|$ 且 $b<a$，可知 $b$ 必為負，故 $b=-2$。",
+      "剩下 $a=1$ 或 $a=-1$，兩者都滿足 $a>b>c$，都要保留。",
+      "當 $a=1$ 時，${(a+b-c)}^{2}={(1-2+3)}^{2}={2}^{2}=4$。",
+      "當 $a=-1$ 時，${(a+b-c)}^{2}={(-1-2+3)}^{2}={0}^{2}=0$。",
+      "故所求之值為 $4$ 或 $0$。"
+    ],
+    "ans": "$4$ 或 $0$",
+    "note": "常見錯誤是只找到 $a=1$ 就收工。$\\left|a\\right|=1$ 給的是兩個候選，必須逐一檢查 $a>b>c$ 是否成立——$a=-1$ 仍然大於 $b=-2$，所以不能刪。"
+  }
+];
+
+const $ = id => document.getElementById(id);
+const nav = $('nav');
+const shown = new Set();          // 已顯示解答的題號
+const seen = new Set();           // 已看過的題號
+let cur = 0;
+
+QUESTIONS.forEach((q, i) => {
+  const b = document.createElement('button');
+  b.textContent = 'Q' + q.n;
+  b.addEventListener('click', () => go(i));
+  nav.appendChild(b);
+});
+
+function render() {
+  const q = QUESTIONS[cur];
+  seen.add(q.n);
+
+  $('badge').textContent = 'Q' + q.n;
+  $('skill').textContent = '技法：' + q.skill;
+  $('stem').innerHTML = q.stem;
+  $('count').textContent = (cur + 1) + ' / ' + QUESTIONS.length;
+
+  const open = shown.has(q.n);
+  const sol = $('sol');
+  sol.hidden = !open;
+  $('toggle').textContent = open ? '收合解答' : '顯示解答';
+  if (open) {
+    sol.innerHTML =
+      '<ol>' + q.sol.map(s => '<li>' + s + '</li>').join('') + '</ol>' +
+      (q.note ? '<div class="note">※ ' + q.note + '</div>' : '') +
+      '<div class="ans">答：' + q.ans + '</div>';
+  } else {
+    sol.innerHTML = '';
+  }
+
+  [...nav.children].forEach((b, i) => {
+    b.setAttribute('aria-current', i === cur ? 'true' : 'false');
+    b.classList.toggle('seen', seen.has(QUESTIONS[i].n));
+  });
+  $('prev').disabled = cur === 0;
+  $('next').disabled = cur === QUESTIONS.length - 1;
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([$('stem'), sol]).catch(() => {});
+  }
+  location.hash = 'q' + q.n;
+}
+
+function go(i) {
+  cur = Math.max(0, Math.min(QUESTIONS.length - 1, i));
+  render();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+$('toggle').addEventListener('click', () => {
+  const n = QUESTIONS[cur].n;
+  shown.has(n) ? shown.delete(n) : shown.add(n);
+  render();
+});
+$('reset').addEventListener('click', () => { shown.clear(); render(); });
+$('prev').addEventListener('click', () => go(cur - 1));
+$('next').addEventListener('click', () => go(cur + 1));
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'BUTTON' && e.key === ' ') e.preventDefault();
+  if (e.key === 'ArrowLeft') go(cur - 1);
+  else if (e.key === 'ArrowRight') go(cur + 1);
+  else if (e.key === ' ') { e.preventDefault(); $('toggle').click(); }
+});
+
+// 網址帶 #q7 時直接開該題
+const m = /^#q(\d+)$/.exec(location.hash);
+if (m) {
+  const i = QUESTIONS.findIndex(q => q.n === +m[1]);
+  if (i >= 0) cur = i;
+}
+render();
+</script>
+</body>
+</html>
