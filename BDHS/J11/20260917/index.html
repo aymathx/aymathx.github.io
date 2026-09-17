@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摩天輪與正弦函數動態模型</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .canvas-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        canvas {
+            display: block;
+            border: 1px solid #ecf0f1;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button.pause {
+            background-color: #e74c3c;
+        }
+        button.pause:hover {
+            background-color: #c0392b;
+        }
+        label {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        input[type="range"] {
+            cursor: pointer;
+        }
+        .instructions {
+            margin-top: 15px;
+            color: #7f8c8d;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎡 摩天輪與正弦函數 (Sine Wave) 動態模型</h1>
+    
+    <div class="canvas-container">
+        <canvas id="mathCanvas" width="1050" height="450"></canvas>
+    </div>
+
+    <div class="controls">
+        <button id="btnPlayPause" class="pause">暫停轉動</button>
+        <button id="btnReset">重置位置</button>
+        <label for="speedSlider">轉速調整:</label>
+        <input type="range" id="speedSlider" min="0.005" max="0.06" step="0.005" value="0.02">
+    </div>
+
+    <div class="instructions">
+        💡 觀察重點：左方摩天輪車廂的「高度變化」，完美對應右方正弦函數的 Y 軸數值。
+    </div>
+
+    <script>
+        const canvas = document.getElementById('mathCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 系統與物理參數
+        let t = 0; // 時間變數
+        let speed = 0.02; // 預設轉速
+        let isPlaying = true;
+
+        // 摩天輪參數
+        const cx = 200; // 中心點 X
+        const cy = 230; // 中心點 Y
+        const r = 130;  // 半徑 (振幅)
+        const numCabins = 12; // 車廂數量
+
+        // 右側函數圖形參數
+        const graphStartX = 450; // 圖形 X 軸起點
+        const graphEndX = 1000;  // 圖形 X 軸終點
+        const graphScaleX = 60;  // X 軸縮放比例 (每一單位時間的像素)
+
+        function draw() {
+            // 清空畫布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 當前小龍的旋轉角度 (起始於最底部：-90度 或 -pi/2)
+            let angle = t - Math.PI / 2;
+            let riderX = cx + r * Math.cos(angle);
+            let riderY = cy - r * Math.sin(angle); // Canvas 的 Y 軸往下為正，所以用減的來符合數學直覺
+
+            // 繪製背景格線 (函數圖區)
+            drawGrid();
+
+            // ================= 1. 繪製摩天輪 =================
+            // 畫支架
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx - 90, cy + 200);
+            ctx.lineTo(cx + 90, cy + 200);
+            ctx.closePath();
+            ctx.fillStyle = '#ecf0f1';
+            ctx.fill();
+            ctx.strokeStyle = '#bdc3c7';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // 畫摩天輪主圓
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#34495e';
+            ctx.lineWidth = 5;
+            ctx.stroke();
+
+            // 畫輻條與車廂
+            for (let i = 0; i < numCabins; i++) {
+                let cabinAngle = angle + (i * 2 * Math.PI / numCabins);
+                let x = cx + r * Math.cos(cabinAngle);
+                let y = cy - r * Math.sin(cabinAngle);
+
+                // 輻條
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = '#95a5a6';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // 車廂 (如果是第一個車廂，用紅色高亮顯示小龍的位置)
+                ctx.beginPath();
+                ctx.arc(x, y, 12, 0, 2 * Math.PI);
+                ctx.fillStyle = (i === 0) ? '#e74c3c' : '#3498db';
+                ctx.fill();
+                ctx.strokeStyle = '#2c3e50';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            // 中心軸承
+            ctx.beginPath();
+            ctx.arc(cx, cy, 10, 0, 2 * Math.PI);
+            ctx.fillStyle = '#2c3e50';
+            ctx.fill();
+
+            // ================= 2. 繪製正弦函數圖形 =================
+            // 計算圖形的平移 (如果時間超過畫布寬度，讓圖形往左滾動)
+            let maxGraphWidth = graphEndX - graphStartX;
+            let currentTipX = graphStartX + t * graphScaleX;
+            let offset = Math.max(0, currentTipX - graphEndX);
+
+            // 畫正弦軌跡
+            ctx.beginPath();
+            let startT = Math.max(0, (offset / graphScaleX));
+            for (let currentT = startT; currentT <= t; currentT += 0.02) {
+                let px = graphStartX + currentT * graphScaleX - offset;
+                let pAngle = currentT - Math.PI / 2;
+                let py = cy - r * Math.sin(pAngle);
+                
+                if (currentT === startT) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // ================= 3. 繪製連結虛線與端點 =================
+            let finalTipX = currentTipX - offset;
+
+            // 水平對齊虛線
+            ctx.beginPath();
+            ctx.moveTo(riderX, riderY);
+            ctx.lineTo(finalTipX, riderY);
+            ctx.strokeStyle = '#e74c3c';
+            ctx.setLineDash([8, 8]); // 設定虛線樣式
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.setLineDash([]); // 恢復實線
+
+            // 圖形當前的描繪點
+            ctx.beginPath();
+            ctx.arc(finalTipX, riderY, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = '#e74c3c';
+            ctx.fill();
+
+            // 標示文字
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = '16px "Segoe UI"';
+            ctx.fillText('高度 y = a · sin(bt - π/2) + c', graphStartX + 20, 30);
+            
+            // 更新時間
+            if (isPlaying) {
+                t += speed;
+            }
+
+            // 循環呼叫動畫
+            requestAnimationFrame(draw);
+        }
+
+        function drawGrid() {
+            // 畫 X 軸 (時間基準線，對應摩天輪中心點)
+            ctx.beginPath();
+            ctx.moveTo(graphStartX - 20, cy);
+            ctx.lineTo(graphEndX + 20, cy);
+            ctx.strokeStyle = '#7f8c8d';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = '#7f8c8d';
+            ctx.font = '14px Arial';
+            ctx.fillText('時間 (t)', graphEndX + 5, cy + 20);
+
+            // 畫 Y 軸
+            ctx.beginPath();
+            ctx.moveTo(graphStartX, cy - r - 40);
+            ctx.lineTo(graphStartX, cy + r + 40);
+            ctx.strokeStyle = '#7f8c8d';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillText('高度 (y)', graphStartX - 25, cy - r - 50);
+
+            // 畫最高與最低點的基準線
+            ctx.beginPath();
+            ctx.moveTo(graphStartX - 10, cy - r);
+            ctx.lineTo(graphEndX, cy - r);
+            ctx.moveTo(graphStartX - 10, cy + r);
+            ctx.lineTo(graphEndX, cy + r);
+            ctx.strokeStyle = '#ecf0f1';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        // 綁定按鈕事件
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        btnPlayPause.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                btnPlayPause.textContent = '暫停轉動';
+                btnPlayPause.className = 'pause';
+            } else {
+                btnPlayPause.textContent = '開始轉動';
+                btnPlayPause.className = '';
+            }
+        });
+
+        document.getElementById('btnReset').addEventListener('click', () => {
+            t = 0;
+            if (!isPlaying) {
+                // 如果是暫停狀態下按重置，手動觸發一次重繪以更新畫面
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawGrid(); // 快速重繪背景與初始狀態
+                // (因為 requestAnimationFrame 會在暫停時停止更新畫面)
+                isPlaying = true;
+                btnPlayPause.textContent = '暫停轉動';
+                btnPlayPause.className = 'pause';
+            }
+        });
+
+        document.getElementById('speedSlider').addEventListener('input', (e) => {
+            speed = parseFloat(e.target.value);
+        });
+
+        // 啟動動畫
+        requestAnimationFrame(draw);
+    </script>
+</body>
+</html>
