@@ -1,1 +1,73 @@
-
+<!doctype html><html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>國八 1-3 多項式的除法｜一題一頁</title><style>
+:root{--blue:#1672b8;--blue2:#eef6fd;--ink:#15191d;--muted:#6b747d;--line:#d5dde5;--bg:#f3f5f7;--vh:100dvh}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink)}
+body{overscroll-behavior:none}button{font:inherit;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.topbar{height:62px;background:#fff;border-bottom:1px solid #d7dce1;display:flex;align-items:center;gap:16px;padding:0 20px;position:fixed;inset:0 0 auto 0;z-index:50}
+.title{font-size:22px;font-weight:900;white-space:nowrap}.counter{margin-left:auto;font-size:20px;font-weight:700;color:#60686f;white-space:nowrap}
+.zoom{display:flex;align-items:center;gap:5px;margin-left:10px}.zoom button{height:34px;min-width:38px;padding:0 9px;border:1px solid #ccd5de;border-radius:9px;background:#f7f9fb;color:#3c4650;font-weight:900}.zoom .zlabel{min-width:52px;text-align:center;font-size:14px;color:#59636c;font-weight:800}
+.quick{position:fixed;top:62px;left:0;right:0;height:58px;background:#fff;border-bottom:1px solid #d7dce1;z-index:49;display:flex;align-items:center;gap:9px;padding:7px 16px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}.quick::-webkit-scrollbar{display:none}
+.quick button{flex:0 0 auto;height:44px;min-width:64px;padding:0 13px;border:1px solid #cbd6e0;border-radius:13px;background:#f7f9fb;color:#47525d;font-size:17px;font-weight:900}.quick button.active{background:var(--blue);border-color:var(--blue);color:#fff}
+main{position:fixed;left:0;right:0;top:120px;bottom:64px;padding:16px 26px;overflow:hidden}.card{width:100%;height:100%;background:#fff;border-radius:22px;box-shadow:0 4px 20px rgba(0,0,0,.08);overflow:hidden;display:grid;grid-template-columns:minmax(0,52%) minmax(0,48%)}
+.qpane{min-width:0;min-height:0;padding:26px 34px 24px;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid #edf0f2}.meta{display:flex;align-items:center;gap:12px;min-height:46px;margin-bottom:18px}.badge{display:inline-flex;align-items:center;background:var(--blue2);color:var(--blue);font-size:20px;font-weight:900;border-radius:999px;padding:8px 16px;white-space:nowrap}.qnum{font-size:24px;font-weight:900;white-space:nowrap}
+.qcontent{flex:1;min-height:0;overflow:hidden;color:#111}.qtext{font-size:28px;line-height:1.62;font-weight:900;color:#111;letter-spacing:.01em}.qtext p{margin:0 0 20px}.math{font-family:"STIX Two Math","Cambria Math","Times New Roman",serif;font-weight:900;white-space:normal}.blank{display:inline-block;min-width:135px;border-bottom:3px solid #252a2e;height:.9em;vertical-align:baseline}.division-diagram{font-family:monospace;font-size:1em;line-height:1.4;margin-top:12px;white-space:pre}.options{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px 30px}.option{font-size:28px;line-height:1.5;font-weight:900}.subparts{display:flex;flex-direction:column;gap:20px}.answer{min-width:0;min-height:0;padding:16px;display:flex;flex-direction:column;background:#fff}.answer-space{flex:1;min-height:0;border:1.5px dashed #d2dae2;border-radius:18px;background:#fff}
+.bottom{position:fixed;left:0;right:0;bottom:0;height:64px;background:rgba(255,255,255,.98);border-top:1px solid #d7dce1;z-index:50;display:flex;align-items:center;justify-content:center;gap:14px}.bottom button{height:46px;padding:0 24px;border-radius:14px;background:#eef1f4;color:#27323a;font-size:18px;font-weight:900}.bottom .primary{background:var(--blue);color:#fff}.hint{position:absolute;right:16px;bottom:7px;color:#7b858d;font-size:12px;font-weight:700}
+@media(max-width:800px){.topbar{height:54px;padding:0 12px;gap:8px}.title{font-size:16px}.counter{font-size:15px}.zoom{margin-left:auto}.zoom button{height:31px;min-width:34px;padding:0 6px}.zoom .zlabel{display:none}.quick{top:54px;height:54px;padding:6px 10px;gap:6px}.quick button{height:40px;min-width:56px;font-size:15px;border-radius:11px}main{top:108px;bottom:58px;padding:8px 8px}.card{grid-template-columns:1fr;grid-template-rows:45% 55%;border-radius:16px}.qpane{border-right:0;border-bottom:1px solid #edf0f2;padding:15px 17px 10px}.meta{gap:8px;min-height:35px;margin-bottom:6px}.badge{font-size:15px;padding:6px 11px}.qnum{font-size:18px}.qtext{font-size:22px;line-height:1.45}.qtext p{margin-bottom:10px}.option{font-size:20px}.options{gap:7px 15px;margin-top:8px}.answer{padding:8px}.answer-space{border-width:1px;border-radius:13px}.bottom{height:58px;gap:7px}.bottom button{height:42px;padding:0 14px;font-size:16px;border-radius:12px}.hint{display:none}}
+@media(max-width:430px){.title{font-size:14px}.counter{font-size:13px}.zoom button{min-width:30px;padding:0 5px}.qtext{font-size:20px}.option{font-size:18px}.card{grid-template-rows:46% 54%}}
+@media print{html,body{overflow:visible}.topbar,.quick,.bottom{display:none!important}main{position:static;height:auto;padding:0}.card{height:100vh;border-radius:0;box-shadow:none;page-break-after:always}.qpane{padding:30px}.answer{padding:16px}.qtext{font-size:24px}.answer-space{min-height:0}}
+</style></head><body><header class="topbar"><div class="title">[ 國八 ] 1-3 多項式的除法</div><div class="zoom"><button id="zoomOut" title="縮小題目文字">A−</button><div class="zlabel" id="zoomLabel">100%</div><button id="zoomIn" title="放大題目文字">A＋</button></div><div class="counter" id="counter">1 / 44</div></header><nav class="quick" id="quick"></nav><main><div class="card"><section class="qpane"><div class="meta"><span class="badge" id="badge"></span><span class="qnum" id="qnum"></span></div><div class="qcontent" id="qcontent"></div></section><section class="answer"><div class="answer-space"></div></section></div></main><footer class="bottom"><button id="prev">← 上一題</button><button id="home">題目目錄</button><button id="next" class="primary">下一題 →</button><div class="hint">鍵盤：← →／空白鍵</div></footer>
+<script>
+const M=s=>`<span class="math">${s}</span>`;
+const Q=(badge,num,html,prompts='')=>({badge,num,html,prompts});
+const slides=[
+Q('精選範例 1','1-1',`<p>在空格中填入適當的式子：</p><p>${M('x<sup>2</sup>')} × <span class="blank"></span> = ${M('x<sup>5</sup>')}</p>`),
+Q('精選範例 1','1-2',`<p>在空格中填入適當的式子：</p><p>2x × <span class="blank"></span> = ${M('x<sup>4</sup>')}</p>`),
+Q('精選範例 1','1-3',`<p>在空格中填入適當的式子：</p><p>−2x × <span class="blank"></span> = ${M('−7x<sup>4</sup>')}</p>`),
+Q('精選範例 1','1-4',`<p>在空格中填入適當的式子：</p><p>${M('12x<sup>3</sup>')} ÷ 3x = <span class="blank"></span></p>`),
+Q('精選範例 1','1-5',`<p>在空格中填入適當的式子：</p><p>${M('(−8x<sup>4</sup>)')} ÷ (−2x) = <span class="blank"></span></p>`),
+Q('精選範例 1','1-6',`<p>在空格中填入適當的式子：</p><p>${M('9x<sup>2</sup>')} ÷ (−6x<sup>2</sup>) = <span class="blank"></span></p>`),
+Q('隨堂練習','1-7',`<p>在空格中填入適當的式子：</p><p>${M('x<sup>2</sup>')} × <span class="blank"></span> = 3x<sup>7</sup></p>`),
+Q('隨堂練習','1-8',`<p>在空格中填入適當的式子：</p><p>${M('½x')} × <span class="blank"></span> = −3x<sup>4</sup></p>`),
+Q('隨堂練習','1-9',`<p>在空格中填入適當的式子：</p><p>${M('2x<sup>2</sup>')} ÷ 3x = <span class="blank"></span></p>`),
+Q('隨堂練習','1-10',`<p>在空格中填入適當的式子：</p><p>${M('x<sup>3</sup>')} ÷ 4x = <span class="blank"></span></p>`),
+Q('隨堂練習','1-11',`<p>在空格中填入適當的式子：</p><p>(−15x<sup>2</sup>) ÷ 3x = <span class="blank"></span></p>`),
+Q('隨堂練習','1-12',`<p>在空格中填入適當的式子：</p><p>10x<sup>3</sup> ÷ (−4x<sup>3</sup>) = <span class="blank"></span></p>`),
+Q('精選範例 2','2-1',`<p>求下列各式的商式與餘式：</p><p>${M('x(4x−3)')} ÷ x</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('精選範例 2','2-2',`<p>求下列各式的商式與餘式：</p><p>${M('(15x<sup>2</sup>−24x)')} ÷ 3x</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','2-3',`<p>求下列各式的商式與餘式：</p><p>${M('(−9x<sup>2</sup>+6x−4)')} ÷ 3x</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','2-4',`<p>求下列各式的商式與餘式：</p><p>${M('(14x<sup>2</sup>+10x−2)')} ÷ (−2x)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','2-5',`<p>求下列各式的商式與餘式：</p><p>x(4x+3) ÷ (4x+3)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','2-6',`<p>求下列各式的商式與餘式：</p><p>(3x+4)(−x−1) ÷ (x+1)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('精選範例 3','3-1',`<p>計算 (x<sup>2</sup> − 3x + 1) ÷ (x + 2) 的商式與餘式。</p><div style="margin-top:18px">${M('x + 2')} ) ${M('x<sup>2</sup> − 3x + 1')}</div>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','3-2',`<p>求下列各式的商式與餘式：</p><p>(2x<sup>2</sup> + 5x − 3) ÷ (x + 3)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','3-3',`<p>求下列各式的商式與餘式：</p><p>(6x<sup>2</sup> + x − 2) ÷ (2x − 1)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('精選範例 4','4-1',`<p>計算 (3x<sup>2</sup> − 7) ÷ (x − 2) 的商式與餘式。</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','4-2',`<p>求下列各式的商式與餘式：</p><p>(5 − 7x + 2x<sup>2</sup>) ÷ (x − 3)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','4-3',`<p>求下列各式的商式與餘式：</p><p>(4x<sup>2</sup> − 9) ÷ (2x + 3)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('精選範例 5','5-1',`<p>求下列各式的商式與餘式：</p><p>(8x<sup>2</sup> − 15x + 3) ÷ (4x<sup>2</sup> + 3x − 7)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('精選範例 5','5-2',`<p>求下列各式的商式與餘式：</p><p>(6x<sup>2</sup> − x) ÷ (−3x<sup>2</sup> + 2x + 1)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','5-3',`<p>求下列各式的商式與餘式：</p><p>(x<sup>2</sup> + 4x − 3) ÷ (x<sup>2</sup> + 1)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('隨堂練習','5-4',`<p>求下列各式的商式與餘式：</p><p>(3x<sup>2</sup> + 2x − 4) ÷ (2x<sup>2</sup> − x)</p>`,`商式：<span class="line"></span>　　餘式：<span class="line"></span>`),
+Q('精選範例 6','6-1',`<p>有一多項式除以 x<sup>2</sup> + 2x，得商式為 x − 2、餘式為 5x + 3，求此多項式。</p>`),
+Q('隨堂練習','6-2',`<p>多項式 A 除以 2x − 3，得商式 x + 4、餘式 −5，求 A。</p>`),
+Q('隨堂練習','6-3',`<p>多項式 B 除以 x<sup>2</sup> − 1，得商式 3x + 2、餘式 x − 4，求 B。</p>`),
+Q('精選範例 7','7-1',`<p>已知 6x<sup>2</sup> + x − 10 除以多項式 B，得商式為 2x + 3、餘式為 2，求多項式 B。</p>`),
+Q('隨堂練習','7-2',`<p>已知 3x<sup>2</sup> − 5x + 7 除以多項式 C，得商式為 x − 1、餘式為 5，求多項式 C。</p>`),
+Q('精選範例 8','7-3',`<p>若 6x<sup>2</sup> − 7x + k 能被 2x − 1 整除，求 k 的值與商式。</p>`),
+Q('隨堂練習','7-4',`<p>若 x<sup>2</sup> + ax − 12 能被 x + 4 整除，求 a 的值。</p>`),
+Q('精熟 A＋＋','8-1',`<p>小明計算 (6x<sup>2</sup> + x − 4) ÷ (3x + 2)，得到「商式為 2x，餘式為 −3x − 4」。</p><p>他算對了嗎？若不對，請寫出正確的商式與餘式。</p>`),
+Q('精熟 A＋＋','8-2',`<p>若 2x<sup>2</sup> + ax + b 除以 x − 3，得商式為 2x + 5、餘式為 4，求 a、b 的值。</p>`),
+Q('精熟 A＋＋','8-3',`<p>若 x<sup>2</sup> + ax + b 除以 x − 1 的餘式為 2，除以 x + 2 的餘式為 5，求 a、b 的值。</p>`),
+Q('109 會考','9-1',`<p>計算 2x<sup>2</sup> − 3 除以 x + 1 後，得商式和餘式分別為何？</p><div class="options"><div class="option">🄐 商式為 2，餘式為 −5</div><div class="option">🄑 商式為 2x − 5，餘式為 5</div><div class="option">🄒 商式為 2x + 2，餘式為 −1</div><div class="option">🄓 商式為 2x − 2，餘式為 −1</div></div>`),
+Q('115 會考','9-2',`<p>計算多項式 4x<sup>2</sup> − 3x − 5 除以 x + 2 後，所得商式與餘式兩者之和為何？</p><div class="options"><div class="option">🄐 4x + 6</div><div class="option">🄑 4x + 10</div><div class="option">🄒 −7x − 5</div><div class="option">🄓 −11x − 1</div></div>`),
+Q('104 會考','9-3',`<p>計算多項式 −2x(3x − 2) + 3 除以 3x − 2 後，所得商式與餘式兩者之和為何？</p><div class="options"><div class="option">🄐 −2x + 3</div><div class="option">🄑 −6x<sup>2</sup> + 4x</div><div class="option">🄒 −6x<sup>2</sup> + 4x + 3</div><div class="option">🄓 −6x<sup>2</sup> − 4x + 3</div></div>`),
+Q('93-2 基測','9-4',`<p>若多項式 A 除以 2x + 1 得商式為 3x − 4，餘式為 5，則 A = ？</p><div class="options"><div class="option">🄐 6x<sup>2</sup> − 5x − 4</div><div class="option">🄑 6x<sup>2</sup> − 5x − 9</div><div class="option">🄒 6x<sup>2</sup> + 5x + 1</div><div class="option">🄓 6x<sup>2</sup> − 5x + 1</div></div>`),
+Q('93-1 基測','9-5',`<p>已知有一多項式除以 (x − 2) 得商式為 (2x − 3)，餘式為 3，若此多項式除以 (2x + 3)，得商式為何？</p><div class="options"><div class="option">🄐 x + 5</div><div class="option">🄑 x − 5</div><div class="option">🄒 x + 2</div><div class="option">🄓 x − 2</div></div>`),
+Q('91-1 基測','9-6',`<p>章老師作一個多項式除法示範後，擦掉計算過程中的六個係數，並以 a、b、c、d、e、f 表示，求 a + b + d + e =？</p><div class="division-diagram">　　2x　　　+3<br>bx+5 ) 6x<sup>2</sup>　+ ax　+d<br>　　　　　cx<sup>2</sup>　+10x<br>　　　　　　　　 ex　+d<br>　　　　　　　　 fx　+15<br>　　　　　　　　　　 −2</div><div class="options"><div class="option">🄐 18</div><div class="option">🄑 26</div><div class="option">🄒 38</div><div class="option">🄓 44</div></div>`)
+];
+let idx=0,zoom=1;
+const quick=document.getElementById('quick');
+function renderQuick(){quick.innerHTML=slides.map((s,i)=>`<button data-i="${i}">${s.num}</button>`).join('');}
+function applyZoom(){document.documentElement.style.setProperty('--qzoom',zoom);document.getElementById('zoomLabel').textContent=Math.round(zoom*100)+'%';document.querySelector('.qtext')?.style.setProperty('font-size',`calc(28px * ${zoom})`);document.querySelectorAll('.option').forEach(e=>e.style.fontSize=`calc(26px * ${zoom})`);}
+function show(n){idx=Math.max(0,Math.min(slides.length-1,n));const s=slides[idx];document.getElementById('badge').textContent=s.badge;document.getElementById('qnum').textContent='第 '+s.num+' 題';document.getElementById('qcontent').innerHTML=`<div class="qtext">${s.html}</div>`;document.getElementById('counter').textContent=`${idx+1} / ${slides.length}`;document.querySelectorAll('.quick button').forEach((b,i)=>b.classList.toggle('active',i===idx));const active=quick.querySelector('.active');active?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});document.getElementById('prev').disabled=idx===0;document.getElementById('next').disabled=idx===slides.length-1;document.getElementById('prev').style.opacity=idx===0?.45:1;document.getElementById('next').style.opacity=idx===slides.length-1?.45:1;applyZoom();}
+quick.addEventListener('click',e=>{const b=e.target.closest('button');if(b)show(+b.dataset.i)});document.getElementById('prev').onclick=()=>show(idx-1);document.getElementById('next').onclick=()=>show(idx+1);document.getElementById('home').onclick=()=>{const n=prompt('輸入題號（1～44）',String(idx+1));if(n&&/^\d+$/.test(n))show(+n-1)};document.getElementById('zoomOut').onclick=()=>{zoom=Math.max(.75,Math.round((zoom-.125)*1000)/1000);applyZoom()};document.getElementById('zoomIn').onclick=()=>{zoom=Math.min(1.75,Math.round((zoom+.125)*1000)/1000);applyZoom()};document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')show(idx-1);else if(e.key==='ArrowRight'||e.key===' ') {e.preventDefault();show(idx+1)}else if(e.key==='-'||e.key==='Subtract')document.getElementById('zoomOut').click();else if(e.key==='+'||e.key==='=')document.getElementById('zoomIn').click()});renderQuick();show(0);
+</script></body></html>
