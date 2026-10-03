@@ -11,38 +11,46 @@
 <script>
 
 const links = {
-
+  
+  // Aaron & Yvonne 's Google Drive
   "ay520": "https://drive.google.com/drive/folders/1kKxMuzYn6CBdndIWWHLN1ZmTFJltC5Km?usp=drive_link",
+  
+  // Shopping
   "洗衣機": "https://aymathx.github.io/Aaron/Shopping/washing-machine/index.html",
   
+  // Trading System
   "PivotZone": "https://aymathx.github.io/Stock/Pivot Zone/index.html",
+  
+  // Print
+  "print": "https://www.dropbox.com/scl/fo/qyzk9cfrlgno5p2nwr0pd/ANwgVYamLf7R-62-Nbthbvs?rlkey=zjvs4cp4dw7w4q1f4zr8ljma7&st=kmby23y5&dl=0",
 
-  "d-print": "https://www.dropbox.com/scl/fo/qyzk9cfrlgno5p2nwr0pd/ANwgVYamLf7R-62-Nbthbvs?rlkey=zjvs4cp4dw7w4q1f4zr8ljma7&st=kmby23y5&dl=0",
-  "g-print": "https://drive.google.com/drive/folders/1hMn_ollI_Ign_jADLhhBTxQAP9T1Xgdh?usp=drive_link",
+  // BDSH
+  "BDSH": "https://www.dropbox.com/scl/fo/siq10rcg608hwmn2a41cg/ALxRzxjAM_F9PAnjU5gZPxw?rlkey=lnezxc9z64z3za94as8qefiws&st=5oiog4wr&dl=0h",
+  "BDSH-ANSWER": "https://www.dropbox.com/scl/fo/bzasggiyj01u7t847ra96/AHtlXQBlRfNWRRyTcZm6mj8?rlkey=xi3vd2k3an320e5guayb9rv2e&st=w7kwpext&dl=0",
+  "BDSHJ8": "https://aymathx.github.io/BDHS/J8/index.html",
+  "BDSHJ9": "https://aymathx.github.io/BDHS/J9/index.html",
+  "BDSHJ11": "https://aymathx.github.io/BDHS/J11/index.html",
+  "BDSHGM7": "https://aymathx.github.io/BDHS/GiftedMath/20260916/J7/index.html",
+  "BDSHGM8": "https://aymathx.github.io/BDHS/GiftedMath/20260916/J8/index.html",
   
-  "bdsh": "https://www.dropbox.com/scl/fo/siq10rcg608hwmn2a41cg/ALxRzxjAM_F9PAnjU5gZPxw?rlkey=lnezxc9z64z3za94as8qefiws&st=5oiog4wr&dl=0h",
-  "bdsh-ans": "https://www.dropbox.com/scl/fo/bzasggiyj01u7t847ra96/AHtlXQBlRfNWRRyTcZm6mj8?rlkey=xi3vd2k3an320e5guayb9rv2e&st=w7kwpext&dl=0",
-  
-  "bdshj8": "https://aymathx.github.io/BDHS/J8/index.html",
-  "bdshj9": "https://aymathx.github.io/BDHS/J9/index.html",
-  "bdshj11": "https://aymathx.github.io/BDHS/J11/index.html",
-  
-  "bdshgm7": "https://aymathx.github.io/BDHS/GiftedMath/20260916/J7/index.html",
-  "bdshgm8": "https://aymathx.github.io/BDHS/GiftedMath/20260916/J8/index.html",
-
+  // 阮柏誠
   "share": "https://drive.google.com/drive/folders/1_fGZuR1Rff721-zCafmje4bn-bXQ9UN_?usp=sharing",
-
+  
+  // 高三模考題本(解)
   "answer": "https://drive.google.com/drive/folders/1QoqgnoekELEkIHygVW26T6Q-cJWPVzc2?usp=drive_link",
-  
+
+  // 中昊
   "zh": "https://drive.google.com/drive/folders/1pCvnXAPBO-hgvexPwUtm7VSkieu6VQN_?usp=drive_link",
-  
+
+  // 愛英樂
   "ayy": "https://drive.google.com/drive/folders/1yGCwZGPiWfPPD51nU0BYi91-hVMx_QIH?usp=drive_link",
   "20260809課堂影片": "https://drive.google.com/drive/folders/1OxaibK7D0llWjcoS10m6w31i4Tz3lfl9?usp=drive_link",
   "20260823課堂影片": "https://drive.google.com/drive/folders/1N58sKo_QJoLuhoQBTjc7tvwLzKr29Mq1?usp=drive_link",
   "20260830課堂影片": "https://drive.google.com/drive/folders/15i3qLLy_gxOeBIXUYX0d4YMx2UNrnWNh?usp=drive_link",
   "20260906課堂影片": "https://drive.google.com/drive/folders/1O4iU1FxL-jbLgmXZiB2FVZPU-YFpvvWc?usp=drive_link",
   "20260920課堂影片": "https://drive.google.com/drive/folders/1efAg9lwzZ8jYYBk1EfwHVWOEIvH7fCRq?usp=drive_link",
-
+  "20261004課堂影片": "https://drive.google.com/drive/folders/1efAg9lwzZ8jYYBk1EfwHVWOEIvH7fCRq?usp=drive_link",
+  
 };
 
 const code = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, "");
