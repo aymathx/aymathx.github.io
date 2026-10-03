@@ -6,10 +6,13 @@
   <title>AY's Shortened URL</title>
 </head>
 
-<body>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; text-align: center; padding-top: 60px;">
 
 <script>
+// 你的 Google Apps Script API 網址
+const API_URL = "https://script.google.com/macros/s/AKfycby9ngTy00VPXNN5cBiZkR-NeYEBS9JSNee-_eKWU9OEQ9Zxw0NX5ZIca6zrqdYNcv3Dvg/exec";
 
+// 原本固定的常用短網址（優先比對，秒速跳轉）
 const links = {
   
   // Aaron & Yvonne 's Google Drive
@@ -52,25 +55,45 @@ const links = {
   "20260830課堂影片": "https://drive.google.com/drive/folders/15i3qLLy_gxOeBIXUYX0d4YMx2UNrnWNh?usp=drive_link",
   "20260906課堂影片": "https://drive.google.com/drive/folders/1O4iU1FxL-jbLgmXZiB2FVZPU-YFpvvWc?usp=drive_link",
   "20260920課堂影片": "https://drive.google.com/drive/folders/1efAg9lwzZ8jYYBk1EfwHVWOEIvH7fCRq?usp=drive_link",
-  "20261004課堂影片": "",
-  
+  "20261004課堂影片": ""
 };
 
+// 取得網址路徑中的代碼
 const code = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, "");
 
-if (links[code]) {
-
-  window.location.replace(links[code]);
-
-} else {
-
+function renderNotFound() {
   document.body.innerHTML = `
     <h2>找不到這個短網址</h2>
     <p>請確認網址是否輸入正確。</p>
   `;
-
 }
 
+if (!code) {
+  renderNotFound();
+} else if (links[code]) {
+  // 1. 如果原本的 links 裡面有，秒速直接跳轉
+  window.location.replace(links[code]);
+} else {
+  // 2. 如果原本清單沒有，顯示提示並向 Google 試算表查詢
+  document.body.innerHTML = `<h2>短網址轉址中，請稍候...</h2>`;
+
+  fetch(`${API_URL}?action=get&code=${encodeURIComponent(code)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success" && data.url) {
+        // 在試算表查到了，自動跳轉！
+        window.location.replace(data.url);
+      } else {
+        renderNotFound();
+      }
+    })
+    .catch(() => {
+      document.body.innerHTML = `
+        <h2>連線失敗</h2>
+        <p>無法連線至短網址資料庫，請稍後再試。</p>
+      `;
+    });
+}
 </script>
 
 </body>
