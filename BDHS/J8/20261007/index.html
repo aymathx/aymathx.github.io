@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>新北市立國中八年級數學科 段考試題解答多卷彙整系統</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --zoom: 1; /* 1.0 (100%) ~ 5.0 (500%) */
+            --zoom-pct: 100%;
+            --red-main: #dc2626;
+            --red-bg: #fef2f2;
+            --red-border: #fca5a5;
+            --slate-base: #0f172a;
+            --border-color: #cbd5e1;
+            --primary-accent: #1e3a8a;
+        }
+
+        /* 嚴格鎖定 100vh 視窗高度，絕對零捲軸 */
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            max-height: 100vh;
+            overflow: hidden !important;
+            background-color: #0b0f19;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(30, 58, 138, 0.16) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(220, 38, 38, 0.12) 0%, transparent 45%),
+                radial-gradient(#1e293b 1.2px, transparent 1.2px);
+            background-size: 100% 100%, 100% 100%, 22px 22px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(3px, 0.5vh, 8px);
+        }
+
+        .app-window {
+            width: 100%;
+            max-width: 1440px;
+            height: 100%;
+            max-height: 100vh;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #94a3b8;
+            position: relative;
+        }
+
+        .top-navbar {
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            padding: clamp(4px, 0.5vh, 6px) clamp(8px, 1.2vw, 14px);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .nav-row-1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .exam-selector-group {
+            display: inline-flex;
+            background: #e2e8f0;
+            padding: 2px;
+            border-radius: 7px;
+            gap: 2px;
+            overflow-x: auto;
+        }
+
+        .exam-tab-btn {
+            background: transparent;
+            border: none;
+            padding: clamp(3px, 0.5vh, 5px) clamp(8px, 0.9vw, 12px);
+            font-size: clamp(11px, 1.25vh, 12.5px);
+            font-weight: 800;
+            color: #475569;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .exam-tab-btn:hover {
+            background: rgba(255, 255, 255, 0.6);
+            color: #0f172a;
+        }
+
+        .exam-tab-btn.active {
+            background: #1e3a8a;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+        }
+
+        .exam-header-meta {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .exam-title-text {
+            font-size: clamp(12.5px, 1.5vh, 15.5px);
+            font-weight: 900;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .exam-score-badge {
+            font-size: clamp(9px, 1.1vh, 11px);
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .nav-row-2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .section-tab-group {
+            display: inline-flex;
+            background: #e2e8f0;
+            padding: 2px;
+            border-radius: 6px;
+            gap: 2px;
+        }
+
+        .sec-tab-btn {
+            background: transparent;
+            border: none;
+            padding: 2px 8px;
+            font-size: clamp(10px, 1.1vh, 11px);
+            font-weight: 700;
+            color: #475569;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .sec-tab-btn.active {
+            background: #0f172a;
+            color: #ffffff;
+        }
+
+        .zoom-hub {
+            display: flex;
+            align-items: center;
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            padding: 1px 6px;
+            border-radius: 6px;
+            gap: 6px;
+        }
+
+        .zoom-label {
+            font-size: clamp(9.5px, 1.1vh, 11px);
+            font-weight: 800;
+            color: #b91c1c;
+            white-space: nowrap;
+        }
+
+        .zoom-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: clamp(65px, 6vw, 100px);
+            height: 5px;
+            background: #f87171;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .zoom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #991b1b;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .zoom-badge {
+            min-width: 42px;
+            text-align: center;
+            font-family: ui-monospace, monospace;
+            font-size: clamp(10px, 1.15vh, 11.5px);
+            font-weight: 900;
+            color: #991b1b;
+            background: #ffffff;
+            padding: 1px 3px;
+            border-radius: 4px;
+            border: 1px solid #f87171;
+        }
+
+        .preset-cluster {
+            display: flex;
+            gap: 2px;
+        }
+
+        .preset-btn {
+            background: #ffffff;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+            font-size: 9.5px;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .preset-btn.active, .preset-btn:hover {
+            background: #dc2626;
+            color: #ffffff;
+            border-color: #dc2626;
+        }
+
+        .utility-cluster {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .util-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            font-size: clamp(9.5px, 1.1vh, 11px);
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .util-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .workspace-viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: clamp(3px, 0.7vh, 8px) clamp(8px, 1.2vw, 14px);
+            overflow: hidden;
+            position: relative;
+            gap: clamp(3px, 0.5vh, 6px);
+            min-height: 0;
+        }
+
+        .section-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f5f9;
+            border-left: 4px solid var(--red-main);
+            padding: clamp(1px, 0.3vh, 3px) 6px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .section-bar-title {
+            font-size: clamp(10px, 1.2vh, 12px);
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .section-bar-meta {
+            font-size: clamp(8.5px, 1vh, 10px);
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        /* 核心紅字解答元素與自適應字級計算 */
+        .ans-target {
+            color: var(--red-main) !important;
+            font-weight: 900 !important;
+            cursor: pointer;
+            transition: font-size 0.08s ease, transform 0.08s ease;
+            position: relative;
+            user-select: none;
+        }
+
+        .ans-target:hover {
+            filter: brightness(1.25);
+            text-shadow: 0 0 6px rgba(220, 38, 38, 0.35);
+        }
+
+        /* 選擇題表格佈局 */
+        .section-choice {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            gap: 2px;
+        }
+
+        .choice-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            text-align: center;
+        }
+
+        .choice-table th, .choice-table td {
+            border: 1px solid var(--border-color);
+            line-height: 1.05;
+            padding: clamp(1px, 0.25vh, 2.5px) 1px;
+        }
+
+        .choice-table th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-size: clamp(8.5px, 1.05vh, 10.5px);
+            font-weight: 600;
+        }
+
+        .choice-table .row-label {
+            background-color: #f1f5f9;
+            font-weight: 800;
+            color: #334155;
+            width: 32px;
+            font-size: clamp(8.5px, 1vh, 10px);
+        }
+
+        .choice-ans-cell {
+            font-size: clamp(13px, calc((11px + 0.9vh) * var(--zoom)), calc(7.2vh * (var(--zoom) / 2.3)));
+            font-family: ui-monospace, SFMono-Regular, monospace;
+            background: #fffafa;
+            letter-spacing: -0.5px;
+        }
+
+        .section-fill {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            gap: 2px;
+        }
+
+        .fill-grid {
+            display: grid;
+            gap: clamp(2px, 0.4vh, 4px) clamp(4px, 0.6vw, 7px);
+        }
+
+        .fill-card {
+            border: 1px solid #e2e8f0;
+            background: #fafafa;
+            border-radius: 5px;
+            padding: clamp(2px, 0.35vh, 3.5px) clamp(4px, 0.5vw, 6px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.12s ease;
+        }
+
+        .fill-card:hover {
+            border-color: #f87171;
+            background: #fff5f5;
+        }
+
+        .fill-meta {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex-shrink: 0;
+        }
+
+        .fill-q-num {
+            font-size: clamp(8px, 0.95vh, 9.5px);
+            color: #64748b;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .fill-q-desc {
+            font-size: 8px;
+            color: #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 110px;
+        }
+
+        .fill-ans-cell {
+            font-size: clamp(11.5px, calc((10px + 0.75vh) * var(--zoom)), calc(4.8vh * (var(--zoom) / 2)));
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.1;
+        }
+
+        .section-calc {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            gap: 2px;
+        }
+
+        .calc-grid {
+            display: grid;
+            gap: clamp(3px, 0.5vw, 6px);
+        }
+
+        .calc-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            background: #ffffff;
+            padding: clamp(2px, 0.4vh, 4.5px) clamp(5px, 0.7vw, 8px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 2px;
+            cursor: pointer;
+            transition: all 0.12s ease;
+        }
+
+        .calc-card:hover {
+            border-color: #f87171;
+        }
+
+        .calc-header {
+            font-size: clamp(8.5px, 1.05vh, 10px);
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .calc-pill {
+            background: #0f172a;
+            color: #ffffff;
+            font-size: 8px;
+            font-weight: 800;
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+
+        .calc-ans-box {
+            background: #fef2f2;
+            border-left: 3px solid var(--red-main);
+            padding: clamp(1.5px, 0.3vh, 3.5px) 5px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: clamp(3px, 0.6vw, 8px);
+            overflow: hidden;
+        }
+
+        .calc-ans-cell {
+            font-size: clamp(11.5px, calc((10px + 0.75vh) * var(--zoom)), calc(4.8vh * (var(--zoom) / 2)));
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        body.zoom-level-ultra .top-navbar {
+            padding-top: 1px;
+            padding-bottom: 2px;
+            gap: 2px;
+        }
+        body.zoom-level-ultra .fill-q-desc {
+            display: none;
+        }
+        body.zoom-level-ultra .section-bar-meta {
+            display: none;
+        }
+        body.zoom-level-ultra .section-bar {
+            padding: 0 4px;
+        }
+        body.zoom-level-ultra .workspace-viewport {
+            gap: 2px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
+        body.zoom-level-ultra .fill-card {
+            padding: 1px 3px;
+        }
+        body.zoom-level-ultra .calc-card {
+            padding: 1px 4px;
+        }
+
+        /* 大題單一專注模式 (Focus Tabs) */
+        .workspace-viewport[data-active-sec="choice"] .section-fill,
+        .workspace-viewport[data-active-sec="choice"] .section-calc {
+            display: none !important;
+        }
+        .workspace-viewport[data-active-sec="choice"] .section-choice {
+            height: 100%;
+            justify-content: center;
+        }
+        .workspace-viewport[data-active-sec="choice"] .choice-table th,
+        .workspace-viewport[data-active-sec="choice"] .choice-table td {
+            padding: clamp(6px, 1.8vh, 16px) 2px;
+        }
+        .workspace-viewport[data-active-sec="choice"] .choice-ans-cell {
+            font-size: clamp(26px, calc((18px + 2vh) * var(--zoom) * 1.3), 12vh) !important;
+        }
+
+        .workspace-viewport[data-active-sec="fill"] .section-choice,
+        .workspace-viewport[data-active-sec="fill"] .section-calc {
+            display: none !important;
+        }
+        .workspace-viewport[data-active-sec="fill"] .section-fill {
+            height: 100%;
+            justify-content: center;
+        }
+        .workspace-viewport[data-active-sec="fill"] .fill-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: clamp(6px, 1.4vh, 14px);
+        }
+        .workspace-viewport[data-active-sec="fill"] .fill-card {
+            padding: clamp(8px, 1.8vh, 16px) 10px;
+        }
+        .workspace-viewport[data-active-sec="fill"] .fill-ans-cell {
+            font-size: clamp(20px, calc((14px + 1.6vh) * var(--zoom) * 1.25), 8.5vh) !important;
+        }
+
+        .workspace-viewport[data-active-sec="calc"] .section-choice,
+        .workspace-viewport[data-active-sec="calc"] .section-fill {
+            display: none !important;
+        }
+        .workspace-viewport[data-active-sec="calc"] .section-calc {
+            height: 100%;
+            justify-content: center;
+        }
+        .workspace-viewport[data-active-sec="calc"] .calc-grid {
+            grid-template-columns: 1fr !important;
+            gap: clamp(10px, 2vh, 18px);
+        }
+        .workspace-viewport[data-active-sec="calc"] .calc-card {
+            padding: clamp(10px, 2vh, 18px);
+        }
+        .workspace-viewport[data-active-sec="calc"] .calc-ans-cell {
+            font-size: clamp(22px, calc((15px + 1.8vh) * var(--zoom) * 1.3), 9vh) !important;
+        }
+
+        /* 遮罩抽問模式 */
+        .mask-active .ans-target {
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
+        .spotlight-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.90);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .spotlight-modal.show {
+            display: flex;
+            animation: popIn 0.15s ease-out;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .spotlight-card {
+            background: #ffffff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 860px;
+            padding: clamp(18px, 3.5vh, 36px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            border: 3.5px solid #dc2626;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .spotlight-top-tags {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spotlight-badge {
+            background: #fee2e2;
+            color: #dc2626;
+            font-size: clamp(13px, 1.8vh, 16px);
+            font-weight: 900;
+            padding: 3px 12px;
+            border-radius: 20px;
+        }
+
+        .spotlight-exam-tag {
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: clamp(11px, 1.5vh, 13px);
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .spotlight-title {
+            font-size: clamp(15px, 2vh, 19px);
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .spotlight-ans-huge {
+            font-size: clamp(42px, 10vh, 88px);
+            font-weight: 900;
+            color: #dc2626;
+            background: #fff5f5;
+            border-radius: 12px;
+            padding: clamp(12px, 2.5vh, 24px);
+            border: 2px dashed #fca5a5;
+            line-height: 1.15;
+            word-break: break-all;
+        }
+
+        .spotlight-nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+
+        .spot-nav-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .spot-nav-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .spotlight-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            background: #f1f5f9;
+            border: none;
+            font-size: 18px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #475569;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spotlight-close-btn:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        @media print {
+            body { background: #fff; padding: 0; }
+            .top-navbar, .spotlight-modal { display: none !important; }
+            .app-window { border: none; box-shadow: none; max-width: 100%; height: auto; }
+            .workspace-viewport { overflow: visible !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-window" id="appWindow">
+
+    <!-- 頂端控制列：標籤順序由左至右為 114海山、113海山、113福和、114福和 -->
+    <header class="top-navbar">
+        <div class="nav-row-1">
+            <div class="exam-selector-group" id="examTabGroup">
+                <!-- 1: 114海山 (預設載入選取) -->
+                <button type="button" class="exam-tab-btn active" data-exam="hs114" onclick="switchExam('hs114')">
+                    <span>114海山</span>
+                </button>
+                <!-- 2: 113海山 -->
+                <button type="button" class="exam-tab-btn" data-exam="hs113" onclick="switchExam('hs113')">
+                    <span>113海山</span>
+                </button>
+                <!-- 3: 113福和 -->
+                <button type="button" class="exam-tab-btn" data-exam="fh113" onclick="switchExam('fh113')">
+                    <span>113福和</span>
+                </button>
+                <!-- 4: 114福和 -->
+                <button type="button" class="exam-tab-btn" data-exam="fh114" onclick="switchExam('fh114')">
+                    <span>114福和</span>
+                </button>
+            </div>
+
+            <div class="exam-header-meta">
+                <h1 class="exam-title-text" id="examHeadingText">新北市立海山高中 114學年度第一學期 第一次定期評量 國中部 8年級數學科</h1>
+                <span class="exam-score-badge" id="examScoreBadge">滿分 100 分</span>
+            </div>
+        </div>
+
+        <div class="nav-row-2">
+            <div class="section-tab-group">
+                <button type="button" class="sec-tab-btn active" onclick="switchSectionTab('all', this)">全部總覽</button>
+                <button type="button" class="sec-tab-btn" onclick="switchSectionTab('choice', this)">選擇題</button>
+                <button type="button" class="sec-tab-btn" onclick="switchSectionTab('fill', this)">填充題</button>
+                <button type="button" class="sec-tab-btn" onclick="switchSectionTab('calc', this)">計算/應用題</button>
+            </div>
+
+            <!-- 500% 縮放專用控制器 -->
+            <div class="zoom-hub">
+                <span class="zoom-label">🔍 紅字放大</span>
+                <input type="range" class="zoom-slider" id="zoomRangeInput" min="100" max="500" step="10" value="100" oninput="applyZoom(this.value)">
+                <span class="zoom-badge" id="zoomBadge">100%</span>
+                <div class="preset-cluster">
+                    <button type="button" class="preset-btn active" id="p100" onclick="applyZoom(100)">100%</button>
+                    <button type="button" class="preset-btn" id="p200" onclick="applyZoom(200)">200%</button>
+                    <button type="button" class="preset-btn" id="p350" onclick="applyZoom(350)">350%</button>
+                    <button type="button" class="preset-btn" id="p500" onclick="applyZoom(500)">500%</button>
+                </div>
+            </div>
+
+            <div class="utility-cluster">
+                <button type="button" class="util-btn" id="maskToggleBtn" onclick="toggleMask()">
+                    <span>👁️</span><span id="maskBtnLabel">隱藏答案</span>
+                </button>
+                <button type="button" class="util-btn" onclick="toggleFullScreen()">
+                    <span>⛶</span><span>全螢幕</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區 (零捲軸保障) -->
+    <main class="workspace-viewport" id="workspaceViewport" data-active-sec="all">
+        <!-- 一、選擇題區塊 -->
+        <section class="section-choice" id="choiceContainer"></section>
+
+        <!-- 二、填充題區塊 -->
+        <section class="section-fill" id="fillContainer"></section>
+
+        <!-- 三、綜合計算/應用題區塊 -->
+        <section class="section-calc" id="calcContainer"></section>
+    </main>
+</div>
+
+<!-- 🎯 500%+ 聚光投影卡 -->
+<div class="spotlight-modal" id="spotlightModal" onclick="closeSpotlight(event)">
+    <div class="spotlight-card" onclick="event.stopPropagation()">
+        <button type="button" class="spotlight-close-btn" onclick="closeSpotlight()">✕</button>
+        <div class="spotlight-top-tags">
+            <span class="spotlight-exam-tag" id="spotlightExamTag">海山 114-1</span>
+            <span class="spotlight-badge" id="spotlightBadge">選擇題 第 1 題</span>
+        </div>
+        <div class="spotlight-title" id="spotlightTitle">標準解答聚焦</div>
+        <div class="spotlight-ans-huge" id="spotlightVal">A</div>
+        <div class="spotlight-nav-bar">
+            <button type="button" class="spot-nav-btn" onclick="navSpotlight(-1)">◀ 上一題 (←)</button>
+            <span style="font-size:12px; color:#64748b;" id="spotlightCounter">第 1 / 25 題</span>
+            <button type="button" class="spot-nav-btn" onclick="navSpotlight(1)">下一題 (→) ▶</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /**
+     * 四份試卷之完整紅字解答數據庫
+     * 排序：114海山 (hs114), 113海山 (hs113), 113福和 (fh113), 114福和 (fh114)
+     */
+    const EXAMS_DATA = {
+        hs114: {
+            id: "hs114",
+            tabLabel: "114海山",
+            schoolName: "新北市立海山高中",
+            fullTitle: "新北市立海山高中 114學年度第一學期 第一次定期評量 國中部 8年級數學科",
+            scoreMeta: "滿分 100 分 ｜ 試卷紅字參考解答",
+            choiceMeta: "共 12 題 ｜ 每題 4 分 ｜ 計 48 分",
+            fillMeta: "共 11 格 ｜ 每格 4 分 ｜ 計 44 分",
+            calcMeta: "共 2 題 ｜ 第 1 題 6分、第 2 題 2分 ｜ 計 8 分",
+            choiceList: [
+                { q: 1, a: "A" }, { q: 2, a: "C" }, { q: 3, a: "C" }, { q: 4, a: "B" },
+                { q: 5, a: "C" }, { q: 6, a: "A" }, { q: 7, a: "D" }, { q: 8, a: "D" },
+                { q: 9, a: "B" }, { q: 10, a: "B" }, { q: 11, a: "C" }, { q: 12, a: "A" }
+            ],
+            fillList: [
+                { num: "1.(一)", desc: "乘法公式", a: "1000000" },
+                { num: "1.(二)", desc: "多項式相減", a: "8x² + 9x + 10" },
+                { num: "1.(三)", desc: "立方乘法公式", a: "x³ + 8" },
+                { num: "1.(四)", desc: "化簡 √42.25", a: "6.5" },
+                { num: "1.(五)", desc: "平方根求值", a: "± 25/24" },
+                { num: "2", desc: "求 x 之值", a: "x = 6" },
+                { num: "3", desc: "長方體表面積", a: "16x² + 58x + 30" },
+                { num: "4", desc: "剪去後剩餘面積", a: "8800" },
+                { num: "5", desc: "除法原理求 A", a: "x² + 1" },
+                { num: "6", desc: "正平方根化簡", a: "1297 / 36" },
+                { num: "7", desc: "區域周長", a: "4x + 26" }
+            ],
+            calcList: [
+                {
+                    pill: "應用 1",
+                    title: "十分逼近法求 √19 近似值（四捨五入至小數點後第一位）",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">(1)</span><span class="ans-target calc-ans-cell">4 < √19 < 5</span>
+                                  <span style="color:#cbd5e1;">|</span>
+                                  <span style="color:#64748b; font-size:10px;">(2)</span><span class="ans-target calc-ans-cell">4.3 < √19 < 4.4</span>
+                                  <span style="color:#cbd5e1;">|</span>
+                                  <span style="color:#64748b; font-size:10px;">(3)</span><span class="ans-target calc-ans-cell">√19 > 4.35</span>
+                                  <span style="color:#cbd5e1;">|</span>
+                                  <span style="color:#64748b; font-size:10px;">(4)</span><span class="ans-target calc-ans-cell">4.4</span>`,
+                    spotlightVal: "(1) 4 < √19 < 5 ｜ (2) 4.3 < √19 < 4.4 ｜ (3) √19 > 4.35 ｜ (4) 4.4"
+                },
+                {
+                    pill: "應用 2",
+                    title: "利用多項式除法技巧求 11⁴ - 9×11³ - 19×11² - 30×11 - 30 之值",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">所求值:</span> <span class="ans-target calc-ans-cell">3</span>`,
+                    spotlightVal: "3"
+                }
+            ]
+        },
+        hs113: {
+            id: "hs113",
+            tabLabel: "113海山",
+            schoolName: "新北市立海山高中",
+            fullTitle: "新北市立海山高中 113學年度第一學期 第一次段考 國中部八年級數學科",
+            scoreMeta: "滿分 100 分 ｜ 試卷紅字參考解答",
+            choiceMeta: "共 8 題 ｜ 每題 4 分 ｜ 計 32 分",
+            fillMeta: "共 12 格 ｜ 每格 4 分 ｜ 計 48 分",
+            calcMeta: "共 4 題 ｜ 計 20 分",
+            choiceList: [
+                { q: 1, a: "B" }, { q: 2, a: "C" }, { q: 3, a: "D" }, { q: 4, a: "A" },
+                { q: 5, a: "A" }, { q: 6, a: "C" }, { q: 7, a: "A" }, { q: 8, a: "B" }
+            ],
+            fillList: [
+                { num: "1", desc: "一次多項式條件", a: "a = -5/2, b ≠ 7, c 為任意數" },
+                { num: "2", desc: "根號錯誤觀念", a: "a, b, c, d, e" },
+                { num: "3", desc: "乘法公式", a: "40000" },
+                { num: "4", desc: "求 s 之值", a: "-79 又 5/9 （或 -716/9）" },
+                { num: "5", desc: "求多項式 B", a: "6x³ + 6x² - 3x + 9" },
+                { num: "6", desc: "直式求 a-b+c", a: "11" },
+                { num: "7", desc: "展開化簡", a: "-10x² + 12x - 52" },
+                { num: "8", desc: "根號四則計算", a: "29 / 4 （或 7 又 1/4）" },
+                { num: "9", desc: "桌巾總面積", a: "6658 又 14/25" },
+                { num: "10", desc: "求 a + b", a: "-4" },
+                { num: "11", desc: "繁複根號化簡", a: "2069 / 45" },
+                { num: "12", desc: "完全平方數個數", a: "8 個" }
+            ],
+            calcList: [
+                {
+                    pill: "計算 1",
+                    title: "-14x²-25x-14 除以 A 得商 2x+1、餘 -5，求多項式 A (5分)",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">A =</span> <span class="ans-target calc-ans-cell">-7x - 9</span>`,
+                    spotlightVal: "-7x - 9"
+                },
+                {
+                    pill: "計算 2",
+                    title: "已知負平方根與平方條件，求 2x²+2y 之平方根 (5分)",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">平方根:</span> <span class="ans-target calc-ans-cell">± √31</span>`,
+                    spotlightVal: "± √31"
+                },
+                {
+                    pill: "計算 3",
+                    title: "指尖陀螺模型面積 200，AB=17：求 (1) a×b (2) (a-b)² (5分)",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">(1)</span> <span class="ans-target calc-ans-cell">89/2</span>
+                                  <span style="color:#cbd5e1;">|</span>
+                                  <span style="color:#64748b; font-size:10px;">(2)</span> <span class="ans-target calc-ans-cell">111</span>`,
+                    spotlightVal: "(1) 89/2　(2) 111"
+                },
+                {
+                    pill: "計算 4",
+                    title: "兩條 OK 繃十字重疊，求佔據之總面積 (5分)",
+                    displayHtml: `<span class="ans-target calc-ans-cell">(20+2π)x² + (100+10π)x + 125 + (25/2)π</span>`,
+                    spotlightVal: "(20 + 2π)x² + (100 + 10π)x + 125 + (25/2)π"
+                }
+            ]
+        },
+        fh113: {
+            id: "fh113",
+            tabLabel: "113福和",
+            schoolName: "新北市立福和國中",
+            fullTitle: "新北市立福和國中 113學年度第一學期 第一次段考 八年級數學科",
+            scoreMeta: "滿分 100 分 ｜ 教學研究會紅筆原卷彙整",
+            choiceMeta: "共 20 題 ｜ 每題配分詳卷 ｜ 計 66 分",
+            fillMeta: "共 8 格 ｜ 每格 3 分 ｜ 計 24 分",
+            calcMeta: "共 2 大題 ｜ 計 10 分（需計算過程）",
+            choiceList: [
+                { q: 1, a: "D" }, { q: 2, a: "D" }, { q: 3, a: "B" }, { q: 4, a: "A" }, { q: 5, a: "A" },
+                { q: 6, a: "D" }, { q: 7, a: "D" }, { q: 8, a: "C" }, { q: 9, a: "B" }, { q: 10, a: "A" },
+                { q: 11, a: "C" }, { q: 12, a: "B" }, { q: 13, a: "C" }, { q: 14, a: "C" }, { q: 15, a: "B" },
+                { q: 16, a: "A" }, { q: 17, a: "C" }, { q: 18, a: "B" }, { q: 19, a: "D" }, { q: 20, a: "A" }
+            ],
+            fillList: [
+                { num: "第 (1) 格", desc: "計算", a: "6000" },
+                { num: "第 (2) 格", desc: "求值", a: "1 / 90" },
+                { num: "第 (3) 格", desc: "多項式運算", a: "− 8 + 5x + 3x²" },
+                { num: "第 (4) 格", desc: "多項式化簡", a: "3x² + x − 4" },
+                { num: "第 (5) 格", desc: "乘法公式", a: "14x² + 19x + 26" },
+                { num: "第 (6) 格", desc: "數值求值", a: "209" },
+                { num: "第 (7) 格", desc: "根號化簡", a: "8.5" },
+                { num: "第 (8) 格", desc: "分數平方根", a: "7 / 2" }
+            ],
+            calcList: [
+                {
+                    pill: "第 1 題",
+                    title: "計算多項式除法之商式、餘式與兩者之和",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">商:</span> <span class="ans-target calc-ans-cell">−10x² + 6x</span>
+                                  <span style="color:#cbd5e1;">|</span>
+                                  <span style="color:#64748b; font-size:10px;">餘:</span> <span class="ans-target calc-ans-cell">3</span>
+                                  <span style="color:#cbd5e1;">|</span>
+                                  <span style="color:#64748b; font-size:10px;">和:</span> <span class="ans-target calc-ans-cell">−10x² + 6x + 3</span>`,
+                    spotlightVal: "商式：−10x² + 6x ｜ 餘式：3 ｜ 和：−10x² + 6x + 3"
+                },
+                {
+                    pill: "第 2 題",
+                    title: "求 √(4x + y) 之平方根",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">平方根:</span> <span class="ans-target calc-ans-cell" style="letter-spacing:1px;">±2</span>`,
+                    spotlightVal: "±2"
+                }
+            ]
+        },
+        fh114: {
+            id: "fh114",
+            tabLabel: "114福和",
+            schoolName: "新北市立福和國中",
+            fullTitle: "新北市立福和國中 114學年度第一學期 第一次段考 八年級數學科",
+            scoreMeta: "滿分 100 分 ｜ 教學研究會紅筆原卷彙整",
+            choiceMeta: "共 28 題 ｜ 每題配分詳卷 ｜ 覆蓋全面",
+            fillMeta: "共 8 格 ｜ 每格配分詳卷",
+            calcMeta: "共 3 題 ｜ 計 12 分",
+            choiceList: [
+                { q: 1, a: "A" }, { q: 2, a: "C" }, { q: 3, a: "D" }, { q: 4, a: "C" }, { q: 5, a: "D" },
+                { q: 6, a: "C" }, { q: 7, a: "B" }, { q: 8, a: "D" }, { q: 9, a: "A" }, { q: 10, a: "B" },
+                { q: 11, a: "B" }, { q: 12, a: "A" }, { q: 13, a: "B" }, { q: 14, a: "C" }, { q: 15, a: "A" },
+                { q: 16, a: "D" }, { q: 17, a: "A" }, { q: 18, a: "D" }, { q: 19, a: "A" }, { q: 20, a: "B" },
+                { q: 21, a: "A" }, { q: 22, a: "A" }, { q: 23, a: "B" }, { q: 24, a: "B" }, { q: 25, a: "A" },
+                { q: 26, a: "B" }, { q: 27, a: "A" }, { q: 28, a: "A" }
+            ],
+            fillList: [
+                { num: "①", desc: "降冪排列", a: "-5x³ - 6x² + x + 9" },
+                { num: "②", desc: "升冪排列", a: "9 + x - 6x² - 5x³" },
+                { num: "③", desc: "求值", a: "20" },
+                { num: "④", desc: "逼近值", a: "21.213" },
+                { num: "⑤", desc: "大小關係", a: "R > P > Q" },
+                { num: "⑥", desc: "多項式展開", a: "14x² - 6x - 18" },
+                { num: "⑦", desc: "求商餘", a: "3" },
+                { num: "⑧", desc: "數值求值", a: "80" }
+            ],
+            calcList: [
+                {
+                    pill: "第 1 題",
+                    title: "計算分數多項式運算結果",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">結果:</span> <span class="ans-target calc-ans-cell">39 / 155</span>`,
+                    spotlightVal: "39 / 155"
+                },
+                {
+                    pill: "第 2 題",
+                    title: "多項式除法求商式與餘式",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">商:</span> <span class="ans-target calc-ans-cell">x + 5/7</span>
+                                  <span style="color:#cbd5e1;">|</span>
+                                  <span style="color:#64748b; font-size:10px;">餘:</span> <span class="ans-target calc-ans-cell">-8/7</span>`,
+                    spotlightVal: "商式：x + 5/7 ｜ 餘式：-8/7"
+                },
+                {
+                    pill: "第 3 題",
+                    title: "求滿足條件之數列或解組",
+                    displayHtml: `<span style="color:#64748b; font-size:10px;">數值:</span> <span class="ans-target calc-ans-cell">4, 11, 16, 19</span>`,
+                    spotlightVal: "4, 11, 16, 19"
+                }
+            ]
+        }
+    };
+
+    // 預設載入「114海山」
+    let currentExamKey = "hs114";
+    let currentZoom = 100;
+    let flatSpotlightItems = [];
+    let currentSpotlightIndex = 0;
+
+    const root = document.documentElement;
+    const body = document.body;
+    const zoomSlider = document.getElementById('zoomRangeInput');
+    const zoomBadge = document.getElementById('zoomBadge');
+    const presetButtons = {
+        100: document.getElementById('p100'),
+        200: document.getElementById('p200'),
+        350: document.getElementById('p350'),
+        500: document.getElementById('p500')
+    };
+
+    function renderExam(examKey) {
+        currentExamKey = examKey;
+        const data = EXAMS_DATA[examKey];
+        if (!data) return;
+
+        // 更新頂端標題與徽章
+        document.getElementById('examHeadingText').textContent = data.fullTitle;
+        document.getElementById('examScoreBadge').textContent = data.scoreMeta.split('｜')[0].trim();
+
+        // 切換導覽標籤選取狀態
+        document.querySelectorAll('.exam-tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-exam') === examKey);
+        });
+
+        flatSpotlightItems = [];
+
+        // 渲染選擇題、填充題與計算題
+        renderChoiceSection(data);
+        renderFillSection(data);
+        renderCalcSection(data);
+
+        enforceZeroScroll();
+    }
+
+    function renderChoiceSection(data) {
+        const container = document.getElementById('choiceContainer');
+        const list = data.choiceList;
+        const total = list.length;
+
+        let tableHtml = '';
+        if (total === 28) {
+            tableHtml = generateChoiceTableHtml(list.slice(0, 14), list.slice(14, 28));
+        } else if (total === 20) {
+            tableHtml = generateChoiceTableHtml(list.slice(0, 10), list.slice(10, 20));
+        } else if (total === 12) {
+            tableHtml = generateChoiceTableHtml(list.slice(0, 6), list.slice(6, 12));
+        } else {
+            tableHtml = generateChoiceTableHtml(list, null);
+        }
+
+        container.innerHTML = `
+            <div class="section-bar">
+                <span class="section-bar-title">一、單一選擇題</span>
+                <span class="section-bar-meta">${data.choiceMeta}</span>
+            </div>
+            ${tableHtml}
+        `;
+
+        list.forEach(item => {
+            flatSpotlightItems.push({
+                type: 'choice',
+                tag: '選擇題',
+                num: `第 ${item.q} 題`,
+                title: '標準選擇題解答',
+                ans: item.a
+            });
+        });
+    }
+
+    function generateChoiceTableHtml(row1List, row2List) {
+        let html = '<table class="choice-table"><thead><tr><th class="row-label">題號</th>';
+        row1List.forEach(item => {
+            html += `<th>${item.q}</th>`;
+        });
+        html += '</tr></thead><tbody><tr><td class="row-label">答案</td>';
+        row1List.forEach(item => {
+            html += `<td class="ans-target choice-ans-cell" onclick="openSpotlightByItem('choice', ${item.q})">${item.a}</td>`;
+        });
+        html += '</tr>';
+
+        if (row2List && row2List.length > 0) {
+            html += '<tr><th class="row-label">題號</th>';
+            row2List.forEach(item => {
+                html += `<th>${item.q}</th>`;
+            });
+            html += '</tr><tr><td class="row-label">答案</td>';
+            row2List.forEach(item => {
+                html += `<td class="ans-target choice-ans-cell" onclick="openSpotlightByItem('choice', ${item.q})">${item.a}</td>`;
+            });
+            html += '</tr>';
+        }
+
+        html += '</tbody></table>';
+        return html;
+    }
+
+    function renderFillSection(data) {
+        const container = document.getElementById('fillContainer');
+        const list = data.fillList;
+        const cols = list.length > 8 ? 4 : 4;
+
+        let cardsHtml = `<div class="fill-grid" style="grid-template-columns: repeat(${cols}, 1fr);">`;
+        list.forEach((item, idx) => {
+            cardsHtml += `
+                <div class="fill-card" onclick="openSpotlightByItem('fill', ${idx})">
+                    <div class="fill-meta">
+                        <span class="fill-q-num">${item.num}</span>
+                        <span class="fill-q-desc">${item.desc}</span>
+                    </div>
+                    <span class="ans-target fill-ans-cell">${item.a}</span>
+                </div>
+            `;
+            flatSpotlightItems.push({
+                type: 'fill',
+                tag: '填充題',
+                num: item.num,
+                title: `${item.desc}（填充題）`,
+                ans: item.a
+            });
+        });
+        cardsHtml += '</div>';
+
+        container.innerHTML = `
+            <div class="section-bar">
+                <span class="section-bar-title">二、填充題</span>
+                <span class="section-bar-meta">${data.fillMeta}</span>
+            </div>
+            ${cardsHtml}
+        `;
+    }
+
+    function renderCalcSection(data) {
+        const container = document.getElementById('calcContainer');
+        const list = data.calcList;
+        const cols = list.length === 2 ? '1.2fr 0.8fr' : (list.length === 4 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)');
+
+        let cardsHtml = `<div class="calc-grid" style="grid-template-columns: ${cols};">`;
+        list.forEach((item, idx) => {
+            cardsHtml += `
+                <div class="calc-card" onclick="openSpotlightByItem('calc', ${idx})">
+                    <div class="calc-header">
+                        <span class="calc-pill">${item.pill}</span>
+                        <span style="overflow:hidden; text-overflow:ellipsis;">${item.title}</span>
+                    </div>
+                    <div class="calc-ans-box">
+                        ${item.displayHtml}
+                    </div>
+                </div>
+            `;
+            flatSpotlightItems.push({
+                type: 'calc',
+                tag: '計算/應用題',
+                num: item.pill,
+                title: item.title,
+                ans: item.spotlightVal
+            });
+        });
+        cardsHtml += '</div>';
+
+        container.innerHTML = `
+            <div class="section-bar">
+                <span class="section-bar-title">三、綜合計算與應用題</span>
+                <span class="section-bar-meta">${data.calcMeta}</span>
+            </div>
+            ${cardsHtml}
+        `;
+    }
+
+    function applyZoom(val) {
+        val = parseInt(val, 10);
+        if (isNaN(val)) val = 100;
+        val = Math.max(100, Math.min(500, val));
+        currentZoom = val;
+
+        zoomSlider.value = val;
+        zoomBadge.textContent = val + '%';
+
+        const factor = val / 100;
+        root.style.setProperty('--zoom', factor);
+        root.style.setProperty('--zoom-pct', val + '%');
+
+        Object.keys(presetButtons).forEach(key => {
+            if (presetButtons[key]) {
+                presetButtons[key].classList.toggle('active', parseInt(key, 10) === val);
+            }
+        });
+
+        if (val >= 250) {
+            body.classList.add('zoom-level-ultra');
+        } else {
+            body.classList.remove('zoom-level-ultra');
+        }
+
+        enforceZeroScroll();
+    }
+
+    function switchExam(examKey) {
+        renderExam(examKey);
+    }
+
+    function switchSectionTab(secName, btnElem) {
+        const viewport = document.getElementById('workspaceViewport');
+        viewport.setAttribute('data-active-sec', secName);
+
+        document.querySelectorAll('.sec-tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (btnElem) btnElem.classList.add('active');
+
+        enforceZeroScroll();
+    }
+
+    function toggleMask() {
+        const viewport = document.getElementById('workspaceViewport');
+        const isMasked = viewport.classList.toggle('mask-active');
+        document.getElementById('maskBtnLabel').textContent = isMasked ? '顯示答案' : '隱藏答案';
+        document.getElementById('maskToggleBtn').style.backgroundColor = isMasked ? '#fee2e2' : '#f1f5f9';
+        document.getElementById('maskToggleBtn').style.color = isMasked ? '#dc2626' : '#334155';
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+        }
+    }
+
+    function openSpotlightByItem(type, indexParam) {
+        let targetIndex = -1;
+        if (type === 'choice') {
+            targetIndex = flatSpotlightItems.findIndex(it => it.type === 'choice' && it.num === `第 ${indexParam} 題`);
+        } else if (type === 'fill') {
+            let fillCount = 0;
+            targetIndex = flatSpotlightItems.findIndex(it => {
+                if (it.type === 'fill') {
+                    if (fillCount === indexParam) return true;
+                    fillCount++;
+                }
+                return false;
+            });
+        } else if (type === 'calc') {
+            let calcCount = 0;
+            targetIndex = flatSpotlightItems.findIndex(it => {
+                if (it.type === 'calc') {
+                    if (calcCount === indexParam) return true;
+                    calcCount++;
+                }
+                return false;
+            });
+        }
+
+        if (targetIndex !== -1) {
+            currentSpotlightIndex = targetIndex;
+            showSpotlightModal();
+        }
+    }
+
+    function showSpotlightModal() {
+        if (!flatSpotlightItems[currentSpotlightIndex]) return;
+        const item = flatSpotlightItems[currentSpotlightIndex];
+        const data = EXAMS_DATA[currentExamKey];
+
+        document.getElementById('spotlightExamTag').textContent = data.tabLabel;
+        document.getElementById('spotlightBadge').textContent = `${item.tag} ${item.num}`;
+        document.getElementById('spotlightTitle').textContent = item.title;
+        document.getElementById('spotlightVal').textContent = item.ans;
+        document.getElementById('spotlightCounter').textContent = `第 ${currentSpotlightIndex + 1} / ${flatSpotlightItems.length} 題`;
+
+        document.getElementById('spotlightModal').classList.add('show');
+    }
+
+    function navSpotlight(delta) {
+        currentSpotlightIndex += delta;
+        if (currentSpotlightIndex < 0) currentSpotlightIndex = flatSpotlightItems.length - 1;
+        if (currentSpotlightIndex >= flatSpotlightItems.length) currentSpotlightIndex = 0;
+        showSpotlightModal();
+    }
+
+    function closeSpotlight(event) {
+        if (event && event.target !== event.currentTarget && !event.target.classList.contains('spotlight-close-btn')) return;
+        document.getElementById('spotlightModal').classList.remove('show');
+    }
+
+    // 鍵盤快捷鍵：1: 114海山、2: 113海山、3: 113福和、4: 114福和
+    window.addEventListener('keydown', (e) => {
+        const modal = document.getElementById('spotlightModal');
+        const isModalOpen = modal.classList.contains('show');
+
+        if (isModalOpen) {
+            if (e.key === 'Escape') closeSpotlight();
+            if (e.key === 'ArrowLeft') navSpotlight(-1);
+            if (e.key === 'ArrowRight') navSpotlight(1);
+        } else {
+            if (e.key === '1') switchExam('hs114');
+            if (e.key === '2') switchExam('hs113');
+            if (e.key === '3') switchExam('fh113');
+            if (e.key === '4') switchExam('fh114');
+            if (e.key.toLowerCase() === 'm') toggleMask();
+            if (e.key.toLowerCase() === 'f') toggleFullScreen();
+        }
+    });
+
+    function enforceZeroScroll() {
+        requestAnimationFrame(() => {
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    window.addEventListener('resize', enforceZeroScroll);
+    window.addEventListener('load', () => {
+        // 預設載入「114海山」
+        renderExam('hs114');
+        applyZoom(100);
+    });
+</script>
+</body>
+</html>
