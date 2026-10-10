@@ -1,236 +1,938 @@
-<!doctype html>
-<html lang="zh-Hant">
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>洗衣機最終購買比較報告｜Panasonic NA-V120HDH-G vs LG WD-S15TBD</title>
-<style>
-:root{
-  --bg:#f5f7fb; --card:#fff; --text:#172033; --muted:#657089;
-  --line:#e6eaf2; --blue:#3157c8; --blue2:#eef3ff;
-  --green:#16834a; --green2:#eaf8f0; --red:#c83d4f; --red2:#fff0f2;
-  --gold:#a66a00; --gold2:#fff7e5;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.7}
-.container{max-width:980px;margin:auto;padding:18px}
-.hero{background:linear-gradient(135deg,#243f9d,#4167d8);color:#fff;border-radius:24px;padding:28px 24px;box-shadow:0 10px 30px #1e3d9925}
-.hero .tag{display:inline-block;background:#ffffff22;border:1px solid #ffffff45;border-radius:999px;padding:3px 11px;font-size:13px;margin-bottom:8px}
-h1{font-size:28px;line-height:1.3;margin:4px 0 8px}
-.hero p{margin:5px 0;opacity:.94}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 4px 16px #23355d08}
-.card h2{font-size:20px;margin:0 0 12px}
-.card h3{font-size:16px;margin:18px 0 7px}
-.badge{display:inline-block;border-radius:999px;padding:4px 10px;font-size:13px;font-weight:700}
-.badge.green{background:var(--green2);color:var(--green)}
-.badge.blue{background:var(--blue2);color:var(--blue)}
-.badge.red{background:var(--red2);color:var(--red)}
-.badge.gold{background:var(--gold2);color:var(--gold)}
-.price{font-size:31px;font-weight:900;letter-spacing:-1px}
-.small{font-size:13px;color:var(--muted)}
-.highlight{background:#fffbe8;border-left:5px solid #e5b12b;border-radius:12px;padding:14px 16px;margin:12px 0}
-.decision{background:linear-gradient(135deg,#edf7f0,#fff);border:2px solid #8ac8a4}
-.decision strong{color:#087a3f}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{border-bottom:1px solid var(--line);padding:10px 8px;vertical-align:top}
-th{background:#f7f9fd;text-align:left;position:sticky;top:0}
-td:first-child{font-weight:700;width:25%}
-.win{font-weight:800;color:var(--green)}
-.lose{color:#9a4b55}
-.neutral{color:var(--muted)}
-.score{display:flex;gap:12px;align-items:center;margin:10px 0}
-.scorebar{height:12px;background:#e9edf5;border-radius:99px;overflow:hidden;flex:1}
-.scorefill{height:100%;background:var(--blue);border-radius:99px}
-.num{font-size:22px;font-weight:900;width:52px;text-align:right}
-ul{margin:7px 0 7px 20px;padding:0}
-li{margin:4px 0}
-.verdict{font-size:18px;font-weight:800;line-height:1.6}
-footer{color:var(--muted);font-size:12px;padding:8px 4px 30px}
-a{color:var(--blue);text-decoration:none}
-@media(max-width:700px){
-  .container{padding:11px}
-  .hero{border-radius:18px;padding:22px 18px}
-  h1{font-size:23px}
-  .grid{grid-template-columns:1fr}
-  .card{padding:16px;border-radius:15px}
-  table{font-size:13px}
-  th,td{padding:8px 6px}
-  .price{font-size:27px}
-}
-@media print{
-  body{background:#fff}.hero{box-shadow:none}.card{break-inside:avoid;box-shadow:none}
-  .container{max-width:none}.no-print{display:none}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洗衣機選購比較</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --primary-subtle: #eff6ff;
+            --secondary: #0f172a;
+            --accent: #0ea5e9;
+            --accent-warm: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        header.report-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #ffffff;
+            padding: 3.5rem 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header.report-header::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .badge-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            color: #93c5fd;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1.title {
+            font-size: 2.35rem;
+            font-weight: 900;
+            line-height: 1.25;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            max-width: 800px;
+            line-height: 1.6;
+        }
+
+        .meta-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.75rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .meta-info span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .meta-info strong {
+            color: #f1f5f9;
+        }
+
+        /* Navigation Bar */
+        .nav-anchor {
+            position: sticky;
+            top: 1rem;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 1rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .nav-anchor a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 0.45rem 0.85rem;
+            border-radius: 8px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .nav-anchor a:hover {
+            background-color: var(--primary-subtle);
+            color: var(--primary);
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 3.5rem;
+        }
+
+        .section-header {
+            margin-bottom: 1.75rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-header h2::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 1.65rem;
+            background: linear-gradient(to bottom, var(--primary-light), var(--primary));
+            border-radius: 3px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+            font-size: 0.98rem;
+        }
+
+        /* Cards & Grids */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-highlight {
+            border-top: 4px solid var(--primary-light);
+            position: relative;
+        }
+
+        .card-warning {
+            border-top: 4px solid var(--accent-warm);
+        }
+
+        .card-success {
+            border-top: 4px solid var(--success);
+        }
+
+        .card-neutral {
+            border-top: 4px solid #94a3b8;
+            background-color: #f8fafc;
+        }
+
+        .card-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-indigo { background: #e0e7ff; color: #3730a3; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-gray { background: #e2e8f0; color: #475569; }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .price-tag {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #047857;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 1rem;
+        }
+
+        .price-tag small {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-left: 0.25rem;
+        }
+
+        ul.feature-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        ul.feature-list li {
+            position: relative;
+            padding-left: 1.4rem;
+            margin-bottom: 0.55rem;
+            font-size: 0.92rem;
+            color: #334155;
+        }
+
+        ul.feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+
+        ul.cons-list {
+            list-style: none;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        ul.cons-list li {
+            position: relative;
+            padding-left: 1.4rem;
+            margin-bottom: 0.55rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        ul.cons-list li::before {
+            content: "–";
+            position: absolute;
+            left: 0.2rem;
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        /* Comparison Table */
+        .table-wrapper {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+
+        table.compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 860px;
+        }
+
+        table.compare-table th, table.compare-table td {
+            padding: 1.1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.93rem;
+            vertical-align: middle;
+        }
+
+        table.compare-table thead th {
+            background: #f1f5f9;
+            color: var(--secondary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        table.compare-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        table.compare-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .col-model {
+            font-weight: 700;
+            color: var(--secondary);
+            width: 25%;
+        }
+
+        .highlight-col {
+            background-color: rgba(239, 246, 255, 0.4);
+        }
+
+        /* Diagram Box */
+        .diagram-box {
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            margin-top: 1.5rem;
+            box-shadow: var(--shadow-md);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .diagram-box pre {
+            margin: 0;
+            color: #38bdf8;
+        }
+
+        .diagram-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        .legend-item h4 {
+            color: #93c5fd;
+            font-size: 0.95rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .legend-item p {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* Strategy Callout Box */
+        .callout-box {
+            background: linear-gradient(to right, #eff6ff, #f8fafc);
+            border-left: 5px solid var(--primary-light);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: 1.5rem 1.75rem;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .callout-box h4 {
+            color: var(--primary);
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .callout-box p {
+            font-size: 0.95rem;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        /* Decision Tree Box */
+        .decision-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+
+        .flow-node {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .flow-step {
+            display: inline-block;
+            background: var(--secondary);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+        }
+
+        .flow-node h4 {
+            font-size: 1.05rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-node p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        .flow-winner {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer.report-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer.report-footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            h1.title {
+                font-size: 1.75rem;
+            }
+            .container {
+                padding: 1.25rem 1rem;
+            }
+            header.report-header {
+                padding: 2.25rem 1.25rem;
+            }
+            .meta-info {
+                flex-direction: column;
+                gap: 0.6rem;
+            }
+        }
+    </style>
 </head>
 <body>
+
 <div class="container">
 
-<section class="hero">
-  <span class="tag">2026/09/12 最終決策版</span>
-  <h1>洗衣機最終購買比較報告</h1>
-  <p><b>Panasonic NA-V120HDH-G</b>　vs　<b>LG WD-S15TBD</b></p>
-  <p>以「2人家庭＋可洗棉被＋希望洗脫烘＋長期使用＋價格合理」為主要決策條件。</p>
-</section>
+    <!-- Header Section -->
+    <header class="report-header">
+        <span class="badge-tag">家電採購決策研究報告</span>
+        <h1 class="title">15公斤級洗衣機橫向選購評估</h1>
+        <p class="subtitle">深度評估東芝 TWD-T35BP160MWTA(MG)、LG WD-S15NDB、LG WT-VDN15M，並將停產機種 WD-S15TBD 列為備用參考。涵蓋後陽台實測動線配置、2人小家庭耗電換算與雙11檔期採購戰略。</p>
+        
+        <div class="meta-info">
+            <span><strong>專案位置：</strong> GitHub Pages (Shopping/washing-machine)</span>
+            <span><strong>使用場景：</strong> 2人小家庭・後陽台 190×170 cm</span>
+            <span><strong>評估時機：</strong> 舊機正常運作中・鎖定雙11採購檔期</span>
+            <span><strong>更新日期：</strong> 2026 年 10 月</span>
+        </div>
+    </header>
 
-<div class="grid">
-  <section class="card">
-    <span class="badge blue">Panasonic</span>
-    <h2>NA-V120HDH-G</h2>
-    <div class="price">NT$21,912</div>
-    <p class="small">你之前看到的 momo 限時折後價；實際下單價格仍以當下頁面為準。</p>
-    <ul>
-      <li>洗／脫水：<b>12 kg</b></li>
-      <li>烘衣：<b>8 kg</b></li>
-      <li>5 段溫水洗</li>
-      <li>泡洗淨、30°C 溫水槽洗淨</li>
-      <li>16 種洗衣行程</li>
-      <li>尺寸：595 × 850 × 595 mm（寬×高×深）</li>
-    </ul>
-  </section>
+    <!-- Floating / Sticky Navigation -->
+    <nav class="nav-anchor">
+        <a href="#summary">🎯 快速選購結論</a>
+        <a href="#layout">📐 陽台空間配置圖</a>
+        <a href="#matrix">📊 核心規格矩陣</a>
+        <a href="#models">🔍 各機型深度分析</a>
+        <a href="#power">⚡ 2人家庭電費實測</a>
+        <a href="#timing">🛍️ 雙11檔期作戰心法</a>
+        <a href="#decision">🧭 最終決策建議</a>
+    </nav>
 
-  <section class="card decision">
-    <span class="badge green">目前較推薦</span>
-    <h2>LG WD-S15TBD</h2>
-    <div class="price">NT$27,400</div>
-    <p class="small">你目前全電商購物車：$27,900 − $500 折價券；運費 $0。</p>
-    <ul>
-      <li>洗衣：<b>15 kg</b></li>
-      <li>烘衣：<b>8 kg</b></li>
-      <li><b>Wi-Fi / ThinQ</b></li>
-      <li><b>AI DD 直驅變頻</b></li>
-      <li><b>60°C 蒸氣＋5種蒸氣行程</b></li>
-      <li><b>官方列有「被子」行程</b></li>
-      <li>尺寸：645 × 940 × 770 mm（寬×高×深）</li>
-    </ul>
-  </section>
+    <!-- SECTION 1: Summary -->
+    <section id="summary">
+        <div class="section-header">
+            <h2>執行摘要：三秒決策精華</h2>
+            <p>根據空間、預算與日常生活習慣，三款主力機種各有不可替代的優勢領域。</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card card-warning">
+                <span class="card-badge badge-blue">高CP值洗脫烘首選</span>
+                <h3>東芝 TWD-T35BP160MWTA(MG)</h3>
+                <div class="price-tag">$28,100 - $29,900 <small>折後預估</small></div>
+                <p><strong>適合預算 3 萬內、想一次擁有大容量洗脫烘的家庭。</strong> 59.5cm 超窄機身，省下側面空間；具備沖浪護色洗與銀離子抗菌，雨天洗被單烘衣無後顧之憂。</p>
+                <ul class="feature-list">
+                    <li>15kg 洗 / 9kg 烘 大容量配比</li>
+                    <li>同級最窄 59.5 cm 機身面寬</li>
+                    <li>原色護色洗淨 + Ag+ 銀離子抗菌</li>
+                </ul>
+            </div>
+
+            <div class="card card-highlight">
+                <span class="card-badge badge-indigo">全功能旗艦洗脫烘</span>
+                <h3>LG WD-S15NDB</h3>
+                <div class="price-tag">$39,000 - $41,900 <small>市價參考</small></div>
+                <p><strong>適合預算充裕、追求最省事懶人體驗與極速洗衣者。</strong> 深度僅 64.5cm 與舊機無縫替換；配備智慧洗劑自動投入與 39 分鐘勁速快洗。</p>
+                <ul class="feature-list">
+                    <li>AI DD™ 智慧直驅變頻馬達</li>
+                    <li>智慧洗劑精準自動投入（免手動倒洗衣精）</li>
+                    <li>TurboWash 360° 39分鐘勁速洗</li>
+                    <li>深度僅 64.5 cm 超淺版設計</li>
+                </ul>
+            </div>
+
+            <div class="card card-success">
+                <span class="card-badge badge-green">極致省電耐用首選</span>
+                <h3>LG WT-VDN15M (直立式)</h3>
+                <div class="price-tag">$16,000 - $17,900 <small>超高性價比</small></div>
+                <p><strong>適合平時習慣全曬衣、不需要烘乾功能的務實派。</strong> 15公斤大容量搭配直驅馬達，每月電費不到 5 元；取放衣物免彎腰，省下預算可升級電動曬衣架。</p>
+                <ul class="feature-list">
+                    <li>15kg 大容量直立式變頻</li>
+                    <li>AI DD™ 直驅馬達 10 年保固</li>
+                    <li>上掀式門蓋完全利用挑高空間</li>
+                    <li>購機成本僅滾筒的一半不到</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Balcony Layout & Space Planning -->
+    <section id="layout">
+        <div class="section-header">
+            <h2>後陽台空間配置與動線規劃 (190 × 170 cm)</h2>
+            <p>實測後陽台總長 190 cm、總深 170 cm。原先劃分一半空間（190 × 85 cm）供洗衣機使用，深度限制完全解封！</p>
+        </div>
+
+        <div class="callout-box">
+            <h4>💡 關鍵空間發現：深度 71.5cm 的東芝滾筒完全放得下！</h4>
+            <p>先前若以為陽台總深僅 85cm，東芝 71.5cm 深度會極為壓迫；但實際上總深有 170cm，洗衣機前方擁有近 <strong>95～100 cm 的寬闊走道</strong>。人蹲下開門（門扇迴旋半徑約 50cm）完全不卡腳，因此<strong>四款機型的尺寸在您的陽台皆能完美安裝</strong>。</p>
+        </div>
+
+        <div class="diagram-box">
+<pre>
+┌──────────────────────── 總面寬 190 cm ────────────────────────┐
+│                                                               │
+│   [ 洗衣設備區：約 65 cm ]        [ 水電走管區 ]    [ 彈性置物 / 換衣推車區 ] │
+│   ┌──────────────────────┐        (水龍頭/排水孔)   ┌─────────────────────┐   │
+│   │                      │              ●           │                     │   │
+│   │   洗衣機 (靠左放置)   │         (位於正中間)     │   污衣籃 / 洗衣精層架│   │
+│   │                      │                          │                     │   │
+│   └──────────────────────┘                          └─────────────────────┘   │
+│      機身深度約 65~72 cm                                                      │
+├┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┤  總深 170 cm
+│                                                               │  (劃分前/後)
+│                                                               │
+│   [ 正前方操作動線：餘裕約 95 ~ 100 cm ]                      │
+│   • 滾筒前開門迴旋半徑 (約 50 cm) 暢行無阻                     │
+│   • 上方挑高無擋，可完整規劃「升降曬衣架」                      │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+</pre>
+            <div class="diagram-legend">
+                <div class="legend-item">
+                    <h4>管線配置建議：強烈建議「偏左或偏右擺放」</h4>
+                    <p>水龍頭與排水孔位於 190cm 正中間。請勿將洗衣機壓在正中，將機身靠左，讓水電接頭留在機器側邊，這樣背後能完全貼牆，日後開關閥門與清濾網最方便。</p>
+                </div>
+                <div class="legend-item">
+                    <h4>門扇開啟角度與站位</h4>
+                    <p>滾筒門預設為左開或右開。陽台有 100cm 走道，人可側身或正對站立，從容抱出床單與大件衣物；若選直立式更完全不佔前方迴旋走道。</p>
+                </div>
+                <div class="legend-item">
+                    <h4>挑高曬衣空間聯動</h4>
+                    <p>上方無障礙物，可於走道上方安裝雙桿升降曬衣架。若選純洗脫機型（WT-VDN15M），洗完抬手即可直接晾衣，動線最短。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Comparison Matrix -->
+    <section id="matrix">
+        <div class="section-header">
+            <h2>核心規格與功能完整對照表</h2>
+            <p>涵蓋三款主力候選機型，以及列為備用對照的 LG WD-S15TBD。</p>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>評估項目</th>
+                        <th class="highlight-col">東芝 TWD-T35BP160MWTA(MG)</th>
+                        <th>LG WD-S15NDB</th>
+                        <th>LG WT-VDN15M</th>
+                        <th>備用方案：LG WD-S15TBD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-model">產品型態</td>
+                        <td class="highlight-col"><strong style="color:#1d4ed8;">滾筒式（洗脫烘）</strong></td>
+                        <td><strong style="color:#3730a3;">滾筒式（洗脫烘）</strong></td>
+                        <td><strong style="color:#15803d;">直立式（純洗脫）</strong></td>
+                        <td><strong style="color:#64748b;">滾筒式（洗脫烘）</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">容量規格</td>
+                        <td class="highlight-col">洗衣 15 kg / 烘衣 9 kg</td>
+                        <td>洗衣 15 kg / 烘衣 8 kg</td>
+                        <td>洗衣 15 kg (無烘衣)</td>
+                        <td>洗衣 15 kg / 烘衣 8 kg</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">機身尺寸 (寬×深×高)</td>
+                        <td class="highlight-col">595 × 715 × 850 mm<br><small style="color:#0284c7;">最窄面寬，深型設計</small></td>
+                        <td>645 × 645 × 940 mm<br><small style="color:#0284c7;">淺版機身，等同舊機</small></td>
+                        <td>632 × 670 × 1020 mm<br><small style="color:#0284c7;">標準直立，掀蓋約140cm</small></td>
+                        <td>645 × 770 × 940 mm<br><small style="color:#dc2626;">舊款深型，佔地較大</small></td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">乾衣技術</td>
+                        <td class="highlight-col">冷凝式烘乾</td>
+                        <td>冷凝式烘乾</td>
+                        <td>無烘衣功能</td>
+                        <td>冷凝式烘乾</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">洗劑自動精準投入</td>
+                        <td class="highlight-col">無（手動添加）</td>
+                        <td><span style="color:#059669; font-weight:700;">有（自動稱重投放）</span></td>
+                        <td>無（手動添加）</td>
+                        <td>無（手動添加）</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">馬達與傳動技術</td>
+                        <td class="highlight-col">Origin Inverter BLDC 變頻</td>
+                        <td>AI DD™ 智慧直驅變頻</td>
+                        <td>AI DD™ 智慧直驅變頻</td>
+                        <td>直驅變頻 (DD)</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">特色洗程科技</td>
+                        <td class="highlight-col">沖浪洗淨2.0、原色護色洗、Ag+銀離子抗菌</td>
+                        <td>TurboWash 360° (39分快洗)、60°C蒸氣除蟎</td>
+                        <td>TurboWash勁速洗、6種手洗動作模擬</td>
+                        <td>TurboWash勁速洗、蒸氣洗滌</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">智慧聯網 APP</td>
+                        <td class="highlight-col">TSmartLife APP</td>
+                        <td>LG ThinQ WiFi</td>
+                        <td>LG ThinQ WiFi</td>
+                        <td>LG ThinQ WiFi</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">市場參考價格</td>
+                        <td class="highlight-col"><strong style="color:#047857;">NT$ 28,106 - 29,900</strong></td>
+                        <td>NT$ 39,000 - 41,900</td>
+                        <td><strong style="color:#047857;">NT$ 16,065 - 17,900</strong></td>
+                        <td>約 NT$ 31,000 - 37,900</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model">通路現況與供貨</td>
+                        <td class="highlight-col"><span class="card-badge badge-green">現貨在售</span></td>
+                        <td><span class="card-badge badge-green">現貨在售</span></td>
+                        <td><span class="card-badge badge-green">現貨在售</span></td>
+                        <td><span class="card-badge badge-gray">已停產 (僅零星展示/庫存)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- SECTION 4: In-depth Model Breakdown -->
+    <section id="models">
+        <div class="section-header">
+            <h2>各機型優缺點深度評析</h2>
+            <p>深入分析核心賣點與日常使用可能遇到的痛點。</p>
+        </div>
+
+        <div class="card-grid">
+            <!-- TOSHIBA -->
+            <div class="card">
+                <span class="card-badge badge-blue">主力候選 1</span>
+                <h3>東芝 TWD-T35BP160MWTA(MG)</h3>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:0.75rem;">15kg 滾筒洗脫烘 / 黑曜岩</p>
+                
+                <h4 style="font-size:0.95rem; color:#047857; margin-top:0.75rem;">👍 核心優勢</h4>
+                <ul class="feature-list">
+                    <li><strong>性價比破表：</strong>3 萬元以內同級唯一提供 15kg 洗＋9kg 烘大容量規格。</li>
+                    <li><strong>59.5cm 極窄面寬：</strong>同級滾筒最窄，放在 190cm 寬的陽台能留出高達 130cm 的置物空間。</li>
+                    <li><strong>冷水強洗護色：</strong>沖浪洗淨 2.0 在常溫下能打出深層細膩微泡，降低棉質衣物褪色與縮水。</li>
+                    <li><strong>健康抑菌防護：</strong>筒槽內建 Ag+ 銀離子抗菌、高溫蒸氣除蟎洗程，並配有夜視照明燈。</li>
+                </ul>
+
+                <h4 style="font-size:0.95rem; color:#b91c1c; margin-top:1rem;">⚠️ 注意事項與缺點</h4>
+                <ul class="cons-list">
+                    <li>冷凝式烘乾時間較長（約 2.5～3 小時），厚重被單滿載時不易完全烘透。</li>
+                    <li>無自動洗劑投遞，每次洗衣需手動倒洗衣精。</li>
+                    <li>全機保固僅 1 年（馬達 10 年保固）。</li>
+                </ul>
+            </div>
+
+            <!-- LG WD-S15NDB -->
+            <div class="card">
+                <span class="card-badge badge-indigo">主力候選 2</span>
+                <h3>LG WD-S15NDB</h3>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:0.75rem;">15kg 滾筒洗脫烘 / 夜墨灰 / 淺版</p>
+                
+                <h4 style="font-size:0.95rem; color:#047857; margin-top:0.75rem;">👍 核心優勢</h4>
+                <ul class="feature-list">
+                    <li><strong>智慧洗劑自動投入：</strong>一次加滿可自動精準投放數週，不沾手且防止過量殘留。</li>
+                    <li><strong>TurboWash 360° 39分快洗：</strong>4 道噴射水流，日常微髒衣物 39 分鐘搞定，大幅省時。</li>
+                    <li><strong>深度僅 64.5cm 淺版：</strong>機身深度與您舊機 65cm 一模一樣，陽台空間感最開闊。</li>
+                    <li><strong>AI DD™ 智慧感測：</strong>自動感測衣物柔軟度與重量，自動微調最佳洗滌拍打路徑。</li>
+                </ul>
+
+                <h4 style="font-size:0.95rem; color:#b91c1c; margin-top:1rem;">⚠️ 注意事項與缺點</h4>
+                <ul class="cons-list">
+                    <li>購機成本較高，市價約 3.9～4.1 萬元，較東芝貴約 1 萬元。</li>
+                    <li>烘衣容量為 8kg，略小於東芝的 9kg。</li>
+                </ul>
+            </div>
+
+            <!-- LG WT-VDN15M -->
+            <div class="card">
+                <span class="card-badge badge-green">主力候選 3</span>
+                <h3>LG WT-VDN15M</h3>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:0.75rem;">15kg 直立式變頻純洗脫 / 曜石黑</p>
+                
+                <h4 style="font-size:0.95rem; color:#047857; margin-top:0.75rem;">👍 核心優勢</h4>
+                <ul class="feature-list">
+                    <li><strong>價格極親民：</strong>不到 1.8 萬元即可享有 15kg 大容量與 DD 直驅變頻。</li>
+                    <li><strong>取放衣物免彎腰：</strong>上方挑高無擋，上掀開蓋站姿拿取最符合人體工學。</li>
+                    <li><strong>電費極致節省：</strong>純馬達轉動，洗一次電費僅約 0.3～0.5 元，一年電費不到 60 元。</li>
+                    <li><strong>維護成本低：</strong>無冷凝烘乾電熱管等複雜加熱組件，結構單純更耐用。</li>
+                </ul>
+
+                <h4 style="font-size:0.95rem; color:#b91c1c; margin-top:1rem;">⚠️ 注意事項與缺點</h4>
+                <ul class="cons-list">
+                    <li>完全沒有烘衣功能，遇到梅雨季或冬天連日陰雨需依賴室內除濕機或曬衣架。</li>
+                    <li>直立式用水量天生高於滾筒式，衣物輕微打結機率略高於滾筒。</li>
+                </ul>
+            </div>
+
+            <!-- LG WD-S15TBD (Backup) -->
+            <div class="card card-neutral">
+                <span class="card-badge badge-gray">備用參考方案 (已停產)</span>
+                <h3>LG WD-S15TBD</h3>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:0.75rem;">15kg 滾筒洗脫烘 / 冰磁白 / 舊款深版</p>
+                
+                <h4 style="font-size:0.95rem; color:#475569; margin-top:0.75rem;">📌 機型定位與現況</h4>
+                <p style="font-size:0.88rem; color:#475569; margin-bottom:0.75rem;">為 WD-S15NDB 的前代機型。原廠已停產下架，目前僅剩極少數賣家有零星展示機或庫存。</p>
+                
+                <ul class="cons-list" style="border-top:none; padding-top:0;">
+                    <li><strong>機身深度達 77 cm：</strong>加上背後管線需吃掉 82～85cm 空間，比新版淺版多出 12cm。</li>
+                    <li><strong>無自動洗劑投放：</strong>仍需每趟手動添加洗衣精。</li>
+                    <li><strong>停產風險：</strong>後續若需更換外觀件或主機板可能面臨備料週期較長的問題。</li>
+                </ul>
+                <p style="font-size:0.85rem; color:#b45309; margin-top:0.5rem; font-weight:600;">結論：除非能撿到極大出清價差（例如 2.5 萬以內），否則直接選東芝或新款 S15NDB 更划算。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Power Consumption for 2-person Household -->
+    <section id="power">
+        <div class="section-header">
+            <h2>2人小家庭實際耗電與電費試算</h2>
+            <p>洗衣機耗電核心在於「電熱管加熱」。以下以 2 人家庭（每週洗 3 次、每月 12 次）、每度電 4 元進行年化換算。</p>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>使用情境模式</th>
+                        <th>LG WT-VDN15M (直立式)</th>
+                        <th class="highlight-col">東芝 TWD-T35BP (滾筒洗脫烘)</th>
+                        <th>LG WD-S15NDB (滾筒洗脫烘)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-model"><strong>單次純冷水洗脫</strong><br><small>馬達運轉約 40-50 分鐘</small></td>
+                        <td>約 0.1 度 (0.4 元)</td>
+                        <td class="highlight-col">約 0.2 度 (0.8 元)</td>
+                        <td>約 0.18 度 (0.7 元)</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model"><strong>單次完整洗脫烘</strong><br><small>電熱冷凝加熱 2.5-3 小時</small></td>
+                        <td><span style="color:#94a3b8;">無此功能</span></td>
+                        <td class="highlight-col">約 2.8 度 (11.2 元)</td>
+                        <td>約 3.2 度 (12.8 元)</td>
+                    </tr>
+                    <tr>
+                        <td class="col-model"><strong>情境 A：日常曬衣為主</strong><br><small>每月 8次純洗 + 4次洗脫烘 (雨天/床單)</small></td>
+                        <td><strong>約 5 元 / 月</strong><br><small>(全年約 60 元)</small></td>
+                        <td class="highlight-col"><strong style="color:#1d4ed8;">約 42 元 / 月</strong><br><small>(全年約 500 元)</small></td>
+                        <td><strong>約 45 元 / 月</strong><br><small>(全年約 540 元)</small></td>
+                    </tr>
+                    <tr>
+                        <td class="col-model"><strong>情境 B：全烘懶人模式</strong><br><small>每月 12次全部洗脫烘到底</small></td>
+                        <td><span style="color:#94a3b8;">無此功能</span></td>
+                        <td class="highlight-col"><strong style="color:#1d4ed8;">約 106 元 / 月</strong><br><small>(全年約 1,270 元)</small></td>
+                        <td><strong>約 120 元 / 月</strong><br><small>(全年約 1,440 元)</small></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="callout-box" style="margin-top:1.5rem;">
+            <h4>💰 電費精算結論：完全不需擔心電費暴增！</h4>
+            <p>1. 即便每週都烘棉被，情境 A 每月電費也<strong>僅需 40 多元</strong>（不到一杯拿鐵的價格）。<br>
+               2. 即使進入「全烘模式」，整個月電費也僅約 100～120 元。相較外面自助洗衣店一次烘衣就要 60～100 元，在家洗烘依然極度划算。</p>
+        </div>
+    </section>
+
+    <!-- SECTION 6: Double 11 Strategy -->
+    <section id="timing">
+        <div class="section-header">
+            <h2>採購時機與雙11作戰策略</h2>
+            <p>鑑於您的<strong>舊洗衣機目前仍能正常運作</strong>，您手握極大的選購主動權！</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card card-highlight">
+                <span class="card-badge badge-blue">策略核心 1</span>
+                <h3>舊機正常 = 物流延誤零痛感</h3>
+                <p>雙 11 大家電最怕「塞單 2～3 週等不到機器」。家中沒機器會痛苦萬分，但您舊機正常服役，即使新機因塞車排到 11 月底才送達安裝，生活完全零影響。</p>
+            </div>
+
+            <div class="card card-highlight">
+                <span class="card-badge badge-blue">策略核心 2</span>
+                <h3>鎖定「原廠加碼登錄禮」</h3>
+                <p>大家電受限品牌控價，雙 11 裸機降價幅度有限（約數百至一千元）；但品牌會<strong>大幅加碼原廠贈品</strong>（如氣炸鍋、雙人牌刀具組、高額超商禮券或吸塵器），實質回饋極高。</p>
+            </div>
+
+            <div class="card card-highlight">
+                <span class="card-badge badge-blue">策略核心 3</span>
+                <h3>鎖定「10月下旬早鳥暖身慶」</h3>
+                <p>建議在 <strong>10/24～11/01</strong> 留意 momo、PChome 等平台的首波暖身神券與銀行高趴數回饋（約 6～10%）。提早於 11 月初結帳，能避開 11/11 真正的全台物流大癱瘓。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Decision Flow -->
+    <section id="decision">
+        <div class="section-header">
+            <h2>最終選購決策引導</h2>
+            <p>依據您與家人的生活偏好，跟隨以下三條路徑做出最精準的決定：</p>
+        </div>
+
+        <div class="decision-flow">
+            <div class="flow-node">
+                <span class="flow-step">決策路徑 A</span>
+                <h4>追求預算與洗脫烘平衡</h4>
+                <p>希望雨天能烘乾衣物與被單，但購機預算希望控制在 3 萬元內，不想花到 4 萬。</p>
+                <div class="flow-winner">👉 堅定選擇：東芝 TWD-T35BP160MWTA</div>
+            </div>
+
+            <div class="flow-node">
+                <span class="flow-step">決策路徑 B</span>
+                <h4>追求極致懶人與高品質體驗</h4>
+                <p>預算有 4 萬元餘裕，想要「洗劑自動投入」不沾手，且希望機身深度最淺（64.5cm）。</p>
+                <div class="flow-winner">👉 直上旗艦：LG WD-S15NDB</div>
+            </div>
+
+            <div class="flow-node">
+                <span class="flow-step">決策路徑 C</span>
+                <h4>習慣全日曬、崇尚務實耐用</h4>
+                <p>陽台 190×170cm 曬衣空間充裕，完全不需要烘衣功能，希望購機省下一半預算。</p>
+                <div class="flow-winner">👉 經濟首選：LG WT-VDN15M</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="report-footer">
+        <p>本報告專為 2人家庭洗衣機採購與後陽台配置規劃製作 ｜ 部署目標：<a href="https://aymathx.github.io/Aaron/Shopping/washing-machine/index.html" target="_blank">aymathx.github.io</a></p>
+        <p style="margin-top:0.4rem; font-size:0.8rem; color:#94a3b8;">建議將此 index.html 放置於 GitHub Repository 對應路徑即可直接靜態呈現。</p>
+    </footer>
+
 </div>
 
-<section class="card">
-<h2>① 先看「真正價格」</h2>
-<table>
-<tr><th>項目</th><th>Panasonic</th><th>LG</th></tr>
-<tr><td>目前比較價格</td><td>NT$21,912</td><td>NT$27,400 實際付款</td></tr>
-<tr><td>額外回饋</td><td>—</td><td>5,000 全聯福利點</td></tr>
-<tr><td>福利點折抵價值</td><td>—</td><td>約 NT$500</td></tr>
-<tr><td>計入點數後的實質成本</td><td><b>NT$21,912</b></td><td><b>約 NT$26,900</b></td></tr>
-<tr><td>實質價差</td><td colspan="2"><b>LG 約多 NT$4,988</b></td></tr>
-</table>
-<div class="highlight">
-<b>重點：</b>不要把 5,000 福利點當成 5,000 元。你已確認「5,000 點＝500 元折抵」，所以 LG 的實質成本是約 26,900 元，而不是 22,400 元。
-</div>
-</section>
-
-<section class="card">
-<h2>② 核心規格一覽</h2>
-<table>
-<tr><th>比較項目</th><th>Panasonic NA-V120HDH-G</th><th>LG WD-S15TBD</th><th>誰較有利</th></tr>
-<tr><td>洗衣容量</td><td>12 kg</td><td><b>15 kg</b></td><td class="win">LG</td></tr>
-<tr><td>烘衣容量</td><td>8 kg</td><td>8 kg</td><td class="neutral">平手</td></tr>
-<tr><td>洗脫烘</td><td>✓</td><td>✓</td><td class="neutral">平手</td></tr>
-<tr><td>溫水洗</td><td><b>5 段</b></td><td>5 段溫度設定</td><td class="win">Panasonic偏強</td></tr>
-<tr><td>蒸氣</td><td>—</td><td><b>✓ 60°C</b></td><td class="win">LG</td></tr>
-<tr><td>Wi-Fi</td><td>—</td><td><b>✓ ThinQ</b></td><td class="win">LG</td></tr>
-<tr><td>AI DD</td><td>—</td><td><b>✓</b></td><td class="win">LG</td></tr>
-<tr><td>被子行程</td><td>官方目前產品頁未列出</td><td><b>✓</b></td><td class="win">LG</td></tr>
-<tr><td>尺寸（寬×高×深）</td><td><b>595×850×595 mm</b></td><td>645×940×770 mm</td><td class="win">Panasonic</td></tr>
-<tr><td>空間友善度</td><td><b>明顯較省空間</b></td><td>較深、較高</td><td class="win">Panasonic</td></tr>
-</table>
-</section>
-
-<section class="grid">
-<section class="card">
-<h2>③ Panasonic 的優點</h2>
-<ul>
-<li><b>價格最低：</b>目前約 21,912 元，明顯省約 4,988 元。</li>
-<li><b>機身非常漂亮：</b>深度只有 595 mm，若洗衣機位置有限，優勢很大。</li>
-<li><b>溫水洗：</b>官方列出 5 段溫水洗。</li>
-<li><b>洗脫烘完整：</b>12kg 洗＋8kg 烘，已能滿足一般小家庭。</li>
-<li><b>功能不花俏：</b>如果不在乎 Wi-Fi、AI、蒸氣，CP 值很好。</li>
-</ul>
-<h3>Panasonic 的缺點</h3>
-<ul>
-<li>洗衣容量比 LG 少 3 kg。</li>
-<li>沒有 Wi-Fi / ThinQ。</li>
-<li>沒有 LG 的 AI DD 與蒸氣功能。</li>
-<li>官方產品頁目前未明列「被子」行程，因此若「棉被」是核心需求，需再依棉被材質與尺寸確認使用限制。</li>
-</ul>
-</section>
-
-<section class="card">
-<h2>④ LG 的優點</h2>
-<ul>
-<li><b>15kg 洗衣容量：</b>洗大件床單、被類的餘裕更大。</li>
-<li><b>官方有「被子」行程：</b>這點對你的需求非常直接。</li>
-<li><b>8kg 烘衣：</b>與 Panasonic 相同。</li>
-<li><b>Wi-Fi / ThinQ：</b>可遠端遙控、監控、下載行程。</li>
-<li><b>蒸氣：</b>60°C 蒸氣，官方標示 BAF 過敏防護相關功能。</li>
-<li><b>AI DD＋直驅變頻：</b>屬於 LG 的核心洗衣技術配置。</li>
-<li><b>你現在的促銷價格很漂亮：</b>實付 27,400 元＋5,000 福利點。</li>
-</ul>
-<h3>LG 的缺點</h3>
-<ul>
-<li><b>機身明顯較大：</b>深度 770 mm，比 Panasonic 多 175 mm。</li>
-<li>高度也高約 90 mm。</li>
-<li>雖然洗 15kg，但<b>烘衣仍只有 8kg</b>，不能把 15kg 洗完全部直接塞進去烘。</li>
-<li>沒有自動洗劑投入 ezDispense。</li>
-</ul>
-</section>
-</section>
-
-<section class="card">
-<h2>⑤ 「棉被」是這次最重要的差異</h2>
-<div class="highlight">
-<b>如果買洗脫烘的核心理由之一，就是希望偶爾處理棉被，我會偏向 LG。</b>
-</div>
-<p>LG 官方規格明列「被子」行程，且洗衣容量 15kg；Panasonic NA-V120HDH-G 則是 12kg 洗、8kg 烘，官方產品頁沒有在目前公開規格中列出「被子」行程。</p>
-<p><b>但要注意：</b>「15kg」不代表任何超厚冬被都能一次洗完並一次烘乾。洗衣與烘衣是兩個不同的容量限制；兩台都是 8kg 烘衣上限。厚重羽絨被、羊毛被或大型冬被，仍應以材質、尺寸及原廠行程／說明書限制為準。</p>
-</section>
-
-<section class="card">
-<h2>⑥ 以你們的需求打分</h2>
-<p class="small">評分不是原廠數據，而是依「2人家庭＋棉被＋洗脫烘＋價格＋長期使用」做的決策權重。</p>
-
-<div class="score"><b>Panasonic</b><div class="scorebar"><div class="scorefill" style="width:84%"></div></div><div class="num">84</div></div>
-<div class="score"><b>LG</b><div class="scorebar"><div class="scorefill" style="width:92%"></div></div><div class="num">92</div></div>
-
-<table>
-<tr><th>權重</th><th>Panasonic</th><th>LG</th></tr>
-<tr><td>價格／CP值 20%</td><td>★★★★★</td><td>★★★★☆</td></tr>
-<tr><td>棉被需求 25%</td><td>★★★★☆</td><td>★★★★★</td></tr>
-<tr><td>洗脫烘能力 20%</td><td>★★★★☆</td><td>★★★★★</td></tr>
-<tr><td>智慧／附加功能 15%</td><td>★★★☆☆</td><td>★★★★★</td></tr>
-<tr><td>空間需求 10%</td><td>★★★★★</td><td>★★★☆☆</td></tr>
-<tr><td>長期使用價值 10%</td><td>★★★★☆</td><td>★★★★★</td></tr>
-</table>
-</section>
-
-<section class="card decision">
-<h2>⑦ 最終結論</h2>
-<p class="verdict">如果「預算優先」，選 <strong>Panasonic NA-V120HDH-G</strong>。</p>
-<p>它的最大優勢就是便宜、機身小、12kg＋8kg 已經足夠一般兩人家庭使用。如果你們其實很少洗棉被，也不在乎 Wi-Fi、蒸氣與智慧功能，Panasonic 是很理性的省錢選擇。</p>
-
-<p class="verdict">如果「希望一次買好、棉被需求重要」，我會選 <strong>LG WD-S15TBD</strong>。</p>
-<p>你現在拿到的條件是 <strong>實付 NT$27,400＋5,000 全聯福利點（價值約 NT$500）＋運費 0 元＋基本安裝</strong>。以約 NT$26,900 的實質成本，比 Panasonic 多約 NT$4,988，換到 15kg 洗衣容量、Wi-Fi、蒸氣、AI DD，以及官方明列的「被子」行程。</p>
-
-<div class="highlight">
-<b>一句話給另一半：</b><br>
-「Panasonic 是比較便宜、比較小的理性選擇；LG 是多花約 5,000 元，把容量、棉被彈性、智慧功能一次補齊。我們如果會用到棉被洗滌與烘乾，我會選 LG。」
-</div>
-</section>
-
-<section class="card">
-<h2>⑧ 下單前最後 5 項確認</h2>
-<ol>
-<li><b>確認洗衣機空間：</b>LG 深度約 770mm，請量「牆面到前方可用空間」，並預留門片開啟與管線空間。</li>
-<li><b>確認 5,000 福利點：</b>你已確認 5,000 點可折 500 元；請確認點數入帳時間與使用期限。</li>
-<li><b>確認基本安裝範圍：</b>尤其是排水、進水、水龍頭與特殊環境是否可能產生額外費用。</li>
-<li><b>確認舊機回收：</b>若有舊洗衣機，先確認全電商此次配送是否包含搬運／回收及樓層限制。</li>
-<li><b>棉被先確認材質：</b>如果主要是大型冬被、羽絨被或特殊材質，不要只看 15kg 數字，依被子洗滌標示與原廠限制操作。</li>
-</ol>
-</section>
-
-</div>
 </body>
 </html>
