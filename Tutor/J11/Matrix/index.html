@@ -498,11 +498,11 @@
           </li>
           <li>
             <span>2. 左邊是 <strong>R (＋)</strong></span>
-            <span class="tag-pill" style="background:#dbeafe;color:#1e40af;">角度相加 (θ + φ)</span>
+            <span class="tag-pill" style="background:#dbeafe;color:#1e40af;">角度相加 ( θ + φ )</span>
           </li>
           <li>
             <span>3. 左邊是 <strong>M (－)</strong></span>
-            <span class="tag-pill" style="background:#fee2e2;color:#991b1b;">左減右 (θ − φ)</span>
+            <span class="tag-pill" style="background:#fee2e2;color:#991b1b;">左減右 ( θ − φ )</span>
           </li>
         </ul>
       </div>
@@ -511,7 +511,7 @@
       <div class="mnemonic-box blue">
         <div>
           <span class="badge badge-R">筆記版・四大公式直接背</span>
-          <div class="mnemonic-slogan">「 以 M(φ) 為基準，乘左加 θ，乘右減 θ 」</div>
+          <div class="mnemonic-slogan">「 M(φ) 為準，左加右減 」</div>
         </div>
         <ul class="compact-list">
           <li>
@@ -537,7 +537,7 @@
       <div class="mnemonic-box purple">
         <div>
           <span class="badge" style="background:#ddd6fe;color:#5b21b6;">考場忘光救命術</span>
-          <div class="mnemonic-slogan">「 只看 (1,0) 落點角度！」</div>
+          <div class="mnemonic-slogan">「 只看 ( 1 , 0 ) 落點角度！」</div>
         </div>
         <ul class="compact-list">
           <li style="display:block;">
@@ -554,8 +554,8 @@
     </div>
 
     <div class="warning-banner">
-      <span>⚠️ <strong>學測必考「 兩倍角 」防呆</strong>：對 [ 斜角 ] <strong>α</strong>( 斜率 <code>m = tan α</code> ) 鏡射時，矩陣內角是 <strong>φ = 2α</strong>！</span>
-      <span class="tag-pill" style="background:#f59e0b;color:#fff;font-size:0.9rem;">算完若問「新鏡射軸傾角」記得 ÷ 2</span>
+      <span>⚠️ <strong>學測必考「 兩倍角 」防呆</strong>：對「 斜角 」<strong>α</strong> ( 斜率 <code>m = tan α</code> ) 鏡射時，矩陣內角是 <strong>φ = 2α</strong>！</span>
+      <span class="tag-pill" style="background:#f59e0b;color:#fff;font-size:0.9rem;">算完若問「 新鏡射軸斜角 」記得 ÷ 2</span>
     </div>
   </section>
 
@@ -581,7 +581,7 @@
       <div>
         <div class="mode-tabs">
           <button class="mode-btn active" onclick="setMode(0)" id="modeBtn0">
-            一、R ( θ ) · M ( φ ) = M ( φ + θ )
+            ① R ( θ ) · M ( φ ) = M ( φ + θ )
             <small>左轉右鏡 ＝ 鏡射 ( 乘左加 θ )</small>
           </button>
           <button class="mode-btn" onclick="setMode(1)" id="modeBtn1">
@@ -799,7 +799,7 @@
 
     if (currentMode === 0 || currentMode === 1) {
       labelTheta.textContent = `旋轉矩陣 R(θ) 的旋轉角 θ`;
-      labelPhi.textContent = `鏡射矩陣 M(φ) 的內角 φ（鏡射軸傾角 α = ${(phi/2).toFixed(1)}°）`;
+      labelPhi.textContent = `鏡射矩陣 M(φ) 的內角 φ ( 鏡射軸傾角 α = ${(phi/2).toFixed(1)}° )`;
     } else if (currentMode === 2) {
       labelTheta.textContent = `左鏡射矩陣 M(θ) 內角 θ（鏡射軸 L₁ 傾角 = ${(theta/2).toFixed(1)}°）`;
       labelPhi.textContent = `右鏡射矩陣 M(φ) 內角 φ（鏡射軸 L₂ 傾角 = ${(phi/2).toFixed(1)}°）`;
