@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>旋轉與鏡射矩陣四大關係｜高三學測互動視覺化重點講義</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --secondary: #dc2626;
+      --secondary-light: #fee2e2;
+      --accent: #7c3aed;
+      --accent-light: #ede9fe;
+      --emerald: #059669;
+      --emerald-light: #d1fae5;
+      --amber: #d97706;
+      --amber-light: #fef3c7;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: #ffffff;
+      padding: 36px 20px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(30, 58, 138, 0.18);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      font-size: 1.05rem;
+      opacity: 0.92;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 28px auto;
+      padding: 0 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .section-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 26px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+      border: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .badge-R {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .badge-M {
+      background: var(--secondary-light);
+      color: var(--secondary);
+    }
+
+    /* 口訣區 */
+    .mnemonic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 18px;
+    }
+
+    .mnemonic-box {
+      border-radius: 14px;
+      padding: 20px;
+      border: 2px solid transparent;
+    }
+
+    .mnemonic-box.gold {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border-color: #f59e0b;
+    }
+
+    .mnemonic-box.blue {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border-color: #3b82f6;
+    }
+
+    .mnemonic-box.purple {
+      background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+      border-color: #8b5cf6;
+    }
+
+    .mnemonic-slogan {
+      font-size: 1.3rem;
+      font-weight: 900;
+      margin: 10px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .gold .mnemonic-slogan { color: #b45309; }
+    .blue .mnemonic-slogan { color: #1d4ed8; }
+    .purple .mnemonic-slogan { color: #6d28d9; }
+
+    .mnemonic-steps {
+      list-style: none;
+      margin-top: 10px;
+      font-size: 0.96rem;
+    }
+
+    .mnemonic-steps li {
+      margin-bottom: 8px;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .mnemonic-steps li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    /* 互動視覺化區 */
+    .lab-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .lab-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .mode-btn {
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      background: #f8fafc;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--text);
+      transition: all 0.2s;
+      text-align: left;
+    }
+
+    .mode-btn:hover {
+      border-color: #94a3b8;
+      background: #f1f5f9;
+    }
+
+    .mode-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: #1e3a8a;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+    }
+
+    .mode-btn small {
+      display: block;
+      font-weight: 500;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .canvas-wrapper {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+      position: relative;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      background: #fcfdff;
+    }
+
+    .legend-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 10px;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .slider-group {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .step-explanation {
+      background: #f8fafc;
+      border-left: 4px solid var(--primary);
+      padding: 14px 16px;
+      border-radius: 0 12px 12px 0;
+      margin-top: 12px;
+      font-size: 0.95rem;
+    }
+
+    .step-explanation h4 {
+      margin-bottom: 6px;
+      color: #1e3a8a;
+    }
+
+    /* 矩陣排版 */
+    .matrix-equation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 12px;
+      margin: 12px 0;
+      font-family: "Cambria Math", "Times New Roman", serif;
+      font-size: 1.08rem;
+    }
+
+    .matrix {
+      display: inline-grid;
+      grid-template-columns: repeat(2, auto);
+      gap: 4px 12px;
+      padding: 6px 10px;
+      border-left: 2px solid #cbd5e1;
+      border-right: 2px solid #cbd5e1;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    /* 表格區 */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: #f1f5f9;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .warning-banner {
+      background: var(--amber-light);
+      border: 1px solid #f59e0b;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-top: 16px;
+      color: #78350f;
+      font-size: 0.95rem;
+    }
+
+    /* 測驗區 */
+    .quiz-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .quiz-question {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .quiz-option {
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.96rem;
+      transition: all 0.15s;
+      text-align: left;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .quiz-option.correct {
+      border-color: var(--emerald);
+      background: var(--emerald-light);
+      color: #065f46;
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--secondary);
+      background: var(--secondary-light);
+      color: #991b1b;
+    }
+
+    .quiz-feedback {
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.95rem;
+      display: none;
+      margin-bottom: 12px;
+    }
+
+    .btn-next {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-next:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>旋轉矩陣 R 與鏡射矩陣 M 的四大乘積關係</h1>
+  <p>高三學測數學總複習｜定性正負號法 × 終極秒殺口訣 × 追蹤 (1,0) 幾何視覺化</p>
+</header>
+
+<div class="container">
+
+  <!-- 第一部分：三大記憶口訣與教學切入點 -->
+  <section class="section-card">
+    <div class="section-title">
+      <span>💡 一、三個層次帶學生秒記（不死背硬展開）</span>
+    </div>
+
+    <div class="mnemonic-grid">
+      <!-- 口訣一 -->
+      <div class="mnemonic-box gold">
+        <span class="badge" style="background:#fef08a;color:#854d0e;">全場通殺・10字神口訣</span>
+        <div class="mnemonic-slogan">「正負定 R M，左矩定加減」</div>
+        <ul class="mnemonic-steps">
+          <li><strong>Step 1 定種類（看正負 / 行列式）</strong>：<br>
+            把 <strong>R 當「＋（正面，det=1）」</strong>、<strong>M 當「－（翻面，det=-1）」</strong>。<br>
+            同號相乘得 <strong>R</strong>（R·R=R、M·M=R）；異號相乘得 <strong>M</strong>（R·M=M、M·R=M）。</li>
+          <li><strong>Step 2 定角度（看左邊矩陣是誰）</strong>：<br>
+            固定把<strong>左邊角度放前面</strong>：<br>
+            • 左邊是 <strong>R（＋）</strong> 👉 角度<strong>相加</strong>（θ + φ）<br>
+            • 左邊是 <strong>M（－）</strong> 👉 角度<strong>相減</strong>（左減右：θ − φ）</li>
+        </ul>
+      </div>
+
+      <!-- 口訣二 -->
+      <div class="mnemonic-box blue">
+        <span class="badge badge-R">手寫筆記版・以 M(φ) 為主體</span>
+        <div class="mnemonic-slogan">「左乘加 θ，右乘減 θ，雙鏡前減後」</div>
+        <ul class="mnemonic-steps">
+          <li><strong>一轉一鏡必為鏡（以 M(φ) 為基準）</strong>：<br>
+            • <strong>R(θ) · M(φ) = M(φ + θ)</strong> 👉 R 乘在<strong>左邊</strong>，角度<strong>加 θ</strong><br>
+            • <strong>M(φ) · R(θ) = M(φ − θ)</strong> 👉 R 乘在<strong>右邊</strong>，角度<strong>減 θ</strong></li>
+          <li><strong>兩次鏡射負負得正變旋轉</strong>：<br>
+            • <strong>M(θ) · M(φ) = R(θ − φ)</strong> 👉 矩陣內角度<strong>左減右</strong>（即兩鏡射軸夾角的 2 倍）</li>
+        </ul>
+      </div>
+
+      <!-- 口訣三 -->
+      <div class="mnemonic-box purple">
+        <span class="badge" style="background:#ddd6fe;color:#5b21b6;">考場忘光光救命術</span>
+        <div class="mnemonic-slogan">「追蹤 (1,0) 點！只看第一行」</div>
+        <ul class="mnemonic-steps">
+          <li>不管是 R(ψ) 或 M(ψ)，<strong>第一行永遠是 [cos ψ, sin ψ]<sup>T</sup></strong>，代表點 <strong>(1,0) 變換後的落點角度就是 ψ</strong>！</li>
+          <li>例：求 <strong>M(φ) · R(θ)</strong>（<strong>由右往左</strong>作用）：<br>
+            1. (1,0) 先經 R(θ) 轉到角度 <strong>θ</strong>。<br>
+            2. 再對傾角 <strong>φ/2</strong> 的鏡射軸鏡射：因為兩角度平均為 φ/2，新角度必為 <strong>φ − θ</strong>！<br>
+            3. 一轉一鏡為 M，直接寫出 <strong>M(φ − θ)</strong>！</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="warning-banner">
+      <strong>⚠️ 學測最常考的「符號陷阱」提醒學生：</strong><br>
+      題目若說「對直線 <em>L</em>（與 x 軸正向夾角 <strong>α</strong>，即斜率 m = tan α）作鏡射」，則<strong>鏡射矩陣內部的角度是兩倍角 φ = 2α</strong>：
+      <code>M(2α) = [[cos 2α, sin 2α], [sin 2α, -cos 2α]]</code>。<br>
+      👉 <strong>解題SOP：先全部換成「矩陣內部角度 φ = 2α」套用加減口訣，最後若題目問新的鏡射軸夾角，再除以 2 即可！</strong>
+    </div>
+  </section>
+
+  <!-- 第二部分：互動式幾何視覺化實驗室 -->
+  <section class="section-card">
+    <div class="section-title">
+      <span>🧭 二、互動幾何視覺化實驗室（追蹤 (1,0) 與非對稱旗標圖形）</span>
+    </div>
+
+    <div class="lab-layout">
+      <!-- 左側：Canvas 畫布 -->
+      <div class="canvas-wrapper">
+        <canvas id="geoCanvas" width="520" height="460"></canvas>
+        <div class="legend-bar">
+          <span class="legend-item"><span class="dot" style="background:#64748b;"></span>初始狀態 (1,0)</span>
+          <span class="legend-item"><span class="dot" style="background:#f59e0b;"></span>Step 1：右矩陣先作用</span>
+          <span class="legend-item"><span class="dot" style="background:#2563eb;"></span>Step 2：左矩陣後作用（最終結果）</span>
+          <span class="legend-item"><span class="dot" style="background:#dc2626;"></span>鏡射軸 L</span>
+        </div>
+      </div>
+
+      <!-- 右側：控制面板與即時推導 -->
+      <div>
+        <div class="mode-tabs">
+          <button class="mode-btn active" onclick="setMode(0)" id="modeBtn0">
+            一、R(θ) · M(φ) = M(φ + θ)
+            <small>左轉右鏡 ＝ 鏡射（乘左加 θ）</small>
+          </button>
+          <button class="mode-btn" onclick="setMode(1)" id="modeBtn1">
+            二、M(φ) · R(θ) = M(φ − θ)
+            <small>左鏡右轉 ＝ 鏡射（乘右減 θ）</small>
+          </button>
+          <button class="mode-btn" onclick="setMode(2)" id="modeBtn2">
+            三、M(θ) · M(φ) = R(θ − φ)
+            <small>雙鏡相乘 ＝ 旋轉（左減右）</small>
+          </button>
+          <button class="mode-btn" onclick="setMode(3)" id="modeBtn3">
+            四、R(θ) · R(φ) = R(θ + φ)
+            <small>雙轉相乘 ＝ 旋轉（角度相加）</small>
+          </button>
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span id="labelTheta">角度 θ（旋轉角 / 矩陣角）</span>
+            <span id="valTheta" style="color:var(--primary);">40°</span>
+          </div>
+          <input type="range" id="sliderTheta" min="0" max="360" step="5" value="40" oninput="updateLab()" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span id="labelPhi">角度 φ（鏡射矩陣內角 = 2α，鏡射軸 α = 50°）</span>
+            <span id="valPhi" style="color:var(--secondary);">100°</span>
+          </div>
+          <input type="range" id="sliderPhi" min="0" max="360" step="5" value="100" oninput="updateLab()" />
+        </div>
+
+        <!-- 動態矩陣算式 -->
+        <div class="matrix-equation" id="matrixEqBox"></div>
+
+        <!-- 動態幾何步驟解說 -->
+        <div class="step-explanation" id="stepExplainBox"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 第三部分：四大關係完整對照表 -->
+  <section class="section-card">
+    <div class="section-title">
+      <span>📋 三、四大乘積關係「矩陣內角 vs. 鏡射軸角」完整對照表</span>
+    </div>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>關係類別</th>
+            <th>矩陣內角寫法（推薦背這個！）<br><small>M(φ) 內部為 cos φ, sin φ</small></th>
+            <th>鏡射軸傾角寫法（講義上半部）<br><small>M<sub>α</sub> 鏡射軸傾角為 α（內部為 2α）</small></th>
+            <th>口訣與幾何意義</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-M">左轉 × 右鏡 ＝ 鏡射</span></td>
+            <td><strong>R(θ) · M(φ) = M(φ + θ)</strong></td>
+            <td>R(θ) · M<sub>α</sub> = M<sub>α + θ/2</sub><br><small>（矩陣內部角度為 2α + θ）</small></td>
+            <td><strong>乘左加 θ</strong>（左邊是 R 就相加）<br>鏡射軸逆時針轉 θ/2</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-M">左鏡 × 右轉 ＝ 鏡射</span></td>
+            <td><strong>M(φ) · R(θ) = M(φ − θ)</strong></td>
+            <td>M<sub>α</sub> · R(θ) = M<sub>α − θ/2</sub><br><small>（矩陣內部角度為 2α − θ）</small></td>
+            <td><strong>乘右減 θ</strong>（左邊是 M 就相減）<br>鏡射軸順時針轉 θ/2</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-R">左鏡 × 右鏡 ＝ 旋轉</span></td>
+            <td><strong>M(θ) · M(φ) = R(θ − φ)</strong></td>
+            <td>M<sub>α</sub> · M<sub>β</sub> = R(2(α − β))</td>
+            <td><strong>負負得正變旋轉，左減右</strong><br>旋轉角 ＝ 兩鏡射軸有向夾角的 2 倍</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-R">左轉 × 右轉 ＝ 旋轉</span></td>
+            <td><strong>R(θ) · R(φ) = R(θ + φ)</strong></td>
+            <td>R(θ) · R(φ) = R(θ + φ)</td>
+            <td><strong>正正得正，角度直接累加</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 第四部分：高三學測快問快答自測 -->
+  <section class="section-card">
+    <div class="section-title">
+      <span>🎯 四、高三學測秒殺快問快答（課堂抽問 / 學生自測）</span>
+    </div>
+    <div class="quiz-box">
+      <div class="quiz-question" id="quizQ">載入題目中...</div>
+      <div class="quiz-options" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFb"></div>
+      <button class="btn-next" onclick="nextQuiz()">下一題 ➔</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  let currentMode = 0; // 0: R*M, 1: M*R, 2: M*M, 3: R*R
+
+  function setMode(m) {
+    currentMode = m;
+    for (let i = 0; i < 4; i++) {
+      document.getElementById('modeBtn' + i).classList.toggle('active', i === m);
+    }
+    updateLab();
+  }
+
+  function degToRad(d) {
+    return d * Math.PI / 180;
+  }
+
+  function normDeg(d) {
+    let r = d % 360;
+    if (r < 0) r += 360;
+    return r;
+  }
+
+  function applyR(pt, deg) {
+    const r = degToRad(deg);
+    const c = Math.cos(r), s = Math.sin(r);
+    return {
+      x: c * pt.x - s * pt.y,
+      y: s * pt.x + c * pt.y
+    };
+  }
+
+  function applyM(pt, deg) {
+    const r = degToRad(deg);
+    const c = Math.cos(r), s = Math.sin(r);
+    return {
+      x: c * pt.x + s * pt.y,
+      y: s * pt.x - c * pt.y
+    };
+  }
+
+  function drawArrow(ctx, x1, y1, x2, y2, color, width = 3) {
+    const headlen = 10;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const angle = Math.atan2(dy, dx);
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+    ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function drawFlag(ctx, cx, cy, R, transformFn, color, fillAlpha) {
+    // 定義一個在 (1,0) 附近的非對稱小旗標，讓學生清楚看出「翻面（鏡射）」與「不翻面（旋轉）」的差異
+    const pts = [
+      { x: 0.55, y: 0 },
+      { x: 1.0,  y: 0 },
+      { x: 1.0,  y: 0.28 },
+      { x: 0.78, y: 0.14 },
+      { x: 0.78, y: 0 }
+    ];
+    const tPts = pts.map(p => transformFn(p));
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = fillAlpha;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    tPts.forEach((p, i) => {
+      const sx = cx + p.x * R;
+      const sy = cy - p.y * R;
+      if (i === 0) ctx.moveTo(sx, sy);
+      else ctx.lineTo(sx, sy);
+    });
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawMirrorLine(ctx, cx, cy, R, alphaDeg, color, label) {
+    const rad = degToRad(alphaDeg);
+    const len = R * 1.25;
+    const x1 = cx - len * Math.cos(rad);
+    const y1 = cy + len * Math.sin(rad);
+    const x2 = cx + len * Math.cos(rad);
+    const y2 = cy - len * Math.sin(rad);
+
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 5]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+    ctx.fillStyle = color;
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillText(label, x2 - 25, y2 - 8);
+    ctx.restore();
+  }
+
+  function updateLab() {
+    const theta = parseInt(document.getElementById('sliderTheta').value, 10);
+    const phi = parseInt(document.getElementById('sliderPhi').value, 10);
+
+    document.getElementById('valTheta').textContent = theta + "°";
+    document.getElementById('valPhi').textContent = phi + "°";
+
+    const labelTheta = document.getElementById('labelTheta');
+    const labelPhi = document.getElementById('labelPhi');
+
+    if (currentMode === 0 || currentMode === 1) {
+      labelTheta.textContent = `旋轉矩陣 R(θ) 的旋轉角 θ`;
+      labelPhi.textContent = `鏡射矩陣 M(φ) 的內角 φ（鏡射軸傾角 α = ${(phi/2).toFixed(1)}°）`;
+    } else if (currentMode === 2) {
+      labelTheta.textContent = `左鏡射矩陣 M(θ) 內角 θ（鏡射軸 L₁ 傾角 = ${(theta/2).toFixed(1)}°）`;
+      labelPhi.textContent = `右鏡射矩陣 M(φ) 內角 φ（鏡射軸 L₂ 傾角 = ${(phi/2).toFixed(1)}°）`;
+    } else {
+      labelTheta.textContent = `左旋轉矩陣 R(θ) 的旋轉角 θ`;
+      labelPhi.textContent = `右旋轉矩陣 R(φ) 的旋轉角 φ`;
+    }
+
+    const canvas = document.getElementById('geoCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+    const R = 155;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // 座標軸與單位圓
+    ctx.strokeStyle = "#e2e8f0";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#cbd5e1";
+    ctx.beginPath();
+    ctx.moveTo(20, cy); ctx.lineTo(W - 20, cy);
+    ctx.moveTo(cx, 20); ctx.lineTo(cx, H - 20);
+    ctx.stroke();
+
+    ctx.fillStyle = "#64748b";
+    ctx.font = "12px sans-serif";
+    ctx.fillText("x", W - 18, cy - 6);
+    ctx.fillText("y", cx + 6, 24);
+
+    let step1Fn, step2Fn, resultAngle, isResultM;
+    let eqHtml = "", explainHtml = "";
+
+    if (currentMode === 0) {
+      // R(theta) * M(phi) = M(phi + theta)
+      step1Fn = (p) => applyM(p, phi);
+      step2Fn = (p) => applyR(step1Fn(p), theta);
+      resultAngle = phi + theta;
+      isResultM = true;
+
+      drawMirrorLine(ctx, cx, cy, R, phi / 2, "#f87171", `原鏡射軸 φ/2=${phi/2}°`);
+      drawMirrorLine(ctx, cx, cy, R, resultAngle / 2, "#dc2626", `合成鏡射軸 (φ+θ)/2=${resultAngle/2}°`);
+
+      eqHtml = `
+        <span><strong>R(${theta}°) · M(${phi}°)</strong> ＝ </span>
+        <div class="matrix"><span>cos ${resultAngle}°</span><span>sin ${resultAngle}°</span><span>sin ${resultAngle}°</span><span>-cos ${resultAngle}°</span></div>
+        <span> ＝ <strong>M(${phi}° + ${theta}°) = M(${resultAngle}°)</strong></span>
+      `;
+      explainHtml = `
+        <h4>🔍 幾何步驟拆解（矩陣由右往左作用）：</h4>
+        <p>1️⃣ <strong>先做右矩陣 M(${phi}°)</strong>：點 (1,0) 對傾角 ${phi/2}° 的直線鏡射，落到角度 <strong>${phi}°</strong>（橘色向量，旗標翻面）。</p>
+        <p>2️⃣ <strong>再做左矩陣 R(${theta}°)</strong>：將剛剛的圖形再逆時針旋轉 <strong>+${theta}°</strong>，最終落到角度 <strong>${phi}° + ${theta}° = ${resultAngle}°</strong>（藍色向量）。</p>
+        <p>✅ <strong>結論</strong>：翻面一次仍是鏡射，左邊是 R 所以角度相加 👉 <strong>M(φ + θ) = M(${resultAngle}°)</strong>。</p>
+      `;
+    } else if (currentMode === 1) {
+      // M(phi) * R(theta) = M(phi - theta)
+      step1Fn = (p) => applyR(p, theta);
+      step2Fn = (p) => applyM(step1Fn(p), phi);
+      resultAngle = phi - theta;
+      isResultM = true;
+
+      drawMirrorLine(ctx, cx, cy, R, phi / 2, "#f87171", `原鏡射軸 φ/2=${phi/2}°`);
+      drawMirrorLine(ctx, cx, cy, R, resultAngle / 2, "#dc2626", `合成鏡射軸 (φ-θ)/2=${resultAngle/2}°`);
+
+      eqHtml = `
+        <span><strong>M(${phi}°) · R(${theta}°)</strong> ＝ </span>
+        <div class="matrix"><span>cos(${resultAngle}°)</span><span>sin(${resultAngle}°)</span><span>sin(${resultAngle}°)</span><span>-cos(${resultAngle}°)</span></div>
+        <span> ＝ <strong>M(${phi}° − ${theta}°) = M(${resultAngle}°)</strong></span>
+      `;
+      explainHtml = `
+        <h4>🔍 幾何步驟拆解（為什麼右乘是減 θ？）：</h4>
+        <p>1️⃣ <strong>先做右矩陣 R(${theta}°)</strong>：點 (1,0) 逆時針轉到角度 <strong>${theta}°</strong>（橘色向量）。</p>
+        <p>2️⃣ <strong>再做左矩陣 M(${phi}°)</strong>：對傾角 <strong>${phi/2}°</strong> 的紅虛線鏡射！因為鏡射會把「逆時針轉的 +${theta}°」對稱過去變成反方向，且兩角度中點為 ${phi/2}°，所以新角度 ＝ <strong>${phi}° − ${theta}° = ${resultAngle}°</strong>！</p>
+        <p>✅ <strong>結論</strong>：左邊是 M 所以左減右 👉 <strong>M(φ − θ) = M(${resultAngle}°)</strong>。</p>
+      `;
+    } else if (currentMode === 2) {
+      // M(theta) * M(phi) = R(theta - phi)
+      step1Fn = (p) => applyM(p, phi);
+      step2Fn = (p) => applyM(step1Fn(p), theta);
+      resultAngle = theta - phi;
+      isResultM = false;
+
+      drawMirrorLine(ctx, cx, cy, R, phi / 2, "#f59e0b", `右鏡 L₂ (${phi/2}°)`);
+      drawMirrorLine(ctx, cx, cy, R, theta / 2, "#dc2626", `左鏡 L₁ (${theta/2}°)`);
+
+      eqHtml = `
+        <span><strong>M(${theta}°) · M(${phi}°)</strong> ＝ </span>
+        <div class="matrix"><span>cos(${resultAngle}°)</span><span>-sin(${resultAngle}°)</span><span>sin(${resultAngle}°)</span><span>cos(${resultAngle}°)</span></div>
+        <span> ＝ <strong>R(${theta}° − ${phi}°) = R(${resultAngle}°)</strong></span>
+      `;
+      explainHtml = `
+        <h4>🔍 幾何步驟拆解（負負得正！翻面兩次變回正面旋轉）：</h4>
+        <p>1️⃣ <strong>先做右矩陣 M(${phi}°)</strong>：點 (1,0) 鏡射到角度 <strong>${phi}°</strong>（橘色旗標翻面一次）。</p>
+        <p>2️⃣ <strong>再做左矩陣 M(${theta}°)</strong>：對傾角 ${theta/2}° 的直線再鏡射一次（藍色旗標翻回來變正面！），新角度 ＝ <strong>${theta}° − ${phi}° = ${resultAngle}°</strong>。</p>
+        <p>✅ <strong>結論</strong>：兩次鏡射合成為旋轉，旋轉角度為兩鏡射軸夾角 (${theta/2}° − ${phi/2}°) 的 2 倍 👉 <strong>R(θ − φ) = R(${resultAngle}°)</strong>。</p>
+      `;
+    } else {
+      // R(theta) * R(phi) = R(theta + phi)
+      step1Fn = (p) => applyR(p, phi);
+      step2Fn = (p) => applyR(step1Fn(p), theta);
+      resultAngle = theta + phi;
+      isResultM = false;
+
+      eqHtml = `
+        <span><strong>R(${theta}°) · R(${phi}°)</strong> ＝ </span>
+        <div class="matrix"><span>cos ${resultAngle}°</span><span>-sin ${resultAngle}°</span><span>sin ${resultAngle}°</span><span>cos ${resultAngle}°</span></div>
+        <span> ＝ <strong>R(${theta}° + ${phi}°) = R(${resultAngle}°)</strong></span>
+      `;
+      explainHtml = `
+        <h4>🔍 幾何步驟拆解（連續旋轉）：</h4>
+        <p>1️⃣ <strong>先做右矩陣 R(${phi}°)</strong>：點 (1,0) 逆時針旋轉 <strong>${phi}°</strong>（橘色向量）。</p>
+        <p>2️⃣ <strong>再做左矩陣 R(${theta}°)</strong>：接著再逆時針旋轉 <strong>${theta}°</strong>，總共旋轉 <strong>${theta}° + ${phi}° = ${resultAngle}°</strong>（藍色向量）。</p>
+        <p>✅ <strong>結論</strong>：正正得正，左邊是 R 相加 👉 <strong>R(θ + φ) = R(${resultAngle}°)</strong>。</p>
+      `;
+    }
+
+    // 畫三個狀態的旗標與 (1,0) 向量
+    // 0. 初始狀態
+    drawFlag(ctx, cx, cy, R, (p) => p, "#64748b", "rgba(100,116,139,0.12)");
+    drawArrow(ctx, cx, cy, cx + R, cy, "#64748b", 2.5);
+
+    // 1. Step 1
+    const p1 = step1Fn({ x: 1, y: 0 });
+    drawFlag(ctx, cx, cy, R, step1Fn, "#f59e0b", "rgba(245,158,11,0.18)");
+    drawArrow(ctx, cx, cy, cx + p1.x * R, cy - p1.y * R, "#f59e0b", 2.5);
+
+    // 2. Step 2 (Final)
+    const p2 = step2Fn({ x: 1, y: 0 });
+    drawFlag(ctx, cx, cy, R, step2Fn, "#2563eb", "rgba(37,99,235,0.22)");
+    drawArrow(ctx, cx, cy, cx + p2.x * R, cy - p2.y * R, "#2563eb", 3.5);
+
+    document.getElementById('matrixEqBox').innerHTML = eqHtml;
+    document.getElementById('stepExplainBox').innerHTML = explainHtml;
+  }
+
+  // 測驗題庫
+  const quizData = [
+    {
+      q: "Q1. 設 R(θ) 為逆時針旋轉 θ 的旋轉矩陣，M(φ) 為矩陣內部角度為 φ 的鏡射矩陣。請問 M(120°) · R(30°) 等於下列何者？",
+      opts: ["M(150°)", "M(90°)", "R(90°)", "R(150°)"],
+      ans: 1,
+      exp: "套用口訣「正負定RM，左矩定加減」：一鏡一轉異號得 M；左邊是 M（或說 R 乘在右邊減 θ），故角度相減：120° − 30° = 90°，答案為 M(90°)。"
+    },
+    {
+      q: "Q2. 承上定義，請問 R(45°) · M(60°) 等於下列何者？",
+      opts: ["M(105°)", "M(15°)", "R(105°)", "M(-15°)"],
+      ans: 0,
+      exp: "一轉一鏡異號得 M；R 乘在左邊加 θ（左邊是 R 則相加），故為 M(60° + 45°) = M(105°)。"
+    },
+    {
+      q: "Q3. 平面上對直線 L₁（與 x 軸正向夾角 20°）鏡射，再對直線 L₂（與 x 軸正向夾角 55°）鏡射，合成變換相當於？",
+      opts: ["逆時針旋轉 35°", "逆時針旋轉 70°", "順時針旋轉 70°", "對 75° 直線鏡射"],
+      ans: 1,
+      exp: "注意順序！「先 L₁ 再 L₂」代表矩陣相乘為 M_L2 · M_L1 = M(110°) · M(40°)。雙鏡變旋轉 R(110° − 40°) = R(70°)，即逆時針旋轉 70°（兩鏡射軸夾角 35° 的兩倍）！"
+    },
+    {
+      q: "Q4. 【學測經典陷阱】設 M 為對直線 y = (1/√3)x 的鏡射矩陣，R 為逆時針旋轉 40° 的矩陣，則 R · M 相當於對哪一條直線的鏡射？",
+      opts: ["與 x 軸正向夾角 70° 的直線", "與 x 軸正向夾角 50° 的直線", "與 x 軸正向夾角 100° 的直線", "與 x 軸正向夾角 10° 的直線"],
+      ans: 1,
+      exp: "直線 y = (1/√3)x 的傾角 α = 30°，故鏡射矩陣內部角度 φ = 2α = 60°，即 M = M(60°)。因此 R(40°) · M(60°) = M(60° + 40°) = M(100°)。最後還原成鏡射軸傾角：100° ÷ 2 = 50°！"
+    }
+  ];
+
+  let quizIdx = 0;
+
+  function renderQuiz() {
+    const item = quizData[quizIdx];
+    document.getElementById('quizQ').textContent = item.q;
+    const optsBox = document.getElementById('quizOpts');
+    optsBox.innerHTML = "";
+    const fb = document.getElementById('quizFb');
+    fb.style.display = "none";
+
+    item.opts.forEach((optText, idx) => {
+      const btn = document.createElement('button');
+      btn.className = "quiz-option";
+      btn.textContent = optText;
+      btn.onclick = () => checkAns(idx, btn);
+      optsBox.appendChild(btn);
+    });
+  }
+
+  function checkAns(selectedIdx, clickedBtn) {
+    const item = quizData[quizIdx];
+    const buttons = document.querySelectorAll('.quiz-option');
+    buttons.forEach((b, i) => {
+      b.disabled = true;
+      if (i === item.ans) b.classList.add('correct');
+    });
+    if (selectedIdx !== item.ans) {
+      clickedBtn.classList.add('wrong');
+    }
+    const fb = document.getElementById('quizFb');
+    fb.innerHTML = (selectedIdx === item.ans ? "✅ <strong>答對了！</strong> " : "❌ <strong>再想一下！</strong> ") + item.exp;
+    fb.style.display = "block";
+  }
+
+  function nextQuiz() {
+    quizIdx = (quizIdx + 1) % quizData.length;
+    renderQuiz();
+  }
+
+  window.onload = () => {
+    updateLab();
+    renderQuiz();
+  };
+</script>
+
+</body>
+</html>
