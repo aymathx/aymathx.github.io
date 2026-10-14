@@ -562,7 +562,7 @@
   <!-- 第二部分：互動式幾何 -->
   <section class="section-card">
     <div class="section-title">
-      <span>🧭 二、互動幾何視覺化實驗室（追蹤 (1,0) 與非對稱旗標圖形）</span>
+      <span>🧭 二、互動式幾何</span>
     </div>
 
     <div class="lab-layout">
@@ -581,19 +581,19 @@
       <div>
         <div class="mode-tabs">
           <button class="mode-btn active" onclick="setMode(0)" id="modeBtn0">
-            ① R ( θ ) · M ( φ ) = M ( φ + θ )
+            ① R(θ) · M(φ) = M(φ + θ)
             <small>左轉右鏡 ＝ 鏡射 ( 乘左加 θ )</small>
           </button>
           <button class="mode-btn" onclick="setMode(1)" id="modeBtn1">
-            二、M(φ) · R(θ) = M(φ − θ)
+            ② M(φ) · R(θ) = M(φ − θ)
             <small>左鏡右轉 ＝ 鏡射 ( 乘右減 θ )</small>
           </button>
           <button class="mode-btn" onclick="setMode(2)" id="modeBtn2">
-            三、M(θ) · M(φ) = R(θ − φ)
+            ③ M(θ) · M(φ) = R(θ − φ)
             <small>雙鏡相乘 ＝ 旋轉 ( 左減右 )</small>
           </button>
           <button class="mode-btn" onclick="setMode(3)" id="modeBtn3">
-            四、R(θ) · R(φ) = R(θ + φ)
+            ④ R(θ) · R(φ) = R(θ + φ)
             <small>雙轉相乘 ＝ 旋轉 ( 角度相加 )</small>
           </button>
         </div>
@@ -633,33 +633,33 @@
         <thead>
           <tr>
             <th>關係類別</th>
-            <th>矩陣內角寫法（推薦背這個！）<br><small>M(φ) 內部為 cos φ, sin φ</small></th>
-            <th>鏡射軸傾角寫法（講義上半部）<br><small>M<sub>α</sub> 鏡射軸傾角為 α（內部為 2α）</small></th>
-            <th>口訣與幾何意義</th>
+            <th>矩陣內角寫法 ( 背這個！)<br><small>M(φ) 內部為 cos φ , sin φ</small></th>
+            <th>鏡射軸斜角寫法<br><small>M<sub>α</sub> 鏡射軸斜角為 α ( 內部為 2α )</small></th>
+            <th>口訣 vs 幾何意義</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><span class="badge badge-M">左轉 × 右鏡 ＝ 鏡射</span></td>
             <td><strong>R(θ) · M(φ) = M(φ + θ)</strong></td>
-            <td>R(θ) · M<sub>α</sub> = M<sub>α + θ/2</sub><br><small>（矩陣內部角度為 2α + θ）</small></td>
-            <td><strong>乘左加 θ</strong>（左邊是 R 就相加）<br>鏡射軸逆時針轉 θ/2</td>
+            <td>R(θ) · M<sub>α</sub> = M<sub>α + θ/2</sub><br><small>( 矩陣內部角度為 2α + θ )</small></td>
+            <td><strong>乘左加 θ</strong> ( 左邊是 R 就相加 )<br>鏡射軸逆時針轉 θ/2</td>
           </tr>
           <tr>
             <td><span class="badge badge-M">左鏡 × 右轉 ＝ 鏡射</span></td>
             <td><strong>M(φ) · R(θ) = M(φ − θ)</strong></td>
-            <td>M<sub>α</sub> · R(θ) = M<sub>α − θ/2</sub><br><small>（矩陣內部角度為 2α − θ）</small></td>
-            <td><strong>乘右減 θ</strong>（左邊是 M 就相減）<br>鏡射軸順時針轉 θ/2</td>
+            <td>M<sub>α</sub> · R(θ) = M<sub>α − θ/2</sub><br><small>( 矩陣內部角度為 2α − θ )</small></td>
+            <td><strong>乘右減 θ</strong> ( 左邊是 M 就相減 )<br>鏡射軸順時針轉 θ/2</td>
           </tr>
           <tr>
             <td><span class="badge badge-R">左鏡 × 右鏡 ＝ 旋轉</span></td>
             <td><strong>M(θ) · M(φ) = R(θ − φ)</strong></td>
-            <td>M<sub>α</sub> · M<sub>β</sub> = R(2(α − β))</td>
+            <td>M<sub>α</sub> · M<sub>β</sub> = R ( 2 ( α − β ) )</td>
             <td><strong>負負得正變旋轉，左減右</strong><br>旋轉角 ＝ 兩鏡射軸有向夾角的 2 倍</td>
           </tr>
           <tr>
             <td><span class="badge badge-R">左轉 × 右轉 ＝ 旋轉</span></td>
-            <td><strong>R(θ) · R(φ) = R(θ + φ)</strong></td>
+            <td><strong>R(θ) · R(φ) = R ( θ + φ )</strong></td>
             <td>R(θ) · R(φ) = R(θ + φ)</td>
             <td><strong>正正得正，角度直接累加</strong></td>
           </tr>
@@ -671,7 +671,7 @@
   <!-- 第四部分：高三學測快問快答自測 -->
   <section class="section-card">
     <div class="section-title">
-      <span>🎯 四、高三學測秒殺快問快答（課堂抽問 / 學生自測）</span>
+      <span>🎯 四、秒殺快問快答</span>
     </div>
     <div class="quiz-box">
       <div class="quiz-question" id="quizQ">載入題目中...</div>
