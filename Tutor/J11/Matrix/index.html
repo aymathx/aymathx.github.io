@@ -606,42 +606,42 @@
   <!-- 第三部分：四大關係完整對照表 -->
   <section class="section-card">
     <div class="section-title">
-      <span>📋 三、乘積關係對照表</span>
+      <span>📋 三、乘積關係表</span>
     </div>
     <div class="table-responsive">
       <table>
         <thead>
           <tr>
-            <th>關係類別</th>
-            <th>矩陣內角寫法<br><small>M(φ) 內部為 cos φ , sin φ</small></th>
+            <th>   關係類別</th>
+            <th>矩陣內角<br><small style="font-size: 0.6rem;">M ( φ ) 內部為 cos φ 、 sin φ</small></th>
             <th>鏡射軸斜角寫法<br><small>M<sub>α</sub> 鏡射軸斜角為 α ( 內部為 2α )</small></th>
             <th>口訣 vs 幾何意義</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><span class="badge badge-M">左轉 × 右鏡 ＝ 鏡射</span></td>
+            <td><span class="badge badge-R">鏡 × 鏡 ＝ 旋轉</span></td>
+            <td><strong style="font-size: 0.7rem; white-space: nowrap;">M ( θ ) · M ( φ ) = R ( θ − φ )</strong></td>
+            <td>M<sub>α</sub> · M<sub>β</sub> = R ( 2 ( α − β ) )</td>
+            <td><strong>負負得正變旋轉，左減右</strong><br>旋轉角 ＝ 兩鏡射軸有向夾角的 2 倍</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-R">轉 × 轉 ＝ 旋轉</span></td>
+            <td><strong>R(θ) · R(φ) = R ( θ + φ )</strong></td>
+            <td>R(θ) · R(φ) = R(θ + φ)</td>
+            <td><strong>正正得正，角度直接累加</strong></td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-M">轉 × 鏡 ＝ 鏡射</span></td>
             <td><strong>R(θ) · M(φ) = M(φ + θ)</strong></td>
             <td>R(θ) · M<sub>α</sub> = M<sub>α + θ/2</sub><br><small>( 矩陣內部角度為 2α + θ )</small></td>
             <td><strong>乘左加 θ</strong> ( 左邊是 R 就相加 )<br>鏡射軸逆時針轉 θ/2</td>
           </tr>
           <tr>
-            <td><span class="badge badge-M">左鏡 × 右轉 ＝ 鏡射</span></td>
+            <td><span class="badge badge-M">鏡 × 轉 ＝ 鏡射</span></td>
             <td><strong>M(φ) · R(θ) = M(φ − θ)</strong></td>
             <td>M<sub>α</sub> · R(θ) = M<sub>α − θ/2</sub><br><small>( 矩陣內部角度為 2α − θ )</small></td>
             <td><strong>乘右減 θ</strong> ( 左邊是 M 就相減 )<br>鏡射軸順時針轉 θ/2</td>
-          </tr>
-          <tr>
-            <td><span class="badge badge-R">左鏡 × 右鏡 ＝ 旋轉</span></td>
-            <td><strong>M(θ) · M(φ) = R(θ − φ)</strong></td>
-            <td>M<sub>α</sub> · M<sub>β</sub> = R ( 2 ( α − β ) )</td>
-            <td><strong>負負得正變旋轉，左減右</strong><br>旋轉角 ＝ 兩鏡射軸有向夾角的 2 倍</td>
-          </tr>
-          <tr>
-            <td><span class="badge badge-R">左轉 × 右轉 ＝ 旋轉</span></td>
-            <td><strong>R(θ) · R(φ) = R ( θ + φ )</strong></td>
-            <td>R(θ) · R(φ) = R(θ + φ)</td>
-            <td><strong>正正得正，角度直接累加</strong></td>
           </tr>
         </tbody>
       </table>
@@ -831,9 +831,9 @@
         <span> ＝ <strong>M(${phi}° + ${theta}°) = M(${resultAngle}°)</strong></span>
       `;
       explainHtml = `
-        <h4>🔍 幾何步驟拆解（由右往左作用）：</h4>
-        <p>1️⃣ <strong>先做右矩陣 M(${phi}°)</strong>：(1,0) 對 ${phi/2}° 直線鏡射至 <strong>${phi}°</strong>（橘色，旗標翻面）。</p>
-        <p>2️⃣ <strong>再做左矩陣 R(${theta}°)</strong>：繼續逆時針轉 <strong>+${theta}°</strong>，落點為 <strong>${phi}° + ${theta}° = ${resultAngle}°</strong>（藍色）。</p>
+        <h4>🔍 幾何步驟拆解 ( 由右往左作用 )：</h4>
+        <p>1️⃣ <strong>先做右矩陣 M ( ${phi}° )</strong>：<br>( 1 , 0 ) 對 ${phi/2}° 直線鏡射至 <strong>${phi}°</strong> ( 橘色，旗標翻面 ）。</p>
+        <p>2️⃣ <strong>再做左矩陣 R ( ${theta}° )</strong>：<br>繼續逆時針轉 <strong>+ ${theta}°</strong>，<br>落點為 <strong>${phi}° + ${theta}° = ${resultAngle}°</strong> ( 藍色 ）。</p>
       `;
     } else if (currentMode === 1) {
       step1Fn = (p) => applyR(p, theta);
