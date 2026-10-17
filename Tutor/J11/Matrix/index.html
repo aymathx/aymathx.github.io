@@ -534,7 +534,7 @@
       </div>
 
     <div class="warning-banner">
-      <span>⚠️ <strong>學測必考「 兩倍角 」防呆</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;對 L 鏡射時 ( 斜率 <code>m = tan α</code> )，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角度是 <strong>φ = 2α</strong></span>
+      <span>⚠️ <strong>學測必考「 兩倍角 」防呆</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;對 L 鏡射時 ( 斜率 <code>m = tan α</code> )，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角度是 <strong>φ = 2α</strong></span>
       <span class="tag-pill" style="background:#f59e0b;color:#fff;font-size:0.9rem;">算完若問「 新鏡射軸的斜角 」記得 ÷ 2</span>
     </div>
   </section>
@@ -552,7 +552,7 @@
       <div class="legend-bar" style="flex-direction: column; align-items: flex-start; gap: 6px; padding-left: 20px;">
           <span class="legend-item"><span class="dot" style="background:#64748b;"></span>初始狀態 ( 1 , 0 )</span>
           <span class="legend-item"><span class="dot" style="background:#f59e0b;"></span>Step 1：「 右 」矩陣「 先 」作用</span>
-          <span class="legend-item"><span class="dot" style="background:#2563eb;"></span>Step 2：「 左」矩陣「 後 」作用</span>
+          <span class="legend-item"><span class="dot" style="background:#2563eb;"></span>Step 2：「 左 」矩陣「 後 」作用</span>
           <span class="legend-item"><span class="dot" style="background:#dc2626;"></span>鏡射軸 L</span>
       </div>
       </div>
@@ -832,8 +832,8 @@
       `;
       explainHtml = `
         <h4>🔍 幾何步驟拆解 ( 由右往左作用 )：</h4>
-        <p>1️⃣ <strong>先做右矩陣 M ( ${phi}° )</strong>：<br>( 1 , 0 ) 對 ${phi/2}° 直線鏡射至 <strong>${phi}°</strong> ( 橘色，旗標翻面 ）。</p>
-        <p>2️⃣ <strong>再做左矩陣 R ( ${theta}° )</strong>：<br>繼續逆時針轉 <strong>+ ${theta}°</strong>，<br>落點為 <strong>${phi}° + ${theta}° = ${resultAngle}°</strong> ( 藍色 ）。</p>
+        <p>&nbsp;&nbsp;&nbsp;1️⃣ <strong>先做右矩陣 M ( ${phi}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;( 1 , 0 ) 對 ${phi/2}° 直線鏡射至 <strong>${phi}°</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;( 橘色，旗標翻面 ）。</p>
+        <p>&nbsp;&nbsp;&nbsp;2️⃣ <strong>再做左矩陣 R ( ${theta}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;繼續逆時針轉 <strong>+ ${theta}°</strong>，<br>&nbsp;&nbsp;&nbsp;&nbsp;落點為 <strong>${phi}° + ${theta}° = ${resultAngle}°</strong> ( 藍色 ）。</p>
       `;
     } else if (currentMode === 1) {
       step1Fn = (p) => applyR(p, theta);
