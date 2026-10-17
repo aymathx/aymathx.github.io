@@ -569,30 +569,30 @@
       <!-- 左側：Canvas 畫布 -->
       <div class="canvas-wrapper">
         <canvas id="geoCanvas" width="520" height="460"></canvas>
-        <div class="legend-bar">
+      <div class="legend-bar" style="flex-direction: column; align-items: flex-start; gap: 6px; padding-left: 20px;">
           <span class="legend-item"><span class="dot" style="background:#64748b;"></span>初始狀態 ( 1 , 0 )</span>
           <span class="legend-item"><span class="dot" style="background:#f59e0b;"></span>Step 1：右矩陣先作用</span>
           <span class="legend-item"><span class="dot" style="background:#2563eb;"></span>Step 2：左矩陣後作用（最終結果）</span>
           <span class="legend-item"><span class="dot" style="background:#dc2626;"></span>鏡射軸 L</span>
-        </div>
+      </div>
       </div>
 
       <!-- 右側：控制面板與即時推導 -->
       <div>
         <div class="mode-tabs">
-          <button class="mode-btn active" onclick="setMode(0)" id="modeBtn0">
+          <button class="mode-btn active" onclick="setMode(0)" id="modeBtn0" style="font-size: 10px;">
             ① R(θ) · M(φ) = M(φ + θ)
             <small style="font-size: 0.74rem;">左轉右鏡 ＝ 鏡射 ( 乘左加 θ )</small>
           </button>
-          <button class="mode-btn" onclick="setMode(1)" id="modeBtn1">
+          <button class="mode-btn" onclick="setMode(1)" id="modeBtn1" style="font-size: 11px;">
             ② M(φ) · R(θ) = M(φ − θ)
             <small style="font-size: 0.74rem;">左鏡右轉 ＝ 鏡射 ( 乘右減 θ )</small>
           </button>
-          <button class="mode-btn" onclick="setMode(2)" id="modeBtn2">
+          <button class="mode-btn" onclick="setMode(2)" id="modeBtn2" style="font-size: 12px;">
             ③ M(θ) · M(φ) = R(θ − φ)
             <small style="font-size: 0.74rem;">雙鏡相乘 ＝ 旋轉 ( 左減右 )</small>
           </button>
-          <button class="mode-btn" onclick="setMode(3)" id="modeBtn3">
+          <button class="mode-btn" onclick="setMode(3)" id="modeBtn3" style="font-size: 13px;">
             ④ R(θ) · R(φ) = R(θ + φ)
             <small style="font-size: 0.74rem;">雙轉相乘 ＝ 旋轉 ( 角度相加 )</small>
           </button>
