@@ -197,15 +197,14 @@
       background: var(--amber-light);
       border: 1px solid #f59e0b;
       border-radius: 10px;
-      padding: 12px 16px;
-      margin-top: 14px;
+      padding: 14px 18px;
+      margin-top: 16px;
       color: #78350f;
       font-size: 0.94rem;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
     }
 
     /* 互動視覺化區 */
@@ -343,27 +342,34 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
       background: #0f172a;
       color: #f8fafc;
-      padding: 16px;
+      padding: 18px 20px;
       border-radius: 12px;
       margin: 12px 0;
       font-family: "Cambria Math", "Times New Roman", serif;
       font-size: 1.08rem;
     }
 
+    .eq-grid {
+      display: inline-grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      gap: 8px 10px;
+      text-align: left;
+    }
+
     .matrix {
       display: inline-grid;
       grid-template-columns: repeat(2, auto);
-      gap: 4px 12px;
-      padding: 6px 10px;
+      gap: 4px 14px;
+      padding: 6px 12px;
       border-left: 2px solid #cbd5e1;
       border-right: 2px solid #cbd5e1;
       border-radius: 4px;
       text-align: center;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
+      justify-self: start;
     }
 
     /* 表格區 */
@@ -532,10 +538,23 @@
           </li>
         </ul>
       </div>
+    </div>
 
+    <!-- 兩倍角防呆提醒（三行切齊＋橘色膠囊置中） -->
     <div class="warning-banner">
-      <span>⚠️ <strong>學測必考「 兩倍角 」防呆</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;對 L 鏡射時 ( 斜率 <code>m = tan α</code> )，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角度是 <strong>φ = 2α</strong></span>
-      <span class="tag-pill" style="background:#f59e0b; color:#fff; font-size:0.9rem; margin: 0 auto;">算完若問「 新鏡射軸的斜角 」記得 ÷ 2</span>
+      <div style="display: flex; align-items: flex-start; gap: 6px; line-height: 1.75;">
+        <span>⚠️</span>
+        <div>
+          <strong>學測必考「 兩倍角 」防呆：</strong><br>
+          對 L 鏡射時 ( 斜率 <code>m = tan α</code> )，<br>
+          角度是 <strong>φ = 2α</strong>
+        </div>
+      </div>
+      <div style="width: 100%; text-align: center;">
+        <span class="tag-pill" style="background:#f59e0b; color:#fff; font-size:0.9rem; display:inline-block; padding: 4px 12px;">
+          算完若問「 新鏡射軸的斜角 」記得 ÷ 2
+        </span>
+      </div>
     </div>
   </section>
 
@@ -549,12 +568,12 @@
       <!-- 左側：Canvas 畫布 -->
       <div class="canvas-wrapper">
         <canvas id="geoCanvas" width="520" height="460"></canvas>
-      <div class="legend-bar" style="flex-direction: column; align-items: flex-start; gap: 6px; padding-left: 20px;">
+        <div class="legend-bar" style="flex-direction: column; align-items: flex-start; gap: 6px; padding-left: 20px;">
           <span class="legend-item"><span class="dot" style="background:#64748b;"></span>初始狀態 ( 1 , 0 )</span>
           <span class="legend-item"><span class="dot" style="background:#f59e0b;"></span>Step 1：「 右 」矩陣「 先 」作用</span>
           <span class="legend-item"><span class="dot" style="background:#2563eb;"></span>Step 2：「 左 」矩陣「 後 」作用</span>
           <span class="legend-item"><span class="dot" style="background:#dc2626;"></span>鏡射軸 L</span>
-      </div>
+        </div>
       </div>
 
       <!-- 右側：控制面板與即時推導 -->
@@ -620,25 +639,25 @@
         </thead>
         <tbody>
           <tr>
-            <td><span class="badge badge-R";style="font-size: 0.5rem;">鏡 × 鏡 ＝ 旋轉</span></td>
+            <td style="text-align: center;"><span class="badge badge-R" style="font-size: 0.72rem; white-space: nowrap;">鏡 × 鏡 ＝ 旋轉</span></td>
             <td><strong style="font-size: 0.8rem; white-space: nowrap;">M ( θ ) · M ( φ ) = R ( θ − φ )</strong></td>
             <td style="font-size: 0.8rem;">M<sub>α</sub> · M<sub>β</sub> = R ( 2(α − β) )</td>
             <td style="font-size: 0.8rem;"><strong>負負得正(轉)，左減右</strong><br>角 ＝ 兩鏡射夾角的 2 倍</td>
           </tr>
           <tr>
-            <td><span class="badge badge-R";style="font-size: 0.45rem;">轉 × 轉 ＝ 旋轉</span></td>
+            <td style="text-align: center;"><span class="badge badge-R" style="font-size: 0.72rem; white-space: nowrap;">轉 × 轉 ＝ 旋轉</span></td>
             <td><strong style="font-size: 0.8rem; white-space: nowrap;">R ( θ ) · R ( φ ) = R ( θ + φ )</strong></td>
             <td style="font-size: 0.8rem;">R ( θ ) · R ( φ ) = R ( θ + φ )</td>
             <td style="font-size: 0.8rem;"><strong>正正得正(轉)，角相加</strong></td>
           </tr>
           <tr>
-            <td><span class="badge badge-M";style="font-size: 0.58rem;">轉 × 鏡 ＝ 鏡射</span></td>
+            <td style="text-align: center;"><span class="badge badge-M" style="font-size: 0.72rem; white-space: nowrap;">轉 × 鏡 ＝ 鏡射</span></td>
             <td><strong style="font-size: 0.8rem; white-space: nowrap;">R ( θ ) · M ( φ ) = M ( φ + θ )</strong></td>
             <td style="font-size: 0.8rem;">R ( θ ) · M<sub>α</sub> = M<sub>α + θ/2</sub><br><small>( 矩陣內部角度為 2α + θ )</small></td>
             <td style="font-size: 0.8rem;"><strong>正負得負(鏡)，乘左加 θ</strong><br>鏡射軸，逆時針轉 θ/2</td>
           </tr>
           <tr>
-            <td><span class="badge badge-M";style="font-size: 0.6rem;">鏡 × 轉 ＝ 鏡射</span></td>
+            <td style="text-align: center;"><span class="badge badge-M" style="font-size: 0.72rem; white-space: nowrap;">鏡 × 轉 ＝ 鏡射</span></td>
             <td><strong style="font-size: 0.8rem; white-space: nowrap;">M ( φ ) · R ( θ ) = M ( φ − θ )</strong></td>
             <td style="font-size: 0.8rem;">M<sub>α</sub> · R ( θ ) = M<sub>α − θ/2</sub><br><small>( 矩陣內部角度為 2α − θ )</small></td>
             <td style="font-size: 0.8rem;"><strong>正負得負(鏡)，乘右減 θ</strong><br>鏡射軸，順時針轉 θ/2</td>
@@ -778,14 +797,14 @@
     const labelPhi = document.getElementById('labelPhi');
 
     if (currentMode === 0 || currentMode === 1) {
-      labelTheta.textContent = `旋轉矩陣 R ( θ ) 的旋轉角 θ`;
+      labelTheta.innerHTML = `旋轉矩陣 R ( θ ) 的旋轉角 θ`;
       labelPhi.innerHTML = `鏡射矩陣 M ( φ ) 的內角 φ <br>( 鏡射軸 L 的斜角 α = φ/2 = ${(phi/2).toFixed(0)}° )`;
     } else if (currentMode === 2) {
-      labelTheta.textContent = `左鏡射矩陣 M(θ) 內角 θ（鏡射軸 L₁ 傾角 = ${(theta/2).toFixed(1)}°）`;
-      labelPhi.textContent = `右鏡射矩陣 M(φ) 內角 φ（鏡射軸 L₂ 傾角 = ${(phi/2).toFixed(1)}°）`;
+      labelTheta.innerHTML = `左鏡射矩陣 M ( θ ) 內角 θ <br>( 鏡射軸 L₁ 斜角 = ${(theta/2).toFixed(1)}° )`;
+      labelPhi.innerHTML = `右鏡射矩陣 M ( φ ) 內角 φ <br>( 鏡射軸 L₂ 斜角 = ${(phi/2).toFixed(1)}° )`;
     } else {
-      labelTheta.textContent = `左旋轉矩陣 R(θ) 的旋轉角 θ`;
-      labelPhi.textContent = `右旋轉矩陣 R(φ) 的旋轉角 φ`;
+      labelTheta.innerHTML = `左旋轉矩陣 R ( θ ) 的旋轉角 θ`;
+      labelPhi.innerHTML = `右旋轉矩陣 R ( φ ) 的旋轉角 φ`;
     }
 
     const canvas = document.getElementById('geoCanvas');
@@ -826,9 +845,17 @@
       drawMirrorLine(ctx, cx, cy, R, resultAngle / 2, "#dc2626", `合成鏡射軸 (φ+θ)/2=${resultAngle/2}°`);
 
       eqHtml = `
-        <span><strong>R(${theta}°) · M(${phi}°)</strong> ＝ </span>
-        <div class="matrix"><span>cos ${resultAngle}°</span><span>sin ${resultAngle}°</span><span>sin ${resultAngle}°</span><span>-cos ${resultAngle}°</span></div>
-        <span> ＝ <strong>M(${phi}° + ${theta}°) = M(${resultAngle}°)</strong></span>
+        <div class="eq-grid">
+          <span></span>
+          <strong style="justify-self: center;">R(${theta}°) · M(${phi}°)</strong>
+          <span>＝</span>
+          <div class="matrix">
+            <span>cos ${resultAngle}°</span><span>sin ${resultAngle}°</span>
+            <span>sin ${resultAngle}°</span><span>-cos ${resultAngle}°</span>
+          </div>
+          <span>＝</span>
+          <strong>M(${phi}° + ${theta}°) = M(${resultAngle}°)</strong>
+        </div>
       `;
       explainHtml = `
         <h4>🔍 幾何步驟拆解 ( 由右往左作用 )：</h4>
@@ -844,14 +871,22 @@
       drawMirrorLine(ctx, cx, cy, R, resultAngle / 2, "#dc2626", `合成鏡射軸 (φ-θ)/2=${resultAngle/2}°`);
 
       eqHtml = `
-        <span><strong>M(${phi}°) · R(${theta}°)</strong> ＝ </span>
-        <div class="matrix"><span>cos(${resultAngle}°)</span><span>sin(${resultAngle}°)</span><span>sin(${resultAngle}°)</span><span>-cos(${resultAngle}°)</span></div>
-        <span> ＝ <strong>M(${phi}° − ${theta}°) = M(${resultAngle}°)</strong></span>
+        <div class="eq-grid">
+          <span></span>
+          <strong style="justify-self: center;">M(${phi}°) · R(${theta}°)</strong>
+          <span>＝</span>
+          <div class="matrix">
+            <span>cos(${resultAngle}°)</span><span>sin(${resultAngle}°)</span>
+            <span>sin(${resultAngle}°)</span><span>-cos(${resultAngle}°)</span>
+          </div>
+          <span>＝</span>
+          <strong>M(${phi}° − ${theta}°) = M(${resultAngle}°)</strong>
+        </div>
       `;
       explainHtml = `
-        <h4>🔍 幾何步驟拆解（為什麼右乘是減 θ？）：</h4>
-        <p>1️⃣ <strong>先做右矩陣 R(${theta}°)</strong>：(1,0) 逆時針轉至 <strong>${theta}°</strong>（橘色）。</p>
-        <p>2️⃣ <strong>再做左矩陣 M(${phi}°)</strong>：對 <strong>${phi/2}°</strong> 直線鏡射，兩角度平均為 ${phi/2}°，故新落點為 <strong>${phi}° − ${theta}° = ${resultAngle}°</strong>（藍色）！</p>
+        <h4>🔍 幾何步驟拆解 ( 為什麼右乘是減 θ？ )：</h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1️⃣ <strong>先做右矩陣 R ( ${theta}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( 1 , 0 ) 逆時針轉至 <strong>${theta}°</strong> [ 橘色 ]。</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2️⃣ <strong>再做左矩陣 M ( ${phi}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;對 <strong>${phi/2}°</strong> 直線鏡射，兩角度平均為 ${phi/2}°，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;故新落點為 <strong>${phi}° − ${theta}° = ${resultAngle}°</strong> [ 藍色 ]！</p>
       `;
     } else if (currentMode === 2) {
       step1Fn = (p) => applyM(p, phi);
@@ -862,14 +897,22 @@
       drawMirrorLine(ctx, cx, cy, R, theta / 2, "#dc2626", `左鏡 L₁ (${theta/2}°)`);
 
       eqHtml = `
-        <span><strong>M(${theta}°) · M(${phi}°)</strong> ＝ </span>
-        <div class="matrix"><span>cos(${resultAngle}°)</span><span>-sin(${resultAngle}°)</span><span>sin(${resultAngle}°)</span><span>cos(${resultAngle}°)</span></div>
-        <span> ＝ <strong>R(${theta}° − ${phi}°) = R(${resultAngle}°)</strong></span>
+        <div class="eq-grid">
+          <span></span>
+          <strong style="justify-self: center;">M(${theta}°) · M(${phi}°)</strong>
+          <span>＝</span>
+          <div class="matrix">
+            <span>cos(${resultAngle}°)</span><span>-sin(${resultAngle}°)</span>
+            <span>sin(${resultAngle}°)</span><span>cos(${resultAngle}°)</span>
+          </div>
+          <span>＝</span>
+          <strong>R(${theta}° − ${phi}°) = R(${resultAngle}°)</strong>
+        </div>
       `;
       explainHtml = `
-        <h4>🔍 幾何步驟拆解（翻面兩次變回正面旋轉）：</h4>
-        <p>1️⃣ <strong>先做右矩陣 M(${phi}°)</strong>：(1,0) 鏡射至 <strong>${phi}°</strong>（橘色旗標翻面）。</p>
-        <p>2️⃣ <strong>再做左矩陣 M(${theta}°)</strong>：對 ${theta/2}° 再鏡射一次（藍色旗標翻回正面），落點為 <strong>${theta}° − ${phi}° = ${resultAngle}°</strong>。</p>
+        <h4>🔍 幾何步驟拆解 ( 翻面兩次變回正面旋轉 )：</h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1️⃣ <strong>先做右矩陣 M ( ${phi}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( 1 , 0 ) 鏡射至 <strong>${phi}°</strong> [ 橘色，旗標翻面 ]。</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2️⃣ <strong>再做左矩陣 M ( ${theta}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;對 ${theta/2}° 再鏡射一次 [ 藍色，旗標翻回正面 ]，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;落點為 <strong>${theta}° − ${phi}° = ${resultAngle}°</strong>。</p>
       `;
     } else {
       step1Fn = (p) => applyR(p, phi);
@@ -877,14 +920,22 @@
       resultAngle = theta + phi;
 
       eqHtml = `
-        <span><strong>R(${theta}°) · R(${phi}°)</strong> ＝ </span>
-        <div class="matrix"><span>cos ${resultAngle}°</span><span>-sin ${resultAngle}°</span><span>sin ${resultAngle}°</span><span>cos ${resultAngle}°</span></div>
-        <span> ＝ <strong>R(${theta}° + ${phi}°) = R(${resultAngle}°)</strong></span>
+        <div class="eq-grid">
+          <span></span>
+          <strong style="justify-self: center;">R(${theta}°) · R(${phi}°)</strong>
+          <span>＝</span>
+          <div class="matrix">
+            <span>cos ${resultAngle}°</span><span>-sin ${resultAngle}°</span>
+            <span>sin ${resultAngle}°</span><span>cos ${resultAngle}°</span>
+          </div>
+          <span>＝</span>
+          <strong>R(${theta}° + ${phi}°) = R(${resultAngle}°)</strong>
+        </div>
       `;
       explainHtml = `
-        <h4>🔍 幾何步驟拆解（連續旋轉）：</h4>
-        <p>1️⃣ <strong>先做右矩陣 R(${phi}°)</strong>：(1,0) 逆時針轉 <strong>${phi}°</strong>（橘色）。</p>
-        <p>2️⃣ <strong>再做左矩陣 R(${theta}°)</strong>：再逆時針轉 <strong>${theta}°</strong>，共轉 <strong>${theta}° + ${phi}° = ${resultAngle}°</strong>（藍色）。</p>
+        <h4>🔍 幾何步驟拆解 ( 連續旋轉 )：</h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1️⃣ <strong>先做右矩陣 R ( ${phi}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( 1 , 0 ) 逆時針轉 <strong>${phi}°</strong> [ 橘色 ]。</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2️⃣ <strong>再做左矩陣 R ( ${theta}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再逆時針轉 <strong>${theta}°</strong>，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共轉 <strong>${theta}° + ${phi}° = ${resultAngle}°</strong> [ 藍色 ]。</p>
       `;
     }
 
@@ -908,7 +959,7 @@
       q: "Q1. 設 R(θ) 為逆時針旋轉 θ 的旋轉矩陣，M(φ) 為矩陣內部角度為 φ 的鏡射矩陣。請問 M(120°) · R(30°) 等於下列何者？",
       opts: ["M(150°)", "M(90°)", "R(90°)", "R(150°)"],
       ans: 1,
-      exp: "套用口訣「正負定RM，左矩定加減」：異號得 M；左邊是 M（乘右減 θ），故 120° − 30° = 90°，答案為 M(90°)。"
+      exp: "套用口訣「正 R 負 M，加減看左邊」：異號得 M；左邊是 M（乘右減 θ），故 120° − 30° = 90°，答案為 M(90°)。"
     },
     {
       q: "Q2. 承上定義，請問 R(45°) · M(60°) 等於下列何者？",
