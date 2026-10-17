@@ -582,19 +582,19 @@
         <div class="mode-tabs">
           <button class="mode-btn active" onclick="setMode(0)" id="modeBtn0">
             ① R(θ) · M(φ) = M(φ + θ)
-            <small>左轉右鏡 ＝ 鏡射 ( 乘左加 θ )</small>
+            <small style="font-size: 0.74rem;">左轉右鏡 ＝ 鏡射 ( 乘左加 θ )</small>
           </button>
           <button class="mode-btn" onclick="setMode(1)" id="modeBtn1">
             ② M(φ) · R(θ) = M(φ − θ)
-            <small>左鏡右轉 ＝ 鏡射 ( 乘右減 θ )</small>
+            <small style="font-size: 0.74rem;">左鏡右轉 ＝ 鏡射 ( 乘右減 θ )</small>
           </button>
           <button class="mode-btn" onclick="setMode(2)" id="modeBtn2">
             ③ M(θ) · M(φ) = R(θ − φ)
-            <small>雙鏡相乘 ＝ 旋轉 ( 左減右 )</small>
+            <small style="font-size: 0.74rem;">雙鏡相乘 ＝ 旋轉 ( 左減右 )</small>
           </button>
           <button class="mode-btn" onclick="setMode(3)" id="modeBtn3">
             ④ R(θ) · R(φ) = R(θ + φ)
-            <small>雙轉相乘 ＝ 旋轉 ( 角度相加 )</small>
+            <small style="font-size: 0.74rem;">雙轉相乘 ＝ 旋轉 ( 角度相加 )</small>
           </button>
         </div>
 
@@ -799,7 +799,7 @@
 
     if (currentMode === 0 || currentMode === 1) {
       labelTheta.textContent = `旋轉矩陣 R(θ) 的旋轉角 θ`;
-      labelPhi.textContent = `鏡射矩陣 M(φ) 的內角 φ ( 鏡射軸斜角 α = ${(phi/2).toFixed(1)}° )`;
+      labelPhi.textContent = `鏡射矩陣 M(φ) 的內角 φ <br>( 鏡射軸斜角 α = = ${(phi/2).toFixed(1)}° )`;
     } else if (currentMode === 2) {
       labelTheta.textContent = `左鏡射矩陣 M(θ) 內角 θ（鏡射軸 L₁ 傾角 = ${(theta/2).toFixed(1)}°）`;
       labelPhi.textContent = `右鏡射矩陣 M(φ) 內角 φ（鏡射軸 L₂ 傾角 = ${(phi/2).toFixed(1)}°）`;
