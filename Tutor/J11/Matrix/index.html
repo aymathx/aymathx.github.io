@@ -832,8 +832,8 @@
       `;
       explainHtml = `
         <h4>🔍 幾何步驟拆解 ( 由右往左作用 )：</h4>
-        <p>&nbsp;&nbsp;&nbsp;1️⃣ <strong>先做右矩陣 M ( ${phi}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;( 1 , 0 ) 對 ${phi/2}° 直線鏡射至 <strong>${phi}°</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;( 橘色，旗標翻面 ）。</p>
-        <p>&nbsp;&nbsp;&nbsp;2️⃣ <strong>再做左矩陣 R ( ${theta}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;繼續逆時針轉 <strong>+ ${theta}°</strong>，<br>&nbsp;&nbsp;&nbsp;&nbsp;落點為 <strong>${phi}° + ${theta}° = ${resultAngle}°</strong> ( 藍色 ）。</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;1️⃣ <strong>先做右矩陣 M ( ${phi}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( 1 , 0 ) 對 ${phi/2}° 直線鏡射至 <strong>${phi}°</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 橘色，旗標翻面 ]。</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;2️⃣ <strong>再做左矩陣 R ( ${theta}° )</strong>：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;繼續逆時針轉 <strong>+ ${theta}°</strong>，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;落點為 <strong>${phi}° + ${theta}° = ${resultAngle}°</strong> [ 藍色 ]。</p>
       `;
     } else if (currentMode === 1) {
       step1Fn = (p) => applyR(p, theta);
