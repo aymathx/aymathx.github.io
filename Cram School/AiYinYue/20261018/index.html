@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小六數學「比與比值」全套題庫互動詳解（支援匯出 Word）</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #eff6ff;
+    --accent: #f59e0b;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: #fff;
+    padding: 28px 24px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  }
+  .header-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-title h1 {
+    margin: 0 0 6px 0;
+    font-size: 1.65rem;
+    font-weight: 800;
+  }
+  .header-title p {
+    margin: 0;
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+  .action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+  .btn-word {
+    background-color: #ffffff;
+    color: #1e3a8a;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  }
+  .btn-word:hover {
+    background-color: #f1f5f9;
+    transform: translateY(-1px);
+  }
+  .btn-print {
+    background-color: #f59e0b;
+    color: #ffffff;
+  }
+  .btn-print:hover {
+    background-color: #d97706;
+    transform: translateY(-1px);
+  }
+  .container {
+    max-width: 1080px;
+    margin: 24px auto;
+    padding: 0 20px 48px 20px;
+  }
+  .strategy-banner {
+    background: #fffbeb;
+    border: 2px solid #fcd34d;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+  }
+  .strategy-banner h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.15rem;
+    color: #b45309;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .strategy-item {
+    background: #ffffff;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  .strategy-item strong {
+    color: #d97706;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .tab-btn {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: var(--text);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .tab-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+  }
+  .section-group {
+    margin-bottom: 32px;
+  }
+  .section-header {
+    background: #e0f2fe;
+    border-left: 6px solid #0284c7;
+    padding: 12px 18px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #0369a1;
+  }
+  .section-header span {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #0284c7;
+    background: #ffffff;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    background: var(--primary);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 3px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .q-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .idea-box {
+    background: #f0f9ff;
+    border-left: 4px solid #38bdf8;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    color: #0c4a6e;
+    margin-bottom: 12px;
+  }
+  .steps-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+  .steps-box ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .steps-box li {
+    margin-bottom: 6px;
+  }
+  .steps-box li:last-child {
+    margin-bottom: 0;
+  }
+  .ans-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--success-light);
+    color: #15803d;
+    border: 1px solid #86efac;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+  }
+  .frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    font-size: 0.85em;
+    line-height: 1.1;
+    margin: 0 3px;
+  }
+  .frac-num { border-bottom: 1.5px solid currentColor; padding: 0 3px; }
+  .frac-den { padding: 0 3px; }
+
+  @media print {
+    header .action-bar, .tabs { display: none !important; }
+    body { background: #fff; }
+    .card { break-inside: avoid; border: 1px solid #cbd5e1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-title">
+      <h1>🎓 小六數學「比與比值」全套練習卷詳解（共 6 張／29 題）</h1>
+      <p>專為國小六年級設計：純算術與份數圖像思考・零國中代數方程式・一看就懂！</p>
+    </div>
+    <div class="action-bar">
+      <button class="btn btn-word" onclick="exportToWord()">
+        📥 點此下載 Word 檔 (.doc)
+      </button>
+      <button class="btn btn-print" onclick="window.print()">
+        🖨️ 列印 / 另存 PDF
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="strategy-banner">
+    <h2>💡 小六生解「比與比值」四大滿分秘訣（不用設未知數 x！）</h2>
+    <div class="strategy-grid">
+      <div class="strategy-item">
+        <strong>秘訣 1：看放大縮小倍數</strong>
+        比的前項和後項同時「乘以」或「除以」一個不是 0 的數，比維持相等、比值不變！
+      </div>
+      <div class="strategy-item">
+        <strong>秘訣 2：算 1 組總份數</strong>
+        看到「合起來共有多少」，就把前項加後項當作「總份數」，先用除法算出「1 份是多少」。
+      </div>
+      <div class="strategy-item">
+        <strong>秘訣 3：找不變的人對齊份數</strong>
+        有人轉入或互送東西時，找出「數量沒變的人」或「總和沒變」，用最小公倍數把份數統一！
+      </div>
+      <div class="strategy-item">
+        <strong>秘訣 4：正方形面積畫小方格</strong>
+        邊長 3 份的正方形，面積會有 3×3＝9 個小方格！先算出「1 個小方格面積」，就能反推邊長。
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs" id="filter-tabs">
+    <button class="tab-btn active" onclick="filterSection('all', this)">全部顯示（共 29 題）</button>
+    <button class="tab-btn" onclick="filterSection('part1', this)">圖1～2：作業練習 (p.26-27)</button>
+    <button class="tab-btn" onclick="filterSection('part2', this)">圖3：進階作業 (p.28)</button>
+    <button class="tab-btn" onclick="filterSection('part3', this)">圖4：競賽題練習 (p.30)</button>
+    <button class="tab-btn" onclick="filterSection('part4', this)">圖5：課綱選擇題 (p.31)</button>
+    <button class="tab-btn" onclick="filterSection('part5', this)">圖6：課綱填填看 (p.32)</button>
+  </div>
+
+  <!-- Word 匯出內容區開始 -->
+  <div id="export-content">
+
+    <!-- 第一部分：圖1 & 圖2 -->
+    <div class="section-group" data-part="part1">
+      <div class="section-header">
+        <h3>第一部分：比與比值 作業練習 (1)～(2)</h3>
+        <span>對應講義 第 26、27 頁（第 1～6 題）</span>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">作業 第 1 題</span>
+          <div class="q-text">「文具店正在辦活動：3 張貼紙可以換 2 枝鉛筆。小芸有 18 張貼紙，她最多可以換到幾枝鉛筆？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>把「3 張貼紙換 2 枝鉛筆」當成 <strong>1 組</strong>（貼紙：鉛筆 ＝ 3：2），看看 18 張貼紙是幾組（也就是放大了幾倍）！
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>算有幾組（倍數）：</strong> 18 ÷ 3 ＝ 6（代表有 6 組，貼紙數量是原本的 6 倍）。</li>
+            <li><strong>算鉛筆數量：</strong> 鉛筆也要跟著放大 6 倍 → 2 × 6 ＝ 12（枝）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：12 枝鉛筆</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">作業 第 2 題</span>
+          <div class="q-text">「調一杯果汁時，果汁原液和水的比是 2：3。若一共調了 20 杯飲料，需要多少杯果汁原液？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>「果汁原液：水 ＝ 2：3」代表每調出 1 組飲料，裡面有 2 份果汁原液和 3 份水，合起來是 <strong>5 份飲料</strong>。
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>算 1 組飲料有幾份：</strong> 2 ＋ 3 ＝ 5（份）。</li>
+            <li><strong>算 1 份是幾杯（有幾組）：</strong> 20 ÷ 5 ＝ 4（杯）。</li>
+            <li><strong>算果汁原液（佔 2 份）：</strong> 2 × 4 ＝ 8（杯）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：8 杯果汁原液</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">作業 第 3 題</span>
+          <div class="q-text">「一個長方形的長與寬的比是 4：3。若寬是 18 公分，這個長方形的長是多少公分？周長是多少公分？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>長佔 4 份、寬佔 3 份。題目告訴我們「寬是 18 公分」，代表 3 份是 18 公分，可以先算出「1 份是幾公分」。
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>算 1 份的長度：</strong> 18 ÷ 3 ＝ 6（公分）。</li>
+            <li><strong>算長方形的長（4 份）：</strong> 4 × 6 ＝ 24（公分）。</li>
+            <li><strong>算長方形的周長：</strong> （長 ＋ 寬）× 2 ＝（24 ＋ 18）× 2 ＝ 42 × 2 ＝ 84（公分）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：24 公分（長）、84 公分（周長）</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">作業 第 4 題</span>
+          <div class="q-text">「甲班男生與女生的人數比是 4：5。若女生有 25 人，甲班共有幾人？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>男生佔 4 份，女生佔 5 份，全班合起來共有 4 ＋ 5 ＝ 9 份。先用女生人數算出「1 份有幾人」！
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>算 1 份有幾人：</strong> 女生 5 份是 25 人，所以 1 份 ＝ 25 ÷ 5 ＝ 5（人）。</li>
+            <li><strong>算全班總份數：</strong> 4 ＋ 5 ＝ 9（份）。</li>
+            <li><strong>算全班總人數：</strong> 5 × 9 ＝ 45（人）。<br><em>（也可以先算男生 4 × 5 ＝ 20 人，再加女生 20 ＋ 25 ＝ 45 人）</em></li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：45 人</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">作業 第 5 題</span>
+          <div class="q-text">「一張地圖的比例尺是 1：50,000。地圖上兩地相距 6 公分，實際距離是多少公尺？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>「比例尺 1：50,000」代表地圖上 1 公分，實際距離是 50,000 公分。算出公分後，記得 <strong>1 公尺 ＝ 100 公分</strong>，要除以 100 換成公尺！
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>算實際距離幾公分：</strong> 50,000 × 6 ＝ 300,000（公分）。</li>
+            <li><strong>換成公尺（除以 100，去掉兩個 0）：</strong> 300,000 ÷ 100 ＝ 3,000（公尺）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：3,000 公尺</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">作業 第 6 題</span>
+          <div class="q-text">「某種鹽水中，食鹽與水的重量比是 1：9。若要配成 800 公克的這種鹽水，食鹽和水各要多少公克？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>「鹽水」是「食鹽 ＋ 水」合起來的總重量！食鹽佔 1 份、水佔 9 份，代表整杯鹽水總共是 10 份。
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>算鹽水總份數：</strong> 1 ＋ 9 ＝ 10（份）。</li>
+            <li><strong>算 1 份是幾公克：</strong> 800 ÷ 10 ＝ 80（公克）。</li>
+            <li><strong>算食鹽與水的重量：</strong> 食鹽（1 份）＝ 80 × 1 ＝ 80（公克）；水（9 份）＝ 80 × 9 ＝ 720（公克）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：食鹽 80 公克、水 720 公克</div>
+      </div>
+    </div>
+
+    <!-- 第二部分：圖3 -->
+    <div class="section-group" data-part="part2">
+      <div class="section-header">
+        <h3>第二部分：比與比值 進階作業 (1)</h3>
+        <span>對應講義 第 28 頁（第 1～3 題）</span>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">進階 第 1 題</span>
+          <div class="q-text">「六年甲班男生和女生的人數比是 5：7。後來有 6 位女生轉入，這時男生和女生的人數比變成 5：8。六年甲班原來有多少人？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>抓出「不變的人」！只有女生轉入，所以<strong>「男生人數沒有變」</strong>。剛好原來（5：7）和後來（5：8）的男生都是 5 份，代表 1 份的人數完全相同！
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>看女生增加了幾份：</strong> 男生固定是 5 份，女生從 7 份變成 8 份，增加了 8 － 7 ＝ 1（份）。</li>
+            <li><strong>算 1 份是幾人：</strong> 轉入 6 位女生剛好讓女生多 1 份，所以 <strong>1 份就是 6 人</strong>！</li>
+            <li><strong>算原來全班總人數：</strong> 原來全班有 5 ＋ 7 ＝ 12（份），總人數 ＝ 6 × 12 ＝ 72（人）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：72 人</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">進階 第 2 題</span>
+          <div class="q-text">「一個長方形花圃的長與寬的比是 7：5，周長是 96 公尺。這個花圃的面積是多少平方公尺？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>⚠️ <strong>超級常錯陷阱！</strong>長方形周長是「2 條長 ＋ 2 條寬」，一定要先把周長除以 2，才是「1 條長 ＋ 1 條寬」的和！
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>先算「1 條長 ＋ 1 條寬」：</strong> 96 ÷ 2 ＝ 48（公尺）。</li>
+            <li><strong>算長與寬的總份數：</strong> 7 ＋ 5 ＝ 12（份）。</li>
+            <li><strong>算 1 份是幾公尺：</strong> 48 ÷ 12 ＝ 4（公尺）。</li>
+            <li><strong>算出實際的長與寬：</strong> 長（7 份）＝ 4 × 7 ＝ 28（公尺）；寬（5 份）＝ 4 × 5 ＝ 20（公尺）。</li>
+            <li><strong>算長方形花圃面積：</strong> 長 × 寬 ＝ 28 × 20 ＝ 560（平方公尺）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：560 平方公尺</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">進階 第 3 題</span>
+          <div class="q-text">「甲、乙兩班捐書的本數比是 4：5。若乙班送 15 本給甲班後，兩班的本數比變成 11：10。甲、乙兩班原來各捐了多少本書？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>乙班把書送給甲班，「兩班加起來的總書本數」完全沒有變！我們可以把前後兩個比的「總份數」用最小公倍數變成一樣大。
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>算前後的總份數：</strong> 原來 4：5（總份數 4 ＋ 5 ＝ 9 份）；後來 11：10（總份數 11 ＋ 10 ＝ 21 份）。</li>
+            <li><strong>統一總份數（找 9 和 21 的最小公倍數 63）：</strong><br>
+              ・原來的比（總份數 9 放大 7 倍變 63）：（4 × 7）：（5 × 7）＝ <strong>28：35</strong><br>
+              ・後來的比（總份數 21 放大 3 倍變 63）：（11 × 3）：（10 × 3）＝ <strong>33：30</strong>
+            </li>
+            <li><strong>找出 1 份有幾本書：</strong> 乙班從 35 份變成 30 份（少了 5 份），這 5 份就是送給甲班的 15 本書！所以 1 份 ＝ 15 ÷ 5 ＝ 3（本）。</li>
+            <li><strong>算兩班原來各捐幾本：</strong> 甲班原來 28 份 ＝ 3 × 28 ＝ 84（本）；乙班原來 35 份 ＝ 3 × 35 ＝ 105（本）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：甲班 84 本、乙班 105 本</div>
+      </div>
+    </div>
+
+    <!-- 第三部分：圖4 -->
+    <div class="section-group" data-part="part3">
+      <div class="section-header">
+        <h3>第三部分：比與比值 競賽題練習 (2)</h3>
+        <span>對應講義 第 30 頁（第 3～4 題）</span>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">競賽 第 3 題</span>
+          <div class="q-text">【競賽類題】「甲、乙兩個正方形的邊長比是 3：5，兩個正方形的面積相差 256 平方公分。求兩個正方形的周長和。」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>把甲邊長看成 3 份、乙邊長看成 5 份。畫出方格來看：甲面積有 3 × 3 ＝ 9 個小正方格，乙面積有 5 × 5 ＝ 25 個小正方格！
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>算面積有幾個小正方格：</strong> 甲面積 ＝ 3 × 3 ＝ 9（格）；乙面積 ＝ 5 × 5 ＝ 25（格）。</li>
+            <li><strong>算面積相差幾格：</strong> 25 － 9 ＝ 16（格）。</li>
+            <li><strong>算 1 個小正方格的面積：</strong> 256 ÷ 16 ＝ 16（平方公分）。</li>
+            <li><strong>算 1 個小正方格的邊長（1 份的長度）：</strong> 想一想，哪一個數乘以自己等於 16？因為 <strong>4 × 4 ＝ 16</strong>，所以 1 份的長度就是 <strong>4 公分</strong>！</li>
+            <li><strong>算兩正方形的實際邊長與周長和：</strong><br>
+              ・甲邊長 ＝ 4 × 3 ＝ 12（公分） → 甲周長 ＝ 12 × 4 ＝ 48（公分）<br>
+              ・乙邊長 ＝ 4 × 5 ＝ 20（公分） → 乙周長 ＝ 20 × 4 ＝ 80（公分）<br>
+              ・兩個正方形的周長和 ＝ 48 ＋ 80 ＝ 128（公分）。
+            </li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：128 公分</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">競賽 第 4 題</span>
+          <div class="q-text">【AMC 類題】「某校男生與女生的人數比是 7：8。後來有 20% 的男生離校，又有 10 名女生轉入，男生與女生的人數比變成 2：3。原來全校共有多少名學生？」</div>
+        </div>
+        <div class="idea-box">
+          <strong>💡 小六解題思路：</strong>「20%」就是五分之一（<span class="frac"><span class="frac-num">1</span><span class="frac-den">5</span></span>）。為了讓男生人數除以 5 不會出現小數，我們把原來男：女 ＝ 7：8 放大 5 倍，看成 <strong>男生 35 份：女生 40 份</strong>！
+        </div>
+        <div class="steps-box">
+          <ol>
+            <li><strong>放大原來的份數：</strong> 男：女 ＝（7 × 5）：（8 × 5）＝ <strong>35 份：40 份</strong>（原來全校共 35 ＋ 40 ＝ 75 份）。</li>
+            <li><strong>算離校後剩下的男生份數：</strong> 男生離校 20%（少掉 35 × 20% ＝ 7 份），剩下 35 － 7 ＝ <strong>28 份</strong>。</li>
+            <li><strong>對齊後來的比（2：3）：</strong> 後來男：女 ＝ 2：3。因為剩下的男生是 28 份（是 2 的 14 倍），所以把 2：3 放大 14 倍 ＝ <strong>28 份：42 份</strong>！</li>
+            <li><strong>算 1 份是幾名學生：</strong> 女生原本是 40 份，轉入 10 名後變成 42 份，增加了 42 － 40 ＝ 2（份）。所以 1 份 ＝ 10 ÷ 2 ＝ 5（名）。</li>
+            <li><strong>算原來全校學生人數：</strong> 原來全校共 75 份，5 × 75 ＝ 375（名）。</li>
+          </ol>
+        </div>
+        <div class="ans-badge">✅ 答：375 名</div>
+      </div>
+    </div>
+
+    <!-- 第四部分：圖5 -->
+    <div class="section-group" data-part="part4">
+      <div class="section-header">
+        <h3>第四部分：比與比值 課綱練習 — 一、選擇題</h3>
+        <span>對應講義 第 31 頁（第 1～7 題）</span>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">選擇 第 1 題</span>
+          <div class="q-text">（ ② ）已知甲：乙 ＝ 1：3，那麼甲、乙的關係如何？<br>
+          <small style="color:#475569;">① 甲是乙的 3 倍　② 甲是乙的 <span class="frac"><span class="frac-num">1</span><span class="frac-den">3</span></span> 倍　③ 乙是甲的 <span class="frac"><span class="frac-num">1</span><span class="frac-den">3</span></span> 倍　④ 無法比較</small></div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>把甲看成 1 份，乙看成 3 份。問「甲是乙的幾倍」就是拿甲除以乙：1 ÷ 3 ＝ <span class="frac"><span class="frac-num">1</span><span class="frac-den">3</span></span>（倍）；反過來「乙是甲的幾倍」則是 3 ÷ 1 ＝ 3（倍）。故選 ②。
+        </div>
+        <div class="ans-badge">✅ 答：②</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">選擇 第 2 題</span>
+          <div class="q-text">（ ④ ）下列哪一個選項，其比值與 7：9 的比值相等？<br>
+          <small style="color:#475569;">① (7＋3)：(9＋3)　② (1÷7)：(1÷9)　③ (7－1)：(9－1)　④ (7×2)：(9×2)</small></div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>比的前項和後項要<strong>「同時乘以或除以一個不為 0 的數」</strong>，比值才會相等！同加（選項①）或同減（選項③）都會改變比值；選項②會變成 <span class="frac"><span class="frac-num">1</span><span class="frac-den">7</span></span>：<span class="frac"><span class="frac-num">1</span><span class="frac-den">9</span></span> ＝ 9：7（顛倒了）。只有 ④ 是前後項同乘以 2，比值相等！
+        </div>
+        <div class="ans-badge">✅ 答：④</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">選擇 第 3 題</span>
+          <div class="q-text">（ ③ ）暄萱的信用卡，每刷卡付款 65 元可集 2 點，暄萱刷卡買了一件洋裝，共集到 38 點，這件洋裝最少要多少元？<br>
+          <small style="color:#475569;">① 1215 元　② 1225 元　③ 1235 元　④ 1245 元</small></div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>每 65 元換 2 點（65：2）。集到 38 點代表集了 38 ÷ 2 ＝ 19（組）的點數。因為問「最少」要多少元，代表剛好刷滿 19 組、沒有多餘零頭：65 × 19 ＝ 1235（元）。
+        </div>
+        <div class="ans-badge">✅ 答：③ 1235 元</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">選擇 第 4 題</span>
+          <div class="q-text">（ ④ ）下面哪一個比和 3：4 不是相等的比？<br>
+          <small style="color:#475569;">① 9：12　② 0.6：0.8　③ 12：16　④ 30：44</small></div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>檢查各選項與 3：4 的倍數關係：<br>
+          ・① 9：12 ＝ (3×3)：(4×3)（相等）<br>
+          ・② 0.6：0.8 ＝ (3×0.2)：(4×0.2)（相等）<br>
+          ・③ 12：16 ＝ (3×4)：(4×4)（相等）<br>
+          ・④ 30：44 前項 3×10＝30，但後項 4×10＝40（題目寫 44），倍數不同，所以不是相等的比！
+        </div>
+        <div class="ans-badge">✅ 答：④</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">選擇 第 5 題</span>
+          <div class="q-text">（ ③ ）甲數是乙數的 <span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span> 倍，下面哪一個是甲數和乙數的最簡整數比？<br>
+          <small style="color:#475569;">① 1：<span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span>　② <span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span>：1　③ 1：2　④ 2：1</small></div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>把基準量「乙數」當作 1，甲數就是 <span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span>。甲：乙 ＝ <span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span>：1。題目要求<strong>「最簡整數比」</strong>（前後項必須是整數），所以把 <span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span>：1 前後項同乘以 2，得到 <strong>1：2</strong>。
+        </div>
+        <div class="ans-badge">✅ 答：③ 1：2</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">選擇 第 6 題</span>
+          <div class="q-text">（ ④ ）下面哪一個比和 4：6 不是相等的比？<br>
+          <small style="color:#475569;">① 0.4：0.6　② 6：9　③ <span class="frac"><span class="frac-num">2</span><span class="frac-den">3</span></span>：1　④ <span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span>：1<span class="frac"><span class="frac-num">1</span><span class="frac-den">3</span></span></small></div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>先把 4：6 同除以 2，化簡為 <strong>2：3</strong>。<br>
+          ・① 0.4：0.6 同乘 10 變 4：6 ＝ 2：3（相等）<br>
+          ・② 6：9 同除以 3 變 2：3（相等）<br>
+          ・③ <span class="frac"><span class="frac-num">2</span><span class="frac-den">3</span></span>：1 同乘 3 變 2：3（相等）<br>
+          ・④ <span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span>：1<span class="frac"><span class="frac-num">1</span><span class="frac-den">3</span></span> ＝ <span class="frac"><span class="frac-num">1</span><span class="frac-den">2</span></span>：<span class="frac"><span class="frac-num">4</span><span class="frac-den">3</span></span>，同乘以 6 變成 <strong>3：8</strong>，不等於 2：3！
+        </div>
+        <div class="ans-badge">✅ 答：④</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">選擇 第 7 題</span>
+          <div class="q-text">（ ④ ）下列何者是 <span class="frac"><span class="frac-num">2</span><span class="frac-den">3</span></span>：0.7 的最簡整數比？<br>
+          <small style="color:#475569;">① 2：3　② 2：7　③ 6：21　④ 20：21</small></div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>先把小數 0.7 化為分數 <span class="frac"><span class="frac-num">7</span><span class="frac-den">10</span></span>，原式變成 <span class="frac"><span class="frac-num">2</span><span class="frac-den">3</span></span>：<span class="frac"><span class="frac-num">7</span><span class="frac-den">10</span></span>。分母 3 和 10 的最小公倍數是 30，前後項同時乘以 30：前項 <span class="frac"><span class="frac-num">2</span><span class="frac-den">3</span></span> × 30 ＝ 20，後項 <span class="frac"><span class="frac-num">7</span><span class="frac-den">10</span></span> × 30 ＝ 21，得到 <strong>20：21</strong>。
+        </div>
+        <div class="ans-badge">✅ 答：④ 20：21</div>
+      </div>
+    </div>
+
+    <!-- 第五部分：圖6 -->
+    <div class="section-group" data-part="part5">
+      <div class="section-header">
+        <h3>第五部分：比與比值 課綱練習 — 二、填填看</h3>
+        <span>對應講義 第 32 頁（第 1～11 題）</span>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 1 題</span>
+          <div class="q-text">大廚師阿進做皮蛋瘦肉粥用掉 1.3 盒皮蛋，做皮蛋豆腐用掉 0.8 盒皮蛋，做皮蛋瘦肉粥和皮蛋豆腐所用皮蛋盒數的比要怎麼記？（　　）（用最簡整數比表示）</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>原本的比是 1.3：0.8。前後項同時乘以 10 把小數變成整數，得到 <strong>13：8</strong>（13 和 8 互質，已是最簡整數比）。
+        </div>
+        <div class="ans-badge">✅ 答：13：8</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 2 題</span>
+          <div class="q-text">寫出相等的比： 17：（　　）＝ 204：72 ＝（　　）：5.4</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong><br>
+          ① 先看左邊和中間：前項從 17 變成 204，因為 204 ÷ 17 ＝ 12（放大 12 倍），所以第一個括號 ＝ 72 ÷ 12 ＝ <strong>6</strong>。<br>
+          ② 再看 17：6 和最右邊的（　）：5.4：後項從 6 變成 5.4，因為 5.4 ÷ 6 ＝ 0.9（乘以 0.9 倍），所以前項 ＝ 17 × 0.9 ＝ <strong>15.3</strong>。
+        </div>
+        <div class="ans-badge">✅ 答：第一格填 6、第二格填 15.3</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 3 題</span>
+          <div class="q-text">找出代號填填看：【甲、60：32｜乙、0.14：0.21｜丙、81：126｜丁、16：14｜戊、2.6：3.9｜己、135：72】<br>
+          (1) 和 2：3 相等的比是（　　）。　(2) 和 15：8 相等的比是（　　）。</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>先把六個代號都化為「最簡整數比」：<br>
+          ・<strong>甲</strong> 60：32（同除以 4）＝ <strong>15：8</strong><br>
+          ・<strong>乙</strong> 0.14：0.21（同乘 100 變 14：21，再同除以 7）＝ <strong>2：3</strong><br>
+          ・<strong>丙</strong> 81：126（同除以 9）＝ 9：14<br>
+          ・<strong>丁</strong> 16：14（同除以 2）＝ 8：7<br>
+          ・<strong>戊</strong> 2.6：3.9（同乘 10 變 26：39，再同除以 13）＝ <strong>2：3</strong><br>
+          ・<strong>己</strong> 135：72（同除以 9）＝ <strong>15：8</strong>
+        </div>
+        <div class="ans-badge">✅ 答：(1) 乙、戊　(2) 甲、己</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 4 題</span>
+          <div class="q-text">找出代號填填看：【甲、24：21｜乙、1.32：0.72｜丙、11：6｜丁、16：14｜戊、8.4：4.9｜己、156：91】<br>
+          (1) 和 33：18 相等的比是（　　）。　(2) 和 12：7 相等的比是（　　）。</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>先把題目目標 33：18 同除以 3 化簡為 <strong>11：6</strong>；另一個目標是 <strong>12：7</strong>。接著化簡各代號：<br>
+          ・<strong>甲</strong> 24：21（同除以 3）＝ 8：7<br>
+          ・<strong>乙</strong> 1.32：0.72（同乘 100 變 132：72，再同除以 12）＝ <strong>11：6</strong><br>
+          ・<strong>丙</strong> 11：6 ＝ <strong>11：6</strong><br>
+          ・<strong>丁</strong> 16：14（同除以 2）＝ 8：7<br>
+          ・<strong>戊</strong> 8.4：4.9（同乘 10 變 84：49，再同除以 7）＝ <strong>12：7</strong><br>
+          ・<strong>己</strong> 156：91（同除以 13）＝ <strong>12：7</strong>
+        </div>
+        <div class="ans-badge">✅ 答：(1) 乙、丙　(2) 戊、己</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 5 題</span>
+          <div class="q-text">媽媽用 <span class="frac"><span class="frac-num">6</span><span class="frac-den">5</span></span> 公斤的白米和 <span class="frac"><span class="frac-num">4</span><span class="frac-den">7</span></span> 公斤的糙米煮成一鍋糙米飯，白米和糙米重量的比要怎麼記？（　　）（用最簡整數比表示）</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>原本的比是 <span class="frac"><span class="frac-num">6</span><span class="frac-den">5</span></span>：<span class="frac"><span class="frac-num">4</span><span class="frac-den">7</span></span>。分母 5 和 7 的最小公倍數是 35，前後項同乘以 35 變成 42：20；再同除以公因數 2，得到最簡整數比 <strong>21：10</strong>。
+        </div>
+        <div class="ans-badge">✅ 答：21：10</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 6 題</span>
+          <div class="q-text">弟弟有 150 元，哥哥的錢比弟弟多 50 元，哥哥和弟弟錢數的比是多少？（　　）</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>先算哥哥有幾元：150 ＋ 50 ＝ 200（元）。注意題目順序是「哥哥和弟弟」，所以是 <strong>200：150</strong>；前後項同除以 50 可化簡為 <strong>4：3</strong>（兩種寫法皆對，建議寫 4：3 或 200：150）。
+        </div>
+        <div class="ans-badge">✅ 答：200：150（或 4：3）</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 7 題</span>
+          <div class="q-text">寫出相等的比： 2.2：（　　）＝ 2：7 ＝（　　）：56</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong><br>
+          ① 看左邊和中間 2：7：前項從 2 變成 2.2（2.2 ÷ 2 ＝ 1.1 倍），所以第一個括號 ＝ 7 × 1.1 ＝ <strong>7.7</strong>。<br>
+          ② 看中間 2：7 和右邊：後項從 7 變成 56（56 ÷ 7 ＝ 8 倍），所以第二個括號 ＝ 2 × 8 ＝ <strong>16</strong>。
+        </div>
+        <div class="ans-badge">✅ 答：第一格填 7.7、第二格填 16</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 8 題</span>
+          <div class="q-text">有兩瓶一樣多的果汁，琪琪 5 天喝完，安安 8 天喝完，琪琪和安安平均每天所喝果汁量的比是多少？（　　）（用最簡整數比表示）</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>把 1 瓶果汁當作「1」。琪琪 5 天喝完，平均每天喝 <span class="frac"><span class="frac-num">1</span><span class="frac-den">5</span></span> 瓶；安安 8 天喝完，平均每天喝 <span class="frac"><span class="frac-num">1</span><span class="frac-den">8</span></span> 瓶。兩人每天喝的量比 ＝ <span class="frac"><span class="frac-num">1</span><span class="frac-den">5</span></span>：<span class="frac"><span class="frac-num">1</span><span class="frac-den">8</span></span>，前後項同乘以 40，得到 <strong>8：5</strong>。
+        </div>
+        <div class="ans-badge">✅ 答：8：5</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 9 題</span>
+          <div class="q-text">媽媽買了一束玫瑰花，白色的有 5 朵、紅色的有 9 朵、黃色的有 7 朵，黃色玫瑰花和全部玫瑰花數量的比值是多少？（　　）</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>先算「全部玫瑰花」有幾朵：5 ＋ 9 ＋ 7 ＝ 21（朵）。黃色和全部的比是 7：21，題目問的是<strong>「比值」</strong>（前項 ÷ 後項）＝ 7 ÷ 21 ＝ <span class="frac"><span class="frac-num">7</span><span class="frac-den">21</span></span>，約分後得到 <strong><span class="frac"><span class="frac-num">1</span><span class="frac-den">3</span></span></strong>。
+        </div>
+        <div class="ans-badge">✅ 答：<span class="frac"><span class="frac-num">1</span><span class="frac-den">3</span></span></div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 10 題</span>
+          <div class="q-text">有一個工程，甲自己做 8 天可以完工，甲、乙兩人每日工作量的比是 <span class="frac"><span class="frac-num">1</span><span class="frac-den">8</span></span>：<span class="frac"><span class="frac-num">1</span><span class="frac-den">12</span></span>，如果換乙自己來做這個工程，要做幾天可以完工？（　　）天</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>把整個工程當作「1」。甲自己做 8 天完工，代表甲每天做 <span class="frac"><span class="frac-num">1</span><span class="frac-den">8</span></span> 個工程。對照題目給的「甲、乙每日工作量的比是 <span class="frac"><span class="frac-num">1</span><span class="frac-den">8</span></span>：<span class="frac"><span class="frac-num">1</span><span class="frac-den">12</span></span>」，前項剛好就是甲每天做的 <span class="frac"><span class="frac-num">1</span><span class="frac-den">8</span></span>，所以後項代表<strong>乙每天做 <span class="frac"><span class="frac-num">1</span><span class="frac-den">12</span></span> 個工程</strong>！每天做 <span class="frac"><span class="frac-num">1</span><span class="frac-den">12</span></span>，做完「1」個工程需要 1 ÷ <span class="frac"><span class="frac-num">1</span><span class="frac-den">12</span></span> ＝ <strong>12（天）</strong>。
+        </div>
+        <div class="ans-badge">✅ 答：12 天</div>
+      </div>
+
+      <div class="card">
+        <div class="q-header">
+          <span class="q-num">填填看 第 11 題</span>
+          <div class="q-text">杜媽媽煮青菜豆腐湯用掉 <span class="frac"><span class="frac-num">2</span><span class="frac-den">5</span></span> 盒豆腐，煮鐵板豆腐用掉 0.8 盒豆腐，煮青菜豆腐湯和鐵板豆腐所用豆腐盒數的比要怎麼記？（　　）（用最簡整數比表示）</div>
+        </div>
+        <div class="steps-box">
+          <strong>解析：</strong>原本的比是 <span class="frac"><span class="frac-num">2</span><span class="frac-den">5</span></span>：0.8。把 <span class="frac"><span class="frac-num">2</span><span class="frac-den">5</span></span> 換成小數是 0.4（2 ÷ 5 ＝ 0.4），變成 0.4：0.8；前後項同乘以 10 變 4：8，再同除以 4 得到最簡整數比 <strong>1：2</strong>。
+        </div>
+        <div class="ans-badge">✅ 答：1：2</div>
+      </div>
+    </div>
+
+  </div>
+  <!-- Word 匯出內容區結束 -->
+</div>
+
+<script>
+  function filterSection(part, btn) {
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const groups = document.querySelectorAll('.section-group');
+    groups.forEach(g => {
+      if (part === 'all' || g.getAttribute('data-part') === part) {
+        g.style.display = 'block';
+      } else {
+        g.style.display = 'none';
+      }
+    });
+  }
+
+  function exportToWord() {
+    // 先確保所有區塊都是展開狀態再匯出
+    const contentClone = document.getElementById('export-content').cloneNode(true);
+    contentClone.querySelectorAll('.section-group').forEach(g => g.style.display = 'block');
+
+    // 將分數 span 轉換為 Word 易讀格式 (a/b)
+    contentClone.querySelectorAll('.frac').forEach(f => {
+      const num = f.querySelector('.frac-num').innerText;
+      const den = f.querySelector('.frac-den').innerText;
+      f.outerHTML = `(${num}/${den})`;
+    });
+
+    const wordHtml = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+            xmlns:w='urn:schemas-microsoft-com:office:word' 
+            xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <meta charset='utf-8'>
+        <title>小六數學「比與比值」全套練習卷詳解</title>
+        <style>
+          body { font-family: "Microsoft JhengHei", "PMingLiU", sans-serif; color: #1e293b; line-height: 1.6; font-size: 11pt; }
+          h1 { color: #1e3a8a; font-size: 18pt; border-bottom: 2px solid #2563eb; padding-bottom: 6px; }
+          h3 { background-color: #e0f2fe; color: #0369a1; padding: 8px 12px; font-size: 13.5pt; border-left: 5px solid #0284c7; margin-top: 20px; }
+          .card { border: 1px solid #cbd5e1; padding: 12px; margin-bottom: 14px; }
+          .q-num { font-weight: bold; color: #2563eb; }
+          .q-text { font-weight: bold; font-size: 11.5pt; margin-bottom: 6px; }
+          .idea-box { background-color: #f0f9ff; padding: 8px; color: #0c4a6e; margin-bottom: 6px; }
+          .steps-box { background-color: #f8fafc; padding: 8px; margin-bottom: 6px; }
+          .ans-badge { font-weight: bold; color: #15803d; background-color: #dcfce7; padding: 4px 8px; display: inline-block; }
+        </style>
+      </head>
+      <body>
+        <h1>小六數學「比與比值」全套練習卷詳解（p.26 ～ p.32 共 29 題）</h1>
+        <p><strong>適用對象：</strong>國小六年級（純算術與份數觀念・無超修國中代數方程式）</p>
+        ${contentClone.innerHTML}
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = '小六數學_比與比值_全套詳解講義.doc';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+</body>
+</html>
