@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 104" width="560" height="104" role="img" aria-label="數線：刻度每格 1/3，A 在 −1 與 −2/3 之間，B 在 −1/3 與 0 之間，C 在 1 的右邊" font-family="'Times New Roman', Times, serif">
+<line x1="14" y1="52" x2="542" y2="52" stroke="#16212b" stroke-width="1.6"/>
+<path d="M552 52 l-12 -5.5 v11 z" fill="#16212b"/>
+<line x1="73.0" y1="46" x2="73.0" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="73.0" y="78" font-size="16" text-anchor="middle" fill="#16212b">−1</text>
+<line x1="130.3" y1="46" x2="130.3" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="123.3" y="84" font-size="16" text-anchor="end" fill="#16212b">−</text>
+<text x="130.3" y="77" font-size="14" text-anchor="middle" fill="#16212b">2</text>
+<line x1="124.3" y1="81" x2="136.3" y2="81" stroke="#16212b" stroke-width="1"/>
+<text x="130.3" y="95" font-size="14" text-anchor="middle" fill="#16212b">3</text>
+<line x1="187.6" y1="46" x2="187.6" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="180.6" y="84" font-size="16" text-anchor="end" fill="#16212b">−</text>
+<text x="187.6" y="77" font-size="14" text-anchor="middle" fill="#16212b">1</text>
+<line x1="181.6" y1="81" x2="193.6" y2="81" stroke="#16212b" stroke-width="1"/>
+<text x="187.6" y="95" font-size="14" text-anchor="middle" fill="#16212b">3</text>
+<line x1="244.9" y1="46" x2="244.9" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="244.9" y="78" font-size="16" text-anchor="middle" fill="#16212b">0</text>
+<line x1="302.2" y1="46" x2="302.2" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="302.2" y="77" font-size="14" text-anchor="middle" fill="#16212b">1</text>
+<line x1="296.2" y1="81" x2="308.2" y2="81" stroke="#16212b" stroke-width="1"/>
+<text x="302.2" y="95" font-size="14" text-anchor="middle" fill="#16212b">3</text>
+<line x1="359.5" y1="46" x2="359.5" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="359.5" y="77" font-size="14" text-anchor="middle" fill="#16212b">2</text>
+<line x1="353.5" y1="81" x2="365.5" y2="81" stroke="#16212b" stroke-width="1"/>
+<text x="359.5" y="95" font-size="14" text-anchor="middle" fill="#16212b">3</text>
+<line x1="416.8" y1="46" x2="416.8" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="416.8" y="78" font-size="16" text-anchor="middle" fill="#16212b">1</text>
+<circle cx="100.5" cy="52" r="4.5" fill="#1a5276"/>
+<text x="100.5" y="38" font-size="19" font-style="italic" text-anchor="middle" fill="#16212b">A</text>
+<circle cx="217.4" cy="52" r="4.5" fill="#1a5276"/>
+<text x="217.4" y="38" font-size="19" font-style="italic" text-anchor="middle" fill="#16212b">B</text>
+<circle cx="471.9" cy="52" r="4.5" fill="#1a5276"/>
+<text x="471.9" y="38" font-size="19" font-style="italic" text-anchor="middle" fill="#16212b">C</text>
+</svg>

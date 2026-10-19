@@ -106,6 +106,13 @@
     .stem{font-size:1.1rem; line-height:1.95}
     nav{padding:9px 12px; gap:6px}
     nav button{min-width:40px; padding:6px 8px; font-size:.88rem}
+    .sol{padding:16px 14px}
+    /* MathJax 3 does not line-break inline math: let a too-wide line scroll by itself */
+    .stem, .sol li, .sol .note, .ans{overflow-x:auto; overflow-y:hidden}
+    /* a scrolling li hides its outside marker, so number the steps inside the li */
+    .sol ol{list-style:none; padding-left:0; counter-reset:step}
+    .sol li{counter-increment:step}
+    .sol li::before{content:counter(step) ". "; font-variant-numeric:tabular-nums}
     main{padding:16px 12px 30px}
   }
 </style>
@@ -163,7 +170,7 @@ const QUESTIONS = [
   {
     "n": 1,
     "skill": "數線比例定位",
-    "stem": "如下圖，在數線上 $A$ 點表示的數為 $1$，$B$ 點表示的數為 $3$。若 $\\overline{AC}=\\dfrac{\\overline{AB}}{3}$，$\\overline{AD}=2\\overline{AB}$，求 $C$、$D$ 兩點所表示的數是多少？<div class=\"fig\"><img src=\"figs/fig_q1.png\" alt=\"Q1 附圖\"></div>",
+    "stem": "如下圖，在數線上 $A$ 點表示的數為 $1$，$B$ 點表示的數為 $3$。若 $\\overline{AC}=\\dfrac{\\overline{AB}}{3}$，$\\overline{AD}=2\\overline{AB}$，求 $C$、$D$ 兩點所表示的數是多少？<div class=\"fig\"><img src=\"figs/fig_q1.svg\" alt=\"數線：由左而右依序為 D、A、C、B\"></div>",
     "sol": [
       "$\\overline{AB}=3-1=2$，故 $\\overline{AC}=\\dfrac{\\overline{AB}}{3}=\\dfrac{2}{3}$。",
       "$C$ 在 $A$ 的右側，所以 $C$ 點表示 $1+\\dfrac{2}{3}=\\dfrac{5}{3}$。",
@@ -191,7 +198,7 @@ const QUESTIONS = [
     "sol": [
       "設 $\\overline{AB}=L$。由 $\\overline{AP}:\\overline{PB}=2:3$ 得 $\\overline{AP}=\\dfrac{2L}{5}$；由 $\\overline{AQ}:\\overline{QB}=3:4$ 得 $\\overline{AQ}=\\dfrac{3L}{7}$。",
       "因 $\\dfrac{2}{5}$ 與 $\\dfrac{3}{7}$ 都小於 $\\dfrac{1}{2}$，$P$、$Q$ 確實都在中點的左側，符合同側的條件。",
-      "又 $\\dfrac{2}{5}<\\dfrac{3}{7}$，所以 $P$ 在 $Q$ 的左側，$\\overline{PQ}=\\dfrac{3L}{7}-\\dfrac{2L}{5}=\\dfrac{L}{35}$。",
+      "又 $\\dfrac{2}{5}\\lt \\dfrac{3}{7}$，所以 $P$ 在 $Q$ 的左側，$\\overline{PQ}=\\dfrac{3L}{7}-\\dfrac{2L}{5}=\\dfrac{L}{35}$。",
       "由 $\\overline{PQ}=4$ 得 $\\dfrac{L}{35}=4$，故 $L=140$。"
     ],
     "ans": "$\\overline{AB}=140$"
@@ -207,7 +214,7 @@ const QUESTIONS = [
       "$(3)$ 新單位長 $\\overline{BC}=5$。$D$ 的新坐標 $-3$ 表示 $D$ 在 $B$ 左側 $3$ 個新單位。",
       "$3\\times 5=15$，故 $D$ 在原數線上的坐標為 $(-2)-15=-17$。"
     ],
-    "ans": "$(1)-8$　$\\dfrac{(2)5}{3}$　$(3)-17$"
+    "ans": "$(1)$ $-8$　$(2)$ $\\dfrac{5}{3}$　$(3)$ $-17$"
   },
   {
     "n": 5,
@@ -224,16 +231,16 @@ const QUESTIONS = [
   {
     "n": 6,
     "skill": "由數線範圍推論比大小",
-    "stem": "如下圖，用字母 $a$、$b$、$c$ 依次表示點 $A$、$B$、$C$ 所對應的數。試比較 $\\dfrac{1}{ab}$、$\\dfrac{1}{b-a}$、$\\dfrac{1}{c}$ 這三個數的大小關係。<div class=\"fig\"><img src=\"figs/fig_q6.png\" alt=\"Q6 附圖\"></div>",
+    "stem": "如下圖，用字母 $a$、$b$、$c$ 依次表示點 $A$、$B$、$C$ 所對應的數。試比較 $\\dfrac{1}{ab}$、$\\dfrac{1}{b-a}$、$\\dfrac{1}{c}$ 這三個數的大小關係。<div class=\"fig\"><img src=\"figs/fig_q6.svg\" alt=\"數線：刻度每格 1/3，標出 A、B、C 三點\"></div>",
     "sol": [
-      "由圖，$C$ 點在 $1$ 的右邊，所以 $c>1$。",
-      "$A$ 點在 $-1$ 與 $-\\dfrac{2}{3}$ 之間，$B$ 點在 $-\\dfrac{1}{3}$ 與 $0$ 之間，故 $\\dfrac{2}{3}<\\left|a\\right|<1$，$0<\\left|b\\right|<\\dfrac{1}{3}$。",
-      "$a$、$b$ 同為負數，兩負相乘得正，且 $\\left|a\\right|<1$、$\\left|b\\right|<\\dfrac{1}{3}$，故 $0<ab<\\dfrac{1}{3}$。",
-      "又 $b-a$ 介於 $(-\\dfrac{1}{3})-(-\\dfrac{2}{3})=\\dfrac{1}{3}$ 與 $0-(-1)=1$ 之間，即 $\\dfrac{1}{3}<b-a<1$。",
-      "三者合起來得 $0<ab<b-a<1<c$。",
-      "正數取倒數會顛倒大小，故 $\\dfrac{1}{ab}>\\dfrac{1}{b-a}>\\dfrac{1}{c}$。"
+      "由圖，$C$ 點在 $1$ 的右邊，所以 $c\\gt 1$。",
+      "$A$ 點在 $-1$ 與 $-\\dfrac{2}{3}$ 之間，$B$ 點在 $-\\dfrac{1}{3}$ 與 $0$ 之間，故 $\\dfrac{2}{3}\\lt \\left|a\\right|\\lt 1$，$0\\lt \\left|b\\right|\\lt \\dfrac{1}{3}$。",
+      "$a$、$b$ 同為負數，兩負相乘得正，且 $\\left|a\\right|\\lt 1$、$\\left|b\\right|\\lt \\dfrac{1}{3}$，故 $0\\lt ab\\lt \\dfrac{1}{3}$。",
+      "又 $b-a$ 介於 $(-\\dfrac{1}{3})-(-\\dfrac{2}{3})=\\dfrac{1}{3}$ 與 $0-(-1)=1$ 之間，即 $\\dfrac{1}{3}\\lt b-a\\lt 1$。",
+      "三者合起來得 $0\\lt ab\\lt b-a\\lt 1\\lt c$。",
+      "正數取倒數會顛倒大小，故 $\\dfrac{1}{ab}\\gt \\dfrac{1}{b-a}\\gt \\dfrac{1}{c}$。"
     ],
-    "ans": "$\\dfrac{1}{ab}>\\dfrac{1}{b-a}>\\dfrac{1}{c}$",
+    "ans": "$\\dfrac{1}{ab}\\gt \\dfrac{1}{b-a}\\gt \\dfrac{1}{c}$",
     "note": "本題不能代入特定數值計算——圖上只標出 $A$、$B$、$C$ 的所在區間，沒有給定值。訓練重點就是「先用範圍夾出三個數的大小，再取倒數」。"
   },
   {
@@ -267,10 +274,10 @@ const QUESTIONS = [
   {
     "n": 9,
     "skill": "由數線位置去絕對值",
-    "stem": "如下圖，$A$、$B$、$C$ 三點所代表的數分別為 $a$、$b$、$c$。若 $m=\\left|a+b\\right|-\\left|b-1\\right|-\\left|a-c\\right|-\\left|1-c\\right|$，求 $1000m$ 之值。<div class=\"fig\"><img src=\"figs/fig_q9.png\" alt=\"Q9 附圖\"></div>",
+    "stem": "如下圖，$A$、$B$、$C$ 三點所代表的數分別為 $a$、$b$、$c$。若 $m=\\left|a+b\\right|-\\left|b-1\\right|-\\left|a-c\\right|-\\left|1-c\\right|$，求 $1000m$ 之值。<div class=\"fig\"><img src=\"figs/fig_q9.svg\" alt=\"數線：由左而右依序為 B、A、0、C、1\"></div>",
     "sol": [
-      "由圖可知 $b<a<0<c<1$。",
-      "逐項判斷正負：$a+b<0$，$b-1<0$，$a-c<0$，$1-c>0$。",
+      "由圖可知 $b\\lt a\\lt 0\\lt c\\lt 1$。",
+      "逐項判斷正負：$a+b\\lt 0$，$b-1\\lt 0$，$a-c\\lt 0$，$1-c\\gt 0$。",
       "所以 $m=-(a+b)+(b-1)+(a-c)-(1-c)$。",
       "$=-a-b+b-1+a-c-1+c=-2$。",
       "故 $1000m=1000\\times (-2)=-2000$。"
@@ -281,17 +288,17 @@ const QUESTIONS = [
   {
     "n": 10,
     "skill": "絕對值條件鎖定正負",
-    "stem": "已知 $\\left|a\\right|=1$、$\\left|b\\right|=2$、$\\left|c\\right|=3$，且 $a>b>c$，求 ${(a+b-c)}^{2}$ 之值。",
+    "stem": "已知 $\\left|a\\right|=1$、$\\left|b\\right|=2$、$\\left|c\\right|=3$，且 $a\\gt b\\gt c$，求 ${(a+b-c)}^{2}$ 之值。",
     "sol": [
-      "由 $\\left|c\\right|>\\left|b\\right|$ 且 $c<b$，可知 $c$ 必為負，故 $c=-3$。",
-      "由 $\\left|b\\right|>\\left|a\\right|$ 且 $b<a$，可知 $b$ 必為負，故 $b=-2$。",
-      "剩下 $a=1$ 或 $a=-1$，兩者都滿足 $a>b>c$，都要保留。",
+      "由 $\\left|c\\right|\\gt \\left|b\\right|$ 且 $c\\lt b$，可知 $c$ 必為負，故 $c=-3$。",
+      "由 $\\left|b\\right|\\gt \\left|a\\right|$ 且 $b\\lt a$，可知 $b$ 必為負，故 $b=-2$。",
+      "剩下 $a=1$ 或 $a=-1$，兩者都滿足 $a\\gt b\\gt c$，都要保留。",
       "當 $a=1$ 時，${(a+b-c)}^{2}={(1-2+3)}^{2}={2}^{2}=4$。",
       "當 $a=-1$ 時，${(a+b-c)}^{2}={(-1-2+3)}^{2}={0}^{2}=0$。",
       "故所求之值為 $4$ 或 $0$。"
     ],
     "ans": "$4$ 或 $0$",
-    "note": "常見錯誤是只找到 $a=1$ 就收工。$\\left|a\\right|=1$ 給的是兩個候選，必須逐一檢查 $a>b>c$ 是否成立——$a=-1$ 仍然大於 $b=-2$，所以不能刪。"
+    "note": "常見錯誤是只找到 $a=1$ 就收工。$\\left|a\\right|=1$ 給的是兩個候選，必須逐一檢查 $a\\gt b\\gt c$ 是否成立——$a=-1$ 仍然大於 $b=-2$，所以不能刪。"
   }
 ];
 
