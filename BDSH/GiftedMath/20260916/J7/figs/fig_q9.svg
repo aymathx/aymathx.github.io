@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 86" width="560" height="86" role="img" aria-label="數線：由左而右依序為 B、A、0、C、1" font-family="'Times New Roman', Times, serif">
+<line x1="14" y1="52" x2="542" y2="52" stroke="#16212b" stroke-width="1.6"/>
+<path d="M552 52 l-12 -5.5 v11 z" fill="#16212b"/>
+<line x1="243.0" y1="46" x2="243.0" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="243.0" y="78" font-size="16" text-anchor="middle" fill="#16212b">0</text>
+<line x1="456.1" y1="46" x2="456.1" y2="58" stroke="#16212b" stroke-width="1.4"/>
+<text x="456.1" y="78" font-size="16" text-anchor="middle" fill="#16212b">1</text>
+<circle cx="89.7" cy="52" r="4.5" fill="#1a5276"/>
+<text x="89.7" y="38" font-size="19" font-style="italic" text-anchor="middle" fill="#16212b">B</text>
+<circle cx="174.9" cy="52" r="4.5" fill="#1a5276"/>
+<text x="174.9" y="38" font-size="19" font-style="italic" text-anchor="middle" fill="#16212b">A</text>
+<circle cx="362.3" cy="52" r="4.5" fill="#1a5276"/>
+<text x="362.3" y="38" font-size="19" font-style="italic" text-anchor="middle" fill="#16212b">C</text>
+</svg>

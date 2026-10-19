@@ -104,6 +104,13 @@
     .stem{font-size:1.1rem; line-height:1.95}
     nav{padding:9px 12px; gap:6px}
     nav button{min-width:40px; padding:6px 8px; font-size:.88rem}
+    .sol{padding:16px 14px}
+    /* MathJax 3 does not line-break inline math: let a too-wide line scroll by itself */
+    .stem, .sol li, .sol .note, .ans{overflow-x:auto; overflow-y:hidden}
+    /* a scrolling li hides its outside marker, so number the steps inside the li */
+    .sol ol{list-style:none; padding-left:0; counter-reset:step}
+    .sol li{counter-increment:step}
+    .sol li::before{content:counter(step) ". "; font-variant-numeric:tabular-nums}
     main{padding:16px 12px 30px}
   }
 </style>
@@ -257,7 +264,7 @@ const QUESTIONS = [
     "stem": "若 $a$、$b$ 為正整數，且 $9{a}^{2}-4{b}^{2}=17$，求 $a-b$ 之值。",
     "sol": [
       "左式因式分解：$9{a}^{2}-4{b}^{2}=(3a-2b)(3a+2b)=17$。",
-      "$17$ 為質數，且 $a$、$b$ 為正整數使 $3a+2b>3a-2b>0$，",
+      "$17$ 為質數，且 $a$、$b$ 為正整數使 $3a+2b\\gt 3a-2b\\gt 0$，",
       "故 $3a-2b=1$ 且 $3a+2b=17$。",
       "兩式相加得 $6a=18$，$a=3$；相減得 $4b=16$，$b=4$。",
       "所以 $a-b=3-4=-1$。"
@@ -271,7 +278,7 @@ const QUESTIONS = [
     "sol": [
       "由 ${a}^{5}={b}^{4}$ 可設 $a={p}^{4}$、$b={p}^{5}$；由 ${c}^{3}={d}^{2}$ 可設 $c={q}^{2}$、$d={q}^{3}$，其中 $p$、$q$ 均為正整數。",
       "代入 $c-a=19$ 得 ${q}^{2}-{p}^{4}=19$，即 $(q-{p}^{2})(q+{p}^{2})=19$。",
-      "$19$ 為質數，且 $q+{p}^{2}>q-{p}^{2}>0$，故 $q+{p}^{2}=19$、$q-{p}^{2}=1$。",
+      "$19$ 為質數，且 $q+{p}^{2}\\gt q-{p}^{2}\\gt 0$，故 $q+{p}^{2}=19$、$q-{p}^{2}=1$。",
       "解得 $q=10$、${p}^{2}=9$，即 $p=3$。",
       "所以 $b={3}^{5}=243$、$d={10}^{3}=1000$，$d-b=1000-243=757$。"
     ],
