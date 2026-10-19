@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>【 國七 】2026-10-19 -- 第二章 分數的運算</title>
+<style>
+  :root{
+    --ink:#16212b; --dim:#5d6b79; --line:#d8e0e9;
+    --blue:#1a5276; --blue-soft:#eaf1f7; --red:#c0392b;
+    --bg:#f4f6f9; --card:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.8;
+    min-height:100vh; display:flex; flex-direction:column;
+  }
+
+  header{
+    background:var(--blue); color:#fff; padding:14px 20px;
+    display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  }
+  header h1{font-size:1.15rem; font-weight:700; letter-spacing:.02em}
+  header .sub{font-size:.82rem; opacity:.82}
+  header .spacer{flex:1}
+  header .count{font-size:.82rem; opacity:.82; font-variant-numeric:tabular-nums}
+
+  nav{
+    background:var(--card); border-bottom:1px solid var(--line);
+    padding:10px 20px; display:flex; gap:8px; flex-wrap:wrap;
+    position:sticky; top:0; z-index:10;
+  }
+  nav button{
+    font:inherit; font-size:.95rem; font-weight:700; font-variant-numeric:tabular-nums;
+    min-width:46px; padding:7px 10px; cursor:pointer;
+    background:#fff; color:var(--blue);
+    border:1.5px solid var(--line); border-radius:8px;
+    transition:background .12s, border-color .12s, color .12s;
+  }
+  nav button:hover{border-color:var(--blue); background:var(--blue-soft)}
+  nav button[aria-current="true"]{background:var(--blue); border-color:var(--blue); color:#fff}
+  nav button.seen:not([aria-current="true"]){background:var(--blue-soft)}
+  nav button.unit-start{margin-left:12px}
+
+  main{flex:1; padding:26px 20px 40px; display:flex; justify-content:center}
+  .card{
+    width:100%; max-width:860px; background:var(--card);
+    border:1px solid var(--line); border-radius:14px;
+    padding:30px 34px 34px; box-shadow:0 1px 3px rgba(22,33,43,.06);
+  }
+  .meta{
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    padding-bottom:14px; margin-bottom:20px; border-bottom:2px solid var(--blue);
+  }
+  .badge{
+    background:var(--blue); color:#fff; font-weight:700;
+    font-size:1.05rem; padding:5px 14px; border-radius:7px;
+    font-variant-numeric:tabular-nums;
+  }
+  .unit{
+    color:var(--blue); background:var(--blue-soft); border:1px solid var(--line);
+    font-size:.82rem; font-weight:700; padding:3px 11px; border-radius:999px;
+  }
+  .skill{color:var(--dim); font-size:.88rem}
+  .src{margin-left:auto; color:var(--dim); font-size:.8rem}
+  .stem{font-size:1.24rem; line-height:2.05}
+  .stem .disp{margin:22px 0 6px; font-size:1.12rem; overflow-x:auto}
+  .stem .fig{margin:20px 0 4px; text-align:center}
+  .stem .fig img{max-width:100%; width:560px; height:auto}
+
+  .tools{margin-top:28px; display:flex; gap:10px; flex-wrap:wrap}
+  .btn{
+    font:inherit; font-size:.95rem; font-weight:600; cursor:pointer;
+    padding:9px 18px; border-radius:9px; border:1.5px solid var(--blue);
+    background:#fff; color:var(--blue); transition:background .12s,color .12s;
+  }
+  .btn:hover{background:var(--blue); color:#fff}
+  .btn.ghost{border-color:var(--line); color:var(--dim)}
+  .btn.ghost:hover{background:var(--line); color:var(--ink)}
+  .sol{
+    margin-top:22px; padding:20px 24px; border-radius:11px;
+    background:#f7f9fb; border:1px solid var(--line); border-left:5px solid var(--blue);
+    font-size:1.04rem; line-height:2.0;
+  }
+  .sol[hidden]{display:none}
+  .sol ol{margin:0; padding-left:1.35em}
+  .sol li{margin:.4em 0}
+  .sol .disp{margin:4px 0 2px; overflow-x:auto; overflow-y:hidden}
+  .sol .note{
+    margin-top:14px; padding-top:12px; border-top:1px dashed var(--line);
+    color:var(--dim); font-size:.92rem; line-height:1.85;
+  }
+  .ans{
+    margin-top:16px; padding-top:14px; border-top:1px solid var(--line);
+    color:var(--red); font-weight:700; font-size:1.12rem;
+  }
+
+  .pager{
+    max-width:860px; width:100%; margin:20px auto 0;
+    display:flex; justify-content:space-between; gap:10px;
+  }
+  .pager button:disabled{opacity:.35; cursor:default}
+  .pager button:disabled:hover{background:#fff; color:var(--blue)}
+  footer{
+    padding:16px 20px 30px; text-align:center;
+    color:var(--dim); font-size:.8rem; line-height:1.7;
+  }
+
+  @media (max-width:640px){
+    .card{padding:22px 18px 26px; border-radius:11px}
+    .stem{font-size:1.1rem; line-height:1.95}
+    nav{padding:9px 12px; gap:6px}
+    nav button{min-width:40px; padding:6px 8px; font-size:.88rem}
+    nav button.unit-start{margin-left:6px}
+    .sol{padding:16px 14px}
+    /* MathJax 3 does not line-break inline math: let a too-wide line scroll by itself */
+    .stem, .sol li, .sol .note, .ans{overflow-x:auto; overflow-y:hidden}
+    /* a scrolling li hides its outside marker, so number the steps inside the li */
+    .sol ol{list-style:none; padding-left:0; counter-reset:step}
+    .sol li{counter-increment:step}
+    .sol li::before{content:counter(step) ". "; font-variant-numeric:tabular-nums}
+    main{padding:16px 12px 30px}
+  }
+</style>
+<script>
+window.MathJax = {
+  tex: {inlineMath: [['$','$']], displayMath: [['$$','$$']]},
+  chtml: {scale: 1.05},
+  options: {renderActions: {addMenu: []}}
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>Chapter 2 · 分數的運算</h1>
+  <span class="sub">【 國七 】2-1 ～ 2-4 精選 12 題</span>
+  <span class="spacer"></span>
+  <span class="count" id="count"></span>
+</header>
+
+<nav id="nav" aria-label="題號"></nav>
+
+<main>
+  <div style="width:100%;max-width:860px">
+    <article class="card">
+      <div class="meta">
+        <span class="badge" id="badge"></span>
+        <span class="unit" id="unit"></span>
+        <span class="skill" id="skill"></span>
+        <span class="src" id="src"></span>
+      </div>
+      <div class="stem" id="stem"></div>
+
+      <div class="tools">
+        <button class="btn" id="toggle">顯示解答</button>
+        <button class="btn ghost" id="reset">收合全部解答</button>
+      </div>
+
+      <div class="sol" id="sol" hidden></div>
+    </article>
+
+    <div class="pager">
+      <button class="btn" id="prev">← 上一題</button>
+      <button class="btn" id="next">下一題 →</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  題目原題取自《〔博志〕縱橫天下國中資優 數學 1》第二章，僅供課堂教學使用。<br>
+  鍵盤：← → 切換題目 ｜ 空白鍵 顯示／收合解答
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    "n": 1,
+    "unit": "2-1 因數與倍數",
+    "src": "p.43 高手過招 4",
+    "skill": "奇偶性與除以3的餘數",
+    "stem": "已知正整數 $p$、$q$ 都是質數，且 $7p+q$ 與 $pq+11$ 也都是質數，求 $p^{q}+q^{p}$ 之值。",
+    "sol": [
+      "若 $p$、$q$ 都是奇質數，則 $pq$ 為奇數，$pq+11$ 是大於 $2$ 的偶數，不是質數；故 $p$、$q$ 中至少有一個是 $2$。",
+      "若 $p=q=2$，則 $7p+q=16$ 不是質數，所以 $p$、$q$ 恰有一個是 $2$，另一個是奇質數。",
+      "當 $p=2$ 時，$14+q$ 與 $2q+11$ 都要是質數。",
+      "若 $q=3m+1$，則 $14+q=3(m+5)$；若 $q=3m+2$，則 $2q+11=3(2m+5)$；兩者都是大於 $3$ 的 $3$ 的倍數，不是質數。",
+      "所以 $q$ 是 $3$ 的倍數，只能 $q=3$；此時 $14+3=17$、$2\\times 3+11=17$ 都是質數，符合。",
+      "當 $q=2$ 時，$7p+2$ 與 $2p+11$ 都要是質數。若 $p=3m+1$，則 $7p+2=3(7m+3)$；若 $p=3m+2$，則 $2p+11=3(2m+5)$；兩者都是大於 $3$ 的 $3$ 的倍數，不是質數。",
+      "所以 $p=3$；此時 $7\\times 3+2=23$、$3\\times 2+11=17$ 都是質數，符合。",
+      "故 $(p,q)=(2,3)$ 或 $(3,2)$，兩種情形都得 $p^{q}+q^{p}=2^{3}+3^{2}=8+9=17$。"
+    ],
+    "ans": "$17$",
+    "note": "「好幾個式子都要是質數」的題目，先用奇偶性逼出 $2$，再用除以 $3$ 的餘數逼出 $3$，是最常用的兩步。因為 $7p+q$ 對 $p$、$q$ 不對稱，$p=2$ 與 $q=2$ 兩種情形要分開檢查；本題兩種都成立，且 $p^{q}+q^{p}$ 對調後值不變。"
+  },
+  {
+    "n": 2,
+    "unit": "2-1 因數與倍數",
+    "src": "p.47 高手過招 9",
+    "skill": "拆成互質因數判別",
+    "stem": "$(1)$ 設七位數 $23ab421$ 為 $99$ 的倍數（$a$、$b$ 為一位正整數或 $0$），試求 $a$、$b$ 之值。<br>$(2)$ 若 $792$ 能整除七位數 $13xy45z$，則 $x+2y+z=$？",
+    "sol": [
+      "$(1)$ $99=9\\times 11$，且 $9$ 與 $11$ 互質，所以 $23ab421$ 必須同時是 $9$ 與 $11$ 的倍數。",
+      "$9$ 的倍數：數字和 $2+3+a+b+4+2+1=12+a+b$ 是 $9$ 的倍數，又 $0\\le a+b\\le 18$，故 $a+b=6$ 或 $15$。",
+      "$11$ 的倍數：奇數位數字和與偶數位數字和之差 $(2+a+4+1)-(3+b+2)=a-b+2$ 是 $11$ 的倍數，又 $-7\\le a-b+2\\le 11$，故 $a-b=-2$ 或 $9$。",
+      "$a+b$ 與 $a-b$ 奇偶相同：$a-b=9$ 只能配 $a+b=15$，得 $a=12$，不合；$a-b=-2$ 只能配 $a+b=6$，得 $a=2$、$b=4$（驗算 $2324421=99\\times 23479$）。",
+      "$(2)$ $792=8\\times 9\\times 11$，且 $8$、$9$、$11$ 兩兩互質，所以 $13xy45z$ 要同時是 $8$、$9$、$11$ 的倍數。",
+      "$8$ 的倍數看末三位：$450+z=448+(2+z)$，而 $448=8\\times 56$，故 $2+z$ 是 $8$ 的倍數；又 $2\\le 2+z\\le 11$，得 $2+z=8$，$z=6$。",
+      "$9$ 的倍數：$1+3+x+y+4+5+6=19+x+y$ 是 $9$ 的倍數，又 $0\\le x+y\\le 18$，故 $x+y=8$ 或 $17$。",
+      "$11$ 的倍數：$(1+x+4+6)-(3+y+5)=x-y+3$ 是 $11$ 的倍數，又 $-6\\le x-y+3\\le 12$，故 $x-y=-3$ 或 $8$。",
+      "$x+y$ 與 $x-y$ 奇偶相同：$x+y=17$ 配 $x-y=-3$ 得 $y=10$，不合；$x+y=8$ 配 $x-y=8$ 得 $x=8$、$y=0$。",
+      "故 $x=8$、$y=0$、$z=6$（$1380456=792\\times 1743$），$x+2y+z=8+0+6=14$。"
+    ],
+    "ans": "$(1)$ $a=2$，$b=4$　$(2)$ $14$",
+    "note": "判別大數的倍數，要拆成「兩兩互質」的因數分別檢查，例如 $792=8\\times 9\\times 11$；若拆成 $4\\times 198$ 這種有公因數的組合，條件就不等價。用 $x+y$ 與 $x-y$ 同奇偶，可以很快刪去不合的配對。"
+  },
+  {
+    "n": 3,
+    "unit": "2-1 因數與倍數",
+    "src": "p.51 高手過招 14",
+    "skill": "奇偶相間與鴿籠原理",
+    "stem": "$41$ 名「兩人三腳」選手所穿運動服號碼分別是 $1$、$2$、$3$、$\\cdots$、$41$。問：<br>$(1)$ 能否讓這 $41$ 名選手站在一排，使得任意兩個相鄰選手運動服的號碼和是質數？<br>$(2)$ 能否讓這 $41$ 名選手站成一圈，使得任意兩個相鄰選手運動服的號碼和是質數？若能辦到，試舉出一例；若不能辦到，請說明理由。",
+    "sol": [
+      "$(1)$ 能。讓奇數 $k$ 後面接偶數 $41-k$，再接奇數 $k+2$：$k+(41-k)=41$，$(41-k)+(k+2)=43$，而 $41$、$43$ 都是質數。",
+      "依此排成 $1,40,3,38,5,36,\\cdots,37,4,39,2,41$，也就是奇數 $1,3,\\cdots,39$ 與偶數 $40,38,\\cdots,2$ 交錯排列，最後接上 $41$。",
+      "$1$～$41$ 每個號碼恰用一次，相鄰兩數的和依序為 $41,43,41,43,\\cdots,41,43$（最後是 $2+41=43$），全部是質數。",
+      "$(2)$ 不能。相鄰兩數若同為奇數或同為偶數，其和是偶數且至少為 $1+3=4$，一定是合數，所以相鄰兩人的號碼必須一奇一偶。",
+      "$1$～$41$ 中奇數有 $21$ 個，偶數只有 $20$ 個。",
+      "站成一圈時，$20$ 個偶數把圓圈分成 $20$ 段空隙，$21$ 個奇數放進這 $20$ 段，必有一段至少有 $2$ 個奇數，這兩個奇數相鄰。",
+      "這兩個相鄰奇數的和是不小於 $4$ 的偶數，不是質數，矛盾；所以無法站成一圈。"
+    ],
+    "ans": "$(1)$ 能，例如 $1,40,3,38,\\cdots,39,2,41$　$(2)$ 不能",
+    "note": "關鍵是「大於 $2$ 的質數都是奇數」，所以相鄰必須一奇一偶。一排可以讓奇數比偶數多 $1$ 個（頭尾都放奇數），一圈則必須奇偶個數相等，這就是兩小題答案不同的原因；構造時讓相鄰和固定為 $41$、$43$ 兩個質數，是排列題常用的技巧。"
+  },
+  {
+    "n": 4,
+    "unit": "2-2 最大公因數與最小公倍數",
+    "src": "p.56 高手過招 5",
+    "skill": "化餘數為公因數",
+    "stem": "用某正整數 $a$ 除 $194$ 餘 $5$，同時用它除 $1077$ 不足 $3$，求 $a$ 的最大值及最小值。",
+    "sol": [
+      "「除 $194$ 餘 $5$」表示 $194-5=189$ 是 $a$ 的倍數；又餘數必須小於除數，所以 $a\\gt 5$。",
+      "「除 $1077$ 不足 $3$」表示 $1077$ 再加 $3$ 就能被 $a$ 整除，即 $1077+3=1080$ 是 $a$ 的倍數。",
+      "所以 $a$ 是 $189$ 與 $1080$ 的公因數，也就是 $(189,1080)$ 的因數。",
+      "$189=3^{3}\\times 7$，$1080=2^{3}\\times 3^{3}\\times 5$，故 $(189,1080)=3^{3}=27$。",
+      "$27$ 的因數有 $1$、$3$、$9$、$27$；其中 $1$、$3$ 不大於 $5$，不能當「餘 $5$」的除數，要刪去，只剩 $9$ 與 $27$。",
+      "檢驗：$194=27\\times 7+5=9\\times 21+5$，$1077=27\\times 40-3=9\\times 120-3$，兩者都成立。",
+      "故 $a$ 的最大值為 $27$，最小值為 $9$。"
+    ],
+    "ans": "最大值為 $27$，最小值為 $9$",
+    "note": "「餘 $r$」要減 $r$、「不足 $r$」要加 $r$，才能化成整除。最常漏掉的是「除數必須大於餘數」：$1$、$3$ 雖然是公因數，卻不可能除 $194$ 餘 $5$，所以最小值是 $9$ 而不是 $1$。"
+  },
+  {
+    "n": 5,
+    "unit": "2-2 最大公因數與最小公倍數",
+    "src": "p.57 高手過招 8",
+    "skill": "和積互質定公因數",
+    "stem": "設 $a$、$b$ 為正整數，$a\\gt b$，若 $a+b=528$，$[a,b]=5797$，試求 $a$、$b$ 之值。",
+    "sol": [
+      "設 $(a,b)=d$，$a=dx$，$b=dy$，其中 $x\\gt y$ 且 $(x,y)=1$，則 $[a,b]=dxy$。",
+      "由題意得 $d(x+y)=528$，$dxy=5797$。",
+      "關鍵：$x+y$ 與 $xy$ 互質。若質數 $p$ 同時整除 $x+y$ 與 $xy$，因 $p$ 是質數，$p\\mid x$ 或 $p\\mid y$；若 $p\\mid x$，則 $p\\mid (x+y)-x=y$，與 $(x,y)=1$ 矛盾，$p\\mid y$ 時同理。",
+      "所以 $(528,5797)=(d(x+y),dxy)=d\\times (x+y,xy)=d$。",
+      "$528=2^{4}\\times 3\\times 11$，$5797=11\\times 17\\times 31$，故 $d=(528,5797)=11$。",
+      "於是 $x+y=528\\div 11=48$，$xy=5797\\div 11=527=17\\times 31$。",
+      "$527$ 拆成兩個正整數相乘只有 $1\\times 527$ 與 $17\\times 31$ 兩種，和為 $48$ 的只有 $17$、$31$；又 $x\\gt y$，故 $x=31$，$y=17$。",
+      "所以 $a=11\\times 31=341$，$b=11\\times 17=187$。",
+      "檢驗：$341+187=528$，$[341,187]=11\\times 31\\times 17=5797$。"
+    ],
+    "ans": "$a=341$，$b=187$",
+    "note": "已知兩數的「和」與「最小公倍數」時，因為 $(x+y,xy)=1$，最大公因數一定等於 $(a+b,[a,b])$；先求出它，問題就化成「已知和與積找兩數」。已知「差」與最小公倍數時，同理可用 $(x-y,xy)=1$。"
+  },
+  {
+    "n": 6,
+    "unit": "2-2 最大公因數與最小公倍數",
+    "src": "p.60 高手過招 12",
+    "skill": "大小範圍鎖定倍數",
+    "stem": "求三個正整數 $a$、$b$、$c$ 滿足下列三條件：<br>$(1)$ $a\\lt b\\lt c$。<br>$(2)$ $a$、$b$、$c$ 兩兩互質。<br>$(3)$ 任意兩個數之和是第三個數的倍數。",
+    "sol": [
+      "由條件 $(1)$，$a\\lt c$ 且 $b\\lt c$，所以 $0\\lt a+b\\lt 2c$。",
+      "由條件 $(3)$，$a+b$ 是 $c$ 的倍數；而介於 $0$ 與 $2c$ 之間的 $c$ 的倍數只有 $c$，故 $a+b=c$。",
+      "再由條件 $(3)$，$a+c=a+(a+b)=2a+b$ 是 $b$ 的倍數，所以 $2a=(2a+b)-b$ 也是 $b$ 的倍數。",
+      "又 $a\\lt b$，所以 $0\\lt 2a\\lt 2b$；介於 $0$ 與 $2b$ 之間的 $b$ 的倍數只有 $b$，故 $b=2a$。",
+      "此時 $(a,b)=(a,2a)=a$，而由條件 $(2)$ 知 $a$、$b$ 互質，所以 $a=1$，從而 $b=2$，$c=a+b=3$。",
+      "檢驗：$1$、$2$、$3$ 兩兩互質；$1+2=3$ 是 $3$ 的倍數，$1+3=4$ 是 $2$ 的倍數，$2+3=5$ 是 $1$ 的倍數，三個條件都成立。",
+      "以上每一步都是由條件推出的唯一可能，所以符合條件的只有這一組。"
+    ],
+    "ans": "$a=1$，$b=2$，$c=3$",
+    "note": "關鍵是「倍數＋大小範圍」：若 $c\\mid (a+b)$ 且 $0\\lt a+b\\lt 2c$，則 $a+b$ 只能等於 $c$。若拿掉「兩兩互質」，$k$、$2k$、$3k$ 也全部符合，所以條件 $(2)$ 正是用來鎖定 $a=1$ 的。"
+  },
+  {
+    "n": 7,
+    "unit": "2-3 分數的加減運算",
+    "src": "p.67 高手過招 1",
+    "skill": "分組計數與平方定位",
+    "stem": "設有如下的一列數：$\\dfrac{1}{1}$、$-\\dfrac{1}{2}$、$\\dfrac{2}{2}$、$-\\dfrac{1}{2}$、$\\dfrac{1}{3}$、$-\\dfrac{2}{3}$、$\\dfrac{3}{3}$、$-\\dfrac{2}{3}$、$\\dfrac{1}{3}$、$-\\dfrac{1}{4}$、$\\dfrac{2}{4}$、$-\\dfrac{3}{4}$、$\\cdots\\cdots$，求：<br>$(1)$ $\\dfrac{7}{11}$ 是第幾個數？<br>$(2)$ 第 $400$ 個數是多少？",
+    "sol": [
+      "先不看正負號，把分母相同的數分成一組：第 $n$ 組的分母都是 $n$，分子依序為 $1,2,\\cdots,n,\\cdots,2,1$，共 $2n-1$ 個數（數列照寫法排列，$\\dfrac{2}{2}$、$\\dfrac{2}{4}$ 等都不約分）。",
+      "前 $n$ 組共有 $1+3+5+\\cdots+(2n-1)=\\dfrac{(1+2n-1)\\times n}{2}=n^{2}$ 個數，所以第 $n$ 組是第 $(n-1)^{2}+1$ 個到第 $n^{2}$ 個數。",
+      "正負號則是一正一負交錯：第奇數個數為正，第偶數個數為負。",
+      "$(1)$ $\\dfrac{7}{11}$ 在第 $11$ 組；前 $10$ 組共 $10^{2}=100$ 個數，故第 $11$ 組是第 $101$ 個到第 $121$ 個數。",
+      "第 $11$ 組中分子為 $7$ 的有兩個：上升段的第 $7$ 個，是第 $100+7=107$ 個數；下降段從組末的 $\\dfrac{1}{11}$（第 $121$ 個）往前數到分子 $7$，是第 $121-6=115$ 個數。",
+      "$107$、$115$ 都是奇數，這兩項都取正號，確實是 $\\dfrac{7}{11}$ 而不是 $-\\dfrac{7}{11}$，故 $\\dfrac{7}{11}$ 是第 $107$ 個與第 $115$ 個數。",
+      "$(2)$ $400=20^{2}$，所以第 $400$ 個數恰好是第 $20$ 組的最後一個數，分母為 $20$、分子為 $1$。",
+      "$400$ 是偶數，取負號，故第 $400$ 個數是 $-\\dfrac{1}{20}$。"
+    ],
+    "ans": "$(1)$ 第 $107$ 個與第 $115$ 個　$(2)$ $-\\dfrac{1}{20}$",
+    "note": "$\\dfrac{7}{11}$ 在第 $11$ 組的上升段與下降段各出現一次，只答 $107$ 是最常見的漏答。另外每次定位後都要檢查位置的奇偶：若落在偶數位置，那一項是 $-\\dfrac{7}{11}$，就不算是 $\\dfrac{7}{11}$。"
+  },
+  {
+    "n": 8,
+    "unit": "2-3 分數的加減運算",
+    "src": "p.72 高手過招 6",
+    "skill": "拆整數部分與夾擠估計",
+    "stem": "$(1)$ 計算 $\\left(\\dfrac{1}{2}+\\dfrac{1}{3}+\\dfrac{1}{5}+\\dfrac{1}{7}+\\dfrac{1}{11}+\\dfrac{1}{13}\\right)\\times 385$，它的整數部分是多少？<br>$(2)$ 將 $\\dfrac{1}{\\dfrac{1}{3}+\\dfrac{1}{4}+\\dfrac{1}{5}}$ 表成小數，其整數部分可用下列方法求得<div class=\"disp\">$$\\dfrac{1}{5}+\\dfrac{1}{5}+\\dfrac{1}{5}\\lt \\dfrac{1}{3}+\\dfrac{1}{4}+\\dfrac{1}{5}\\lt \\dfrac{1}{3}+\\dfrac{1}{3}+\\dfrac{1}{3}\\ \\Rightarrow\\ \\dfrac{3}{5}\\lt \\dfrac{1}{3}+\\dfrac{1}{4}+\\dfrac{1}{5}\\lt 1$$</div>可知 $\\dfrac{1}{\\dfrac{1}{3}+\\dfrac{1}{4}+\\dfrac{1}{5}}$ 的整數部分為 $1$。<br>那麼<div class=\"disp\">$$\\dfrac{1}{\\dfrac{1}{1991}+\\dfrac{1}{1992}+\\dfrac{1}{1993}+\\cdots+\\dfrac{1}{2000}}$$</div>表成小數，則整數部分為多少？",
+    "sol": [
+      "$(1)$ 用分配律把 $385$ 乘進括號。$385=5\\times 7\\times 11$，所以 $385\\times\\dfrac{1}{5}=77$、$385\\times\\dfrac{1}{7}=55$、$385\\times\\dfrac{1}{11}=35$ 都是整數。",
+      "其餘三項化成帶分數：$\\dfrac{385}{2}=192\\dfrac{1}{2}$，$\\dfrac{385}{3}=128\\dfrac{1}{3}$，$\\dfrac{385}{13}=29\\dfrac{8}{13}$。",
+      "整數部分相加：$77+55+35+192+128+29=516$。",
+      "分數部分相加：$\\dfrac{1}{2}+\\dfrac{1}{3}+\\dfrac{8}{13}=\\dfrac{39+26+48}{78}=\\dfrac{113}{78}=1\\dfrac{35}{78}$，又進位了 $1$。",
+      "所以原式 $=516+1\\dfrac{35}{78}=517\\dfrac{35}{78}$，整數部分為 $517$。",
+      "$(2)$ 設 $S=\\dfrac{1}{1991}+\\dfrac{1}{1992}+\\cdots+\\dfrac{1}{2000}$，共 $2000-1991+1=10$ 項。",
+      "每一項都不小於最小項 $\\dfrac{1}{2000}$、不大於最大項 $\\dfrac{1}{1991}$，且這 $10$ 項不全相等，所以 $10\\times\\dfrac{1}{2000}\\lt S\\lt 10\\times\\dfrac{1}{1991}$，即 $\\dfrac{1}{200}\\lt S\\lt \\dfrac{10}{1991}$。",
+      "正數取倒數，大小顛倒：$\\dfrac{1991}{10}\\lt \\dfrac{1}{S}\\lt 200$，即 $199.1\\lt \\dfrac{1}{S}\\lt 200$。",
+      "故 $\\dfrac{1}{S}$ 的整數部分為 $199$。"
+    ],
+    "ans": "$(1)$ $517$　$(2)$ $199$",
+    "note": "$(1)$ 不必把六個分數全部通分：先挑出分母是 $385$ 的因數的項（乘上 $385$ 後恰為整數），剩下只要看「分數部分」的和有沒有超過 $1$，漏掉這次進位就會誤答 $516$。$(2)$ 夾擠時右端 $\\dfrac{1}{S}\\lt 200$ 必須是嚴格不等式，否則無法排除整數部分是 $200$。"
+  },
+  {
+    "n": 9,
+    "unit": "2-3 分數的加減運算",
+    "src": "p.73 高手過招 8",
+    "skill": "首尾配對提出質因數",
+    "stem": "設 $\\dfrac{1}{1}+\\dfrac{1}{2}+\\dfrac{1}{3}+\\cdots+\\dfrac{1}{27}+\\dfrac{1}{28}=\\dfrac{Q}{P}$（$\\dfrac{Q}{P}$ 為最簡分數）。證明：分子 $Q$ 可被 $29$ 整除。",
+    "sol": [
+      "首尾配對：$1+28=2+27=\\cdots=14+15=29$，$28$ 項恰好配成 $14$ 對。",
+      "每一對 $\\dfrac{1}{k}+\\dfrac{1}{29-k}=\\dfrac{(29-k)+k}{k(29-k)}=\\dfrac{29}{k(29-k)}$（$k=1,2,\\cdots,14$）。",
+      "所以 $\\dfrac{Q}{P}=29\\times\\left(\\dfrac{1}{1\\times 28}+\\dfrac{1}{2\\times 27}+\\cdots+\\dfrac{1}{14\\times 15}\\right)$。",
+      "令 $N=1\\times 2\\times 3\\times\\cdots\\times 28$。每個 $k(29-k)$ 都是 $1$ 到 $28$ 中兩個不同數的乘積，是 $N$ 的因數，所以括號內的和可通分成 $\\dfrac{M}{N}$（$M$ 為正整數）。",
+      "於是 $\\dfrac{Q}{P}=\\dfrac{29M}{N}$，交叉相乘得 $Q\\times N=29\\times M\\times P$，即 $29\\mid Q\\times N$。",
+      "$N$ 是 $1$ 到 $28$ 的連乘積，它的質因數都小於 $29$，所以 $29\\nmid N$。",
+      "$29$ 是質數，整除 $Q\\times N$ 就必須整除 $Q$ 或 $N$；既然 $29\\nmid N$，只能 $29\\mid Q$。"
+    ],
+    "ans": "得證：$29\\mid Q$",
+    "note": "關鍵是「和為 $29$ 的首尾配對」把 $29$ 提到分子，而通分用的分母 $1\\times 2\\times\\cdots\\times 28$ 沒有質因數 $29$，所以約分時這個 $29$ 約不掉。同樣的配對可證：$p$ 為奇質數時，$\\dfrac{1}{1}+\\dfrac{1}{2}+\\cdots+\\dfrac{1}{p-1}$ 化成最簡分數後，分子是 $p$ 的倍數。"
+  },
+  {
+    "n": 10,
+    "unit": "2-4 分數的四則運算與指數律",
+    "src": "p.80 高手過招 7",
+    "skill": "化同指數比較底數",
+    "stem": "$(1)$ 已知 $a=\\dfrac{99^{9}}{9^{99}}$，$b=\\dfrac{11^{9}}{9^{90}}$，$c=0.1^{9}$，比較 $a$、$b$、$c$ 的大小關係。<br>$(2)$ 滿足 $n^{300}\\lt 7^{400}$ 之最大正整數 $n$ 是多少？",
+    "sol": [
+      "$(1)$ 先化簡 $a$：$99^{9}=(9\\times 11)^{9}=9^{9}\\times 11^{9}$，所以 $a=\\dfrac{9^{9}\\times 11^{9}}{9^{99}}=\\dfrac{11^{9}}{9^{90}}=b$。",
+      "再比較 $b$ 與 $c$：$9^{90}=(9^{10})^{9}$，故 $b=\\left(\\dfrac{11}{9^{10}}\\right)^{9}$；而 $c=0.1^{9}=\\left(\\dfrac{1}{10}\\right)^{9}$。",
+      "兩者都是正數的 $9$ 次方，只要比較底數 $\\dfrac{11}{9^{10}}$ 與 $\\dfrac{1}{10}$，交叉相乘即比較 $110$ 與 $9^{10}$。",
+      "$9^{10}\\gt 9^{3}=729\\gt 110$，所以 $\\dfrac{11}{9^{10}}\\lt \\dfrac{1}{10}$，得 $b\\lt c$。",
+      "故 $a=b\\lt c$。",
+      "$(2)$ $n^{300}=(n^{3})^{100}$，$7^{400}=(7^{4})^{100}=2401^{100}$。",
+      "對正數而言，底數較大者的 $100$ 次方也較大，反之亦然，所以 $n^{300}\\lt 7^{400}$ 等價於 $n^{3}\\lt 2401$。",
+      "$13^{3}=2197\\lt 2401$，所以 $n=13$ 符合。",
+      "$14^{3}=2744\\gt 2401$，而 $n\\ge 14$ 時 $n^{3}\\ge 2744$ 都不合，故最大正整數 $n=13$。"
+    ],
+    "ans": "$(1)$ $a=b\\lt c$　$(2)$ $13$",
+    "note": "比較高次方的大小，關鍵是把指數化成相同再比較底數：$(2)$ 取最大公因數 $(300,400)=100$，把兩邊都寫成 $100$ 次方；$(1)$ 把 $9^{90}$ 寫成 $(9^{10})^{9}$。底數都是正數時才能放心這樣比（例如 $(-3)^{2}\\gt 2^{2}$，但 $-3\\lt 2$），而 $(1)$ 也別漏看 $a$ 與 $b$ 其實相等。"
+  },
+  {
+    "n": 11,
+    "unit": "2-4 分數的四則運算與指數律",
+    "src": "p.81 高手過招 8",
+    "skill": "整體代換＋交錯和化簡",
+    "stem": "計算下列各式之值：<br>$(1)$<div class=\"disp\">$$\\begin{aligned}&\\left(1-\\dfrac{1}{2}+\\dfrac{1}{3}-\\dfrac{1}{4}+\\cdots+\\dfrac{1}{99}-\\dfrac{1}{100}\\right)\\left(\\dfrac{1}{2}-\\dfrac{1}{3}+\\dfrac{1}{4}-\\cdots-\\dfrac{1}{99}\\right)\\\\&-\\left(\\dfrac{1}{2}-\\dfrac{1}{3}+\\dfrac{1}{4}-\\cdots-\\dfrac{1}{99}+\\dfrac{1}{100}\\right)\\left(1-\\dfrac{1}{2}+\\dfrac{1}{3}-\\dfrac{1}{4}+\\cdots+\\dfrac{1}{99}\\right)\\end{aligned}$$</div>$(2)$<div class=\"disp\">$$\\left(1-\\dfrac{1}{2}+\\dfrac{1}{3}-\\dfrac{1}{4}+\\cdots+\\dfrac{1}{49}-\\dfrac{1}{50}\\right)\\div\\left(\\dfrac{1}{26}+\\dfrac{1}{27}+\\dfrac{1}{28}+\\cdots+\\dfrac{1}{50}\\right)$$</div>",
+    "sol": [
+      "$(1)$ 設 $x=1-\\dfrac{1}{2}+\\dfrac{1}{3}-\\cdots+\\dfrac{1}{99}$（第四個括號），$y=\\dfrac{1}{2}-\\dfrac{1}{3}+\\dfrac{1}{4}-\\cdots-\\dfrac{1}{99}$（第二個括號）。",
+      "第一個括號比 $x$ 多一項 $-\\dfrac{1}{100}$，等於 $x-\\dfrac{1}{100}$；第三個括號比 $y$ 多一項 $+\\dfrac{1}{100}$，等於 $y+\\dfrac{1}{100}$。",
+      "原式$=\\left(x-\\dfrac{1}{100}\\right)y-\\left(y+\\dfrac{1}{100}\\right)x=xy-\\dfrac{y}{100}-xy-\\dfrac{x}{100}=-\\dfrac{x+y}{100}$。",
+      "$x$ 中 $1$ 以後的各項 $-\\dfrac{1}{2}+\\dfrac{1}{3}-\\cdots+\\dfrac{1}{99}$ 恰與 $y$ 逐項相反，相加全部抵消，得 $x+y=1$。",
+      "故原式$=-\\dfrac{1}{100}$。",
+      "$(2)$ 被除式可看成「全部取加號，再把偶數分母的項減去兩次」：$1-\\dfrac{1}{2}+\\cdots-\\dfrac{1}{50}=\\left(1+\\dfrac{1}{2}+\\cdots+\\dfrac{1}{50}\\right)-2\\left(\\dfrac{1}{2}+\\dfrac{1}{4}+\\cdots+\\dfrac{1}{50}\\right)$。",
+      "而 $2\\left(\\dfrac{1}{2}+\\dfrac{1}{4}+\\cdots+\\dfrac{1}{50}\\right)=1+\\dfrac{1}{2}+\\cdots+\\dfrac{1}{25}$。",
+      "相減後前 $25$ 項抵消，被除式$=\\dfrac{1}{26}+\\dfrac{1}{27}+\\cdots+\\dfrac{1}{50}$，恰好等於除式。",
+      "所以原式$=1$。"
+    ],
+    "ans": "$(1)$ $-\\dfrac{1}{100}$　$(2)$ $1$",
+    "note": "$(1)$ 幾個長串彼此只差最後一項時，用代號整體代換，乘開後 $xy$ 會互相消去，不必真的算出每一串。$(2)$ 的恆等式 $1-\\dfrac{1}{2}+\\cdots-\\dfrac{1}{2n}=\\dfrac{1}{n+1}+\\cdots+\\dfrac{1}{2n}$ 值得記住，技巧是「全部相加，再減去兩倍的偶數項」。"
+  },
+  {
+    "n": 12,
+    "unit": "2-4 分數的四則運算與指數律",
+    "src": "p.83 高手過招 11",
+    "skill": "裂項相消與三角數",
+    "stem": "計算下列各式的值：<br>$(1)$ $1\\dfrac{1}{3}+2\\dfrac{1}{15}+3\\dfrac{1}{35}+4\\dfrac{1}{63}+\\cdots+8\\dfrac{1}{255}$。<br>$(2)$<div class=\"disp\">$$1-\\dfrac{2}{1(1+2)}-\\dfrac{3}{(1+2)(1+2+3)}-\\cdots-\\dfrac{100}{(1+2+\\cdots+99)(1+2+\\cdots+100)}$$</div>",
+    "sol": [
+      "$(1)$ 把帶分數的整數部分與分數部分分開：整數部分 $1+2+\\cdots+8=36$。",
+      "分母 $3=1\\times 3$，$15=3\\times 5$，$35=5\\times 7$，$63=7\\times 9$，$\\cdots$，$255=15\\times 17$，即第 $k$ 項為 $k+\\dfrac{1}{(2k-1)(2k+1)}$（$k=1,2,\\cdots,8$），分母是相鄰兩個奇數的乘積。",
+      "利用 $\\dfrac{1}{(2k-1)(2k+1)}=\\dfrac{1}{2}\\left(\\dfrac{1}{2k-1}-\\dfrac{1}{2k+1}\\right)$，分數部分$=\\dfrac{1}{2}\\left(1-\\dfrac{1}{3}+\\dfrac{1}{3}-\\dfrac{1}{5}+\\cdots+\\dfrac{1}{15}-\\dfrac{1}{17}\\right)$。",
+      "中間各項相消，分數部分$=\\dfrac{1}{2}\\left(1-\\dfrac{1}{17}\\right)=\\dfrac{8}{17}$，故原式$=36\\dfrac{8}{17}$。",
+      "$(2)$ 記 $S_{n}=1+2+\\cdots+n$，則 $S_{n}-S_{n-1}=n$。",
+      "所以每個被減的項 $\\dfrac{n}{S_{n-1}S_{n}}=\\dfrac{S_{n}-S_{n-1}}{S_{n-1}S_{n}}=\\dfrac{1}{S_{n-1}}-\\dfrac{1}{S_{n}}$（$n=2,3,\\cdots,100$）。",
+      "被減各項的和$=\\left(\\dfrac{1}{S_{1}}-\\dfrac{1}{S_{2}}\\right)+\\left(\\dfrac{1}{S_{2}}-\\dfrac{1}{S_{3}}\\right)+\\cdots+\\left(\\dfrac{1}{S_{99}}-\\dfrac{1}{S_{100}}\\right)=\\dfrac{1}{S_{1}}-\\dfrac{1}{S_{100}}$。",
+      "$S_{1}=1$，$S_{100}=\\dfrac{100\\times 101}{2}=5050$，故原式$=1-\\left(1-\\dfrac{1}{5050}\\right)=\\dfrac{1}{5050}$。"
+    ],
+    "ans": "$(1)$ $36\\dfrac{8}{17}$　$(2)$ $\\dfrac{1}{5050}$",
+    "note": "裂項的關鍵是看出「分子恰為分母兩因數之差」：$(2)$ 的分子 $n$ 正是 $S_{n}-S_{n-1}$，可直接拆成 $\\dfrac{1}{S_{n-1}}-\\dfrac{1}{S_{n}}$；$(1)$ 的兩因數相差 $2$ 而分子是 $1$，拆開後別忘了乘 $\\dfrac{1}{2}$。"
+  }
+];
+
+const $ = id => document.getElementById(id);
+const nav = $('nav');
+const shown = new Set();          // 已顯示解答的題號
+const seen = new Set();           // 已看過的題號
+let cur = 0;
+
+QUESTIONS.forEach((q, i) => {
+  const b = document.createElement('button');
+  b.textContent = 'Q' + q.n;
+  b.title = q.unit;
+  if (i > 0 && q.unit !== QUESTIONS[i - 1].unit) b.classList.add('unit-start');
+  b.addEventListener('click', () => go(i));
+  nav.appendChild(b);
+});
+
+function render() {
+  const q = QUESTIONS[cur];
+  seen.add(q.n);
+
+  $('badge').textContent = 'Q' + q.n;
+  $('unit').textContent = q.unit;
+  $('skill').textContent = '技法：' + q.skill;
+  $('src').textContent = '原書 ' + q.src;
+  $('stem').innerHTML = q.stem;
+  $('count').textContent = (cur + 1) + ' / ' + QUESTIONS.length;
+
+  const open = shown.has(q.n);
+  const sol = $('sol');
+  sol.hidden = !open;
+  $('toggle').textContent = open ? '收合解答' : '顯示解答';
+  if (open) {
+    sol.innerHTML =
+      '<ol>' + q.sol.map(s => '<li>' + s + '</li>').join('') + '</ol>' +
+      (q.note ? '<div class="note">※ ' + q.note + '</div>' : '') +
+      '<div class="ans">答：' + q.ans + '</div>';
+  } else {
+    sol.innerHTML = '';
+  }
+
+  [...nav.children].forEach((b, i) => {
+    b.setAttribute('aria-current', i === cur ? 'true' : 'false');
+    b.classList.toggle('seen', seen.has(QUESTIONS[i].n));
+  });
+  $('prev').disabled = cur === 0;
+  $('next').disabled = cur === QUESTIONS.length - 1;
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([$('stem'), sol]).catch(() => {});
+  }
+  location.hash = 'q' + q.n;
+}
+
+function go(i) {
+  cur = Math.max(0, Math.min(QUESTIONS.length - 1, i));
+  render();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+$('toggle').addEventListener('click', () => {
+  const n = QUESTIONS[cur].n;
+  shown.has(n) ? shown.delete(n) : shown.add(n);
+  render();
+});
+$('reset').addEventListener('click', () => { shown.clear(); render(); });
+$('prev').addEventListener('click', () => go(cur - 1));
+$('next').addEventListener('click', () => go(cur + 1));
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'BUTTON' && e.key === ' ') e.preventDefault();
+  if (e.key === 'ArrowLeft') go(cur - 1);
+  else if (e.key === 'ArrowRight') go(cur + 1);
+  else if (e.key === ' ') { e.preventDefault(); $('toggle').click(); }
+});
+
+// 網址帶 #q7 時直接開該題
+const m = /^#q(\d+)$/.exec(location.hash);
+if (m) {
+  const i = QUESTIONS.findIndex(q => q.n === +m[1]);
+  if (i >= 0) cur = i;
+}
+render();
+</script>
+</body>
+</html>
