@@ -441,10 +441,10 @@ const HOTEL = {
     ['付款', '到店付款｜12/22 前免費取消'],
     ['寄放行李', '退房後寄放行李在公開資料查不到，入住時跟櫃台確認']
   ],
-  tip: '12/24 搭 21:00 船約 22:00 到飯店（預估）；改搭 22:00 船則約 23:00。櫃台受理入住到 23:00，會晚到請先打電話。',
+  tip: '12/24 搭 21:00 船約 22:00 到飯店（預估）；改搭 22:00 船則約 23:00，剛好壓在櫃台受理時間（到 23:00）。會晚到請先打電話，或請飯店同意晚餐後再入住。',
   firstNight: '今晚入住（約 22:00，預估）',
   midStay: '續住｜早餐 7:00–11:00（L.O. 10:30）',
-  lastDay: '11:00 前退房｜行李寄放櫃台'
+  lastDay: '11:00 前退房｜行李寄放（入住時向櫃台確認）'
 };
 
 const TRIP_DEFAULT = {
@@ -452,22 +452,30 @@ const TRIP_DEFAULT = {
     {
       id: 'd1', date: '2026-12-24', loc: 'kobe', theme: 'night', bg: '',
       city: '台北 → 神戶', title: '出發・抵達神戶',
-      branches: null,
-      note: '高速船末班風險：目標 21:00 船，22:00 是備案，之後只剩 0:00（神戶 0:31 到；沒有 Port Liner，船站也沒有計程車招呼站）。\n航班延誤就到 KIX T1 1F 櫃台改搭下一班（櫃台 6:00–0:15）。\n風浪大時高速船會停航，冬天通常前一天 14:00 左右公告。',
+      branches: { A: '21:00 船', B: '22:00 船（備案）' },
+      note: '19:30 落地後要在 20:40 前辦好船票手續才趕得上 21:00 船（入境＋行李抓 45–75 分，下機排隊也要算進去），來不及就切到 B 案 22:00 船。\nB 案約 23:00 到飯店（櫃台受理到 23:00）、約 23:20 到仔牛屋（L.O. 24:00，只剩約 40 分）：訂位時講清楚；也可以先請飯店同意晚餐後（約 00:30）再入住，計程車直接去仔牛屋。\n若只能搭 0:00 末班（神戶 0:31 到；沒有 Port Liner，船站也沒有計程車招呼站），仔牛屋趕不上，直接吃一蘭（營業到翌 4:00）。\n航班延誤就到 KIX T1 1F 櫃台改搭下一班（櫃台 6:00–0:15）。風浪大時高速船會停航，冬天通常前一天 14:00 左右公告。',
       events: [
         { id: 'd1e1', time: '08:00', label: '早上', type: 'WORK', title: '上班（北大高中）', sub: '行李今天要帶到學校' },
         { id: 'd1e2', time: '12:00', label: '中午', icon: 'taxi', type: 'TRANSPORT', title: '機場接送：北大高中 → 桃園機場 T1', sub: '下班直接出發｜約 30 km，中午抓 35–45 分', res: 'transfer' },
-        { id: 'd1e3', time: '13:00', est: true, type: 'FLIGHT', title: '桃園機場 第一航廈 報到', sub: 'AirAsia 櫃台 2｜櫃台 14:40 關閉、登機門 15:20 關閉', map: '台灣桃園國際機場 第一航廈' },
+        { id: 'd1e3', time: '13:00', est: true, type: 'FLIGHT', title: '桃園機場 第一航廈 報到', sub: 'AirAsia 櫃台 2（AK 改編後待確認）｜櫃台 14:40 關閉、登機門 15:20 關閉', map: '台灣桃園國際機場 第一航廈' },
         { id: 'd1e4', time: '15:40', official: true, type: 'FLIGHT', title: 'AirAsia AK 176 起飛', sub: 'TPE T1 15:40 → KIX T1 19:30｜托運 20kg＋手提 7kg（每人）', res: 'flight-out', desc: '這條航線 10/25 起由 AirAsia X（D7）改成 AirAsia（AK），時間不變。出發前在 App 再確認一次。' },
         { id: 'd1e5', time: '19:30', official: true, type: 'FLIGHT', title: '關西機場 T1 落地', sub: '入境＋提領行李（抓 45–75 分）', map: '関西国際空港 第1ターミナル' },
-        { id: 'd1e6', time: '20:30', est: true, icon: 'boat', type: 'TRANSPORT', title: '買高速船票', sub: 'T1 1F A 出入口旁櫃台（6:00–0:15）｜大人單程 ¥1,880', res: 'boat-in', map: '関西空港 ベイ・シャトル チケットカウンター', desc: '訪日外國人 ¥500 優惠已在 2026/6/30 停售，一律 ¥1,880。\n「ポートライナーセット券」同價，多送一趟 Port Liner 三宮⇔神戸空港。\n至少開船前 20 分辦好手續；現場票看空位，網路預約者優先。', warn: '現場買要看空位；平安夜可考慮先網路預約' },
-        { id: 'd1e7', time: '20:50', icon: 'boat', type: 'TRANSPORT', title: '12 番のりば 接駁巴士 → 船站', sub: '免費，約 6–7 分｜船站不能步行或搭計程車前往' },
-        { id: 'd1e8', time: '21:00', end: '21:31', official: true, icon: 'boat', type: 'TRANSPORT', title: '神戸-関空ベイ・シャトル → 神戸空港', sub: '約 31 分｜備案 22:00（22:31 到），末班 0:00', url: 'https://www.kobe-access.jp/', map: '神戸空港 海上アクセスターミナル' },
-        { id: 'd1e9', time: '21:35', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 飯店', sub: '約 20 分｜¥3,600–4,800（22:00 後夜間加成）', map: '神戸空港 タクシー乗り場', warn: '船站沒有計程車招呼站：走 5–6 分或搭免費接駁到機場航廈 1F 搭車', desc: '深夜計程車可能少，可先用 App 或請飯店叫車。' },
-        { id: 'd1e10', time: '22:00', est: true, type: 'LODGING', title: '飯店 check-in', sub: '櫃台受理到 23:00', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel' },
-        { id: 'd1e11', time: '22:30', est: true, type: 'FOOD', title: '仔牛屋 神戸三宮店', sub: '神戸牛燒肉・全室包廂｜L.O. 24:00｜飯店搭計程車約 10 分', phone: '078-222-1529', hours: '17:00–25:00（L.O. 24:00）・週日休', addr: '神戸市中央区中山手通1-25-6 ラ・ドルレイ神戸三宮 3F', url: 'https://www.koushiya.jp/sannomiya.html', map: '仔牛屋 神戸三宮店', res: 'koushiya', warn: '尚未預訂：平安夜＋全室包廂，盡快訂；告知 22:30 後到＋玉ねぎ完全NG', desc: '官網、ヒトサラ、ぐるなび都能網路預約，也可以打電話。\n套餐約 ¥16,800 起，平均 ¥7,000–9,000。' },
-        { id: 'd1e12', time: '23:50', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 先搭計程車回飯店休息｜離仔牛屋走路約 5 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店', desc: '神戶沒有 24 小時的一蘭。平安夜可能人多，官網說客滿時 L.O. 前也可能不能入店。' },
-        { id: 'd1e13', time: '00:30', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分（走路約 25 分）', map: HOTEL.map }
+        { id: 'd1a1', time: '20:30', branch: 'A', est: true, icon: 'boat', type: 'TRANSPORT', title: '買高速船票（20:40 前辦好）', sub: 'T1 1F A 出入口旁櫃台（6:00–0:15）｜大人單程 ¥1,880', res: 'boat-in', map: '関西空港 ベイ・シャトル チケットカウンター', desc: '訪日外國人 ¥500 優惠已在 2026/6/30 停售，一律 ¥1,880。\n「ポートライナーセット券」同價，多送一趟 Port Liner 三宮⇔神戸空港。\n至少開船前 20 分辦好手續；現場票看空位，網路預約者優先。', warn: '現場買要看空位；平安夜可考慮先網路預約' },
+        { id: 'd1a2', time: '20:50', branch: 'A', est: true, icon: 'boat', type: 'TRANSPORT', title: '12 番のりば 接駁巴士 → 船站', sub: '免費，約 6–7 分｜船站不能步行或搭計程車前往' },
+        { id: 'd1a3', time: '21:00', end: '21:31', branch: 'A', icon: 'boat', type: 'TRANSPORT', title: '神戸-関空ベイ・シャトル → 神戸空港', sub: '約 31 分｜現行時刻表，12 月前再確認', url: 'https://www.kobe-access.jp/', map: '神戸空港 海上アクセスターミナル' },
+        { id: 'd1a4', time: '21:35', branch: 'A', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 飯店', sub: '約 20 分｜約 ¥3,000–4,000（預估）', map: '神戸空港 タクシー乗り場', warn: '船站沒有計程車招呼站：走 5–6 分或搭免費接駁到機場航廈 1F 搭車', desc: '深夜計程車可能少：先預約計程車（例：神戸MK）或請飯店安排；叫車 App 在船站常被拒載。' },
+        { id: 'd1a5', time: '22:00', branch: 'A', est: true, type: 'LODGING', title: '飯店 check-in', sub: '櫃台受理到 23:00', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel' },
+        { id: 'd1a6', time: '22:30', branch: 'A', est: true, type: 'FOOD', title: '仔牛屋 神戸三宮店', sub: '神戸牛燒肉・全室包廂｜L.O. 24:00｜飯店搭計程車約 10 分', phone: '078-222-1529', hours: '17:00–25:00（L.O. 24:00）・週日休', addr: '神戸市中央区中山手通1-25-6 ラ・ドルレイ神戸三宮 3F', url: 'https://www.koushiya.jp/sannomiya.html', map: '仔牛屋 神戸三宮店', res: 'koushiya', warn: '尚未預訂：平安夜＋全室包廂，盡快訂；告知可能 22:30–23:30 才到＋玉ねぎ完全NG', desc: '官網、ヒトサラ、ぐるなび都能網路預約，也可以打電話。\n套餐約 ¥16,800 起，平均 ¥7,000–9,000。' },
+        { id: 'd1a7', time: '23:50', branch: 'A', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 先搭計程車回飯店休息｜離仔牛屋走路約 5 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店', desc: '神戶沒有 24 小時的一蘭。平安夜可能人多，官網說客滿時 L.O. 前也可能不能入店。' },
+        { id: 'd1a8', time: '00:30', branch: 'A', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分（走路約 25 分）', map: HOTEL.map },
+        { id: 'd1b1', time: '21:30', branch: 'B', est: true, icon: 'boat', type: 'TRANSPORT', title: '買高速船票（21:40 前辦好）', sub: 'T1 1F A 出入口旁櫃台（6:00–0:15）｜大人單程 ¥1,880', res: 'boat-in', map: '関西空港 ベイ・シャトル チケットカウンター', desc: '至少開船前 20 分辦好手續；現場票看空位，網路預約者優先。之後只剩 0:00 末班。' },
+        { id: 'd1b2', time: '21:50', branch: 'B', est: true, icon: 'boat', type: 'TRANSPORT', title: '12 番のりば 接駁巴士 → 船站', sub: '免費，約 6–7 分' },
+        { id: 'd1b3', time: '22:00', end: '22:31', branch: 'B', icon: 'boat', type: 'TRANSPORT', title: '神戸-関空ベイ・シャトル → 神戸空港', sub: '約 31 分｜現行時刻表，12 月前再確認｜之後只剩 0:00 末班', url: 'https://www.kobe-access.jp/', map: '神戸空港 海上アクセスターミナル' },
+        { id: 'd1b4', time: '22:40', branch: 'B', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 飯店', sub: '約 20 分｜約 ¥3,600–4,800（預估，22:00 後夜間加成）', map: '神戸空港 タクシー乗り場', warn: '船站沒有計程車招呼站：走 5–6 分或搭免費接駁到機場航廈 1F 搭車', desc: '深夜計程車可能少：先預約計程車（例：神戸MK）或請飯店安排；叫車 App 在船站常被拒載。' },
+        { id: 'd1b5', time: '23:00', branch: 'B', est: true, type: 'LODGING', title: '飯店 check-in（壓線）', sub: '櫃台受理到 23:00：先打電話說晚到，或請飯店同意晚餐後再入住、計程車直接去仔牛屋', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel' },
+        { id: 'd1b6', time: '23:20', branch: 'B', est: true, type: 'FOOD', title: '仔牛屋 神戸三宮店', sub: '神戸牛燒肉・全室包廂｜L.O. 24:00', phone: '078-222-1529', hours: '17:00–25:00（L.O. 24:00）・週日休', addr: '神戸市中央区中山手通1-25-6 ラ・ドルレイ神戸三宮 3F', url: 'https://www.koushiya.jp/sannomiya.html', map: '仔牛屋 神戸三宮店', res: 'koushiya', warn: '離 L.O. 24:00 只剩約 40 分：訂位時講清楚可能晚到，請店家保留到約 23:30；玉ねぎ完全NG' },
+        { id: 'd1b7', time: '00:30', branch: 'B', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 先搭計程車回飯店休息｜離仔牛屋走路約 5 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店' },
+        { id: 'd1b8', time: '01:10', branch: 'B', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分', map: HOTEL.map }
       ]
     },
     {
@@ -490,18 +498,18 @@ const TRIP_DEFAULT = {
       id: 'd3', date: '2026-12-26', loc: 'sannomiya', theme: 'kobe', bg: '',
       city: '神戶・三宮／港區', title: '神戶慢活・港邊黃昏',
       branches: { A: '11:00 吃みなと軒', B: '晚餐後吃みなと軒' },
-      note: '原本想早餐前先吃みなと軒，但三宮高架下店 11:00 才開、飯店早餐 10:30 最後點餐，所以分兩個方案：A 早餐後 11:00 一開店就吃；B 石田屋晚餐後再吃（營業到 24:00）。\n神戶多數聖誕燈飾到 12/25 結束，今天看港區常設夜景＋摩天輪。',
+      note: '原本想早餐前先吃みなと軒，但三宮高架下店 11:00 才開、飯店早餐 10:30 最後點餐，所以分兩個方案：A 早餐後 11:00 一開店就吃；B 石田屋晚餐後再吃（營業到 24:00）。\n原本 Yvonne 在飯店等：A 案她可以在飯店多休息、晚點到ナガサワ會合，或先逛ナガサワ；B 案她先搭計程車回飯店。\n14:00 後查 kobe-access.jp：明天（12/27）的高速船是否停航。\n神戶多數聖誕燈飾到 12/25 結束，今天看港區常設夜景＋摩天輪。',
       events: [
         { id: 'd3e1', time: '09:00', label: '自然醒', type: 'LODGING', title: '睡到自然醒' },
-        { id: 'd3e2', time: '09:30', type: 'FOOD', title: '飯店早餐', sub: '3F ALL FLAGS｜L.O. 10:30', map: HOTEL.map },
-        { id: 'd3a1', time: '11:00', branch: 'A', type: 'RAMEN', title: 'みなと軒 三宮高架下店（Aaron 儀式）', sub: '11:00 開店｜Yvonne 可先逛ナガサワ（走路約 5 分）', phone: '078-391-3288', hours: '11:00–24:00・無休', addr: '神戸市中央区北長狭通1丁目31-35 1F（阪急神戸三宮駅 西口）', map: 'みなと軒 三宮高架下店', warn: '只收現金或 PayPay，不能刷卡', desc: '豚骨拉麵，吧台 11 席。舊的東門店（營業到早上）已顯示休業。' },
-        { id: 'd3e3', time: '11:30', type: 'SHOP', title: 'ナガサワ文具センター 本店＋三宮輕逛', sub: 'ジュンク堂書店三宮店 3F（三宮センター街）｜北星「大人の鉛筆」', phone: '078-321-4500', hours: '10:00–21:00', addr: '神戸市中央区三宮町1丁目6-18 ジュンク堂書店三宮店 3F', url: 'https://kobe-nagasawa.co.jp/store/main/', map: 'ナガサワ文具センター 本店', desc: '官網只確認有北星「大人の色鉛筆」；「大人の鉛筆」本身很可能有，想確保就先打電話問。' },
-        { id: 'd3e4', time: '14:00', end: '15:30', type: 'CAFE', title: '幸せのパンケーキ 神戸店', sub: '舒芙蕾鬆餅（Yvonne 下午茶）｜每份約 20 分以上', phone: '078-392-8888', hours: '週末 10:00–20:30（L.O. 19:40）', addr: '神戸市中央区三宮町1-6-1 パレックスビル 2F 東', url: 'https://hitosara.com/0011100316/', map: '幸せのパンケーキ 神戸店', res: 'pancake', warn: '未預約：週六接近聖誕，預期要排隊', desc: '可用ヒトサラ或電話預約；週末是否接受預約未確認。' },
-        { id: 'd3e5', time: '15:45', icon: 'train', type: 'TRANSPORT', title: '三宮 → 神戸ハーバーランド', sub: 'JR 三ノ宮 → 神戸 約 4 分，再走約 8 分', map: 'umie MOSAIC' },
-        { id: 'd3e6', time: '16:30', type: 'SIGHT', title: '黃昏：モザイク大観覧車', sub: '日落約 16:54｜一圈約 10 分 ¥800｜看神戶港、港塔、六甲山', hours: '10:00–22:00（依季節）', map: 'モザイク大観覧車', warn: '週六傍晚可能排隊；強風或打雷會停駛', desc: '晚上還有 LED 點燈的神戸ポートタワー。' },
-        { id: 'd3e7', time: '17:30', icon: 'train', type: 'TRANSPORT', title: '→ 石田屋（三宮）', sub: 'JR 神戸 → 三ノ宮 約 4 分，或計程車' },
-        { id: 'd3e8', time: '18:00', end: '20:00', type: 'FOOD', title: '焼肉しゃぶしゃぶ 石田屋。北野坂店', sub: '已預約（樂天ぐるなび）｜桌位 120 分制｜當天點餐結帳', phone: '050-5484-3236', hours: '週六晚 17:00–21:30（L.O. 21:00）・週一休', addr: '神戸市中央区北長狭通1-20-13 北野坂壱番館 3F', url: 'https://r.gnavi.co.jp/c192807/', map: '焼肉しゃぶしゃぶ 石田屋。北野坂店', res: 'ishidaya', warn: '訂位時沒選套餐：點餐時說玉ねぎ／タロイモNG', desc: '神戶牛壽喜燒、涮涮鍋、燒肉；壽喜燒記得要生蛋液（Yvonne）。\n阪急神戸三宮駅 東口走路 1 分。變更預約直接聯絡店家。\n不要走錯成石田屋本店或 Hanare。' },
-        { id: 'd3b1', time: '20:10', branch: 'B', type: 'RAMEN', title: 'みなと軒 三宮高架下店（Aaron 儀式）', sub: '營業到 24:00｜離石田屋走路幾分鐘', phone: '078-391-3288', hours: '11:00–24:00・無休', addr: '神戸市中央区北長狭通1丁目31-35 1F（阪急神戸三宮駅 西口）', map: 'みなと軒 三宮高架下店', warn: '只收現金或 PayPay，不能刷卡' },
+        { id: 'd3e2', time: '09:30', est: true, type: 'FOOD', title: '飯店早餐', sub: '3F ALL FLAGS｜L.O. 10:30', map: HOTEL.map },
+        { id: 'd3a1', time: '11:00', branch: 'A', type: 'RAMEN', title: 'みなと軒 三宮高架下店（Aaron 儀式）', sub: '11:00 開店｜Yvonne 可在飯店多休息再到ナガサワ會合，或先逛ナガサワ（走路約 5 分）', phone: '078-391-3288', hours: '11:00–24:00・無休', addr: '神戸市中央区北長狭通1丁目31-35 1F（阪急神戸三宮駅 西口）', map: 'みなと軒 三宮高架下店', warn: '只收現金或 PayPay，不能刷卡', desc: '豚骨拉麵，吧台 11 席。舊的東門店（營業到早上）已顯示休業。' },
+        { id: 'd3e3', time: '11:30', est: true, type: 'SHOP', title: 'ナガサワ文具センター 本店＋三宮輕逛', sub: 'ジュンク堂書店三宮店 3F（三宮センター街）｜北星「大人の鉛筆」', phone: '078-321-4500', hours: '10:00–21:00', addr: '神戸市中央区三宮町1丁目6-18 ジュンク堂書店三宮店 3F', url: 'https://kobe-nagasawa.co.jp/store/main/', map: 'ナガサワ文具センター 本店', desc: '官網只確認有北星「大人の色鉛筆」；「大人の鉛筆」本身很可能有，想確保就先打電話問。' },
+        { id: 'd3e4', time: '14:00', end: '15:30', est: true, type: 'CAFE', title: '幸せのパンケーキ 神戸店', sub: '舒芙蕾鬆餅（Yvonne 下午茶）｜每份約 20 分以上', phone: '078-392-8888', hours: '週末 10:00–20:30（L.O. 19:40，待確認）', addr: '神戸市中央区三宮町1-6-1 パレックスビル 2F 東', url: 'https://hitosara.com/0011100316/', map: '幸せのパンケーキ 神戸店', res: 'pancake', warn: '未預約：週六接近聖誕，預期要排隊；11:30 在ナガサワ時先繞過去看隊伍（同一條街），14:30 還沒入座就放棄，免得錯過黃昏摩天輪', desc: '可用ヒトサラ或電話預約；週末是否接受預約未確認。營業狀態與時間出發前再確認。' },
+        { id: 'd3e5', time: '15:45', est: true, icon: 'train', type: 'TRANSPORT', title: '三宮 → 神戸ハーバーランド', sub: 'JR 三ノ宮 → 神戸 約 4 分，再走約 8 分', map: 'umie MOSAIC' },
+        { id: 'd3e6', time: '16:30', est: true, type: 'SIGHT', title: '黃昏：モザイク大観覧車', sub: '日落約 16:54｜一圈約 10 分 ¥800（導覽書資料，待確認）｜看神戶港、港塔、六甲山', hours: '10:00–22:00（依季節，待確認）', map: 'モザイク大観覧車', warn: '週六傍晚可能排隊；強風或打雷會停駛', desc: '晚上還有 LED 點燈的神戸ポートタワー。\n錯過黃昏也沒關係：石田屋之後（約 20:10）再來搭，看夜景（營業到 22:00）。' },
+        { id: 'd3e7', time: '17:30', est: true, icon: 'train', type: 'TRANSPORT', title: '→ 石田屋（三宮）', sub: 'JR 神戸 → 三ノ宮 約 4 分，或計程車' },
+        { id: 'd3e8', time: '18:00', end: '20:00', booked: true, type: 'FOOD', title: '焼肉しゃぶしゃぶ 石田屋。北野坂店', sub: '已預約（樂天ぐるなび）｜桌位 120 分制｜當天點餐結帳', phone: '050-5484-3236', hours: '週六晚 17:00–21:30（L.O. 21:00）・週一休', addr: '神戸市中央区北長狭通1-20-13 北野坂壱番館 3F', url: 'https://r.gnavi.co.jp/c192807/', map: '焼肉しゃぶしゃぶ 石田屋。北野坂店', res: 'ishidaya', warn: '訂位時沒選套餐：點餐時說玉ねぎ／タロイモNG', desc: '神戶牛壽喜燒、涮涮鍋、燒肉；壽喜燒記得要生蛋液（Yvonne）。\n阪急神戸三宮駅 東口走路 1 分。變更預約直接聯絡店家。\n不要走錯成石田屋本店或 Hanare。' },
+        { id: 'd3b1', time: '20:10', branch: 'B', est: true, type: 'RAMEN', title: 'みなと軒 三宮高架下店（Aaron 儀式）', sub: '營業到 24:00｜離石田屋走路幾分鐘｜Yvonne 先搭計程車回飯店等', phone: '078-391-3288', hours: '11:00–24:00・無休', addr: '神戸市中央区北長狭通1丁目31-35 1F（阪急神戸三宮駅 西口）', map: 'みなと軒 三宮高架下店', warn: '只收現金或 PayPay，不能刷卡' },
         { id: 'd3e9', time: '20:30', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分（走路約 25 分）', map: HOTEL.map }
       ]
     },
@@ -509,17 +517,18 @@ const TRIP_DEFAULT = {
       id: 'd4', date: '2026-12-27', loc: 'kobe', theme: 'motomachi', bg: '',
       city: '神戶・三宮／元町', title: '元町散步・回台灣',
       branches: null,
-      note: '一蘭三宮店 4:00–10:00 不營業，所以改成退房後 10:00 開店就吃；也可以改到 12/26 深夜吃（營業到翌 4:00）。\n飯店 11:00 退房；寄放行李要在入住時跟櫃台確認。\n機場留 4 小時＝搭 15:30 船（KIX T1 約 16:10 到）；17:00 船只剩約 3 小時 40 分，18:00 是最後安全班次（櫃台 19:55 關）。\n旧居留地・南京町的聖誕燈飾通常到 12/25，今天以洋房街景為主。',
+      note: '一蘭三宮店 4:00–10:00 不營業，所以改成退房後 10:00 開店就吃；也可以改到 12/26 深夜吃（營業到翌 4:00）。\n飯店 11:00 退房；寄放行李要在入住時跟櫃台確認。\n機場留 4 小時＝搭 15:30 船（KIX T1 約 16:10 到），15:10 前要辦好手續，所以最晚 14:05 回到飯店。17:00 船（T1 約 17:40）只剩約 3 小時 15 分；18:00 是最後安全班次（櫃台 19:55 關）。\n時間不夠時先砍旧居留地・南京町散步，再縮短 LIMA COFFEE；船班不動。\n12/26 14:00 後查 kobe-access.jp：今天的船是否停航；低氣壓停航有替代巴士（約 90 分，要在櫃台買），颱風則無。\n旧居留地・南京町的聖誕燈飾通常到 12/25，今天以洋房街景為主。',
       events: [
-        { id: 'd4e1', time: '08:00', type: 'FOOD', title: '飯店早餐', sub: '3F ALL FLAGS｜L.O. 10:30', map: HOTEL.map },
-        { id: 'd4e2', time: '09:30', type: 'LODGING', title: '退房＋寄放行李', sub: '退房 11:00 前', map: HOTEL.map, res: 'hotel' },
-        { id: 'd4e3', time: '10:00', type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: '10:00 開店｜Yvonne 這時先去広重排隊', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店' },
-        { id: 'd4e4', time: '10:30', type: 'FOOD', title: '神戸牛丼 広重（午餐）', sub: '11:00 開店｜吧台約 10 席｜排隊時可輪流逛三宮', phone: '078-222-6611', hours: '週日 11:00–15:00（賣完即止）・週三休', addr: '神戸市中央区中山手通1-22-21 前川ビル 1F', map: '神戸牛丼 広重', warn: '常排 1.5–3 小時、賣完就關，開店前就要排', desc: '只賣神戶牛丼（並・大＋溫泉蛋等），價格各文章差很多，以現場為準。' },
-        { id: 'd4e5', time: '12:20', type: 'SIGHT', title: '旧居留地・南京町 聖誕洋房散步', sub: '只走看拍照、不吃｜約 1.2 km、45–60 分', map: '旧居留地 十五番館', desc: '建議路線：三宮センター街 → 神戸市立博物館 → 旧居留地十五番館 → 仲町通・明石町筋（煤氣燈、石造建築）→ 大丸神戸店迴廊 → 南京町 長安門 → 南京町広場 → 西安門 → 元町。\n週日中午南京町很擠，從長安門到広場快速穿過即可。' },
-        { id: 'd4e6', time: '13:20', end: '14:15', type: 'CAFE', title: 'LIMA COFFEE 神戸本店（下午茶）', sub: 'みなと元町駅 2 分｜17 席', phone: '078-335-6308', hours: '9:00–18:00・週三休', addr: '神戸市中央区栄町通3-2-6 1F', map: 'LIMA COFFEE 神戸本店', desc: '備選：にしむら珈琲店 元町店（元町通2-6-3，9:00–22:00，92 席）；イスズベーカリー 元町店（元町通1-11-18，只能外帶）。\n有網站還寫舊地址（元町通3-8-1），以栄町通為準。' },
-        { id: 'd4e7', time: '14:30', type: 'LODGING', title: '回飯店取行李', sub: '從 LIMA COFFEE 走路約 10 分', map: HOTEL.map },
-        { id: 'd4e8', time: '14:45', icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 神戸空港', sub: '約 20 分｜開船前 20 分要辦好手續', map: '神戸空港 海上アクセスターミナル' },
-        { id: 'd4e9', time: '15:30', end: '16:01', official: true, icon: 'boat', type: 'TRANSPORT', title: '高速船 神戸空港 → 關西機場', sub: '¥1,880｜接駁巴士到 T1 約 16:10｜備案 17:00、18:00', url: 'https://www.kobe-access.jp/', res: 'boat-out' },
+        { id: 'd4e1', time: '08:00', est: true, type: 'FOOD', title: '飯店早餐', sub: '3F ALL FLAGS｜L.O. 10:30', map: HOTEL.map },
+        { id: 'd4e2', time: '09:30', est: true, type: 'LODGING', title: '退房＋寄放行李', sub: '退房 11:00 前｜寄放行李待確認', map: HOTEL.map, res: 'hotel' },
+        { id: 'd4e3', time: '10:00', type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: '10:00 開店｜建議：Yvonne 可先去広重排隊，或兩人逛三宮後再一起排', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店' },
+        { id: 'd4e3b', time: '10:30', est: true, type: 'SHOP', title: '神戶三宮輕逛', sub: '三宮センター街一帶｜排広重時可以輪流逛', map: '三宮センター街' },
+        { id: 'd4e4', time: '11:00', est: true, type: 'FOOD', title: '神戸牛丼 広重（午餐）', sub: '11:00 開店｜吧台約 10 席', phone: '078-222-6611', hours: '週日 11:00–15:00（賣完即止）・週三休', addr: '神戸市中央区中山手通1-22-21 前川ビル 1F', map: '神戸牛丼 広重', warn: '常排 1.5–3 小時、賣完就關，開店前就要排；12:15 還沒入座就放棄（改便利店或別家），才趕得上 15:30 船', desc: '只賣神戶牛丼（並・大＋溫泉蛋等），價格各文章差很多，以現場為準。' },
+        { id: 'd4e5', time: '12:20', type: 'SIGHT', title: '旧居留地・南京町 聖誕洋房散步', sub: '只走看拍照、不吃｜約 1.2 km、45–60 分', map: '旧居留地 十五番館', desc: '建議路線：三宮センター街 → 神戸市立博物館 → 旧居留地十五番館 → 仲町通・明石町筋（煤氣燈、石造建築）→ 大丸神戸店迴廊 → 南京町 長安門 → 南京町広場 → 西安門 → 元町。\n週日中午南京町很擠，從長安門到広場快速穿過即可。\n時間不夠就先砍這段。' },
+        { id: 'd4e6', time: '13:15', end: '13:55', est: true, type: 'CAFE', title: 'LIMA COFFEE 神戸本店（下午茶）', sub: 'みなと元町駅 2 分｜17 席', phone: '078-335-6308', hours: '9:00–18:00・週三休（2023 資料，待確認）', addr: '神戸市中央区栄町通3-2-6 1F', map: 'LIMA COFFEE 神戸本店', warn: '2026 年中曾暫停營業（7/1 重開），出發前看 IG（limacoffee）或打電話確認', desc: '備選：にしむら珈琲店 元町店（元町通2-6-3，9:00–22:00，92 席）；イスズベーカリー 元町店（元町通1-11-18，只能外帶）。\n筆記寫的「イスズベーカリー元町本店」不存在：元町的是元町店，本店在三宮側。\n有網站還寫 LIMA 舊地址（元町通3-8-1），以栄町通為準。' },
+        { id: 'd4e7', time: '14:05', est: true, type: 'LODGING', title: '回飯店取行李', sub: '從 LIMA COFFEE 走路約 10 分｜最晚 14:05', map: HOTEL.map },
+        { id: 'd4e8', time: '14:20', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 神戸空港', sub: '約 20 分｜15:10 前要辦好手續｜跟司機說「海上アクセスターミナル（ベイ・シャトル乗り場）」', map: '神戸空港 海上アクセスターミナル', warn: '錯過 15:30 船：下一班 17:00（T1 約 17:40），只剩約 3 小時 15 分' },
+        { id: 'd4e9', time: '15:30', end: '16:01', icon: 'boat', type: 'TRANSPORT', title: '高速船 神戸空港 → 關西機場', sub: '¥1,880｜接駁巴士到 T1 約 16:10｜現行時刻表，12 月前再確認｜備案 17:00、18:00', url: 'https://www.kobe-access.jp/', res: 'boat-out' },
         { id: 'd4e10', time: '17:55', est: true, type: 'FLIGHT', title: 'AirAsia 櫃台開放報到', sub: 'KIX T1 4F 國際線｜櫃台 19:55 關閉、登機門 20:35 關閉', map: '関西国際空港 第1ターミナル' },
         { id: 'd4e11', time: '20:55', official: true, type: 'FLIGHT', title: 'AirAsia AK 177 起飛', sub: 'KIX T1 20:55 → TPE T1 23:15｜托運 40kg＋手提 7kg（每人，可以多買）', res: 'flight-back' }
       ]
@@ -557,14 +566,14 @@ const LIGHTS = [
 const RESERVATIONS = [
   { id: 'transfer', icon: 'taxi', name: '機場接送（北大高中 → 桃園 T1）', when: '12/24（四）中午', status: '待查', how: '下班直接出發；行李當天帶到學校' },
   { id: 'flight-out', icon: 'flight', name: '去程 AirAsia AK 176', when: '12/24（四）TPE T1 15:40 → KIX T1 19:30', status: '已購', how: '托運 20kg＋手提 7kg（每人）', url: 'https://www.airasia.com/' },
-  { id: 'boat-in', icon: 'boat', name: '高速船 KIX → 神戸空港', when: '12/24（四）21:00（備案 22:00）', status: '現場買', how: '¥1,880／人；網路預約 90 天前開放、1 小時前截止；現場票看空位', url: 'https://www.kobe-access.jp/' },
+  { id: 'boat-in', icon: 'boat', name: '高速船 KIX → 神戸空港', when: '12/24（四）21:00（B 案 22:00）', status: '現場買', how: '¥1,880／人；網路預約 90 天前開放、1 小時前截止；現場票看空位', url: 'https://www.kobe-access.jp/' },
   { id: 'hotel', icon: 'hotel', name: '神戸メリケンパークオリエンタルホテル', when: '12/24–12/27 3 晚｜標準雙人房・西景｜含早餐', status: '已訂', how: '到店付款｜12/22 前免費取消', phone: HOTEL.phone, url: HOTEL.url },
-  { id: 'koushiya', icon: 'food', name: '仔牛屋 神戸三宮店', when: '12/24（四）約 22:30', status: '未訂', how: '官網／ヒトサラ／ぐるなび／電話｜告知晚到＋玉ねぎNG', phone: '078-222-1529', url: 'https://www.koushiya.jp/sannomiya.html' },
+  { id: 'koushiya', icon: 'food', name: '仔牛屋 神戸三宮店', when: '12/24（四）約 22:30（B 案約 23:20）', status: '未訂', how: '官網／ヒトサラ／ぐるなび／電話｜告知可能晚到＋玉ねぎNG', phone: '078-222-1529', url: 'https://www.koushiya.jp/sannomiya.html' },
   { id: 'usj', icon: 'ticket', name: 'USJ 1 デイ・スタジオ・パス ×2', when: '12/25（五）', status: '待查', how: '日別變動價，越早買越便宜', url: 'https://store.usj.co.jp/ja/jp/c/ticket' },
   { id: 'usj-dinner', icon: 'food', name: 'USJ 晚餐（レストラン優先案內）', when: '12/25（五）', status: '待查', how: '預計 11/25 11:00 開放（非官方資訊），以官方 App 為準' },
   { id: 'pancake', icon: 'cafe', name: '幸せのパンケーキ 神戸店', when: '12/26（六）14:00', status: '未訂', how: 'ヒトサラ或電話（週末是否接受預約未確認）', phone: '078-392-8888', url: 'https://hitosara.com/0011100316/' },
   { id: 'ishidaya', icon: 'food', name: '焼肉しゃぶしゃぶ 石田屋。北野坂店', when: '12/26（六）18:00–（120 分制）', status: '已訂', how: '樂天ぐるなび｜只訂位，當天點餐結帳｜變更直接聯絡店家', phone: '050-5484-3236', url: 'https://r.gnavi.co.jp/c192807/' },
-  { id: 'boat-out', icon: 'boat', name: '高速船 神戸空港 → KIX', when: '12/27（日）15:30（備案 17:00、18:00）', status: '現場買', how: '¥1,880／人；開船前 20 分辦好手續', url: 'https://www.kobe-access.jp/' },
+  { id: 'boat-out', icon: 'boat', name: '高速船 神戸空港 → KIX', when: '12/27（日）15:30（備案 17:00、18:00）', status: '待查', how: '¥1,880／人；購票方式未定，建議網路預約保住 15:30 班（4 小時緩衝）；開船前 20 分辦好手續', url: 'https://www.kobe-access.jp/' },
   { id: 'flight-back', icon: 'flight', name: '回程 AirAsia AK 177', when: '12/27（日）KIX T1 20:55 → TPE T1 23:15', status: '已購', how: '托運 40kg＋手提 7kg（每人）', url: 'https://www.airasia.com/' }
 ];
 const RES_STATUSES = ['未訂', '已訂', '已購', '現場買', '不需預約', '待查'];
@@ -572,21 +581,21 @@ const RES_STATUSES = ['未訂', '已訂', '已購', '現場買', '不需預約',
 /* 行前待辦（日期為建議期限） */
 const TODOS = [
   { id: 't-usj-ticket', due: '2026-10-31', text: '買 USJ 12/25 入場券 ×2（日別變動價，越早越便宜）' },
-  { id: 't-koushiya', due: '2026-11-15', text: '訂仔牛屋 神戸三宮店 12/24 約 22:30（平安夜包廂；告知晚到＋玉ねぎNG）' },
+  { id: 't-koushiya', due: '2026-11-15', text: '訂仔牛屋 神戸三宮店 12/24 約 22:30（平安夜包廂；告知可能 23:20 才到＋玉ねぎNG）' },
   { id: 't-transfer', due: '2026-11-24', text: '預約機場接送：12/24 中午 北大高中 → 桃園 T1' },
   { id: 't-usj-dinner', due: '2026-11-25', text: 'USJ 晚餐「優先案內」（預計 11/25 11:00 開放）' },
   { id: 't-usj-view', due: '2026-11-30', text: '考慮買夜間秀「特別鑑賞エリア」¥1,700 起' },
   { id: 't-pancake', due: '2026-11-30', text: '問幸せのパンケーキ 12/26 能否預約（ヒトサラ／電話）' },
-  { id: 't-boat', due: '2026-12-01', text: '決定高速船要不要網路預約（12/24 21:00、12/27 15:30）' },
-  { id: 't-hotel-call', due: '2026-12-10', text: '打給飯店：12/24 約 22:00–23:00 到＋12/27 退房後寄放行李' },
+  { id: 't-boat', due: '2026-11-30', text: '網路預約 12/27 15:30 回程高速船（保 4 小時緩衝）；12/24 去程照計畫現場買，或也預約' },
+  { id: 't-hotel-call', due: '2026-12-10', text: '打給飯店：12/24 可能 22:00–23:00 才到（或晚餐後再入住）＋12/27 退房後寄放行李' },
   { id: 't-joy', due: '2026-12-14', text: '想在「ジョイ・オブ・ライツ」投影訊息？抽選投稿 12/14 截止' },
   { id: 't-hours', due: '2026-12-15', text: '再確認第一旭 三宮本店營業時間（9/4 起變更）' },
   { id: 't-nagasawa', due: '2026-12-15', text: '打給ナガサワ本店問有沒有北星「大人の鉛筆」' },
-  { id: 't-icoca', due: '2026-12-17', text: '兩人 iPhone Wallet 加 ICOCA（Mastercard 儲值）' },
+  { id: 't-icoca', due: '2026-12-17', text: '兩人 iPhone Wallet 加 ICOCA，出發前先試一次儲值' },
   { id: 't-vjw', due: '2026-12-17', text: '填 Visit Japan Web，QR 存進 APP' },
   { id: 't-week', due: '2026-12-17', text: '出發前 1 週：AirAsia 航班、高速船時刻、天氣、USJ 場次' },
   { id: 't-hotel-cancel', due: '2026-12-21', text: '飯店 12/22 前免費取消：確認行程不變' },
-  { id: 't-boat-weather', due: '2026-12-23', text: '前一天 14:00 後看高速船停航公告（kobe-access.jp）' },
+  { id: 't-boat-weather', due: '2026-12-23', text: '12/23 與 12/26 14:00 後看高速船停航公告（kobe-access.jp）' },
   { id: 't-offline', due: '2026-12-23', text: '出發前一晚：資訊 → 按「離線準備」；行李隔天帶到學校' }
 ];
 
@@ -603,7 +612,7 @@ const EMERGENCY = [
 /* 給司機看（交通卡片） */
 const TAXI = [
   { ja: '神戸メリケンパークオリエンタルホテルまでお願いします。', sub: '〒650-0042 神戸市中央区波止場町5-6（メリケンパーク）', zh: '請載我們到神戶美利堅公園東方酒店' },
-  { ja: '神戸空港までお願いします。関空行きの高速船（ベイ・シャトル）に乗ります。', sub: '海上アクセスターミナル', zh: '到神戶機場，要搭往關西機場的高速船' },
+  { ja: '神戸空港の海上アクセスターミナルまでお願いします。', sub: '関空行きの高速船（ベイ・シャトル）に乗ります。', zh: '到神戶機場的高速船碼頭（往關西機場）' },
   { ja: '仔牛屋 神戸三宮店までお願いします。', sub: '中山手通1-25-6 ラ・ドルレイ神戸三宮 3階', zh: '仔牛屋 神戸三宮店' },
   { ja: '一蘭 三宮店までお願いします。', sub: '北長狭通1-9-9 第1岸ビル', zh: '一蘭 三宮店' },
   { ja: '神戸ラーメン第一旭 三宮本店までお願いします。', sub: '琴ノ緒町4-1-394（JR高架下）', zh: '第一旭 三宮本店' },
@@ -701,13 +710,13 @@ const USJ = {
 const TRANSIT = [
   ['KIX → 神戶', '高速船「神戸-関空ベイ・シャトル」約 31 分，大人 ¥1,880（訪日外國人優惠 2026/6/30 已停售）'],
   ['買票', 'KIX T1 1F A 出入口旁櫃台（6:00–0:15）或網路；再到 T1 1F 12 番のりば搭免費接駁巴士（6–7 分）'],
-  ['12/24 船班', 'KIX 發：20:00／21:00／22:00／0:00（末班，沒有 23:00）'],
-  ['12/27 船班', '神戸空港發：14:00／15:30／17:00／18:00（建議 15:30，T1 約 16:10 到）'],
-  ['神戸空港 → 飯店', '計程車約 20 分、¥3,000–4,000（22:00 後加成約 2 成）；船站沒有計程車招呼站，走 5–6 分到機場航廈 1F'],
-  ['Port Liner', '神戸空港 ⇄ 三宮 約 18 分 ¥340（末班 23:45）；「ポートライナーセット券」同船票價含一趟'],
+  ['12/24 船班', 'KIX 發：20:00／21:00／22:00／0:00（末班，沒有 23:00）｜現行時刻表，12 月前再確認'],
+  ['12/27 船班', '神戸空港發：14:00／15:30／17:00／18:00（建議 15:30，T1 約 16:10 到）｜現行時刻表，12 月前再確認'],
+  ['神戸空港 → 飯店', '計程車約 20 分、約 ¥3,000–4,000（預估；22:00 後加成約 2 成）；船站沒有計程車招呼站，走 5–6 分到機場航廈 1F；深夜建議先預約計程車'],
+  ['Port Liner', '神戸空港 ⇄ 三宮 約 18 分 ¥340（末班約 23:45，待確認）；「ポートライナーセット券」同船票價含一趟'],
   ['飯店 ⇄ 市區', 'みなと元町駅 8 分｜元町駅 15 分｜三宮 計程車約 10 分、約 ¥1,000｜三宮免費接駁巴士（乘車處待確認）'],
   ['三宮 → USJ', 'JR 經大阪、西九条 約 52 分 ¥660；阪神經西九条 約 45 分 ¥500'],
-  ['付款', '兩人 iPhone Wallet 加 ICOCA，Apple Pay 儲值（台灣卡用 Mastercard 最穩）'],
+  ['付款', '兩人 iPhone Wallet 加 ICOCA，Apple Pay 儲值（7 月規劃的結論是台灣卡用 Mastercard 較穩，出發前先試一次）'],
   ['停航', '強風巨浪會停航；冬天通常前一天 14:00 左右公告，低氣壓停航時有替代巴士（約 90 分，要在櫃台買）']
 ];
 const TRANSIT_SPOTS = ['神戸メリケンパークオリエンタルホテル', '神戸空港 海上アクセスターミナル', '関西国際空港 第1ターミナル', 'みなと元町駅', '元町駅', '三ノ宮駅', 'ユニバーサルシティ駅'];
@@ -961,6 +970,9 @@ const fmtTs = ts => {
   return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 };
 const mapUrl = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+const imgSrc = u => /^data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+$/.test(u || '') ? u : '';
+const MAP_EMBED_RE = /^https:\/\/(www\.)?google\.[a-z.]+\/maps\//;
 const telHref = n => 'tel:' + String(n).replace(/[^\d+]/g, '');
 const yen = n => '¥' + Math.round(n).toLocaleString('ja-JP');
 const twd = n => 'NT$' + Math.round(n).toLocaleString('zh-TW');
@@ -1058,6 +1070,14 @@ function sunTimes(date, lat, lon, alt = -0.833) {
 /* =========================================================
    狀態（含舊版大阪行程的資料遷移）
    ========================================================= */
+try {
+  /* 舊版大阪 APP 用過這支手機：舊飯店（阪神大阪）的確認號不能沿用到神戶飯店 */
+  if (OLD_KEYS.some(k => localStorage.getItem(k) !== null)) {
+    const r = store.get(K.res, {});
+    delete r.hotel;
+    store.set(K.res, r);
+  }
+} catch (e) { /* 私密模式 */ }
 OLD_KEYS.forEach(k => store.del(k));
 let trip = loadTrip();
 const ui = Object.assign({ view: 'trip', day: 'd1', branch: {}, phraseCat: '餐廳', editing: false }, store.get(K.ui, {}));
@@ -1296,6 +1316,7 @@ async function applyHeroImage(day) {
   }
   const art = $('.hero-art', hero);
   if (!art || curDay().id !== day.id) return;
+  if (src && !imgSrc(src) && !safeUrl(src)) src = '';
   if (!src) { art.innerHTML = HERO_ART[day.theme] || HERO_ART.kobe; return; }
   art.innerHTML = '';
   const img = document.createElement('img');
@@ -1322,7 +1343,7 @@ function renderTimelineHtml(day, br) {
     const t = TYPES[e.type] || TYPES.SIGHT;
     const cls = nowIdx < 0 ? '' : i < nowIdx ? 'past' : i === nowIdx ? 'now' : '';
     return `<div class="ev type-${esc(e.type)} ${cls}" role="button" tabindex="0" data-ev="${esc(e.id)}">
-      <div class="ev-time">${esc(e.label || e.time)}${e.end ? `<small>–${esc(e.end)}</small>` : ''}${e.est ? '<span class="tag tag-est">預估</span>' : e.official ? '<span class="tag tag-off">官方</span>' : ''}</div>
+      <div class="ev-time">${esc(e.label || e.time)}${e.end ? `<small>–${esc(e.end)}</small>` : ''}${e.est ? '<span class="tag tag-est">預估</span>' : e.official ? '<span class="tag tag-off">官方</span>' : e.booked ? '<span class="tag tag-off">已訂</span>' : ''}</div>
       <div class="ev-rail"><span class="ev-dot"></span></div>
       <div class="ev-body">
         <div class="ev-title">${esc(e.title)}</div>
@@ -1365,13 +1386,13 @@ function wxRequest(day) {
   const url = inRange
     ? `${base}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&start_date=${day.date}&end_date=${day.date}`
     : `${base}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=2`;
-  return { loc, inRange, key: inRange ? `${day.loc}|${day.date}` : `${day.loc}|now`, url };
+  return { loc, inRange, ahead, key: inRange ? `${day.loc}|${day.date}` : `${day.loc}|now`, url };
 }
 
 let wxToken = 0;
 async function renderWeather(day, force = false) {
   const token = ++wxToken;
-  const { loc, inRange, key, url } = wxRequest(day);
+  const { loc, inRange, ahead, key, url } = wxRequest(day);
   const cache = store.get(K.wx, {});
   let data = null;
   let offline = false;
@@ -1411,7 +1432,7 @@ async function renderWeather(day, force = false) {
     hours = hours.slice(start, start + 24);
     const c = j.current || {};
     summary = `<div class="wx-day"><b>${Math.round(c.temperature_2m)}°</b><span>現在${WX_TEXT(c.weather_code)}・今天 ${Math.round(j.daily.temperature_2m_max[0])}°/${Math.round(j.daily.temperature_2m_min[0])}°</span></div>
-      <div class="wx-meta">目前${esc(loc.name)}・${md(day.date)} 進入 16 天預報範圍後改成當天逐時預報・${esc(loc.normal)}・${stamp}</div>`;
+      <div class="wx-meta">目前${esc(loc.name)}・${ahead < 0 ? md(day.date) + ' 已過，顯示目前起 24 小時' : md(day.date) + ' 進入 16 天預報範圍後改成當天逐時預報・' + esc(loc.normal)}・${stamp}</div>`;
   }
   el.innerHTML = `<div class="wx-hours">${hours.map(x => `<div class="wx-h"><div>${x.h}</div>${wxSvg(x.c)}<div class="t">${Math.round(x.temp)}°</div><div class="p">${x.p ? x.p + '%' : ''}</div></div>`).join('')}</div>${summary}`;
 }
@@ -1456,7 +1477,7 @@ function openEventDetail(day, id) {
   ].filter(Boolean);
   openSheet(t.zh, `
     <div class="det-head type-${esc(e.type)}"><span class="tm">${esc(e.label || e.time)}${e.end ? '–' + esc(e.end) : ''}</span>
-      ${e.est ? '<span class="tag tag-est">預估</span>' : ''}${e.official ? '<span class="tag tag-off">官方時刻</span>' : ''}
+      ${e.est ? '<span class="tag tag-est">預估</span>' : ''}${e.official ? '<span class="tag tag-off">官方時刻</span>' : ''}${e.booked ? '<span class="tag tag-off">已訂</span>' : ''}
       ${e.branch && day.branches ? `<span class="tag tag-draft">${esc(e.branch)} 案</span>` : ''}<span>${ic(e.icon || t.icon)} ${esc(t.en)}</span></div>
     <div class="det-title">${esc(e.title)}</div>
     ${e.sub ? `<div class="det-sub">${esc(e.sub)}</div>` : ''}
@@ -1465,7 +1486,7 @@ function openEventDetail(day, id) {
     ${e.desc ? `<div class="det-desc">${esc(e.desc)}</div>` : ''}
     <div class="btn-row">
       ${e.map || e.addr ? `<a class="btn btn-primary" href="${mapUrl(e.map || e.addr)}" target="_blank" rel="noopener">${ic('map')} Google Maps</a>` : ''}
-      ${e.url ? `<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">${ic('link')} 官網／預約</a>` : ''}
+      ${safeUrl(e.url) ? `<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">${ic('link')} 官網／預約</a>` : ''}
       ${isFood ? `<button class="btn btn-red" data-act="redline">${ic('block')} 紅線卡</button>` : ''}
     </div>
     <div class="btn-row"><button class="btn btn-ghost" data-act="edit">${ic('edit')} 編輯</button><button class="btn btn-danger" data-act="del">${ic('trash')} 刪除</button></div>`,
@@ -1672,7 +1693,7 @@ function renderWallet() {
         <button class="swap" id="swapBtn" aria-label="交換幣別">⇅</button>
         <div class="conv-row"><span class="cur" id="curBot">${convDir === 'JPY' ? 'TWD' : 'JPY'}</span><input id="convBot" inputmode="decimal" placeholder="0"></div>
       </div>
-      <div class="rate-line">1 JPY = <input id="rateInput" inputmode="decimal" value="${r.rate}"> TWD
+      <div class="rate-line">1 JPY = <input id="rateInput" inputmode="decimal" value="${esc(r.rate)}"> TWD
         <button class="btn btn-sm ${r.locked ? 'on' : ''}" id="lockBtn">${r.locked ? '🔒 已鎖定' : '🔓 鎖定'}</button>
         <button class="btn btn-sm" id="rateRefresh">↻ 更新</button></div>
     </div>
@@ -1681,7 +1702,7 @@ function renderWallet() {
       <div class="card-title">記一筆</div>
       <form id="expForm">
         <div class="row2">
-          <label class="field"><span>日期</span><select name="date">${[...new Set([...days.map(d => d.date), todayJ])].sort().map(d => `<option value="${d}" ${d === defDate ? 'selected' : ''}>${md(d)}（${wd(d)}）</option>`).join('')}</select></label>
+          <label class="field"><span>日期</span><select name="date">${[...new Set([...days.map(d => d.date), todayJ])].sort().map(d => `<option value="${esc(d)}" ${d === defDate ? 'selected' : ''}>${md(d)}（${wd(d)}）</option>`).join('')}</select></label>
           <label class="field"><span>付款</span><select name="payer"><option>Aaron</option><option>Yvonne</option><option>共同</option></select></label>
         </div>
         <label class="field"><span>項目</span><input name="name" placeholder="例：一蘭、高速船" required></label>
@@ -2026,11 +2047,11 @@ function openMapShots() {
     body.innerHTML = `
       <div class="note small">把 Google Maps 的路線、站內地圖、餐廳位置先截圖存進來。圖片只存在這支手機，沒網路也能看。</div>
       <div class="row2" style="margin-top:12px;align-items:end">
-        <label class="field" style="margin-bottom:0"><span>標記為</span><select id="shotTag"><option value="">一般</option>${days.map(d => `<option value="${d.date}">${md(d.date)} ${esc(d.title)}</option>`).join('')}</select></label>
+        <label class="field" style="margin-bottom:0"><span>標記為</span><select id="shotTag"><option value="">一般</option>${days.map(d => `<option value="${esc(d.date)}">${md(d.date)} ${esc(d.title)}</option>`).join('')}</select></label>
         <button class="btn btn-primary" data-act="add" style="margin-bottom:0">📷 加入截圖</button>
       </div>
       <div class="sec-title">${all.length} 張</div>
-      ${all.length ? `<div class="gallery">${all.map(([k, f]) => `<figure data-k="${esc(k)}"><img src="${f.dataUrl}" alt="${esc(f.name || '')}"><figcaption>${f.tag ? md(f.tag) : '一般'}</figcaption></figure>`).join('')}</div>`
+      ${all.length ? `<div class="gallery">${all.map(([k, f]) => `<figure data-k="${esc(k)}"><img src="${imgSrc(f.dataUrl)}" alt="${esc(f.name || '')}"><figcaption>${f.tag ? md(f.tag) : '一般'}</figcaption></figure>`).join('')}</div>`
         : '<div class="empty">還沒有截圖</div>'}`;
   };
   openSheet('離線地圖截圖', '<div class="empty">載入中…</div>', body => {
@@ -2054,13 +2075,13 @@ function openMapShots() {
       const k = fig.dataset.k;
       const f = await idb.get(k);
       if (!f) return;
-      openSheet(f.tag ? md(f.tag) : '截圖', `<img class="fc-img" src="${f.dataUrl}" alt="" style="border-radius:12px;background:#fff">
+      openSheet(f.tag ? md(f.tag) : '截圖', `<img class="fc-img" src="${imgSrc(f.dataUrl)}" alt="" style="border-radius:12px;background:#fff">
         <div class="small muted" style="margin-top:6px">雙指可放大。</div>
         <div class="btn-row"><button class="btn" data-act="full">⛶ 全螢幕</button><button class="btn btn-danger" data-act="del">刪除</button></div>`, (b2, en2) => {
         b2.onclick = async ev => {
           const a = ev.target.closest('[data-act]');
           if (!a) return;
-          if (a.dataset.act === 'full') openFullCard(() => `<img class="fc-img" src="${f.dataUrl}" alt="">`);
+          if (a.dataset.act === 'full') openFullCard(() => `<img class="fc-img" src="${imgSrc(f.dataUrl)}" alt="">`);
           if (a.dataset.act === 'del' && await askConfirm('刪除這張截圖？', '刪除')) {
             await idb.del(k);
             closeSheet(en2);
@@ -2100,13 +2121,14 @@ function renderInfo() {
       <div class="note small" style="margin-bottom:12px">🔒 確認號、座位與備註只存在這支手機，不會上傳到網站。</div>
       ${RESERVATIONS.map(r => {
         const loc = resLocal[r.id] || {};
-        const status = loc.status || r.status;
+        const status = RES_STATUSES.includes(loc.status) ? loc.status : r.status;
+        const note = typeof loc.note === 'string' ? loc.note : '';
         return `<div class="res-card"><div class="res-top"><span class="ico">${ic(r.icon)}</span>
           <div class="grow"><div class="res-name">${esc(r.name)}</div><div class="res-when">${esc(r.when)}</div>${r.how ? `<div class="small" style="color:var(--ink-2)">${esc(r.how)}</div>` : ''}</div>
           <select class="status st-${esc(status)}" data-status="${r.id}">${RES_STATUSES.map(s => `<option ${s === status ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
-          <div class="conf-row"><input data-conf="${r.id}" value="${esc(loc.conf || '')}" placeholder="確認號／訂位代號" autocomplete="off" autocapitalize="characters">
+          <div class="conf-row"><input data-conf="${r.id}" value="${esc(typeof loc.conf === 'string' ? loc.conf : '')}" placeholder="確認號／訂位代號" autocomplete="off" autocapitalize="characters">
             <button class="btn btn-sm" data-copyconf="${r.id}">複製</button></div>
-          <textarea class="res-note" data-note="${r.id}" rows="${loc.note ? Math.min(6, loc.note.split('\n').length + 1) : 1}" placeholder="私人備註（座位、訂位人…只存本機）">${esc(loc.note || '')}</textarea>
+          <textarea class="res-note" data-note="${r.id}" rows="${note ? Math.min(6, note.split('\n').length + 1) : 1}" placeholder="私人備註（座位、訂位人…只存本機）">${esc(note)}</textarea>
           ${r.url || r.phone ? `<div class="res-links">${r.url ? `<a class="btn btn-sm btn-ghost" href="${esc(r.url)}" target="_blank" rel="noopener">${ic('link')} 預約頁</a>` : ''}${r.phone ? `<a class="btn btn-sm btn-ghost" href="${telHref(r.phone)}">${ic('phone')} ${esc(r.phone)}</a>` : ''}</div>` : ''}
         </div>`;
       }).join('')}
@@ -2153,9 +2175,9 @@ function renderInfo() {
 
     <div class="sec-title">MAP</div>
     <div class="card">
-      ${mapCfg.embed ? `<iframe class="map-frame" src="${esc(mapCfg.embed)}" loading="lazy" title="地圖"></iframe>` : ''}
+      ${MAP_EMBED_RE.test(mapCfg.embed || '') ? `<iframe class="map-frame" src="${esc(mapCfg.embed)}" loading="lazy" title="地圖"></iframe>` : ''}
       <div class="btn-row">
-        ${mapCfg.link ? `<a class="btn btn-primary" href="${esc(mapCfg.link)}" target="_blank" rel="noopener">⭐ 我的 Google Maps 清單</a>` : ''}
+        ${safeUrl(mapCfg.link) ? `<a class="btn btn-primary" href="${esc(mapCfg.link)}" target="_blank" rel="noopener">⭐ 我的 Google Maps 清單</a>` : ''}
         <a class="btn" href="${mapUrl(HOTEL.map)}" target="_blank" rel="noopener">${ic('hotel')} 飯店位置</a>
         <button class="btn btn-ghost" data-act="map-cfg">${ic('gear')} 設定地圖連結</button>
       </div>
@@ -2251,7 +2273,7 @@ async function renderQr() {
   const people = [['A', 'Aaron'], ['P', 'Yvonne']];
   const files = await Promise.all(people.map(([k]) => idb.get('vjw:' + k).catch(() => null)));
   grid.innerHTML = people.map(([k, name], i) => files[i]
-    ? `<button class="qr-slot has" data-qr="${k}"><img src="${files[i].dataUrl}" alt="${name} QR"><b>${name}</b></button>`
+    ? `<button class="qr-slot has" data-qr="${k}"><img src="${imgSrc(files[i].dataUrl)}" alt="${name} QR"><b>${name}</b></button>`
     : `<button class="qr-slot" data-qrup="${k}"><span style="font-size:26px">＋</span><span>上傳 ${name} 的 QR 截圖</span></button>`).join('');
   grid.onclick = async e => {
     const up = e.target.closest('[data-qrup]');
@@ -2266,12 +2288,12 @@ async function renderQr() {
       const k = show.dataset.qr;
       const f = await idb.get('vjw:' + k);
       const name = k === 'A' ? 'Aaron' : 'Yvonne';
-      openSheet(`${name} 的 VJW QR`, `<img class="fc-img" src="${f.dataUrl}" alt="" style="background:#fff;border-radius:12px">
+      openSheet(`${name} 的 VJW QR`, `<img class="fc-img" src="${imgSrc(f.dataUrl)}" alt="" style="background:#fff;border-radius:12px">
         <div class="btn-row"><button class="btn btn-primary" data-act="full">⛶ 全螢幕給海關看</button><button class="btn" data-act="replace">換一張</button><button class="btn btn-danger" data-act="del">刪除</button></div>`, (body, entry) => {
         body.onclick = async ev => {
           const a = ev.target.closest('[data-act]');
           if (!a) return;
-          if (a.dataset.act === 'full') openFullCard(() => `<div style="text-align:center;font-weight:800;font-size:18px;margin-bottom:10px">${name}・Visit Japan Web</div><img class="fc-img" src="${f.dataUrl}" alt="">`);
+          if (a.dataset.act === 'full') openFullCard(() => `<div style="text-align:center;font-weight:800;font-size:18px;margin-bottom:10px">${name}・Visit Japan Web</div><img class="fc-img" src="${imgSrc(f.dataUrl)}" alt="">`);
           if (a.dataset.act === 'replace') {
             const [file] = await pickFile('image/*');
             if (!file) return;
@@ -2317,7 +2339,7 @@ function openMapCfg() {
       e.preventDefault();
       const fd = new FormData(e.target);
       const embed = fd.get('embed').trim();
-      if (embed && !/^https:\/\/(www\.)?google\.[a-z.]+\/maps\//.test(embed)) return toast('內嵌網址要是 Google Maps 的網址');
+      if (embed && !MAP_EMBED_RE.test(embed)) return toast('內嵌網址要是 Google Maps 的網址');
       store.set(K.map, { link: fd.get('link').trim(), embed });
       closeSheet(entry);
       renderInfo();
@@ -2337,7 +2359,7 @@ async function renderOfflineStatus() {
   el.innerHTML = `
     <div><span>App 離線快取</span><span>${sw ? '✅ 已啟用' : '⏳ 重新開一次 APP 後生效'}</span></div>
     <div><span>天氣快取</span><span>${wxTs ? fmtTs(wxTs) + '（' + Object.keys(wx).length + ' 筆）' : '—'}</span></div>
-    <div><span>匯率</span><span>${r.rate}${r.locked ? ' 🔒' : ''}${r.ts ? '・' + fmtTs(r.ts) : '（預設值）'}</span></div>
+    <div><span>匯率</span><span>${esc(r.rate)}${r.locked ? ' 🔒' : ''}${r.ts ? '・' + fmtTs(r.ts) : '（預設值）'}</span></div>
     <div><span>VJW QR／地圖截圖／主圖</span><span>${count('vjw:')}／${count('map:')}／${count('hero:')}</span></div>`;
 }
 
@@ -2383,15 +2405,26 @@ async function offlineImages(silent = false) {
 
 /* 私人資料合併匯入：備份檔 mode=merge，或網址 #import=… */
 async function mergeImport(data, label) {
-  if (!data || data.app !== APP_ID || data.mode !== 'merge') return toast('匯入資料格式不對');
-  const n = Object.keys(data.res || {}).length;
-  if (!(await askConfirm(`把「${label}」存進這支手機？\n共 ${n} 筆預約的確認號與備註，只存在本機、不會上傳。`, '存進手機', false))) return;
+  if (!data || typeof data !== 'object' || data.app !== APP_ID || data.mode !== 'merge') return toast('匯入資料格式不對');
+  label = String(label || '私人預約資料').slice(0, 60);
+  const ids = new Set(RESERVATIONS.map(r => r.id));
+  const entries = Object.entries(data.res && typeof data.res === 'object' ? data.res : {})
+    .filter(([k, v]) => ids.has(k) && v && typeof v === 'object');
+  const contacts = Array.isArray(data.contacts) ? data.contacts.filter(c => c && typeof c.name === 'string' && typeof c.num === 'string') : [];
+  if (!entries.length && !contacts.length) return toast('匯入資料裡沒有可用的內容');
+  if (!(await askConfirm(`把「${label}」存進這支手機？\n共 ${entries.length} 筆預約的確認號與備註，只存在本機、不會上傳。`, '存進手機', false))) return;
   const all = store.get(K.res, {});
-  for (const [k, v] of Object.entries(data.res || {})) all[k] = Object.assign(all[k] || {}, v);
+  for (const [k, v] of entries) {
+    const o = {};
+    if (typeof v.conf === 'string') o.conf = v.conf;
+    if (typeof v.note === 'string') o.note = v.note;
+    if (RES_STATUSES.includes(v.status)) o.status = v.status;
+    all[k] = Object.assign(all[k] || {}, o);
+  }
   store.set(K.res, all);
-  if (Array.isArray(data.contacts)) {
+  if (contacts.length) {
     const list = store.get(K.contacts, []);
-    data.contacts.forEach(c => { if (!list.some(x => x.num === c.num)) list.push({ id: uid('c'), name: c.name, num: c.num }); });
+    contacts.forEach(c => { if (!list.some(x => x.num === c.num)) list.push({ id: uid('c'), name: c.name, num: c.num }); });
     store.set(K.contacts, list);
   }
   toast('已存進手機');
