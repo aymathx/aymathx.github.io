@@ -822,13 +822,13 @@
         ctx.restore();
       }
 
-      // 3. 繪製「底數變動過程殘影軌跡」（已加深顏色與線條，支援後排學生觀察）
+      // 3. 繪製「底數變動過程殘影軌跡」
       const showTrail = document.getElementById('showTrailGhost').checked;
       if (showTrail && trailBases.length > 0) {
         trailBases.forEach((bVal, idx) => {
           if (Math.abs(bVal - currentA) < 0.03 || Math.abs(bVal - initialA) < 0.03) return;
-          const opacity = 0.45 + (idx / trailBases.length) * 0.45;
-          drawSingleBranch(x => Math.pow(bVal, x), width, height, '#2563eb', 2.6, [5, 3], opacity);
+          const opacity = 0.16 + (idx / trailBases.length) * 0.18;
+          drawSingleBranch(x => Math.pow(bVal, x), width, height, '#60a5fa', 1.8, [3, 3], opacity);
         });
       }
 
@@ -1121,7 +1121,7 @@
 
     canvas.addEventListener('touchmove', (e) => {
       e.preventDefault();
-      const rect = canvas.parentElement.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
       if (e.touches.length === 1 && isPanning) {
         const t = e.touches[0];
         originOffsetX = t.clientX - panStart.x;
