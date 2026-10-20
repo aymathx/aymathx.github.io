@@ -71,7 +71,7 @@
   <!-- 頂部導覽列（修正1：只保留文字「指數函數圖形探究實驗室」與「全部重設」功能） -->
   <header class="bg-slate-900 text-white shadow-sm border-b border-slate-800 sticky top-0 z-30">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-2">
-      <h1 class="scale-xl font-bold tracking-tight whitespace-nowrap">指數函數圖形探究實驗室</h1>
+      <h1 class="scale-xl font-bold tracking-tight whitespace-nowrap">指數函數。圖形探究</h1>
       <button onclick="resetAll()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-100 scale-sm font-semibold border border-slate-700 transition whitespace-nowrap">
         全部重設
       </button>
@@ -84,12 +84,12 @@
     <!-- 左側控制面板 (電腦版占 5/4 欄，手機版自適應) -->
     <aside class="lg:col-span-5 xl:col-span-4 flex flex-col gap-3 w-full">
 
-      <!-- 實驗一：底數 a 變化 -->
+      <!-- 一：底數 a 變化 -->
       <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5">
         <div class="flex items-center justify-between gap-2 mb-2.5">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="px-2 py-0.5 scale-xs font-bold rounded bg-blue-100 text-blue-800 shrink-0">實驗一</span>
-            <h2 class="font-bold text-slate-800 scale-base truncate">底數 <span class="math-font">a</span> 大小變化</h2>
+            <span class="px-2 py-0.5 scale-xs font-bold rounded bg-blue-100 text-blue-800 shrink-0">一</span>
+            <h2 class="font-bold text-slate-800 scale-base truncate">底數 <span class="math-font">a</span> 的變化</h2>
           </div>
           <span id="baseRegimeBadge" class="scale-xs font-bold px-2.5 py-1 rounded-full bg-blue-600 text-white shrink-0 whitespace-nowrap">
             a &gt; 1 遞增
@@ -160,8 +160,8 @@
       <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5 flex flex-col">
         <div class="flex items-center justify-between mb-2.5">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="px-2 py-0.5 scale-xs font-bold rounded bg-indigo-100 text-indigo-800 shrink-0">實驗二</span>
-            <h2 class="font-bold text-slate-800 scale-base truncate">比較圖形選擇</h2>
+            <span class="px-2 py-0.5 scale-xs font-bold rounded bg-indigo-100 text-indigo-800 shrink-0">二</span>
+            <h2 class="font-bold text-slate-800 scale-base truncate">圖形的比較</h2>
           </div>
           <button onclick="clearAllComparisons()" class="scale-xs px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold transition whitespace-nowrap shrink-0">
             僅留基準圖
@@ -211,11 +211,11 @@
           <div class="flex flex-wrap items-center gap-3 scale-xs">
             <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-800 font-semibold select-none whitespace-nowrap">
               <input type="checkbox" id="showKeyPoints" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
-              標示特徵點 <span class="math-font">(-1, 0, 1)</span>
+              特殊點 <span class="math-font">( -1 , 0 , 1 )</span>
             </label>
             <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-800 font-semibold select-none whitespace-nowrap">
               <input type="checkbox" id="showSymmetryGuides" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
-              突顯對稱軸／對稱中心
+              對稱軸／對稱中心
             </label>
           </div>
 
@@ -233,7 +233,7 @@
 
             <button onclick="zoomCanvas(1.25)" title="放大坐標系" class="w-7 h-7 flex items-center justify-center scale-sm rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold">＋</button>
             <button onclick="zoomCanvas(0.8)" title="縮小坐標系" class="w-7 h-7 flex items-center justify-center scale-sm rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold">－</button>
-            <button onclick="resetView()" class="px-2.5 py-1 scale-xs rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold whitespace-nowrap">重設視角</button>
+            <button onclick="resetView()" class="px-2.5 py-1 scale-xs rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold whitespace-nowrap">重設</button>
           </div>
         </div>
 
