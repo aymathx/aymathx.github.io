@@ -1,31 +1,3 @@
-針對教室電子螢幕與投影機容易吃色、導致後排學生看不清楚「過程殘影」的問題，已為您完成以下視覺強化與程式碼修正（同時保留上一輪「移除文字放大按鈕」與「全部重設預設皆不勾選」的設定）：
-
-### 修正重點說明
-
-1. **大幅加深「過程殘影」顏色與對比度**：
-* **色彩升級**：將原本偏淡的天藍色（`#60a5fa`）改為高對比的**深寶藍色（`#1d4ed8`）**。
-
-
-* **不透明度提升**：將原本極淡的透明度（`0.16 ~ 0.34`）大幅調高至 **`0.50 ~ 0.80`**，避免在教室高亮度電子白板或投影幕上被背景洗白。
-
-
-* **線條加粗與虛線優化**：殘影線寬由 `1.8px` 加粗至 **`2.5px`**，虛線間距改為更清晰的 `[5, 4]`，與目前函數的實線（加粗至 `3.8px`）既能明確區分，又能讓最後一排學生清楚看見漸變軌跡。
-
-
-
-
-2. **同步強化「基準函數」背景虛線**：將基準函數 $y = a_0^x$ 的虛線改為深灰黑色（`#334155`）、線寬加粗至 `3.0px`、不透明度提升至 `0.85`。
-
-
-3. **修正殘影紀錄邏輯**：若未勾選「保留基準圖形」而僅勾選「過程殘影」，起始值 $a_0$ 的位置也會自動納入過程殘影中，不會漏掉第一條軌跡。
-
-
-
----
-
-### 完整修正後 HTML 程式碼
-
-```html
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -549,8 +521,7 @@
     });
 
     function recordGhostTrail(prevVal) {
-      const showInitial = document.getElementById('showInitialGhost').checked;
-      if (showInitial && Math.abs(prevVal - initialA) < 0.03) return;
+      if (Math.abs(prevVal - initialA) < 0.03) return;
       const tooClose = trailBases.some(b => Math.abs(b - prevVal) < 0.22);
       if (!tooClose) {
         trailBases.push(prevVal);
@@ -851,31 +822,30 @@
         ctx.restore();
       }
 
-      const showInitialGhost = document.getElementById('showInitialGhost').checked;
-
-      // 3. 繪製「底數變動過程殘影軌跡」（加深為高對比深寶藍 #1d4ed8、提高不透明度 0.50~0.80 並加粗至 2.5px，讓教室最後一排清楚可見）
+      // 3. 繪製「底數變動過程殘影軌跡」（已加深顏色與線條，支援後排學生觀察）
       const showTrail = document.getElementById('showTrailGhost').checked;
       if (showTrail && trailBases.length > 0) {
         trailBases.forEach((bVal, idx) => {
-          if (Math.abs(bVal - currentA) < 0.03 || (showInitialGhost && Math.abs(bVal - initialA) < 0.03)) return;
-          const opacity = 0.45 + ((idx + 1) / trailBases.length) * 0.35;
-          drawSingleBranch(x => Math.pow(bVal, x), width, height, '#1d4ed8', 2.5, [5, 4], opacity);
+          if (Math.abs(bVal - currentA) < 0.03 || Math.abs(bVal - initialA) < 0.03) return;
+          const opacity = 0.45 + (idx / trailBases.length) * 0.45;
+          drawSingleBranch(x => Math.pow(bVal, x), width, height, '#2563eb', 2.6, [5, 3], opacity);
         });
       }
 
-      // 4. 繪製「保留基準圖形 y = a0^x」（加深為 #334155、線寬 3.0px、不透明度 0.85）
+      // 4. 繪製「保留基準圖形 y = a0^x」
+      const showInitialGhost = document.getElementById('showInitialGhost').checked;
       const isBaseChanged = Math.abs(currentA - initialA) >= 0.02;
       if (showInitialGhost && isBaseChanged) {
-        drawSingleBranch(x => Math.pow(initialA, x), width, height, '#334155', 3.0, [8, 5], 0.85);
+        drawSingleBranch(x => Math.pow(initialA, x), width, height, '#475569', 2.6, [7, 5], 0.65);
 
         const ptInit = mathToScreen(1, initialA, width, height);
         if (ptInit.py > 15 && ptInit.py < height - 15) {
           ctx.save();
-          ctx.fillStyle = '#1e293b';
+          ctx.fillStyle = 'rgba(71, 85, 105, 0.9)';
           ctx.beginPath();
-          ctx.arc(ptInit.px, ptInit.py, 5, 0, Math.PI * 2);
+          ctx.arc(ptInit.px, ptInit.py, 4.5, 0, Math.PI * 2);
           ctx.fill();
-          ctx.font = `bold ${Math.round(12.5 * fontScale)}px "Noto Sans TC", sans-serif`;
+          ctx.font = `bold ${Math.round(12 * fontScale)}px "Noto Sans TC", sans-serif`;
           ctx.fillText(`基準 y = ${formatCleanBase(initialA)}^x`, ptInit.px + 8, ptInit.py + 4);
           ctx.restore();
         }
@@ -927,7 +897,7 @@
       Object.keys(equivBuckets).forEach(groupKey => {
         const items = equivBuckets[groupKey];
         if (items.length === 1) {
-          drawSingleBranch(items[0].evalSingle, width, height, items[0].color, 3.8, [], 1.0, 0);
+          drawSingleBranch(items[0].evalSingle, width, height, items[0].color, 3.2, [], 1.0, 0);
         } else if (items.length > 1) {
           drawSingleBranch(items[0].evalSingle, width, height, '#facc15', 11, [], 0.42, 0);
 
@@ -1070,18 +1040,9 @@
 
       if (isBaseChanged && document.getElementById('showInitialGhost').checked) {
         items.push(`
-          <div class="flex items-center gap-2 text-slate-700">
-            <span class="w-4 h-0.5 border-b-2 border-dashed border-slate-700 inline-block shrink-0"></span>
+          <div class="flex items-center gap-2 text-slate-500">
+            <span class="w-4 h-0.5 border-b-2 border-dashed border-slate-500 inline-block shrink-0"></span>
             <span class="font-semibold whitespace-nowrap">基準函數：<span class="math-font">y = ${formatCleanBase(initialA)}<sup>x</sup></span></span>
-          </div>
-        `);
-      }
-
-      if (document.getElementById('showTrailGhost').checked && trailBases.length > 0) {
-        items.push(`
-          <div class="flex items-center gap-2 text-blue-800">
-            <span class="w-4 h-0.5 border-b-2 border-dashed border-blue-700 inline-block shrink-0"></span>
-            <span class="font-semibold whitespace-nowrap">過程殘影軌跡</span>
           </div>
         `);
       }
@@ -1160,7 +1121,7 @@
 
     canvas.addEventListener('touchmove', (e) => {
       e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
+      const rect = canvas.parentElement.getBoundingClientRect();
       if (e.touches.length === 1 && isPanning) {
         const t = e.touches[0];
         originOffsetX = t.clientX - panStart.x;
@@ -1203,5 +1164,3 @@
   </script>
 </body>
 </html>
-
-```
