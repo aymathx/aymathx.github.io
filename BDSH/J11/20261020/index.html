@@ -28,7 +28,7 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* 動態文字縮放系統（放大文字但鎖定版型不改變） */
+    /* 固定放大後文字比例並鎖定版型 */
     .scale-xs {
       font-size: calc(0.78rem * var(--font-scale));
       line-height: 1.25;
@@ -128,15 +128,15 @@
         <button onclick="setBaseValue(3)" class="py-1.5 scale-sm font-bold rounded-lg border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100 transition mono-font whitespace-nowrap">3</button>
       </div>
 
-      <!-- 保留基準圖形與殘影控制 -->
+      <!-- 保留基準圖形與殘影控制（預設不勾選） -->
       <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-1 scale-xs">
         <div class="flex items-center gap-3 min-w-0">
           <label class="inline-flex items-center gap-1.5 cursor-pointer select-none text-slate-800 font-semibold whitespace-nowrap">
-            <input type="checkbox" id="showInitialGhost" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+            <input type="checkbox" id="showInitialGhost" onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
             保留基準圖形
           </label>
           <label class="inline-flex items-center gap-1.5 cursor-pointer select-none text-slate-800 font-semibold whitespace-nowrap">
-            <input type="checkbox" id="showTrailGhost" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+            <input type="checkbox" id="showTrailGhost" onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
             過程殘影
           </label>
         </div>
@@ -155,31 +155,20 @@
     <section class="w-full lg:col-span-7 xl:col-span-8 lg:col-start-6 xl:col-start-5 lg:row-start-1 lg:row-span-2 flex flex-col">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2.5 sm:p-4 flex flex-col">
 
-        <!-- 畫布頂部工具列 -->
+        <!-- 畫布頂部工具列（已移除文字放大縮小按鈕，且核取方塊預設不勾選） -->
         <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2 border-b border-slate-100">
           <div class="flex flex-wrap items-center gap-3 scale-xs">
             <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-800 font-semibold select-none whitespace-nowrap">
-              <input type="checkbox" id="showKeyPoints" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
+              <input type="checkbox" id="showKeyPoints" onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
               特殊點 <span class="math-font">( -1 , 0 , 1 )</span>
             </label>
             <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-800 font-semibold select-none whitespace-nowrap">
-              <input type="checkbox" id="showSymmetryGuides" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
+              <input type="checkbox" id="showSymmetryGuides" onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
               對稱軸／對稱中心
             </label>
           </div>
 
           <div class="flex items-center gap-1.5 flex-wrap">
-            <!-- 文字大小縮放控制組 -->
-            <div class="inline-flex items-center bg-blue-50 border border-blue-200 rounded-lg p-0.5 mr-1">
-              <button onclick="adjustFontSize(-0.1)" title="縮小文字" class="px-2 py-0.5 scale-xs rounded-md hover:bg-blue-100 active:bg-blue-200 text-blue-900 font-bold transition whitespace-nowrap">
-                A-
-              </button>
-              <span id="fontScaleLabel" class="px-1.5 scale-xs font-bold text-blue-800 mono-font whitespace-nowrap">文字放大</span>
-              <button onclick="adjustFontSize(0.1)" title="放大文字" class="px-2 py-0.5 scale-xs rounded-md bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold transition whitespace-nowrap">
-                A+
-              </button>
-            </div>
-
             <button onclick="zoomCanvas(1.25)" title="放大坐標系" class="w-7 h-7 flex items-center justify-center scale-sm rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold">＋</button>
             <button onclick="zoomCanvas(0.8)" title="縮小坐標系" class="w-7 h-7 flex items-center justify-center scale-sm rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold">－</button>
             <button onclick="resetView()" class="px-2.5 py-1 scale-xs rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold whitespace-nowrap">重設</button>
@@ -196,8 +185,8 @@
         <div class="relative w-full h-[360px] sm:h-[440px] lg:h-[calc(100vh-175px)] min-h-[360px] max-h-[720px] bg-slate-50 rounded-xl border border-slate-200 overflow-hidden select-none">
           <canvas id="graphCanvas" class="w-full h-full cursor-crosshair"></canvas>
 
-          <!-- 左上角浮動動態圖例 -->
-          <div id="floatingLegend" class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[240px] sm:max-w-xs scale-xs space-y-1 pointer-events-none">
+          <!-- 左上角浮動動態圖例（無勾選圖形時自動隱藏） -->
+          <div id="floatingLegend" class="hidden absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[240px] sm:max-w-xs scale-xs space-y-1 pointer-events-none">
             <!-- JS 動態更新 -->
           </div>
 
@@ -243,10 +232,10 @@
         </button>
       </div>
 
-      <!-- 基準圖形開關 -->
+      <!-- 基準圖形開關（預設不勾選） -->
       <div class="mb-2 p-2.5 rounded-xl bg-blue-50/90 border border-blue-200 flex items-center justify-between">
         <label class="flex items-center gap-2 cursor-pointer select-none min-w-0">
-          <input type="checkbox" id="toggleBaseFunc" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 shrink-0" />
+          <input type="checkbox" id="toggleBaseFunc" onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 shrink-0" />
           <span class="w-3 h-3 rounded-full bg-blue-600 inline-block shrink-0"></span>
           <span class="font-bold scale-sm text-blue-950 whitespace-nowrap">基準圖：<span class="math-font">y = a<sup>x</sup></span></span>
         </label>
@@ -384,13 +373,13 @@
     ];
 
     // =========================================================================
-    // 2. 全域狀態管理與文字放大控制
+    // 2. 全域狀態管理（預設全部不勾選）
     // =========================================================================
     let currentA = 2.00;
     let initialA = 2.00;
     let trailBases = [];
-    let activeFuncIds = new Set(['f1']);
-    let fontScale = 1.15;
+    let activeFuncIds = new Set(); // 預設不勾選任何比較圖形
+    const fontScale = 1.15;
 
     const canvas = document.getElementById('graphCanvas');
     const ctx = canvas.getContext('2d');
@@ -401,14 +390,6 @@
     let panStart = { x: 0, y: 0 };
     let mouseMathPos = null;
     let lastPinchDist = null;
-
-    function adjustFontSize(delta) {
-      fontScale = Math.min(Math.max( +(fontScale + delta).toFixed(2), 0.95), 1.45);
-      document.documentElement.style.setProperty('--font-scale', fontScale);
-      const pct = Math.round((fontScale / 1.15) * 100);
-      document.getElementById('fontScaleLabel').textContent = pct === 100 ? '文字放大' : `${pct}%`;
-      renderGraph();
-    }
 
     function formatCleanBase(val) {
       return Number(val.toFixed(2)).toString();
@@ -432,19 +413,19 @@
                 const isChecked = activeFuncIds.has(f.id);
                 return `
                   <button
-                    id="btn_${f.id}"
-                    onclick="toggleComparisonFunc('${f.id}')"
-                    class="flex items-center justify-between px-2.5 py-2 rounded-xl border text-left transition ${
+                    id="btn_\${f.id}"
+                    onclick="toggleComparisonFunc('\${f.id}')"
+                    class="flex items-center justify-between px-2.5 py-2 rounded-xl border text-left transition \${
                       isChecked
                         ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
                         : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200'
                     }"
                   >
                     <div class="flex items-center gap-2 min-w-0">
-                      <span class="w-3 h-3 rounded-full shrink-0 border border-white/50" style="background-color: ${f.color}"></span>
-                      <span class="font-bold scale-sm math-font truncate">${f.labelHtml}</span>
+                      <span class="w-3 h-3 rounded-full shrink-0 border border-white/50" style="background-color: \${f.color}"></span>
+                      <span class="font-bold scale-sm math-font truncate">\${f.labelHtml}</span>
                     </div>
-                    <span id="check_${f.id}" class="scale-xs font-bold shrink-0 ${isChecked ? 'text-emerald-400' : 'text-transparent'}">✓</span>
+                    <span id="check_\${f.id}" class="scale-xs font-bold shrink-0 \${isChecked ? 'text-emerald-400' : 'text-transparent'}">✓</span>
                   </button>
                 `;
               }).join('')}
@@ -489,13 +470,18 @@
       renderGraph();
     }
 
+    // 全部重設：預設值改為全部都不勾選
     function resetAll() {
       currentA = 2.00;
       initialA = 2.00;
       trailBases = [];
       document.getElementById('aSlider').value = 2.00;
-      document.getElementById('toggleBaseFunc').checked = true;
-      activeFuncIds = new Set(['f1']);
+      document.getElementById('showInitialGhost').checked = false;
+      document.getElementById('showTrailGhost').checked = false;
+      document.getElementById('showKeyPoints').checked = false;
+      document.getElementById('showSymmetryGuides').checked = false;
+      document.getElementById('toggleBaseFunc').checked = false;
+      activeFuncIds.clear();
       updateBaseDisplays();
       updateComparisonButtonsUI();
       resetView();
@@ -837,13 +823,13 @@
         ctx.restore();
       }
 
-      // 3. 繪製「底數變動過程殘影軌跡」
+      // 3. 繪製「底數變動過程殘影軌跡」（加深為深寶藍 #1d4ed8、提高不透明度至 0.50~0.90、加粗至 2.5px，讓最後一排學生清楚可見）
       const showTrail = document.getElementById('showTrailGhost').checked;
       if (showTrail && trailBases.length > 0) {
         trailBases.forEach((bVal, idx) => {
           if (Math.abs(bVal - currentA) < 0.03 || Math.abs(bVal - initialA) < 0.03) return;
-          const opacity = 0.16 + (idx / trailBases.length) * 0.18;
-          drawSingleBranch(x => Math.pow(bVal, x), width, height, '#60a5fa', 1.8, [3, 3], opacity);
+          const opacity = 0.50 + (idx / trailBases.length) * 0.40;
+          drawSingleBranch(x => Math.pow(bVal, x), width, height, '#1d4ed8', 2.5, [5, 4], opacity);
         });
       }
 
@@ -851,12 +837,12 @@
       const showInitialGhost = document.getElementById('showInitialGhost').checked;
       const isBaseChanged = Math.abs(currentA - initialA) >= 0.02;
       if (showInitialGhost && isBaseChanged) {
-        drawSingleBranch(x => Math.pow(initialA, x), width, height, '#475569', 2.6, [7, 5], 0.65);
+        drawSingleBranch(x => Math.pow(initialA, x), width, height, '#475569', 2.6, [7, 5], 0.75);
 
         const ptInit = mathToScreen(1, initialA, width, height);
         if (ptInit.py > 15 && ptInit.py < height - 15) {
           ctx.save();
-          ctx.fillStyle = 'rgba(71, 85, 105, 0.9)';
+          ctx.fillStyle = 'rgba(71, 85, 105, 0.95)';
           ctx.beginPath();
           ctx.arc(ptInit.px, ptInit.py, 4.5, 0, Math.PI * 2);
           ctx.fill();
@@ -1071,7 +1057,13 @@
         `);
       });
 
-      box.innerHTML = items.join('');
+      if (items.length === 0) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+      } else {
+        box.classList.remove('hidden');
+        box.innerHTML = items.join('');
+      }
     }
 
     // =========================================================================
