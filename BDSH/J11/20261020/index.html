@@ -1,1341 +1,1180 @@
-為您整理並製作與您上傳的《Chapter 5・指數函數【指數圖形】》 完全對應的 （1）教用版學習單（含完整紅字詳解、標準函數圖形與一鍵匯出 PDF 功能） 與 （2）學用版學習單 HTML。
-（1）教用版學習單（支援直接下載 PDF 與高畫質列印）
-下方第一個檔案為教用版學習單，已將第 1～3 頁的所有表格填空、代數化簡，以及 (1)～(10) 的「函數圖形」與「與基準函數的合併圖形」 完整繪製填入。
- * 如何下載 PDF：打開下方教用版檔案後，點擊頁面頂部紅色的 「📥 直接下載教用版 PDF 檔」 按鈕，即可自動將 3 頁 A4 完整教用版轉存為 指數函數圖形_教用版.pdf 下載保存；或點擊 「🖨️ 系統列印 / 另存矢量 PDF」 輸出最高解析度的印刷級 PDF。
- * 切換底數範圍：頂部工具列還提供 「切換圖形底數：a > 1 ／ 0 < a < 1」 按鈕，可一鍵切換全卷 (1)～(10) 所有解答圖形的遞增／遞減形態。
+已根據您的需求與畫面截圖完成修正，將圖形畫布區塊移至「一、底數 a 的變化」與「二、圖形的比較」兩個表格的正中間，您可以點擊下方檔案直接下載更新後的網頁，或直接複製下方完整程式碼使用：
+修正重點說明
+ * 將圖形置於「一」和「二」表格中間：拆開原本綁在一起的左側外框，將 DOM 結構順序調整為 「一、底數 a 的變化」\rightarrow「圖形畫布區」\rightarrow「二、圖形的比較」。在手機版上，學生無論是拉動上方「一」的滑桿，或是點選下方「二」的比較圖形按鈕，都能直接對照中間的圖形；在電腦大螢幕上則透過 CSS Grid (lg:grid-rows-[auto_1fr]) 自動維持左控制、右大畫布的雙欄並排。
+ * 優化畫布內對稱軸標籤位置：針對第二張截圖中 ◀ 對稱軸：y 軸 (x = 0) ▶ 膠囊標籤與 (1, 2.00) 點座標重疊的情況，已將 y 軸對稱標籤移至 x 軸下方的 y 軸位置，避免遮擋第一象限的特徵點座標。
+完整修正後 HTML 程式碼
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chapter 5・指數函數【指數圖形】— 教用詳解版</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>指數函數。圖形探究</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@600;700&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+    
     :root {
-      --ans-red: #c81e1e;
-      --ans-bg: #fff5f5;
-      --border-dark: #1e293b;
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
+      --font-scale: 1.15;
     }
 
     body {
-      margin: 0;
-      padding: 0;
-      background-color: #cbd5e1;
-      font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
-      color: #0f172a;
-    }
-
-    /* 頂部操作工具列（列印與匯出 PDF 時自動隱藏） */
-    .no-print-toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #0f172a;
-      color: #fff;
-      padding: 10px 20px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    .toolbar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .badge-teacher {
-      background: #dc2626;
-      color: #fff;
-      font-weight: 700;
-      font-size: 13px;
-      padding: 3px 10px;
-      border-radius: 999px;
-    }
-
-    .toolbar-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
-    }
-
-    .btn-pdf {
-      background: #dc2626;
-      color: white;
-    }
-    .btn-pdf:hover {
-      background: #b91c1c;
-    }
-
-    .btn-print {
-      background: #2563eb;
-      color: white;
-    }
-    .btn-print:hover {
-      background: #1d4ed8;
-    }
-
-    .btn-mode {
-      background: #334155;
-      color: #f8fafc;
-      border: 1px solid #475569;
-    }
-    .btn-mode:hover {
-      background: #475569;
-    }
-
-    /* A4 頁面容器設定 */
-    #pdf-Wrapper {
-      width: 210mm;
-      margin: 20px auto;
-    }
-
-    .a4-page {
-      width: 210mm;
-      min-height: 296mm;
-      background: #ffffff;
-      padding: 12mm 14mm 12mm 14mm;
-      margin-bottom: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      page-break-after: always;
-      break-after: page;
-    }
-
-    .a4-page:last-child {
-      page-break-after: auto;
-      break-after: auto;
-    }
-
-    /* 頁首與章節標題 */
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      border-bottom: 2px solid #0f172a;
-      padding-bottom: 4px;
-      margin-bottom: 8px;
-    }
-
-    .chapter-tag {
-      font-size: 12pt;
-      font-weight: 800;
-      color: #1e293b;
-      letter-spacing: 0.5px;
-    }
-
-    .unit-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin: 6px 0 10px 0;
-    }
-
-    .unit-title {
-      font-size: 16pt;
-      font-weight: 800;
-      letter-spacing: 1px;
-    }
-
-    .student-info {
-      font-size: 10.5pt;
-      font-weight: 600;
-    }
-
-    .section-title {
-      font-size: 12.5pt;
-      font-weight: 800;
-      margin: 8px 0 6px 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .section-subtitle {
-      font-size: 10.5pt;
-      font-weight: 700;
-      color: #334155;
-    }
-
-    /* 表格通用樣式 */
-    table.ws-table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1.8px solid #0f172a;
-      font-size: 10pt;
-      margin-bottom: 8px;
-    }
-
-    table.ws-table th,
-    table.ws-table td {
-      border: 1px solid #334155;
-      padding: 5px 8px;
-      vertical-align: middle;
-    }
-
-    table.ws-table th {
+      font-family: 'Noto Sans TC', sans-serif;
       background-color: #f1f5f9;
-      font-weight: 800;
-      text-align: center;
+      color: #0f172a;
+      overscroll-behavior-y: none;
     }
 
-    .col-label {
-      background-color: #f8fafc;
-      font-weight: 700;
-      text-align: center;
-      width: 14%;
-    }
-
-    /* 數學字體與教師紅字詳解 */
-    .math {
+    .math-font {
       font-family: 'Times New Roman', Georgia, serif;
       font-style: italic;
-      font-weight: 600;
     }
 
-    .math-num {
-      font-family: 'Times New Roman', Georgia, serif;
-      font-style: normal;
-      font-weight: 600;
+    .mono-font {
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .frac {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      vertical-align: middle;
-      font-size: 0.85em;
-      line-height: 1;
-      margin: 0 2px;
+    /* 動態文字縮放系統（放大文字但鎖定版型不改變） */
+    .scale-xs {
+      font-size: calc(0.78rem * var(--font-scale));
+      line-height: 1.25;
     }
-    .frac-num {
-      border-bottom: 1px solid currentColor;
-      padding: 0 2px 1px 2px;
+    .scale-sm {
+      font-size: calc(0.88rem * var(--font-scale));
+      line-height: 1.3;
     }
-    .frac-den {
-      padding: 1px 2px 0 2px;
+    .scale-base {
+      font-size: calc(1rem * var(--font-scale));
+      line-height: 1.35;
     }
-
-    .ans {
-      color: var(--ans-red);
-      font-weight: 700;
+    .scale-lg {
+      font-size: calc(1.15rem * var(--font-scale));
+      line-height: 1.3;
     }
-
-    .ans-box {
-      display: inline-block;
-      color: var(--ans-red);
-      font-weight: 700;
-      border-bottom: 1.5px solid var(--ans-red);
-      padding: 0 4px;
+    .scale-xl {
+      font-size: calc(1.32rem * var(--font-scale));
+      line-height: 1.25;
     }
 
-    .circle-choice {
-      display: inline-block;
-      border: 2px solid var(--ans-red);
-      color: var(--ans-red);
-      border-radius: 999px;
-      padding: 0 5px;
-      font-weight: 800;
-      background: var(--ans-bg);
+    input[type="range"] {
+      accent-color: #2563eb;
     }
-
-    .strike-choice {
-      color: #94a3b8;
-      text-decoration: line-through;
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
     }
-
-    /* 圖形繪製表格樣式 */
-    .graph-cell {
-      padding: 3px !important;
-      text-align: center;
-      height: 98px;
-      width: 43%;
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
     }
-
-    .graph-cell-lg {
-      padding: 4px !important;
-      text-align: center;
-      height: 122px;
-      width: 43%;
-    }
-
-    .page-footer {
-      margin-top: auto;
-      text-align: center;
-      font-size: 9.5pt;
-      font-weight: 700;
-      color: #475569;
-      padding-top: 4px;
-    }
-
-    @media print {
-      body {
-        background: #fff;
-      }
-      .no-print-toolbar {
-        display: none !important;
-      }
-      #pdf-Wrapper {
-        width: 100%;
-        margin: 0;
-      }
-      .a4-page {
-        margin: 0;
-        box-shadow: none;
-        width: 210mm;
-        height: 297mm;
-      }
-      @page {
-        size: A4 portrait;
-        margin: 0;
-      }
+    canvas {
+      touch-action: none;
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-  <!-- 頂部控制與 PDF 下載列 -->
-  <div class="no-print-toolbar">
-    <div class="toolbar-left">
-      <span class="badge-teacher">教師專用詳解版</span>
-      <strong>Chapter 5・指數函數【指數圖形】學習單</strong>
-      <span id="currentBaseLabel" style="font-size:12px; color:#94a3b8;">（目前圖形範例底數：a = 2 &gt; 1）</span>
-    </div>
-    <div class="toolbar-actions">
-      <button class="btn btn-mode" onclick="toggleGraphBase()">
-        🔄 切換圖形底數：<span id="btnBaseText">改為 0 &lt; a &lt; 1 繪圖</span>
-      </button>
-      <button class="btn btn-pdf" onclick="downloadTeacherPDF()">
-        📥 直接下載教用版 PDF 檔
-      </button>
-      <button class="btn btn-print" onclick="window.print()">
-        🖨️ 系統列印 / 另存高畫質 PDF
+  <!-- 頂部導覽列 -->
+  <header class="bg-slate-900 text-white shadow-sm border-b border-slate-800 sticky top-0 z-30">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-2">
+      <h1 class="scale-xl font-bold tracking-tight whitespace-nowrap">指數函數。圖形探究</h1>
+      <button onclick="resetAll()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 active:bg-slate-600 text-slate-100 scale-sm font-semibold border border-slate-700 transition whitespace-nowrap">
+        全部重設
       </button>
     </div>
-  </div>
+  </header>
 
-  <div id="pdf-Wrapper">
+  <!-- 主要互動工作區：手機版依序為「一 → 圖形 → 二」（圖形夾在一與二中間）；電腦版自動左控制、右大畫布 -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto p-2.5 sm:p-4 grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[auto_1fr] gap-3.5 items-start">
 
-    <!-- ==================== 第 1 頁 ==================== -->
-    <div class="a4-page">
-      <div class="page-header">
-        <span class="chapter-tag">Chapter 5・指數函數</span>
-        <span style="font-size: 10pt; font-weight: 700; color: #c81e1e;">【教用詳解版】</span>
+    <!-- 區塊 1：【一、底數 a 的變化】（手機版排第 1，電腦版左欄上方） -->
+    <section class="w-full lg:col-span-5 xl:col-span-4 lg:col-start-1 lg:row-start-1 bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5">
+      <div class="flex items-center justify-between gap-2 mb-2.5">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="px-2 py-0.5 scale-xs font-bold rounded bg-blue-100 text-blue-800 shrink-0">一</span>
+          <h2 class="font-bold text-slate-800 scale-base truncate">底數 <span class="math-font">a</span> 的變化</h2>
+        </div>
+        <span id="baseRegimeBadge" class="scale-xs font-bold px-2.5 py-1 rounded-full bg-blue-600 text-white shrink-0 whitespace-nowrap">
+          a &gt; 1 遞增
+        </span>
       </div>
 
-      <div class="unit-title-row">
-        <div class="unit-title">【指數圖形】</div>
-        <div class="student-info">
-          班級：__________　座號：______　姓名：<span class="ans">教師詳解</span>
+      <!-- 只顯示【目前函數：y = 2.00^x】與【基準函數：y = 2^x】 -->
+      <div class="grid grid-cols-2 gap-2 mb-3">
+        <div class="bg-blue-50/90 border border-blue-200 rounded-xl px-2.5 py-3.5 flex items-center justify-center overflow-hidden">
+          <div class="scale-base font-bold text-blue-900 whitespace-nowrap">
+            目前函數：<span class="math-font">y</span> = <span id="currentAFormula" class="mono-font">2.00</span><sup><span class="math-font">x</span></sup>
+          </div>
+        </div>
+
+        <div onclick="lockCurrentAsInitial()" title="點擊可將目前底數設為基準函數 a₀" class="bg-slate-50 hover:bg-slate-100 active:bg-slate-200 cursor-pointer border border-slate-300 border-dashed rounded-xl px-2.5 py-3.5 flex items-center justify-center overflow-hidden transition">
+          <div class="scale-base font-bold text-slate-700 whitespace-nowrap">
+            基準函數：<span class="math-font">y</span> = <span id="initialAFormula" class="mono-font">2</span><sup><span class="math-font">x</span></sup>
+          </div>
         </div>
       </div>
 
-      <!-- 1. 底數的變化 -->
-      <div class="section-title">
-        <span>1. 底數的變化（基準函數 <span class="math">y = a<sup>x</sup></span>）</span>
+      <!-- 滑桿 -->
+      <div class="mb-2.5">
+        <div class="flex justify-between scale-xs text-slate-600 font-semibold mb-1 mono-font">
+          <span>0.20</span>
+          <span>a = 1</span>
+          <span>5.00</span>
+        </div>
+        <input id="aSlider" type="range" min="0.20" max="5.00" step="0.05" value="2.00" class="w-full h-2.5 bg-slate-200 rounded-lg cursor-pointer" />
       </div>
 
-      <table class="ws-table">
-        <thead>
-          <tr>
-            <th style="width: 15%;">底數</th>
-            <th style="width: 42.5%;"><span class="math">a &gt; 1</span></th>
-            <th style="width: 42.5%;"><span class="math">0 &lt; a &lt; 1</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="col-label">趨勢</td>
-            <td>由左至右嚴格 <span class="ans-box">遞增（上升）</span></td>
-            <td>由左至右嚴格 <span class="ans-box">遞減（下降）</span></td>
-          </tr>
-          <tr>
-            <td class="col-label">定點</td>
-            <td colspan="2">
-              不管 <span class="math">a</span> 是多少，一定通過 <span class="ans-box">定點 ( 0 , 1 )</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="col-label">漸近線</td>
-            <td colspan="2">
-              圖形絕對在 <span class="ans-box"><span class="math">x</span> 軸上方（即 <span class="math">y &gt; 0</span>），以 <span class="math">x</span> 軸（直線 <span class="math">y = 0</span>）為水平漸近線</span>
-            </td>
-          </tr>
-          <tr>
-            <td class="col-label">變化規律<br/><span style="font-size:8.5pt; font-weight:500; color:#475569;">(當底數越極端：<br/>a&gt;1 越大 / 0&lt;a&lt;1 越小)</span></td>
-            <td style="line-height: 1.65;">
-              <div style="font-size:9pt; color:#b91c1c; font-weight:700;">【當底數 <span class="math">a</span> 越大（如 <span class="math">2 → 3</span>）時】</div>
-              ⒜ 在第 I 象限，圖形越 <span class="circle-choice">陡峭</span> ／ <span class="strike-choice">平緩</span>（貼近 <span class="math">y</span> 軸）<br/>
-              ⒝ 在第 II 象限，圖形越 <span class="strike-choice">陡峭</span> ／ <span class="circle-choice">平緩</span>（貼近 <span class="math">x</span> 軸）
-            </td>
-            <td style="line-height: 1.65;">
-              <div style="font-size:9pt; color:#b91c1c; font-weight:700;">【當底數 <span class="math">a</span> 越小（如 <span class="math">1/2 → 1/4</span>）時】</div>
-              ⒜ 在第 I 象限，圖形越 <span class="strike-choice">陡峭</span> ／ <span class="circle-choice">平緩</span>（貼近 <span class="math">x</span> 軸）<br/>
-              ⒝ 在第 II 象限，圖形越 <span class="circle-choice">陡峭</span> ／ <span class="strike-choice">平緩</span>（貼近 <span class="math">y</span> 軸）
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- 2. 圖形的統整 -->
-      <div class="section-title" style="margin-top: 12px;">
-        <span>2. 圖形的統整</span>
-        <span class="section-subtitle">與基準圖形 <span class="math">y = a<sup>x</sup></span> 的對稱關係</span>
+      <!-- 快速底數按鈕（6欄固定） -->
+      <div class="grid grid-cols-6 gap-1.5 mb-2.5">
+        <button onclick="setBaseValue(0.25)" class="py-1.5 scale-sm font-bold rounded-lg border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100 transition mono-font whitespace-nowrap">1/4</button>
+        <button onclick="setBaseValue(0.5)" class="py-1.5 scale-sm font-bold rounded-lg border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100 transition mono-font whitespace-nowrap">1/2</button>
+        <button onclick="setBaseValue(0.75)" class="py-1.5 scale-sm font-bold rounded-lg border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100 transition mono-font whitespace-nowrap">3/4</button>
+        <button onclick="setBaseValue(1.5)" class="py-1.5 scale-sm font-bold rounded-lg border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100 transition mono-font whitespace-nowrap">1.5</button>
+        <button onclick="setBaseValue(2)" class="py-1.5 scale-sm font-bold rounded-lg border border-blue-300 bg-blue-50 text-blue-800 active:bg-blue-100 transition mono-font whitespace-nowrap">2</button>
+        <button onclick="setBaseValue(3)" class="py-1.5 scale-sm font-bold rounded-lg border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100 transition mono-font whitespace-nowrap">3</button>
       </div>
 
-      <table class="ws-table" style="flex: 1;">
-        <thead>
-          <tr>
-            <th style="width: 12%;">關係</th>
-            <th style="width: 23%;">函數</th>
-            <th style="width: 22%;">化簡結果</th>
-            <th style="width: 43%;">與基準函數 <span class="math">y = a<sup>x</sup></span> 的幾何關係</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td rowspan="3" class="col-label">次方與<br/>函數值<br/>加負號</td>
-            <td>⑴ <span class="math">y = a<sup>−x</sup></span></td>
-            <td style="text-align:center;"><span class="ans math">y = a<sup>−x</sup> = (1/a)<sup>x</sup></span></td>
-            <td>兩圖形 <span class="ans-box">左右</span> 對稱於 <span class="ans-box"><span class="math">y</span> 軸（直線 <span class="math">x = 0</span>）</span></td>
-          </tr>
-          <tr>
-            <td>⑵ <span class="math">y = −a<sup>x</sup></span></td>
-            <td style="text-align:center;"><span class="ans math">y = −a<sup>x</sup></span> <span class="ans" style="font-size:8.5pt;">(即 −y = a<sup>x</sup>)</span></td>
-            <td>兩圖形 <span class="ans-box">上下</span> 對稱於 <span class="ans-box"><span class="math">x</span> 軸（直線 <span class="math">y = 0</span>）</span></td>
-          </tr>
-          <tr>
-            <td>⑶ <span class="math">y = −a<sup>−x</sup></span></td>
-            <td style="text-align:center;"><span class="ans math">y = −a<sup>−x</sup></span> <span class="ans" style="font-size:8.5pt;">(即 −y = a<sup>−x</sup>)</span></td>
-            <td>兩圖形對稱於 <span class="ans-box">原點 <span class="math">( 0 , 0 )</span></span></td>
-          </tr>
-          <tr>
-            <td rowspan="4" class="col-label">倒數底數<br/><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><br/>的變換</td>
-            <td>⑷ <span class="math">y = </span><span class="math-num">(</span><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><span class="math-num">)</span><sup><span class="math">x</span></sup></td>
-            <td style="text-align:center;"><span class="ans math">y = (a<sup>−1</sup>)<sup>x</sup> = a<sup>−x</sup></span></td>
-            <td>兩圖形 <span class="ans-box">左右</span> 對稱於 <span class="ans-box"><span class="math">y</span> 軸</span> <span class="ans" style="font-size:8.5pt;">（與 ⑴ 圖形相同）</span></td>
-          </tr>
-          <tr>
-            <td>⑸ <span class="math">y = </span><span class="math-num">(</span><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><span class="math-num">)</span><sup><span class="math">−x</span></sup></td>
-            <td style="text-align:center;"><span class="ans math">y = (a<sup>−1</sup>)<sup>−x</sup> = a<sup>x</sup></span></td>
-            <td>兩圖形 <span class="ans-box">完全重合（同一個圖形）</span></td>
-          </tr>
-          <tr>
-            <td>⑹ <span class="math">y = −</span><span class="math-num">(</span><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><span class="math-num">)</span><sup><span class="math">x</span></sup></td>
-            <td style="text-align:center;"><span class="ans math">y = −(a<sup>−1</sup>)<sup>x</sup> = −a<sup>−x</sup></span></td>
-            <td>兩圖形對稱於 <span class="ans-box">原點 <span class="math">( 0 , 0 )</span></span> <span class="ans" style="font-size:8.5pt;">（與 ⑶ 圖形相同）</span></td>
-          </tr>
-          <tr>
-            <td>⑺ <span class="math">y = −</span><span class="math-num">(</span><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><span class="math-num">)</span><sup><span class="math">−x</span></sup></td>
-            <td style="text-align:center;"><span class="ans math">y = −(a<sup>−1</sup>)<sup>−x</sup> = −a<sup>x</sup></span></td>
-            <td>兩圖形 <span class="ans-box">上下</span> 對稱於 <span class="ans-box"><span class="math">x</span> 軸</span> <span class="ans" style="font-size:8.5pt;">（與 ⑵ 圖形相同）</span></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="page-footer">1</div>
-    </div>
-
-    <!-- ==================== 第 2 頁 ==================== -->
-    <div class="a4-page">
-      <div class="page-header">
-        <span class="chapter-tag">Chapter 5・指數函數</span>
-        <span style="font-size: 10pt; font-weight: 700; color: #c81e1e;">【指數函數圖形的差異 — 教用詳解圖】</span>
-      </div>
-
-      <table class="ws-table" style="flex: 1;">
-        <thead>
-          <tr>
-            <th style="width: 14%;">函數</th>
-            <th style="width: 43%;">函數圖形（紅線為該題函數）</th>
-            <th style="width: 43%;">與基準函數 <span class="math" style="color:#2563eb;">y = a<sup>x</sup> (藍線)</span> 的合併圖形</th>
-          </tr>
-        </thead>
-        <tbody id="page2GraphRows">
-          <!-- 由 JS 自動產生 (1)~(7) 的精準 SVG 數學圖形 -->
-        </tbody>
-      </table>
-
-      <div class="page-footer">2</div>
-    </div>
-
-    <!-- ==================== 第 3 頁 ==================== -->
-    <div class="a4-page">
-      <div class="page-header">
-        <span class="chapter-tag">Chapter 5・指數函數</span>
-        <span style="font-size: 10pt; font-weight: 700; color: #c81e1e;">【教用詳解版】</span>
-      </div>
-
-      <div class="section-title">
-        <span>3. 包含絕對值的圖形變化</span>
-        <span class="section-subtitle">與基準圖形 <span class="math">y = a<sup>x</sup></span> 的對稱關係</span>
-      </div>
-
-      <table class="ws-table">
-        <thead>
-          <tr>
-            <th style="width: 8%;">題號</th>
-            <th style="width: 15%;">函數</th>
-            <th style="width: 27%;">化簡結果（分段討論）</th>
-            <th style="width: 14%;">轉折點</th>
-            <th style="width: 36%;">與基準函數的幾何關係</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="col-label">⑻</td>
-            <td style="text-align:center;"><span class="math">y = |a<sup>x</sup>|</span></td>
-            <td style="text-align:center;">
-              <span class="ans">因 <span class="math">a<sup>x</sup> &gt; 0</span> 恆成立<br/>故 <span class="math">y = a<sup>x</sup></span></span>
-            </td>
-            <td style="text-align:center;"><span class="ans">無轉折點<br/>(必過 (0,1))</span></td>
-            <td>兩圖形 <span class="ans-box">完全重合（無 <span class="math">x</span> 軸下方圖形可折）</span></td>
-          </tr>
-          <tr>
-            <td rowspan="2" class="col-label">⑼</td>
-            <td rowspan="2" style="text-align:center;"><span class="math">y = a<sup>|x|</sup></span></td>
-            <td><span class="ans">當 <span class="math">x ≥ 0</span> 時，<span class="math">y = a<sup>x</sup></span></span></td>
-            <td rowspan="2" style="text-align:center;"><span class="ans math">( 0 , 1 )</span></td>
-            <td rowspan="2">
-              圖形有 <span class="ans-box">左右對稱兩支（保留 <span class="math">x ≥ 0</span> 並複製至左半）</span>，自身對稱於 <span class="ans-box"><span class="math">y</span> 軸</span>
-            </td>
-          </tr>
-          <tr>
-            <td><span class="ans">當 <span class="math">x &lt; 0</span> 時，<span class="math">y = a<sup>−x</sup></span></span></td>
-          </tr>
-          <tr>
-            <td rowspan="2" class="col-label">⑽</td>
-            <td rowspan="2" style="text-align:center;"><span class="math">|y| = a<sup>x</sup></span></td>
-            <td><span class="ans">當 <span class="math">y &gt; 0</span> 時，<span class="math">y = a<sup>x</sup></span></span></td>
-            <td rowspan="2" style="text-align:center;"><span class="ans">無轉折點<br/>(過 (0,±1))</span></td>
-            <td rowspan="2">
-              圖形有 <span class="ans-box">上下兩支（<span class="math">y = a<sup>x</sup></span> 與 <span class="math">y = −a<sup>x</sup></span>）</span>，上下對稱於 <span class="ans-box"><span class="math">x</span> 軸（非函數）</span>
-            </td>
-          </tr>
-          <tr>
-            <td><span class="ans">當 <span class="math">y &lt; 0</span> 時，<span class="math">y = −a<sup>x</sup></span></span></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- (8)~(10) 圖形表 -->
-      <table class="ws-table" style="margin-top: 6px; flex: 1;">
-        <thead>
-          <tr>
-            <th style="width: 14%;">函數</th>
-            <th style="width: 43%;">函數圖形（紅線為該題圖形）</th>
-            <th style="width: 43%;">與基準函數 <span class="math" style="color:#2563eb;">y = a<sup>x</sup> (藍線)</span> 的合併圖形</th>
-          </tr>
-        </thead>
-        <tbody id="page3GraphRows">
-          <!-- 由 JS 自動產生 (8)~(10) 的精準 SVG 數學圖形 -->
-        </tbody>
-      </table>
-
-      <div class="page-footer">3</div>
-    </div>
-
-  </div>
-
-  <script>
-    let currentA = 2.0; // 預設 a = 2 (>1)，可切換為 0.5 (0<a<1)
-
-    const ITEMS_P2 = [
-      { num: '⑴', title: 'y = a<sup>−x</sup>', evals: [(x, a) => Math.pow(a, -x)], sym: 'y', note: '對稱於 y 軸' },
-      { num: '⑵', title: 'y = −a<sup>x</sup>', evals: [(x, a) => -Math.pow(a, x)], sym: 'x', note: '對稱於 x 軸' },
-      { num: '⑶', title: 'y = −a<sup>−x</sup>', evals: [(x, a) => -Math.pow(a, -x)], sym: 'origin', note: '對稱於原點' },
-      { num: '⑷', title: 'y = (1/a)<sup>x</sup>', evals: [(x, a) => Math.pow(1/a, x)], sym: 'y', note: '即 y = a^(−x)' },
-      { num: '⑸', title: 'y = (1/a)<sup>−x</sup>', evals: [(x, a) => Math.pow(1/a, -x)], sym: 'same', note: '與 y = a^x 重合' },
-      { num: '⑹', title: 'y = −(1/a)<sup>x</sup>', evals: [(x, a) => -Math.pow(1/a, x)], sym: 'origin', note: '即 y = −a^(−x)' },
-      { num: '⑺', title: 'y = −(1/a)<sup>−x</sup>', evals: [(x, a) => -Math.pow(1/a, -x)], sym: 'x', note: '即 y = −a^x' }
-    ];
-
-    const ITEMS_P3 = [
-      { num: '⑻', title: 'y = |a<sup>x</sup>|', evals: [(x, a) => Math.abs(Math.pow(a, x))], sym: 'same', note: '與 y = a^x 完全重合' },
-      { num: '⑼', title: 'y = a<sup>|x|</sup>', evals: [(x, a) => Math.pow(a, Math.abs(x))], sym: 'y-self', note: '在 (0,1) 轉折，對稱於 y 軸' },
-      { num: '⑽', title: '|y| = a<sup>x</sup>', evals: [(x, a) => Math.pow(a, x), (x, a) => -Math.pow(a, x)], sym: 'x-both', note: 'y = ±a^x 上下兩支' }
-    ];
-
-    function buildSVG(item, includeBase, isLarge = false) {
-      const w = 240;
-      const h = isLarge ? 114 : 90;
-      const cx = w / 2;
-      const cy = h / 2;
-      const scaleX = 28;
-      const scaleY = isLarge ? 16 : 13;
-
-      const toPx = (x, y) => [cx + x * scaleX, cy - y * scaleY];
-
-      const makePath = (fn) => {
-        let d = '';
-        let started = false;
-        for (let x = -3.4; x <= 3.4; x += 0.08) {
-          const y = fn(x, currentA);
-          if (Math.abs(y) > 3.6) {
-            started = false;
-            continue;
-          }
-          const [px, py] = toPx(x, y);
-          d += (started ? `L ${px.toFixed(1)} ${py.toFixed(1)} ` : `M ${px.toFixed(1)} ${py.toFixed(1)} `);
-          started = true;
-        }
-        return d;
-      };
-
-      let svg = `<svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">`;
-
-      // 淺色網格線
-      for (let gx = -3; gx <= 3; gx++) {
-        const [px] = toPx(gx, 0);
-        svg += `<line x1="${px}" y1="4" x2="${px}" y2="${h-4}" stroke="#e2e8f0" stroke-width="0.8"/>`;
-      }
-      for (let gy = -2; gy <= 2; gy++) {
-        const [, py] = toPx(0, gy);
-        svg += `<line x1="8" y1="${py}" x2="${w-8}" y2="${py}" stroke="#e2e8f0" stroke-width="0.8"/>`;
-      }
-
-      // 對稱軸高亮提示 (合併圖才顯示)
-      if (includeBase) {
-        if (item.sym === 'y' || item.sym === 'y-self') {
-          svg += `<line x1="${cx}" y1="4" x2="${cx}" y2="${h-4}" stroke="#f59e0b" stroke-width="4" stroke-opacity="0.35"/>`;
-        } else if (item.sym === 'x' || item.sym === 'x-both') {
-          svg += `<line x1="8" y1="${cy}" x2="${w-8}" y2="${cy}" stroke="#f59e0b" stroke-width="4" stroke-opacity="0.35"/>`;
-        } else if (item.sym === 'origin') {
-          svg += `<circle cx="${cx}" cy="${cy}" r="7" fill="#f59e0b" fill-opacity="0.28"/>`;
-        }
-      }
-
-      // 坐標軸
-      svg += `
-        <line x1="8" y1="${cy}" x2="${w-8}" y2="${cy}" stroke="#334155" stroke-width="1.3"/>
-        <line x1="${cx}" y1="4" x2="${cx}" y2="${h-4}" stroke="#334155" stroke-width="1.3"/>
-        <text x="${w-14}" y="${cy-4}" font-size="9" font-family="serif" font-style="italic" fill="#1e293b">x</text>
-        <text x="${cx+5}" y="12" font-size="9" font-family="serif" font-style="italic" fill="#1e293b">y</text>
-      `;
-
-      // 若為合併圖，先畫基準函數 y = a^x (藍色)
-      if (includeBase) {
-        const basePath = makePath((x, a) => Math.pow(a, x));
-        const isOverlap = (item.sym === 'same' || item.sym === 'x-both' || item.sym === 'y-self');
-        svg += `<path d="${basePath}" fill="none" stroke="#2563eb" stroke-width="2.2" ${isOverlap ? 'stroke-dasharray="5,3"' : ''}/>`;
-      }
-
-      // 畫目標函數 (紅色)
-      item.evals.forEach((fn) => {
-        const p = makePath(fn);
-        const isDashedOverlap = includeBase && (item.sym === 'same' || item.sym === 'x-both');
-        svg += `<path d="${p}" fill="none" stroke="#dc2626" stroke-width="2.3" ${isDashedOverlap ? 'stroke-dasharray="4,4" stroke-dashoffset="4"' : ''}/>`;
-      });
-
-      // 標示定點 (0,1) 或 (0,-1)
-      const y0Vals = item.evals.map(fn => fn(0, currentA));
-      if (includeBase && !y0Vals.includes(1)) {
-        const [bx, by] = toPx(0, 1);
-        svg += `<circle cx="${bx}" cy="${by}" r="2.8" fill="#2563eb"/>`;
-        svg += `<text x="${bx+4}" y="${by-3}" font-size="8.5" font-weight="bold" fill="#1d4ed8">(0,1)</text>`;
-      }
-      y0Vals.forEach(y0 => {
-        const [px, py] = toPx(0, y0);
-        svg += `<circle cx="${px}" cy="${py}" r="3" fill="#dc2626"/>`;
-        const labelY = y0 > 0 ? py - 3 : py + 9;
-        svg += `<text x="${px+4}" y="${labelY}" font-size="8.5" font-weight="bold" fill="#b91c1c">(0,${y0})</text>`;
-      });
-
-      // 右下角簡短提示
-      if (includeBase) {
-        svg += `<text x="${w-8}" y="${h-5}" text-anchor="end" font-size="8.5" font-weight="bold" fill="#b91c1c">${item.note}</text>`;
-      }
-
-      svg += `</svg>`;
-      return svg;
-    }
-
-    function renderAllGraphs() {
-      const tbody2 = document.getElementById('page2GraphRows');
-      tbody2.innerHTML = ITEMS_P2.map(item => `
-        <tr>
-          <td class="col-label">
-            <div style="font-size:11pt;">${item.num}</div>
-            <div class="math" style="font-size:9pt; color:#334155;">${item.title}</div>
-          </td>
-          <td class="graph-cell">${buildSVG(item, false, false)}</td>
-          <td class="graph-cell">${buildSVG(item, true, false)}</td>
-        </tr>
-      `).join('');
-
-      const tbody3 = document.getElementById('page3GraphRows');
-      tbody3.innerHTML = ITEMS_P3.map(item => `
-        <tr>
-          <td class="col-label">
-            <div style="font-size:11pt;">${item.num}</div>
-            <div class="math" style="font-size:9.5pt; color:#334155;">${item.title}</div>
-          </td>
-          <td class="graph-cell-lg">${buildSVG(item, false, true)}</td>
-          <td class="graph-cell-lg">${buildSVG(item, true, true)}</td>
-        </tr>
-      `).join('');
-    }
-
-    function toggleGraphBase() {
-      currentA = (currentA > 1) ? 0.5 : 2.0;
-      document.getElementById('currentBaseLabel').textContent =
-        currentA > 1 ? '（目前圖形範例底數：a = 2 > 1）' : '（目前圖形範例底數：a = 1/2, 0 < a < 1）';
-      document.getElementById('btnBaseText').textContent =
-        currentA > 1 ? '改為 0 < a < 1 繪圖' : '改為 a > 1 繪圖';
-      renderAllGraphs();
-    }
-
-    function downloadTeacherPDF() {
-      const element = document.getElementById('pdf-Wrapper');
-      const opt = {
-        margin: 0,
-        filename: '指數函數圖形_教用版.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'] }
-      };
-      html2pdf().set(opt).from(element).save();
-    }
-
-    renderAllGraphs();
-  </script>
-</body>
-</html>
-
-（2）學用版學習單 HTML（供學生填寫或列印空白學習單）
-下方第二個檔案為學用版學習單 HTML，完整還原《Chapter 5・指數函數【指數圖形】》3 頁結構：
- * 支援數位填答與紙本列印兩用：表格中的所有空格皆設有可直接輸入文字的欄位（列印時自動轉為乾淨底線），選項 陡峭／平緩 可直接點擊圈選，第 2、3 頁的 (1)～(10) 圖形區則附有乾淨的標準直角坐標格線與 (0,1)、(0,-1) 刻度供學生作圖。
- * 一鍵保存 HTML：頂部配有 「💾 下載此學用版 HTML 檔」 按鈕，點擊即可直接將檔案存成 指數函數圖形_學用版.html。
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chapter 5・指數函數【指數圖形】— 學用版學習單</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap');
-
-    * {
-      box-sizing: border-box;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #e2e8f0;
-      font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
-      color: #0f172a;
-    }
-
-    /* 頂部工具列（列印時自動隱藏） */
-    .no-print-toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #1e293b;
-      color: #fff;
-      padding: 10px 20px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .badge-student {
-      background: #2563eb;
-      color: #fff;
-      font-weight: 700;
-      font-size: 13px;
-      padding: 3px 10px;
-      border-radius: 999px;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
-    }
-
-    .btn-download {
-      background: #10b981;
-      color: white;
-    }
-    .btn-download:hover {
-      background: #059669;
-    }
-
-    .btn-print {
-      background: #3b82f6;
-      color: white;
-    }
-    .btn-print:hover {
-      background: #2563eb;
-    }
-
-    /* A4 頁面容器設定 */
-    .worksheet-container {
-      width: 210mm;
-      margin: 20px auto;
-    }
-
-    .a4-page {
-      width: 210mm;
-      min-height: 296mm;
-      background: #ffffff;
-      padding: 12mm 14mm 12mm 14mm;
-      margin-bottom: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      page-break-after: always;
-      break-after: page;
-    }
-
-    .a4-page:last-child {
-      page-break-after: auto;
-      break-after: auto;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      border-bottom: 2px solid #0f172a;
-      padding-bottom: 4px;
-      margin-bottom: 8px;
-    }
-
-    .chapter-tag {
-      font-size: 12pt;
-      font-weight: 800;
-      color: #1e293b;
-      letter-spacing: 0.5px;
-    }
-
-    .unit-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin: 6px 0 10px 0;
-    }
-
-    .unit-title {
-      font-size: 16pt;
-      font-weight: 800;
-      letter-spacing: 1px;
-    }
-
-    .student-info {
-      font-size: 10.5pt;
-      font-weight: 600;
-    }
-
-    .info-input {
-      border: none;
-      border-bottom: 1.5px solid #334155;
-      width: 70px;
-      text-align: center;
-      font-size: 10.5pt;
-      font-family: inherit;
-      outline: none;
-    }
-
-    .section-title {
-      font-size: 12.5pt;
-      font-weight: 800;
-      margin: 8px 0 6px 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .section-subtitle {
-      font-size: 10.5pt;
-      font-weight: 700;
-      color: #334155;
-    }
-
-    table.ws-table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1.8px solid #0f172a;
-      font-size: 10.5pt;
-      margin-bottom: 8px;
-    }
-
-    table.ws-table th,
-    table.ws-table td {
-      border: 1px solid #334155;
-      padding: 6px 8px;
-      vertical-align: middle;
-    }
-
-    table.ws-table th {
-      background-color: #f1f5f9;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .col-label {
-      background-color: #f8fafc;
-      font-weight: 700;
-      text-align: center;
-      width: 14%;
-    }
-
-    .math {
-      font-family: 'Times New Roman', Georgia, serif;
-      font-style: italic;
-      font-weight: 600;
-    }
-
-    .math-num {
-      font-family: 'Times New Roman', Georgia, serif;
-      font-style: normal;
-      font-weight: 600;
-    }
-
-    .frac {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      vertical-align: middle;
-      font-size: 0.85em;
-      line-height: 1;
-      margin: 0 2px;
-    }
-    .frac-num {
-      border-bottom: 1px solid currentColor;
-      padding: 0 2px 1px 2px;
-    }
-    .frac-den {
-      padding: 1px 2px 0 2px;
-    }
-
-    /* 學生填空輸入框 */
-    .blank-input {
-      border: none;
-      border-bottom: 1.2px solid #475569;
-      background: transparent;
-      font-size: 10pt;
-      font-family: inherit;
-      color: #1d4ed8;
-      font-weight: 600;
-      padding: 1px 4px;
-      outline: none;
-      text-align: center;
-    }
-    .blank-input:focus {
-      border-bottom-color: #2563eb;
-      background-color: #eff6ff;
-    }
-
-    /* 可點擊圈選的選項 */
-    .choice-toggle {
-      cursor: pointer;
-      padding: 1px 5px;
-      border-radius: 999px;
-      border: 1.5px solid transparent;
-      user-select: none;
-      transition: all 0.12s;
-    }
-    .choice-toggle:hover {
-      background: #f1f5f9;
-    }
-    .choice-toggle.selected {
-      border-color: #2563eb;
-      color: #1d4ed8;
-      font-weight: 800;
-      background: #eff6ff;
-    }
-
-    /* 空白座標平面格 */
-    .graph-cell {
-      padding: 3px !important;
-      text-align: center;
-      height: 98px;
-      width: 43%;
-    }
-
-    .graph-cell-lg {
-      padding: 4px !important;
-      text-align: center;
-      height: 122px;
-      width: 43%;
-    }
-
-    .page-footer {
-      margin-top: auto;
-      text-align: center;
-      font-size: 9.5pt;
-      font-weight: 700;
-      color: #475569;
-      padding-top: 4px;
-    }
-
-    @media print {
-      body {
-        background: #fff;
-      }
-      .no-print-toolbar {
-        display: none !important;
-      }
-      .worksheet-container {
-        width: 100%;
-        margin: 0;
-      }
-      .a4-page {
-        margin: 0;
-        box-shadow: none;
-        width: 210mm;
-        height: 297mm;
-      }
-      @page {
-        size: A4 portrait;
-        margin: 0;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- 頂部操作列 -->
-  <div class="no-print-toolbar">
-    <div style="display:flex; align-items:center; gap:10px;">
-      <span class="badge-student">學生課堂學習單</span>
-      <strong>Chapter 5・指數函數【指數圖形】學用版</strong>
-    </div>
-    <div style="display:flex; gap:8px;">
-      <button class="btn btn-download" onclick="downloadStudentHTML()">
-        💾 下載此學用版 HTML 檔
-      </button>
-      <button class="btn btn-print" onclick="window.print()">
-        🖨️ 列印學習單 / 另存 PDF
-      </button>
-    </div>
-  </div>
-
-  <div class="worksheet-container">
-
-    <!-- ==================== 第 1 頁 ==================== -->
-    <div class="a4-page">
-      <div class="page-header">
-        <span class="chapter-tag">Chapter 5・指數函數</span>
-      </div>
-
-      <div class="unit-title-row">
-        <div class="unit-title">【指數圖形】</div>
-        <div class="student-info">
-          班級：<input type="text" class="info-input" />　
-          座號：<input type="text" class="info-input" style="width:50px;" />　
-          姓名：<input type="text" class="info-input" style="width:95px;" />
+      <!-- 保留基準圖形與殘影控制 -->
+      <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-1 scale-xs">
+        <div class="flex items-center gap-3 min-w-0">
+          <label class="inline-flex items-center gap-1.5 cursor-pointer select-none text-slate-800 font-semibold whitespace-nowrap">
+            <input type="checkbox" id="showInitialGhost" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+            保留基準圖形
+          </label>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer select-none text-slate-800 font-semibold whitespace-nowrap">
+            <input type="checkbox" id="showTrailGhost" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500" />
+            過程殘影
+          </label>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button onclick="lockCurrentAsInitial()" class="text-blue-600 hover:text-blue-800 font-semibold underline whitespace-nowrap">
+            設為基準
+          </button>
+          <button onclick="clearGhostTrails()" class="text-slate-500 hover:text-red-600 font-semibold underline whitespace-nowrap">
+            清除殘影
+          </button>
         </div>
       </div>
+    </section>
 
-      <!-- 1. 底數的變化 -->
-      <div class="section-title">
-        <span>1. 底數的變化</span>
+    <!-- 區塊 2：【互動繪圖畫布區】（放在「一」與「二」兩個表格的正中間！電腦版自動固定於右側大欄） -->
+    <section class="w-full lg:col-span-7 xl:col-span-8 lg:col-start-6 xl:col-start-5 lg:row-start-1 lg:row-span-2 flex flex-col">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2.5 sm:p-4 flex flex-col">
+
+        <!-- 畫布頂部工具列 -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-3 scale-xs">
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-800 font-semibold select-none whitespace-nowrap">
+              <input type="checkbox" id="showKeyPoints" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
+              特殊點 <span class="math-font">( -1 , 0 , 1 )</span>
+            </label>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-800 font-semibold select-none whitespace-nowrap">
+              <input type="checkbox" id="showSymmetryGuides" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
+              對稱軸／對稱中心
+            </label>
+          </div>
+
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <!-- 文字大小縮放控制組 -->
+            <div class="inline-flex items-center bg-blue-50 border border-blue-200 rounded-lg p-0.5 mr-1">
+              <button onclick="adjustFontSize(-0.1)" title="縮小文字" class="px-2 py-0.5 scale-xs rounded-md hover:bg-blue-100 active:bg-blue-200 text-blue-900 font-bold transition whitespace-nowrap">
+                A-
+              </button>
+              <span id="fontScaleLabel" class="px-1.5 scale-xs font-bold text-blue-800 mono-font whitespace-nowrap">文字放大</span>
+              <button onclick="adjustFontSize(0.1)" title="放大文字" class="px-2 py-0.5 scale-xs rounded-md bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold transition whitespace-nowrap">
+                A+
+              </button>
+            </div>
+
+            <button onclick="zoomCanvas(1.25)" title="放大坐標系" class="w-7 h-7 flex items-center justify-center scale-sm rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold">＋</button>
+            <button onclick="zoomCanvas(0.8)" title="縮小坐標系" class="w-7 h-7 flex items-center justify-center scale-sm rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold">－</button>
+            <button onclick="resetView()" class="px-2.5 py-1 scale-xs rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold whitespace-nowrap">重設</button>
+          </div>
+        </div>
+
+        <!-- 重合圖形醒目橫幅提示 -->
+        <div id="overlapAlertBanner" class="hidden mb-2 px-3 py-2 rounded-xl bg-amber-50 border-2 border-amber-400 text-amber-950 scale-sm font-bold flex items-center gap-2 shadow-sm">
+          <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-400 text-amber-950 font-extrabold shrink-0">!</span>
+          <span id="overlapAlertText">偵測到完全重合的圖形！畫布已用「雙色交錯虛實線＋螢光底色」標示。</span>
+        </div>
+
+        <!-- 互動 Canvas 容器 -->
+        <div class="relative w-full h-[360px] sm:h-[440px] lg:h-[calc(100vh-175px)] min-h-[360px] max-h-[720px] bg-slate-50 rounded-xl border border-slate-200 overflow-hidden select-none">
+          <canvas id="graphCanvas" class="w-full h-full cursor-crosshair"></canvas>
+
+          <!-- 左上角浮動動態圖例 -->
+          <div id="floatingLegend" class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[240px] sm:max-w-xs scale-xs space-y-1 pointer-events-none">
+            <!-- JS 動態更新 -->
+          </div>
+
+          <!-- 右上角滑鼠/觸控十字游標數值追蹤器 -->
+          <div id="cursorReadout" class="hidden absolute top-2.5 right-2.5 bg-slate-900/90 text-white rounded-xl p-2.5 scale-xs mono-font shadow-md pointer-events-none space-y-0.5 min-w-[155px] sm:min-w-[180px]">
+            <!-- JS 動態更新 -->
+          </div>
+
+          <!-- 左下角精簡操作提示 -->
+          <div class="absolute bottom-2 left-2.5 bg-white/85 backdrop-blur px-2.5 py-1 rounded border border-slate-200 scale-xs text-slate-600 font-medium pointer-events-none">
+            單指或滑鼠拖曳平移 ‧ 雙指或滾輪縮放
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 區塊 3：【二、圖形的比較】（手機版排在圖形下方，電腦版左欄下方） -->
+    <section class="w-full lg:col-span-5 xl:col-span-4 lg:col-start-1 lg:row-start-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5 flex flex-col">
+      <div class="flex items-center justify-between mb-2.5">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="px-2 py-0.5 scale-xs font-bold rounded bg-indigo-100 text-indigo-800 shrink-0">二</span>
+          <h2 class="font-bold text-slate-800 scale-base truncate">圖形的比較</h2>
+        </div>
+        <button onclick="clearAllComparisons()" class="scale-xs px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold transition whitespace-nowrap shrink-0">
+          僅留基準圖
+        </button>
       </div>
 
-      <table class="ws-table">
-        <thead>
-          <tr>
-            <th style="width: 15%;">底數</th>
-            <th style="width: 42.5%;"><span class="math">a &gt; 1</span></th>
-            <th style="width: 42.5%;"><span class="math">0 &lt; a &lt; 1</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="col-label">趨勢</td>
-            <td>由左至右嚴格 <input type="text" class="blank-input" style="width: 130px;" /></td>
-            <td>由左至右嚴格 <input type="text" class="blank-input" style="width: 130px;" /></td>
-          </tr>
-          <tr>
-            <td class="col-label">定點</td>
-            <td colspan="2">
-              不管 <span class="math">a</span> 是多少，一定通過 <input type="text" class="blank-input" style="width: 240px;" />
-            </td>
-          </tr>
-          <tr>
-            <td class="col-label">漸近線</td>
-            <td colspan="2">
-              圖形絕對在 <input type="text" class="blank-input" style="width: 340px;" />
-            </td>
-          </tr>
-          <tr>
-            <td class="col-label">變化規律</td>
-            <td style="line-height: 1.8;">
-              ⒜ 在第 I 象限，圖形越
-              <span class="choice-toggle" onclick="this.classList.toggle('selected')">陡峭</span>／<span class="choice-toggle" onclick="this.classList.toggle('selected')">平緩</span><br/>
-              ⒝ 在第 II 象限，圖形越
-              <span class="choice-toggle" onclick="this.classList.toggle('selected')">陡峭</span>／<span class="choice-toggle" onclick="this.classList.toggle('selected')">平緩</span>
-            </td>
-            <td style="line-height: 1.8;">
-              ⒜ 在第 I 象限，圖形越
-              <span class="choice-toggle" onclick="this.classList.toggle('selected')">陡峭</span>／<span class="choice-toggle" onclick="this.classList.toggle('selected')">平緩</span><br/>
-              ⒝ 在第 II 象限，圖形越
-              <span class="choice-toggle" onclick="this.classList.toggle('selected')">陡峭</span>／<span class="choice-toggle" onclick="this.classList.toggle('selected')">平緩</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- 2. 圖形的統整 -->
-      <div class="section-title" style="margin-top: 12px;">
-        <span>2. 圖形的統整</span>
-        <span class="section-subtitle">與基準圖形 <span class="math">y = a<sup>x</sup></span> 的對稱關係</span>
+      <!-- 雙列並排（2X2 固定網格） -->
+      <div class="grid grid-cols-2 gap-2 mb-2.5">
+        <button onclick="applyPreset('reciprocal')" class="scale-xs py-1.5 px-2 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-bold transition text-center whitespace-nowrap truncate">
+          ① 倒數與負指數
+        </button>
+        <button onclick="applyPreset('symmetry')" class="scale-xs py-1.5 px-2 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold transition text-center whitespace-nowrap truncate">
+          ② 四象限對稱
+        </button>
+        <button onclick="applyPreset('absX')" class="scale-xs py-1.5 px-2 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition text-center whitespace-nowrap truncate">
+          ③ y = ±a<sup>|x|</sup>
+        </button>
+        <button onclick="applyPreset('absY')" class="scale-xs py-1.5 px-2 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold transition text-center whitespace-nowrap truncate">
+          ④ |y| = a<sup>x</sup> 與 |a<sup>x</sup>|
+        </button>
       </div>
 
-      <table class="ws-table" style="flex: 1;">
-        <thead>
-          <tr>
-            <th style="width: 12%;">關係</th>
-            <th style="width: 23%;">函數</th>
-            <th style="width: 22%;">化簡結果</th>
-            <th style="width: 43%;">與基準函數的幾何關係</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td rowspan="3" class="col-label"></td>
-            <td>⑴ <span class="math">y = a<sup>−x</sup></span></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td>兩圖形 <input type="text" class="blank-input" style="width: 70px;" /> 對稱於 <input type="text" class="blank-input" style="width: 90px;" /></td>
-          </tr>
-          <tr>
-            <td>⑵ <span class="math">y = −a<sup>x</sup></span></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td>兩圖形 <input type="text" class="blank-input" style="width: 70px;" /> 對稱於 <input type="text" class="blank-input" style="width: 90px;" /></td>
-          </tr>
-          <tr>
-            <td>⑶ <span class="math">y = −a<sup>−x</sup></span></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td>兩圖形對稱於 <input type="text" class="blank-input" style="width: 140px;" /></td>
-          </tr>
-          <tr>
-            <td rowspan="4" class="col-label"></td>
-            <td>⑷ <span class="math">y = </span><span class="math-num">(</span><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><span class="math-num">)</span><sup><span class="math">x</span></sup></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td>兩圖形 <input type="text" class="blank-input" style="width: 70px;" /> 對稱於 <input type="text" class="blank-input" style="width: 90px;" /></td>
-          </tr>
-          <tr>
-            <td>⑸ <span class="math">y = </span><span class="math-num">(</span><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><span class="math-num">)</span><sup><span class="math">−x</span></sup></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td>兩圖形 <input type="text" class="blank-input" style="width: 160px;" /></td>
-          </tr>
-          <tr>
-            <td>⑹ <span class="math">y = −</span><span class="math-num">(</span><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><span class="math-num">)</span><sup><span class="math">x</span></sup></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td>兩圖形對稱於 <input type="text" class="blank-input" style="width: 140px;" /></td>
-          </tr>
-          <tr>
-            <td>⑺ <span class="math">y = −</span><span class="math-num">(</span><span class="frac"><span class="frac-num">1</span><span class="frac-den math">a</span></span><span class="math-num">)</span><sup><span class="math">−x</span></sup></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td>兩圖形 <input type="text" class="blank-input" style="width: 70px;" /> 對稱於 <input type="text" class="blank-input" style="width: 90px;" /></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="page-footer">1</div>
-    </div>
-
-    <!-- ==================== 第 2 頁 ==================== -->
-    <div class="a4-page">
-      <div class="page-header">
-        <span class="chapter-tag">Chapter 5・指數函數</span>
-        <span style="font-size: 10pt; font-weight: 700; color: #475569;">指數函數圖形的差異</span>
+      <!-- 基準圖形開關 -->
+      <div class="mb-2 p-2.5 rounded-xl bg-blue-50/90 border border-blue-200 flex items-center justify-between">
+        <label class="flex items-center gap-2 cursor-pointer select-none min-w-0">
+          <input type="checkbox" id="toggleBaseFunc" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 shrink-0" />
+          <span class="w-3 h-3 rounded-full bg-blue-600 inline-block shrink-0"></span>
+          <span class="font-bold scale-sm text-blue-950 whitespace-nowrap">基準圖：<span class="math-font">y = a<sup>x</sup></span></span>
+        </label>
+        <span class="scale-xs text-blue-700 font-bold mono-font shrink-0">(0, 1)</span>
       </div>
 
-      <table class="ws-table" style="flex: 1;">
-        <thead>
-          <tr>
-            <th style="width: 14%;">函數</th>
-            <th style="width: 43%;">函數圖形</th>
-            <th style="width: 43%;">與基準函數的合併圖形</th>
-          </tr>
-        </thead>
-        <tbody id="studentPage2Grid">
-          <!-- JS 產生 ⑴~⑺ 空白直角坐標格 -->
-        </tbody>
-      </table>
-
-      <div class="page-footer">2</div>
-    </div>
-
-    <!-- ==================== 第 3 頁 ==================== -->
-    <div class="a4-page">
-      <div class="page-header">
-        <span class="chapter-tag">Chapter 5・指數函數</span>
+      <!-- 11 個比較圖形按鈕清單（2欄固定） -->
+      <div id="comparisonListContainer" class="space-y-2 lg:overflow-y-auto custom-scroll pr-0.5 lg:max-h-[390px]">
+        <!-- 由 JS 動態渲染 -->
       </div>
+    </section>
 
-      <div class="section-title">
-        <span>3. 包含絕對值的圖形變化</span>
-        <span class="section-subtitle">與基準圖形 <span class="math">y = a<sup>x</sup></span> 的對稱關係</span>
-      </div>
-
-      <table class="ws-table">
-        <thead>
-          <tr>
-            <th style="width: 8%;"></th>
-            <th style="width: 15%;">函數</th>
-            <th style="width: 27%;">化簡結果</th>
-            <th style="width: 14%;">轉折點</th>
-            <th style="width: 36%;">與基準函數的幾何關係</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="col-label">⑻</td>
-            <td style="text-align:center;"><span class="math">y = |a<sup>x</sup>|</span></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td>兩圖形 <input type="text" class="blank-input" style="width: 160px;" /></td>
-          </tr>
-          <tr>
-            <td rowspan="2" class="col-label">⑼</td>
-            <td rowspan="2" style="text-align:center;"><span class="math">y = a<sup>|x|</sup></span></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td rowspan="2"><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td rowspan="2">
-              圖形有 <input type="text" class="blank-input" style="width: 80px;" /> 對稱於 <input type="text" class="blank-input" style="width: 80px;" />
-            </td>
-          </tr>
-          <tr>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-          </tr>
-          <tr>
-            <td rowspan="2" class="col-label">⑽</td>
-            <td rowspan="2" style="text-align:center;"><span class="math">|y| = a<sup>x</sup></span></td>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td rowspan="2"><input type="text" class="blank-input" style="width: 100%;" /></td>
-            <td rowspan="2">
-              圖形有 <input type="text" class="blank-input" style="width: 80px;" /> 對稱於 <input type="text" class="blank-input" style="width: 80px;" />
-            </td>
-          </tr>
-          <tr>
-            <td><input type="text" class="blank-input" style="width: 100%;" /></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="ws-table" style="margin-top: 6px; flex: 1;">
-        <thead>
-          <tr>
-            <th style="width: 14%;">函數</th>
-            <th style="width: 43%;">函數圖形</th>
-            <th style="width: 43%;">與基準函數的合併圖形</th>
-          </tr>
-        </thead>
-        <tbody id="studentPage3Grid">
-          <!-- JS 產生 ⑻~⑽ 空白直角坐標格 -->
-        </tbody>
-      </table>
-
-      <div class="page-footer">3</div>
-    </div>
-
-  </div>
+  </main>
 
   <script>
-    function buildBlankCoordSVG(isLarge = false) {
-      const w = 240;
-      const h = isLarge ? 114 : 90;
-      const cx = w / 2;
-      const cy = h / 2;
-      const scaleX = 28;
-      const scaleY = isLarge ? 16 : 13;
+    // =========================================================================
+    // 1. 定義 11 個比較圖形
+    // =========================================================================
+    const COMPARISON_FUNCTIONS = [
+      // 分類 A：倒數底數與負指數
+      {
+        id: 'f1',
+        category: 'A. 倒數底數與負指數',
+        labelHtml: 'y = (1/a)<sup>x</sup>',
+        rawTitle: 'y = (1/a)^x',
+        color: '#e11d48',
+        equivGroup: 'negExp',
+        symmetryType: 'y-axis',
+        evalY: (x, a) => [Math.pow(1 / a, x)]
+      },
+      {
+        id: 'f2',
+        category: 'A. 倒數底數與負指數',
+        labelHtml: 'y = (1/a)<sup>−x</sup>',
+        rawTitle: 'y = (1/a)^(-x)',
+        color: '#f59e0b',
+        equivGroup: 'baseExp',
+        symmetryType: 'identical',
+        evalY: (x, a) => [Math.pow(1 / a, -x)]
+      },
+      {
+        id: 'f3',
+        category: 'A. 倒數底數與負指數',
+        labelHtml: 'y = a<sup>−x</sup>',
+        rawTitle: 'y = a^(-x)',
+        color: '#7c3aed',
+        equivGroup: 'negExp',
+        symmetryType: 'y-axis',
+        evalY: (x, a) => [Math.pow(a, -x)]
+      },
 
-      let svg = `<svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">`;
-      for (let gx = -3; gx <= 3; gx++) {
-        const px = cx + gx * scaleX;
-        svg += `<line x1="${px}" y1="4" x2="${px}" y2="${h-4}" stroke="#f1f5f9" stroke-width="0.9"/>`;
+      // 分類 B：負號鏡射變換
+      {
+        id: 'f4',
+        category: 'B. 負號與對稱變換',
+        labelHtml: 'y = −a<sup>x</sup>',
+        rawTitle: 'y = -a^x',
+        color: '#ea580c',
+        equivGroup: 'minusBaseExp',
+        symmetryType: 'x-axis',
+        evalY: (x, a) => [-Math.pow(a, x)]
+      },
+      {
+        id: 'f5',
+        category: 'B. 負號與對稱變換',
+        labelHtml: 'y = −a<sup>−x</sup>',
+        rawTitle: 'y = -a^(-x)',
+        color: '#0d9488',
+        equivGroup: 'minusNegExp',
+        symmetryType: 'origin',
+        evalY: (x, a) => [-Math.pow(a, -x)]
+      },
+      {
+        id: 'f6',
+        category: 'B. 負號與對稱變換',
+        labelHtml: 'y = −(1/a)<sup>x</sup>',
+        rawTitle: 'y = -(1/a)^x',
+        color: '#ec4899',
+        equivGroup: 'minusNegExp',
+        symmetryType: 'origin',
+        evalY: (x, a) => [-Math.pow(1 / a, x)]
+      },
+      {
+        id: 'f7',
+        category: 'B. 負號與對稱變換',
+        labelHtml: 'y = −(1/a)<sup>−x</sup>',
+        rawTitle: 'y = -(1/a)^(-x)',
+        color: '#06b6d4',
+        equivGroup: 'minusBaseExp',
+        symmetryType: 'x-axis',
+        evalY: (x, a) => [-Math.pow(1 / a, -x)]
+      },
+
+      // 分類 C：絕對值變換與關係式
+      {
+        id: 'f8',
+        category: 'C. 絕對值圖形',
+        labelHtml: 'y = |a<sup>x</sup>|',
+        rawTitle: 'y = |a^x|',
+        color: '#10b981',
+        equivGroup: 'baseExp',
+        symmetryType: 'identical',
+        evalY: (x, a) => [Math.abs(Math.pow(a, x))]
+      },
+      {
+        id: 'f9',
+        category: 'C. 絕對值圖形',
+        labelHtml: 'y = a<sup>|x|</sup>',
+        rawTitle: 'y = a^|x|',
+        color: '#15803d',
+        equivGroup: 'absXPos',
+        symmetryType: 'even-func',
+        evalY: (x, a) => [Math.pow(a, Math.abs(x))]
+      },
+      {
+        id: 'f10',
+        category: 'C. 絕對值圖形',
+        labelHtml: '|y| = a<sup>x</sup>',
+        rawTitle: '|y| = a^x',
+        color: '#d946ef',
+        equivGroup: 'absYRel',
+        symmetryType: 'both-x-branches',
+        evalY: (x, a) => [Math.pow(a, x), -Math.pow(a, x)]
+      },
+      {
+        id: 'f11',
+        category: 'C. 絕對值圖形',
+        labelHtml: 'y = −a<sup>|x|</sup>',
+        rawTitle: 'y = -a^|x|',
+        color: '#4f46e5',
+        equivGroup: 'absXNeg',
+        symmetryType: 'even-func-neg',
+        evalY: (x, a) => [-Math.pow(a, Math.abs(x))]
       }
-      for (let gy = -2; gy <= 2; gy++) {
-        const py = cy - gy * scaleY;
-        svg += `<line x1="8" y1="${py}" x2="${w-8}" y2="${py}" stroke="#f1f5f9" stroke-width="0.9"/>`;
-      }
-      svg += `
-        <line x1="8" y1="${cy}" x2="${w-8}" y2="${cy}" stroke="#64748b" stroke-width="1.2"/>
-        <line x1="${cx}" y1="4" x2="${cx}" y2="${h-4}" stroke="#64748b" stroke-width="1.2"/>
-        <text x="${w-14}" y="${cy-4}" font-size="9" font-family="serif" font-style="italic" fill="#475569">x</text>
-        <text x="${cx+5}" y="12" font-size="9" font-family="serif" font-style="italic" fill="#475569">y</text>
-        <circle cx="${cx}" cy="${cy - scaleY}" r="2" fill="#64748b"/>
-        <circle cx="${cx}" cy="${cy + scaleY}" r="2" fill="#64748b"/>
-      </svg>`;
-      return svg;
+    ];
+
+    // =========================================================================
+    // 2. 全域狀態管理與文字放大控制
+    // =========================================================================
+    let currentA = 2.00;
+    let initialA = 2.00;
+    let trailBases = [];
+    let activeFuncIds = new Set(['f1']);
+    let fontScale = 1.15;
+
+    const canvas = document.getElementById('graphCanvas');
+    const ctx = canvas.getContext('2d');
+    let scale = 68;
+    let originOffsetX = 0;
+    let originOffsetY = 50;
+    let isPanning = false;
+    let panStart = { x: 0, y: 0 };
+    let mouseMathPos = null;
+    let lastPinchDist = null;
+
+    function adjustFontSize(delta) {
+      fontScale = Math.min(Math.max( +(fontScale + delta).toFixed(2), 0.95), 1.45);
+      document.documentElement.style.setProperty('--font-scale', fontScale);
+      const pct = Math.round((fontScale / 1.15) * 100);
+      document.getElementById('fontScaleLabel').textContent = pct === 100 ? '文字放大' : `${pct}%`;
+      renderGraph();
     }
 
-    const numsP2 = ['⑴', '⑵', '⑶', '⑷', '⑸', '⑹', '⑺'];
-    document.getElementById('studentPage2Grid').innerHTML = numsP2.map(n => `
-      <tr>
-        <td class="col-label" style="font-size:12pt;">${n}</td>
-        <td class="graph-cell">${buildBlankCoordSVG(false)}</td>
-        <td class="graph-cell">${buildBlankCoordSVG(false)}</td>
-      </tr>
-    `).join('');
-
-    const numsP3 = ['⑻', '⑼', '⑽'];
-    document.getElementById('studentPage3Grid').innerHTML = numsP3.map(n => `
-      <tr>
-        <td class="col-label" style="font-size:12pt;">${n}</td>
-        <td class="graph-cell-lg">${buildBlankCoordSVG(true)}</td>
-        <td class="graph-cell-lg">${buildBlankCoordSVG(true)}</td>
-      </tr>
-    `).join('');
-
-    function downloadStudentHTML() {
-      const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = '指數函數圖形_學用版.html';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+    function formatCleanBase(val) {
+      return Number(val.toFixed(2)).toString();
     }
+
+    // =========================================================================
+    // 3. 初始化比較圖形按鈕清單（固定雙欄，文字放大不換行）
+    // =========================================================================
+    function initComparisonUI() {
+      const container = document.getElementById('comparisonListContainer');
+      const categories = [...new Set(COMPARISON_FUNCTIONS.map(f => f.category))];
+
+      let html = '';
+      categories.forEach(cat => {
+        const funcs = COMPARISON_FUNCTIONS.filter(f => f.category === cat);
+        html += `
+          <div>
+            <div class="scale-xs font-bold text-slate-400 mb-1 px-0.5">${cat}</div>
+            <div class="grid grid-cols-2 gap-1.5">
+              ${funcs.map(f => {
+                const isChecked = activeFuncIds.has(f.id);
+                return `
+                  <button
+                    id="btn_${f.id}"
+                    onclick="toggleComparisonFunc('${f.id}')"
+                    class="flex items-center justify-between px-2.5 py-2 rounded-xl border text-left transition ${
+                      isChecked
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+                        : 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200'
+                    }"
+                  >
+                    <div class="flex items-center gap-2 min-w-0">
+                      <span class="w-3 h-3 rounded-full shrink-0 border border-white/50" style="background-color: ${f.color}"></span>
+                      <span class="font-bold scale-sm math-font truncate">${f.labelHtml}</span>
+                    </div>
+                    <span id="check_${f.id}" class="scale-xs font-bold shrink-0 ${isChecked ? 'text-emerald-400' : 'text-transparent'}">✓</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function updateComparisonButtonsUI() {
+      COMPARISON_FUNCTIONS.forEach(f => {
+        const btn = document.getElementById(`btn_${f.id}`);
+        const check = document.getElementById(`check_${f.id}`);
+        if (!btn || !check) return;
+        const isChecked = activeFuncIds.has(f.id);
+        if (isChecked) {
+          btn.className = 'flex items-center justify-between px-2.5 py-2 rounded-xl border text-left transition bg-slate-900 text-white border-slate-900 shadow-sm';
+          check.className = 'scale-xs font-bold shrink-0 text-emerald-400';
+        } else {
+          btn.className = 'flex items-center justify-between px-2.5 py-2 rounded-xl border text-left transition bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200';
+          check.className = 'scale-xs font-bold shrink-0 text-transparent';
+        }
+      });
+    }
+
+    function toggleComparisonFunc(id) {
+      if (activeFuncIds.has(id)) {
+        activeFuncIds.delete(id);
+      } else {
+        activeFuncIds.add(id);
+      }
+      updateComparisonButtonsUI();
+      renderGraph();
+    }
+
+    function clearAllComparisons() {
+      activeFuncIds.clear();
+      document.getElementById('toggleBaseFunc').checked = true;
+      updateComparisonButtonsUI();
+      renderGraph();
+    }
+
+    function resetAll() {
+      currentA = 2.00;
+      initialA = 2.00;
+      trailBases = [];
+      document.getElementById('aSlider').value = 2.00;
+      document.getElementById('toggleBaseFunc').checked = true;
+      activeFuncIds = new Set(['f1']);
+      updateBaseDisplays();
+      updateComparisonButtonsUI();
+      resetView();
+    }
+
+    function applyPreset(presetName) {
+      document.getElementById('toggleBaseFunc').checked = true;
+      activeFuncIds.clear();
+      if (presetName === 'reciprocal') {
+        ['f1', 'f2', 'f3'].forEach(id => activeFuncIds.add(id));
+        originOffsetY = 50;
+      } else if (presetName === 'symmetry') {
+        ['f3', 'f4', 'f5'].forEach(id => activeFuncIds.add(id));
+        originOffsetY = 0;
+      } else if (presetName === 'absX') {
+        ['f9', 'f11'].forEach(id => activeFuncIds.add(id));
+        originOffsetY = 0;
+      } else if (presetName === 'absY') {
+        ['f8', 'f10'].forEach(id => activeFuncIds.add(id));
+        originOffsetY = 0;
+      }
+      updateComparisonButtonsUI();
+      renderGraph();
+    }
+
+    // =========================================================================
+    // 4. 底數 a 滑桿與基準函數控制
+    // =========================================================================
+    const aSlider = document.getElementById('aSlider');
+
+    aSlider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      recordGhostTrail(currentA);
+      currentA = val;
+      updateBaseDisplays();
+      renderGraph();
+    });
+
+    function recordGhostTrail(prevVal) {
+      if (Math.abs(prevVal - initialA) < 0.03) return;
+      const tooClose = trailBases.some(b => Math.abs(b - prevVal) < 0.22);
+      if (!tooClose) {
+        trailBases.push(prevVal);
+        if (trailBases.length > 7) {
+          trailBases.shift();
+        }
+      }
+    }
+
+    function setBaseValue(val) {
+      if (Math.abs(currentA - val) >= 0.02) {
+        initialA = currentA;
+      }
+      recordGhostTrail(currentA);
+      currentA = val;
+      aSlider.value = val;
+      updateBaseDisplays();
+      renderGraph();
+    }
+
+    function lockCurrentAsInitial() {
+      initialA = currentA;
+      trailBases = [];
+      updateBaseDisplays();
+      renderGraph();
+    }
+
+    function clearGhostTrails() {
+      trailBases = [];
+      renderGraph();
+    }
+
+    function updateBaseDisplays() {
+      document.getElementById('currentAFormula').textContent = currentA.toFixed(2);
+      document.getElementById('initialAFormula').textContent = formatCleanBase(initialA);
+
+      const badge = document.getElementById('baseRegimeBadge');
+      if (Math.abs(currentA - 1) < 0.03) {
+        badge.textContent = 'a = 1 常數直線';
+        badge.className = 'scale-xs font-bold px-2.5 py-1 rounded-full bg-slate-600 text-white shrink-0 whitespace-nowrap';
+      } else if (currentA > 1) {
+        badge.textContent = 'a > 1 遞增';
+        badge.className = 'scale-xs font-bold px-2.5 py-1 rounded-full bg-blue-600 text-white shrink-0 whitespace-nowrap';
+      } else {
+        badge.textContent = '0 < a < 1 遞減';
+        badge.className = 'scale-xs font-bold px-2.5 py-1 rounded-full bg-emerald-600 text-white shrink-0 whitespace-nowrap';
+      }
+    }
+
+    // =========================================================================
+    // 5. Canvas 直角坐標系與函數曲線繪製引擎
+    // =========================================================================
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (rect.width < 500 && scale > 55) {
+        scale = 52;
+      }
+      renderGraph();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    function mathToScreen(x, y, width, height) {
+      const cx = width / 2 + originOffsetX;
+      const cy = height / 2 + originOffsetY;
+      return {
+        px: cx + x * scale,
+        py: cy - y * scale
+      };
+    }
+
+    function screenToMath(px, py, width, height) {
+      const cx = width / 2 + originOffsetX;
+      const cy = height / 2 + originOffsetY;
+      return {
+        x: (px - cx) / scale,
+        y: (cy - py) / scale
+      };
+    }
+
+    function drawSingleBranch(evalSingleY, width, height, strokeStyle, lineWidth, dashPattern = [], alpha = 1.0, dashOffset = 0) {
+      ctx.save();
+      ctx.strokeStyle = strokeStyle;
+      ctx.lineWidth = lineWidth;
+      ctx.globalAlpha = alpha;
+      ctx.setLineDash(dashPattern);
+      ctx.lineDashOffset = dashOffset;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+
+      ctx.beginPath();
+      let penDown = false;
+      const stepPx = 2;
+
+      for (let px = 0; px <= width; px += stepPx) {
+        const { x } = screenToMath(px, 0, width, height);
+        const y = evalSingleY(x);
+        if (!Number.isFinite(y) || Math.abs(y) > 1e4) {
+          penDown = false;
+          continue;
+        }
+        const { py } = mathToScreen(x, y, width, height);
+        if (py < -height || py > height * 2) {
+          penDown = false;
+          continue;
+        }
+        if (!penDown) {
+          ctx.moveTo(px, py);
+          penDown = true;
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawRoundedBadge(text, x, y, bgColor, textColor, borderColor = null) {
+      ctx.save();
+      const fontSize = Math.round(12 * fontScale);
+      ctx.font = `bold ${fontSize}px "Noto Sans TC", sans-serif`;
+      const padX = Math.round(10 * fontScale);
+      const boxH = Math.round(24 * fontScale);
+      const textW = ctx.measureText(text).width;
+      const boxW = textW + padX * 2;
+      const left = x - boxW / 2;
+      const top = y - boxH / 2;
+
+      ctx.fillStyle = bgColor;
+      ctx.beginPath();
+      ctx.roundRect(left, top, boxW, boxH, 999);
+      ctx.fill();
+
+      if (borderColor) {
+        ctx.strokeStyle = borderColor;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = textColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, x, y + 0.5);
+      ctx.restore();
+    }
+
+    function renderGraph() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const cx = width / 2 + originOffsetX;
+      const cy = height / 2 + originOffsetY;
+      const tickFontSize = Math.round(11.5 * fontScale);
+
+      // 1. 繪製背景網格線
+      ctx.save();
+      ctx.lineWidth = 1;
+      const xMin = Math.floor(-cx / scale) - 1;
+      const xMax = Math.ceil((width - cx) / scale) + 1;
+      const yMin = Math.floor(-(height - cy) / scale) - 1;
+      const yMax = Math.ceil(cy / scale) + 1;
+
+      for (let gx = xMin; gx <= xMax; gx++) {
+        const px = cx + gx * scale;
+        ctx.strokeStyle = gx === 0 ? '#334155' : '#e2e8f0';
+        ctx.beginPath();
+        ctx.moveTo(px, 0);
+        ctx.lineTo(px, height);
+        ctx.stroke();
+
+        if (gx !== 0 && scale >= 30) {
+          ctx.fillStyle = '#475569';
+          ctx.font = `600 ${tickFontSize}px JetBrains Mono, monospace`;
+          ctx.textAlign = 'center';
+          ctx.fillText(gx.toString(), px, Math.min(Math.max(cy + 16 * fontScale, 16), height - 6));
+        }
+      }
+
+      for (let gy = yMin; gy <= yMax; gy++) {
+        const py = cy - gy * scale;
+        ctx.strokeStyle = gy === 0 ? '#334155' : '#e2e8f0';
+        ctx.beginPath();
+        ctx.moveTo(0, py);
+        ctx.lineTo(width, py);
+        ctx.stroke();
+
+        if (gy !== 0 && scale >= 30) {
+          ctx.fillStyle = '#475569';
+          ctx.font = `600 ${tickFontSize}px JetBrains Mono, monospace`;
+          ctx.textAlign = 'right';
+          ctx.fillText(gy.toString(), Math.min(Math.max(cx - 7, 24), width - 6), py + 4);
+        }
+      }
+
+      // 坐標軸主線
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(0, cy);
+      ctx.lineTo(width, cy);
+      ctx.moveTo(cx, 0);
+      ctx.lineTo(cx, height);
+      ctx.stroke();
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = `italic bold ${Math.round(14 * fontScale)}px Georgia, serif`;
+      ctx.fillText('x', width - 18, cy - 8);
+      ctx.fillText('y', cx + 10, 18);
+      ctx.restore();
+
+      // 2. 對稱軸與對稱中心視覺高亮輔助線
+      if (document.getElementById('showSymmetryGuides').checked && activeFuncIds.size > 0) {
+        const activeFuncs = COMPARISON_FUNCTIONS.filter(f => activeFuncIds.has(f.id));
+        const hasYAxisSym = activeFuncs.some(f => f.symmetryType === 'y-axis' || f.symmetryType === 'even-func' || f.symmetryType === 'even-func-neg');
+        const hasXAxisSym = activeFuncs.some(f => f.symmetryType === 'x-axis' || f.symmetryType === 'both-x-branches');
+        const hasOriginSym = activeFuncs.some(f => f.symmetryType === 'origin');
+
+        ctx.save();
+        if (hasYAxisSym) {
+          ctx.strokeStyle = 'rgba(217, 70, 239, 0.28)';
+          ctx.lineWidth = 16;
+          ctx.beginPath();
+          ctx.moveTo(cx, 0);
+          ctx.lineTo(cx, height);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#c026d3';
+          ctx.lineWidth = 4;
+          ctx.setLineDash([10, 6]);
+          ctx.beginPath();
+          ctx.moveTo(cx, 0);
+          ctx.lineTo(cx, height);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // 放於畫布下方 y 軸處，避免遮擋 (1, a) 點座標
+          const badgeY = Math.min(height - 52, Math.max(42, cy + 1.45 * scale));
+          drawRoundedBadge('◀ 對稱軸：y 軸 (x = 0) ▶', cx, badgeY, '#fae8ff', '#86198f', '#d946ef');
+        }
+
+        if (hasXAxisSym) {
+          ctx.strokeStyle = 'rgba(249, 115, 22, 0.28)';
+          ctx.lineWidth = 16;
+          ctx.beginPath();
+          ctx.moveTo(0, cy);
+          ctx.lineTo(width, cy);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#ea580c';
+          ctx.lineWidth = 4;
+          ctx.setLineDash([10, 6]);
+          ctx.beginPath();
+          ctx.moveTo(0, cy);
+          ctx.lineTo(width, cy);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          const badgeX = Math.min(width - 125, Math.max(125, cx + 2.2 * scale));
+          drawRoundedBadge('▲ 對稱軸：x 軸 (y = 0) ▼', badgeX, cy, '#ffedd5', '#9a3412', '#f97316');
+        }
+
+        if (hasOriginSym) {
+          const p1 = mathToScreen(1, Math.pow(currentA, 1), width, height);
+          const p2 = mathToScreen(-1, -Math.pow(currentA, 1), width, height);
+          ctx.strokeStyle = 'rgba(13, 148, 136, 0.65)';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5, 5]);
+          ctx.beginPath();
+          ctx.moveTo(p1.px, p1.py);
+          ctx.lineTo(p2.px, p2.py);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = 'rgba(20, 184, 166, 0.25)';
+          ctx.beginPath();
+          ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = '#0d9488';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.fillStyle = '#0f766e';
+          ctx.beginPath();
+          ctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+          ctx.fill();
+
+          drawRoundedBadge('對稱中心：原點 (0, 0)', cx, Math.min(height - 25, cy + 32), '#ccfbf1', '#115e59', '#14b8a6');
+        }
+        ctx.restore();
+      }
+
+      // 3. 繪製「底數變動過程殘影軌跡」
+      const showTrail = document.getElementById('showTrailGhost').checked;
+      if (showTrail && trailBases.length > 0) {
+        trailBases.forEach((bVal, idx) => {
+          if (Math.abs(bVal - currentA) < 0.03 || Math.abs(bVal - initialA) < 0.03) return;
+          const opacity = 0.16 + (idx / trailBases.length) * 0.18;
+          drawSingleBranch(x => Math.pow(bVal, x), width, height, '#60a5fa', 1.8, [3, 3], opacity);
+        });
+      }
+
+      // 4. 繪製「保留基準圖形 y = a0^x」
+      const showInitialGhost = document.getElementById('showInitialGhost').checked;
+      const isBaseChanged = Math.abs(currentA - initialA) >= 0.02;
+      if (showInitialGhost && isBaseChanged) {
+        drawSingleBranch(x => Math.pow(initialA, x), width, height, '#475569', 2.6, [7, 5], 0.65);
+
+        const ptInit = mathToScreen(1, initialA, width, height);
+        if (ptInit.py > 15 && ptInit.py < height - 15) {
+          ctx.save();
+          ctx.fillStyle = 'rgba(71, 85, 105, 0.9)';
+          ctx.beginPath();
+          ctx.arc(ptInit.px, ptInit.py, 4.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.font = `bold ${Math.round(12 * fontScale)}px "Noto Sans TC", sans-serif`;
+          ctx.fillText(`基準 y = ${formatCleanBase(initialA)}^x`, ptInit.px + 8, ptInit.py + 4);
+          ctx.restore();
+        }
+      }
+
+      // 5. 繪製目前曲線與重合雙色交替段
+      const showBase = document.getElementById('toggleBaseFunc').checked;
+      const activeList = COMPARISON_FUNCTIONS.filter(f => activeFuncIds.has(f.id));
+
+      const equivBuckets = {};
+      if (showBase) {
+        equivBuckets['baseExp'] = [{
+          id: 'base',
+          rawTitle: 'y = a^x',
+          color: '#2563eb',
+          evalSingle: x => Math.pow(currentA, x)
+        }];
+      }
+
+      activeList.forEach(f => {
+        if (f.id === 'f10') {
+          if (!equivBuckets['baseExp']) equivBuckets['baseExp'] = [];
+          equivBuckets['baseExp'].push({
+            id: 'f10_top',
+            rawTitle: '|y| = a^x (上支)',
+            color: f.color,
+            evalSingle: x => Math.pow(currentA, x)
+          });
+          if (!equivBuckets['minusBaseExp']) equivBuckets['minusBaseExp'] = [];
+          equivBuckets['minusBaseExp'].push({
+            id: 'f10_bot',
+            rawTitle: '|y| = a^x (下支)',
+            color: f.color,
+            evalSingle: x => -Math.pow(currentA, x)
+          });
+        } else {
+          if (!equivBuckets[f.equivGroup]) equivBuckets[f.equivGroup] = [];
+          equivBuckets[f.equivGroup].push({
+            id: f.id,
+            rawTitle: f.rawTitle,
+            color: f.color,
+            evalSingle: x => f.evalY(x, currentA)[0]
+          });
+        }
+      });
+
+      const overlapDescriptions = [];
+
+      Object.keys(equivBuckets).forEach(groupKey => {
+        const items = equivBuckets[groupKey];
+        if (items.length === 1) {
+          drawSingleBranch(items[0].evalSingle, width, height, items[0].color, 3.2, [], 1.0, 0);
+        } else if (items.length > 1) {
+          drawSingleBranch(items[0].evalSingle, width, height, '#facc15', 11, [], 0.42, 0);
+
+          const segLen = 16;
+          const gapLen = segLen * (items.length - 1);
+          items.forEach((item, idx) => {
+            drawSingleBranch(
+              item.evalSingle,
+              width,
+              height,
+              item.color,
+              4.2,
+              [segLen, gapLen],
+              1.0,
+              -idx * segLen
+            );
+          });
+
+          const names = items.map(it => it.rawTitle).join(' 與 ');
+          overlapDescriptions.push(names);
+
+          const sampleX = currentA >= 1 ? 1.15 : -1.15;
+          const sampleY = items[0].evalSingle(sampleX);
+          const pt = mathToScreen(sampleX, sampleY, width, height);
+          const clampedX = Math.min(width - 145, Math.max(145, pt.px));
+          const clampedY = Math.min(height - 30, Math.max(30, pt.py - 24));
+          drawRoundedBadge(`⚡ 圖形重合：${names}`, clampedX, clampedY, '#fef08a', '#713f12', '#eab308');
+        }
+      });
+
+      const overlapBanner = document.getElementById('overlapAlertBanner');
+      const overlapText = document.getElementById('overlapAlertText');
+      if (overlapDescriptions.length > 0) {
+        overlapBanner.classList.remove('hidden');
+        overlapText.textContent = `圖形完全重合：${overlapDescriptions.join(' ； ')}（畫布已用雙色交替線段與螢光底色標示）`;
+      } else {
+        overlapBanner.classList.add('hidden');
+      }
+
+      // 6. 繪製特徵點 x = -1, 0, 1
+      if (document.getElementById('showKeyPoints').checked) {
+        const keyXs = [-1, 0, 1];
+        if (showBase) {
+          keyXs.forEach(kx => {
+            const ky = Math.pow(currentA, kx);
+            drawPointMarker(kx, ky, '#1d4ed8', width, height, kx === 1 ? `(1, ${currentA.toFixed(2)})` : kx === 0 ? '(0, 1)' : '');
+          });
+        }
+
+        activeList.forEach(f => {
+          keyXs.forEach(kx => {
+            const ys = f.evalY(kx, currentA);
+            ys.forEach(ky => {
+              const label = (kx === 1 && activeList.length <= 2) ? `(1, ${ky.toFixed(2)})` : '';
+              drawPointMarker(kx, ky, f.color, width, height, label);
+            });
+          });
+        });
+      }
+
+      // 7. 滑鼠/觸控垂直追蹤線與交點
+      if (mouseMathPos) {
+        drawCursorCrosshair(mouseMathPos.x, width, height, showBase, activeList);
+      }
+
+      // 8. 更新左上角浮動圖例
+      updateFloatingLegend(showBase, isBaseChanged, activeList);
+    }
+
+    function drawPointMarker(x, y, color, width, height, labelText = '') {
+      const { px, py } = mathToScreen(x, y, width, height);
+      if (px < 0 || px > width || py < 0 || py > height) return;
+      ctx.save();
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.arc(px, py, 4.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      if (labelText) {
+        ctx.fillStyle = color;
+        ctx.font = `bold ${Math.round(11.5 * fontScale)}px JetBrains Mono, monospace`;
+        ctx.fillText(labelText, px + 7, py - 6);
+      }
+      ctx.restore();
+    }
+
+    function drawCursorCrosshair(mx, width, height, showBase, activeList) {
+      const { px } = mathToScreen(mx, 0, width, height);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(15, 23, 42, 0.35)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(px, 0);
+      ctx.lineTo(px, height);
+      ctx.stroke();
+      ctx.restore();
+
+      const readout = document.getElementById('cursorReadout');
+      readout.classList.remove('hidden');
+
+      let html = `<div class="text-slate-300 border-b border-slate-700 pb-0.5 mb-1">x = <span class="text-white font-bold">${mx.toFixed(2)}</span></div>`;
+
+      if (showBase) {
+        const by = Math.pow(currentA, mx);
+        drawPointMarker(mx, by, '#2563eb', width, height);
+        html += `<div class="flex justify-between gap-2"><span class="text-blue-400">目前 y:</span><span>${by.toFixed(2)}</span></div>`;
+      }
+
+      if (Math.abs(currentA - initialA) >= 0.02 && document.getElementById('showInitialGhost').checked) {
+        const iy = Math.pow(initialA, mx);
+        html += `<div class="flex justify-between gap-2 text-slate-400"><span>基準 y:</span><span>${iy.toFixed(2)}</span></div>`;
+      }
+
+      activeList.forEach(f => {
+        const ys = f.evalY(mx, currentA);
+        ys.forEach(yVal => drawPointMarker(mx, yVal, f.color, width, height));
+        const valStr = ys.length > 1 ? `±${Math.abs(ys[0]).toFixed(2)}` : ys[0].toFixed(2);
+        html += `<div class="flex justify-between gap-2"><span style="color:${f.color}">${f.rawTitle}:</span><span>${valStr}</span></div>`;
+      });
+
+      readout.innerHTML = html;
+    }
+
+    function updateFloatingLegend(showBase, isBaseChanged, activeList) {
+      const box = document.getElementById('floatingLegend');
+      let items = [];
+
+      if (showBase) {
+        items.push(`
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-1 rounded bg-blue-600 inline-block shrink-0"></span>
+            <span class="font-bold text-slate-800 whitespace-nowrap">目前函數：<span class="math-font">y = ${currentA.toFixed(2)}<sup>x</sup></span></span>
+          </div>
+        `);
+      }
+
+      if (isBaseChanged && document.getElementById('showInitialGhost').checked) {
+        items.push(`
+          <div class="flex items-center gap-2 text-slate-500">
+            <span class="w-4 h-0.5 border-b-2 border-dashed border-slate-500 inline-block shrink-0"></span>
+            <span class="font-semibold whitespace-nowrap">基準函數：<span class="math-font">y = ${formatCleanBase(initialA)}<sup>x</sup></span></span>
+          </div>
+        `);
+      }
+
+      activeList.forEach(f => {
+        items.push(`
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-1 rounded inline-block shrink-0" style="background:${f.color}"></span>
+            <span class="font-bold text-slate-700 math-font whitespace-nowrap">${f.labelHtml}</span>
+          </div>
+        `);
+      });
+
+      box.innerHTML = items.join('');
+    }
+
+    // =========================================================================
+    // 6. 畫布滑鼠與手機觸控互動
+    // =========================================================================
+    canvas.addEventListener('mousedown', (e) => {
+      isPanning = true;
+      panStart = { x: e.clientX - originOffsetX, y: e.clientY - originOffsetY };
+    });
+
+    window.addEventListener('mouseup', () => {
+      isPanning = false;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const py = e.clientY - rect.top;
+
+      if (isPanning) {
+        originOffsetX = e.clientX - panStart.x;
+        originOffsetY = e.clientY - panStart.y;
+      }
+
+      mouseMathPos = screenToMath(px, py, rect.width, rect.height);
+      renderGraph();
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      mouseMathPos = null;
+      document.getElementById('cursorReadout').classList.add('hidden');
+      renderGraph();
+    });
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.12 : 0.89;
+      zoomCanvas(factor);
+    }, { passive: false });
+
+    canvas.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isPanning = true;
+        const t = e.touches[0];
+        panStart = { x: t.clientX - originOffsetX, y: t.clientY - originOffsetY };
+        const rect = canvas.getBoundingClientRect();
+        mouseMathPos = screenToMath(t.clientX - rect.left, t.clientY - rect.top, rect.width, rect.height);
+        renderGraph();
+      } else if (e.touches.length === 2) {
+        isPanning = false;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        lastPinchDist = Math.hypot(dx, dy);
+      }
+    }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches.length === 1 && isPanning) {
+        const t = e.touches[0];
+        originOffsetX = t.clientX - panStart.x;
+        originOffsetY = t.clientY - panStart.y;
+        mouseMathPos = screenToMath(t.clientX - rect.left, t.clientY - rect.top, rect.width, rect.height);
+        renderGraph();
+      } else if (e.touches.length === 2 && lastPinchDist) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.hypot(dx, dy);
+        const factor = dist / lastPinchDist;
+        scale = Math.min(Math.max(scale * factor, 28), 160);
+        lastPinchDist = dist;
+        renderGraph();
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', () => {
+      isPanning = false;
+      lastPinchDist = null;
+    });
+
+    function zoomCanvas(factor) {
+      scale = Math.min(Math.max(scale * factor, 28), 160);
+      renderGraph();
+    }
+
+    function resetView() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      scale = rect.width < 500 ? 52 : 68;
+      originOffsetX = 0;
+      originOffsetY = 50;
+      renderGraph();
+    }
+
+    // 啟動初始化
+    initComparisonUI();
+    updateBaseDisplays();
+    setTimeout(resizeCanvas, 30);
   </script>
 </body>
 </html>
