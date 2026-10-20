@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>【 Kobe。X'max 】</title>
-<meta name="theme-color" content="#1E4D3A">
+<meta name="theme-color" content="#F5F8FD">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -12,132 +12,113 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #F6F2EA;
+  --bg: #F5F8FD;
   --card: #FFFFFF;
-  --ink: #1D2320;
-  --ink-2: #3F4642;
-  --muted: #767C77;
-  --line: #E6DFD2;
-  --pine: #1E4D3A;
-  --pine-2: #2C6A51;
-  --pine-soft: #E4EEE8;
-  --berry: #B4232C;
-  --berry-soft: #FBE9E9;
-  --gold: #BF8F2E;
-  --gold-soft: #FBF1DC;
+  --ink: #1B2A41;
+  --ink-2: #44546B;
+  --muted: #8995A8;
+  --line: #E2E9F3;
+  --blue: #2F6FDB;
+  --blue-2: #5B8FE6;
+  --blue-soft: #EAF2FD;
+  --navy: #1C3A70;
+  --red: #E5484D;
+  --red-soft: #FDECEC;
+  --gold: #C99A3B;
+  --gold-soft: #FBF3E2;
+  --green: #2BA39B;
   --radius: 18px;
-  --radius-s: 12px;
-  --shadow: 0 1px 2px rgba(30, 40, 35, .06), 0 6px 20px rgba(30, 40, 35, .06);
+  --shadow: 0 1px 2px rgba(31, 71, 140, .05), 0 8px 24px rgba(31, 71, 140, .08);
+  --serif: "Noto Serif TC", "Songti TC", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "PingFang TC", "Hiragino Sans", "Noto Sans TC", "Noto Sans JP", "Segoe UI", sans-serif;
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
-  --tabbar-h: 64px;
-  --t-FLIGHT: #2F5D8A;
-  --t-TRANSPORT: #55658A;
-  --t-LODGING: #6B5B95;
-  --t-FOOD: #B4232C;
-  --t-CAFE: #A0672B;
-  --t-SIGHT: #1E4D3A;
-  --t-SHOP: #8A6D1E;
-  --t-RITUAL: #C2410C;
-  --t-ONSEN: #0E7490;
+  --t-FLIGHT: #E5484D;
+  --t-TRANSPORT: #6E83B7;
+  --t-LODGING: #7C64D6;
+  --t-FOOD: #2F6FDB;
+  --t-CAFE: #C08A3E;
+  --t-SIGHT: #2BA39B;
+  --t-SHOP: #D9862B;
+  --t-RAMEN: #E0703A;
+  --t-WORK: #8995A8;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { -webkit-text-size-adjust: 100%; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Hiragino Sans", "Noto Sans TC", "Noto Sans JP", "Segoe UI", sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  line-height: 1.5;
-  font-size: 15px;
-  min-height: 100vh;
-}
+body { font-family: var(--sans); background: var(--bg); color: var(--ink); line-height: 1.5; font-size: 15px; min-height: 100vh; }
 body.locked { overflow: hidden; }
 a { color: inherit; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; touch-action: manipulation; }
 input, select, textarea { font: inherit; font-size: 16px; color: var(--ink); }
-.ja { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", -apple-system, sans-serif; }
+.serif { font-family: var(--serif); }
+.ja { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", var(--sans); }
+svg.i { width: 1em; height: 1em; fill: currentColor; flex: none; vertical-align: -.125em; }
 
-/* ---------- top bar ---------- */
+/* ---------- header ---------- */
 .topbar {
-  position: sticky; top: 0; z-index: 30;
-  padding: calc(var(--safe-t) + 10px) 16px 10px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  background: rgba(246, 242, 234, .88);
+  position: sticky; top: 0; z-index: 30; text-align: center;
+  padding: calc(var(--safe-t) + 12px) 16px 10px;
+  background: rgba(245, 248, 253, .92);
   -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
-  border-bottom: 1px solid rgba(230, 223, 210, .7);
 }
-.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.brand-mark {
-  width: 36px; height: 36px; border-radius: 11px; flex: none;
-  display: grid; place-items: center; font-size: 20px;
-  background: var(--pine); box-shadow: inset 0 0 0 2px rgba(191, 143, 46, .55);
-}
-.brand-title { font-weight: 800; letter-spacing: .08em; font-size: 15px; color: var(--pine); }
-.brand-sub { font-size: 12px; color: var(--muted); letter-spacing: .02em; }
-.countdown {
-  flex: none; font-weight: 800; font-size: 13px; padding: 6px 12px; border-radius: 999px;
-  background: var(--berry); color: #fff; letter-spacing: .03em; white-space: nowrap;
-}
+.kicker { font-size: 11px; font-weight: 800; letter-spacing: .28em; color: var(--blue); }
+.title { font-family: var(--serif); font-weight: 700; font-size: 22px; color: var(--navy); letter-spacing: .06em; margin-top: 2px; }
+.sub-line { font-size: 12px; color: var(--muted); margin-top: 2px; letter-spacing: .04em; }
+.sub-line b { color: var(--blue); }
 
-main { max-width: 560px; margin: 0 auto; padding: 12px 16px calc(var(--tabbar-h) + var(--safe-b) + 28px); }
+main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 108px); }
 .view { display: none; }
 .view.active { display: block; animation: fade .18s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
-/* ---------- tab bar ---------- */
-.tabbar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-  display: flex; justify-content: center;
-  padding: 6px 8px calc(var(--safe-b) + 6px);
-  background: rgba(255, 255, 255, .94);
-  -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
-  border-top: 1px solid var(--line);
-}
-.tabbar-inner { display: grid; grid-template-columns: repeat(4, 1fr); width: 100%; max-width: 560px; }
-.tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; border-radius: 12px; color: var(--muted); font-size: 11px; font-weight: 600; }
-.tab svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.tab.active { color: var(--pine); }
-.tab.active svg { stroke-width: 2.2; }
+/* ---------- floating pill nav ---------- */
+.tabbar { position: fixed; left: 0; right: 0; bottom: calc(var(--safe-b) + 14px); z-index: 40; display: flex; justify-content: center; pointer-events: none; }
+.tabbar-inner { pointer-events: auto; display: grid; grid-template-columns: repeat(4, 1fr); width: min(440px, calc(100% - 40px)); background: rgba(255, 255, 255, .96); border-radius: 999px; box-shadow: 0 10px 30px rgba(31, 71, 140, .16), 0 1px 2px rgba(31, 71, 140, .08); padding: 6px; }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 0 5px; border-radius: 999px; color: #A8B3C4; font-size: 10.5px; font-weight: 700; }
+.tab svg { width: 25px; height: 25px; fill: currentColor; }
+.tab.active { color: var(--blue); }
 
 /* ---------- generic ---------- */
 .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 14px; }
-.card-title { font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.card-title { font-family: var(--serif); font-weight: 700; font-size: 17px; color: var(--navy); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
 .card-title .sp { flex: 1; }
-.sec-title { font-size: 13px; font-weight: 800; letter-spacing: .12em; color: var(--muted); margin: 22px 4px 10px; text-transform: uppercase; }
+.sec-title { font-size: 11.5px; font-weight: 800; letter-spacing: .22em; color: var(--blue); margin: 24px 4px 10px; }
 .muted { color: var(--muted); }
 .small { font-size: 12.5px; }
-.tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; vertical-align: 1px; white-space: nowrap; }
-.tag-est { background: var(--gold-soft); color: #8A6414; }
-.tag-off { background: var(--pine-soft); color: var(--pine); }
-.tag-warn { background: var(--berry-soft); color: var(--berry); }
-.tag-draft { background: #EEE; color: #555; }
-.warn { background: var(--berry-soft); color: #8E1B22; border-radius: 10px; padding: 8px 10px; font-size: 13.5px; margin-top: 8px; }
-.note { background: var(--gold-soft); color: #6E5112; border-radius: 10px; padding: 8px 10px; font-size: 13.5px; }
+.tag { display: inline-block; font-size: 10.5px; font-weight: 800; padding: 1px 7px; border-radius: 999px; vertical-align: 1px; white-space: nowrap; letter-spacing: .03em; }
+.tag-est { background: var(--gold-soft); color: #93681A; }
+.tag-off { background: var(--blue-soft); color: var(--blue); }
+.tag-draft { background: #EEF1F6; color: var(--ink-2); }
+.warn { background: var(--red-soft); color: #A8282C; border-radius: 12px; padding: 8px 11px; font-size: 13.5px; margin-top: 8px; }
+.note { background: var(--blue-soft); color: #2A4F8F; border-radius: 12px; padding: 9px 11px; font-size: 13.5px; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   min-height: 44px; padding: 0 16px; border-radius: 999px; font-weight: 700; font-size: 14.5px;
-  background: var(--pine-soft); color: var(--pine); text-decoration: none; white-space: nowrap;
+  background: var(--blue-soft); color: var(--blue); text-decoration: none; white-space: nowrap;
 }
 .btn:active { transform: scale(.97); }
-.btn-primary { background: var(--pine); color: #fff; }
-.btn-berry { background: var(--berry); color: #fff; }
-.btn-danger { background: var(--berry-soft); color: var(--berry); }
-.btn-ghost { background: transparent; color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--line); }
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-red { background: var(--red); color: #fff; }
+.btn-danger { background: var(--red-soft); color: var(--red); }
+.btn-ghost { background: #fff; color: var(--ink-2); box-shadow: inset 0 0 0 1.5px var(--line); }
 .btn-sm { min-height: 34px; padding: 0 12px; font-size: 13px; }
 .btn-block { width: 100%; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .btn-row .btn { flex: 1 1 auto; }
-.icon-btn { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 16px; background: rgba(255, 255, 255, .18); color: #fff; }
 .list-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
 .list-row:first-child { border-top: 0; }
 .list-row .grow { flex: 1; min-width: 0; }
 .list-row .ttl { font-weight: 700; }
-.chk { width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center; border: 2px solid var(--line); background: #fff; font-size: 15px; color: #fff; font-weight: 800; }
-.chk.on { background: var(--pine); border-color: var(--pine); }
+.chk { width: 26px; height: 26px; border-radius: 8px; flex: none; display: grid; place-items: center; border: 2px solid #D4DDEA; background: #fff; font-size: 15px; color: #fff; font-weight: 800; }
+.chk.on { background: var(--blue); border-color: var(--blue); }
 .done .ttl { text-decoration: line-through; color: var(--muted); }
 .empty { text-align: center; color: var(--muted); padding: 18px 8px; font-size: 14px; }
+.x-btn { width: 32px; height: 32px; border-radius: 50%; color: var(--muted); font-size: 15px; flex: none; }
 
 /* ---------- form ---------- */
 .field { display: block; margin-bottom: 12px; }
@@ -147,260 +128,252 @@ main { max-width: 560px; margin: 0 auto; padding: 12px 16px calc(var(--tabbar-h)
   -webkit-appearance: none; appearance: none;
 }
 .field textarea { min-height: 84px; resize: vertical; }
-.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--pine-2); box-shadow: 0 0 0 3px var(--pine-soft); }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--blue-2); box-shadow: 0 0 0 3px var(--blue-soft); }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.seg { display: inline-flex; background: #EFEBE3; border-radius: 999px; padding: 3px; gap: 2px; }
+.seg { display: inline-flex; background: #E9EEF6; border-radius: 999px; padding: 3px; gap: 2px; }
 .seg button { padding: 7px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 700; color: var(--muted); min-height: 36px; }
-.seg button.on { background: #fff; color: var(--pine); box-shadow: 0 1px 3px rgba(0, 0, 0, .1); }
+.seg button.on { background: #fff; color: var(--blue); box-shadow: 0 1px 3px rgba(31, 71, 140, .15); }
 .check-line { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 12px; }
-.check-line input { width: 20px; height: 20px; accent-color: var(--pine); }
+.check-line input { width: 20px; height: 20px; accent-color: var(--blue); }
 
-/* ---------- trip: banner, date scroller ---------- */
-.next-todo { display: flex; align-items: center; gap: 10px; background: var(--gold-soft); color: #6E5112; border-radius: 14px; padding: 10px 12px; margin-bottom: 12px; font-size: 13.5px; width: 100%; text-align: left; }
-.next-todo b { color: #5A410B; }
-.date-scroller { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 12px; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scrollbar-width: none; }
-.date-scroller::-webkit-scrollbar { display: none; }
-.date-chip { flex: none; min-width: 64px; padding: 8px 10px; border-radius: 16px; background: var(--card); box-shadow: var(--shadow); text-align: center; line-height: 1.2; }
-.date-chip .d { font-size: 18px; font-weight: 800; }
-.date-chip .w { font-size: 11.5px; color: var(--muted); font-weight: 700; }
-.date-chip.active { background: var(--pine); color: #fff; }
-.date-chip.active .w { color: rgba(255, 255, 255, .8); }
-.date-chip.today:not(.active) { box-shadow: inset 0 0 0 2px var(--berry), var(--shadow); }
-.date-chip.add { color: var(--muted); font-size: 22px; font-weight: 400; display: grid; place-items: center; min-width: 52px; }
-
-/* ---------- hero ---------- */
-.hero {
-  position: relative; border-radius: 22px; color: #fff; padding: 16px 16px 18px; min-height: 172px; overflow: hidden;
-  display: flex; flex-direction: column; justify-content: flex-end; box-shadow: 0 10px 28px rgba(20, 40, 30, .22);
-  background-size: cover; background-position: center;
+/* ---------- trip ---------- */
+.next-todo { display: flex; align-items: center; gap: 10px; background: #fff; box-shadow: var(--shadow); color: var(--ink-2); border-radius: 14px; padding: 10px 12px; margin: 4px 0 6px; font-size: 13.5px; width: 100%; text-align: left; }
+.next-todo b { color: var(--blue); }
+.date-tabs { display: flex; gap: 2px; overflow-x: auto; margin: 0 -16px; padding: 8px 16px 10px; scrollbar-width: none; border-bottom: 1px solid var(--line); }
+.date-tabs::-webkit-scrollbar { display: none; }
+.date-tab { flex: none; min-width: 66px; padding: 4px 8px 10px; text-align: center; position: relative; color: #A8B3C4; }
+.date-tab .w { font-size: 11.5px; font-weight: 800; letter-spacing: .08em; }
+.date-tab .d { font-family: var(--serif); font-size: 22px; font-weight: 600; line-height: 1.15; }
+.date-tab.active { color: var(--blue); }
+.date-tab.active::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--blue); }
+.date-tab.today:not(.active) .d { color: var(--ink-2); }
+.date-tab.add { color: var(--blue); font-size: 26px; font-weight: 400; display: grid; place-items: center; min-width: 52px; }
+.day-wrap { display: grid; grid-template-columns: 1fr; gap: 0 14px; margin-top: 16px; }
+.day-vert { display: none; }
+@media (min-width: 640px) {
+  .day-wrap { grid-template-columns: 34px 1fr; }
+  .day-vert { display: block; font-family: var(--serif); font-weight: 700; font-size: 26px; color: var(--navy); writing-mode: vertical-rl; text-orientation: upright; letter-spacing: .1em; align-self: center; }
 }
-.hero::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
-  background-image:
-    radial-gradient(1.5px 1.5px at 12% 22%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 28% 60%, #fff 50%, transparent 51%),
-    radial-gradient(2px 2px at 46% 18%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 63% 42%, #fff 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 78% 14%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 90% 52%, #fff 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 8% 78%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 55% 80%, #fff 50%, transparent 51%);
-}
-.hero.has-img::before { display: none; }
-.hero > * { position: relative; }
-.hero-tools { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
-.hero-day { font-size: 12px; font-weight: 800; letter-spacing: .14em; opacity: .9; }
-.hero-city { font-size: 13px; opacity: .9; margin-top: 2px; }
-.hero-title { font-size: 23px; font-weight: 800; line-height: 1.25; margin-top: 4px; text-shadow: 0 1px 8px rgba(0, 0, 0, .25); }
-.theme-night { background-image: linear-gradient(150deg, #0E2233 0%, #173F33 60%, #1E4D3A 100%); }
-.theme-usj { background-image: linear-gradient(150deg, #13284B 0%, #4C1D3D 55%, #B4232C 100%); }
-.theme-kobe { background-image: linear-gradient(150deg, #0B2E4A 0%, #135069 55%, #2E7D8C 100%); }
-.theme-umeda { background-image: linear-gradient(150deg, #2A1B17 0%, #6A3A23 55%, #BF8F2E 100%); }
-.theme-snow { background-image: linear-gradient(150deg, #36506B 0%, #6E8AA6 60%, #A9C0D3 100%); }
-
-/* ---------- strips ---------- */
-.strip { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); margin-top: 12px; padding: 12px 14px; }
-.strip-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; }
-.strip-head b { font-size: 14px; }
-.wx-hours { display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; scrollbar-width: none; }
+.hero { position: relative; border-radius: 22px; overflow: hidden; min-height: 196px; color: #fff; box-shadow: 0 12px 30px rgba(31, 71, 140, .22); background: #2F6FDB; }
+.hero-art, .hero-art svg, .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-img { object-fit: cover; }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 33, 78, 0) 38%, rgba(11, 33, 78, .62)); pointer-events: none; }
+.hero-text { position: absolute; left: 18px; right: 18px; bottom: 16px; z-index: 1; }
+.hero-meta { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; }
+.hero-badge { border: 1.5px solid rgba(255, 255, 255, .85); border-radius: 7px; padding: 0 8px; font-size: 12px; letter-spacing: .12em; }
+.hero-title { font-family: var(--serif); font-weight: 900; font-size: 25px; line-height: 1.25; margin-top: 6px; text-shadow: 0 2px 10px rgba(5, 20, 50, .35); }
+.wx-head { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.wx-loc { display: inline-flex; align-items: center; gap: 8px; font-family: var(--serif); font-size: 19px; font-weight: 600; color: var(--navy); }
+.wx-loc svg { color: var(--blue); width: 22px; height: 22px; }
+.vbar { width: 1px; height: 22px; background: var(--line); }
+.ic-btn { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: var(--blue); }
+.ic-btn svg { width: 21px; height: 21px; fill: currentColor; }
+.ic-btn.red { color: var(--red); }
+.ic-btn.on { background: var(--blue); color: #fff; }
+.wx-head .sp { flex: 1; }
+.wx-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.wx-hours { display: flex; gap: 2px; overflow-x: auto; margin: 6px -16px 0; padding: 4px 16px 2px; scrollbar-width: none; }
 .wx-hours::-webkit-scrollbar { display: none; }
-.wx-h { flex: none; min-width: 54px; text-align: center; background: #F7F5F0; border-radius: 12px; padding: 6px 4px; font-size: 12px; line-height: 1.3; }
-.wx-h .e { font-size: 20px; }
-.wx-h .t { font-weight: 800; font-size: 14px; }
-.wx-h .p { color: #2F5D8A; font-weight: 700; }
-.wx-big { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
-.wx-big .e { font-size: 30px; }
-.wx-big .t { font-size: 22px; font-weight: 800; }
-.sun-row { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13.5px; margin-top: 6px; }
-.sun-row b { font-variant-numeric: tabular-nums; }
-.light-chip { display: block; width: 100%; text-align: left; margin-top: 8px; background: #FFF8EA; border-radius: 12px; padding: 8px 10px; font-size: 13px; }
-.light-chip .n { font-weight: 700; }
+.wx-h { flex: none; width: 56px; text-align: center; font-size: 12px; color: var(--muted); line-height: 1.3; }
+.wx-h svg { width: 26px; height: 26px; color: var(--blue); margin: 4px auto 2px; display: block; }
+.wx-h .t { font-weight: 800; font-size: 15px; color: var(--ink); }
+.wx-h .p { color: var(--blue); font-weight: 700; font-size: 11px; }
+.wx-day { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+.wx-day b { font-size: 18px; color: var(--ink); font-family: var(--serif); }
+.info-strip { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); margin-top: 14px; padding: 12px 14px; }
+.strip-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; }
+.strip-head b { font-family: var(--serif); font-size: 15px; color: var(--navy); }
+.sun-row { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13.5px; margin-top: 6px; color: var(--ink-2); }
+.sun-row b { font-variant-numeric: tabular-nums; color: var(--ink); }
+.light-chip { display: block; width: 100%; text-align: left; margin-top: 8px; background: var(--blue-soft); border-radius: 12px; padding: 8px 10px; font-size: 13px; }
+.light-chip .n { font-weight: 700; color: var(--navy); }
 .hotel-bar { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; }
-.hotel-bar .ico { font-size: 22px; }
+.hotel-bar .ico { width: 40px; height: 40px; border-radius: 12px; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; flex: none; }
+.hotel-bar .ico svg { width: 22px; height: 22px; }
 .hotel-bar .grow { flex: 1; min-width: 0; }
-.hotel-bar .nm { font-weight: 800; font-size: 14.5px; }
-.chev { color: var(--muted); font-size: 18px; }
-.rit-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.rit-chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; background: var(--card); box-shadow: var(--shadow); min-height: 36px; }
-.rit-chip.on { background: var(--pine); color: #fff; }
+.hotel-bar .nm { font-weight: 800; font-size: 14.5px; color: var(--navy); }
+.chev { color: var(--muted); font-size: 20px; }
+.rit-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.rit-chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 999px; font-size: 13px; font-weight: 700; background: #fff; box-shadow: var(--shadow); min-height: 36px; color: var(--ink-2); }
+.rit-chip.on { background: var(--blue); color: #fff; }
 .branch { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
 .branch .lbl { font-size: 13px; font-weight: 700; color: var(--muted); }
 
-/* ---------- timeline ---------- */
-.timeline { margin-top: 14px; position: relative; }
-.ev { display: grid; grid-template-columns: 58px 18px 1fr; gap: 0 8px; position: relative; width: 100%; text-align: left; cursor: pointer; }
-.ev-time { text-align: right; padding-top: 12px; font-weight: 800; font-size: 14.5px; font-variant-numeric: tabular-nums; line-height: 1.2; }
-.ev-time small { display: block; font-weight: 600; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
-.ev-time .tag { margin-top: 4px; }
+/* ---------- timeline (Fuji style) ---------- */
+.timeline { margin-top: 18px; }
+.ev { display: grid; grid-template-columns: 62px 22px 1fr; position: relative; width: 100%; text-align: left; cursor: pointer; }
+.ev-time { text-align: right; padding: 13px 4px 0 0; font-family: var(--serif); font-weight: 600; font-size: 19px; color: var(--blue); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.ev-time small { display: block; font-family: var(--sans); font-weight: 600; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+.ev-time .tag { margin-top: 5px; }
 .ev-rail { position: relative; }
-.ev-rail::before { content: ""; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--line); }
-.ev:first-child .ev-rail::before { top: 18px; }
-.ev:last-child .ev-rail::before { bottom: calc(100% - 18px); }
-.ev-dot { position: absolute; left: 2px; top: 14px; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 3px solid var(--tc, var(--pine)); }
-.ev-body { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); padding: 10px 12px 11px; margin: 4px 0 10px; border-left: 4px solid var(--tc, var(--pine)); }
-.ev-type { font-size: 10.5px; font-weight: 800; letter-spacing: .1em; color: var(--tc, var(--pine)); }
-.ev-title { font-weight: 800; font-size: 15.5px; line-height: 1.35; margin-top: 1px; }
-.ev-sub { font-size: 13px; color: var(--ink-2); margin-top: 3px; }
-.ev-warn { font-size: 12.5px; color: var(--berry); margin-top: 5px; font-weight: 600; }
-.ev.past .ev-body { opacity: .55; }
-.ev.now .ev-body { box-shadow: 0 0 0 2.5px var(--berry), var(--shadow); }
-.ev.now .ev-dot { background: var(--berry); border-color: var(--berry); animation: pulse 1.6s infinite; }
-.now-badge { display: inline-block; background: var(--berry); color: #fff; font-size: 10.5px; font-weight: 800; padding: 1px 7px; border-radius: 999px; margin-left: 6px; letter-spacing: .06em; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(180, 35, 44, .5); } 70% { box-shadow: 0 0 0 9px rgba(180, 35, 44, 0); } 100% { box-shadow: 0 0 0 0 rgba(180, 35, 44, 0); } }
-.add-ev { margin: 4px 0 0 84px; }
-.day-note { margin-top: 10px; }
+.ev-rail::before { content: ""; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: #D6E3F7; }
+.ev:first-child .ev-rail::before { top: 22px; }
+.ev:last-child .ev-rail::before { bottom: calc(100% - 22px); }
+.ev-dot { position: absolute; left: 4px; top: 17px; width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 2.5px solid #BFD3F3; }
+.ev.now .ev-dot, .ev:first-child .ev-dot { background: var(--blue); border-color: #CFE0FB; box-shadow: 0 0 0 3px #EAF2FD; }
+.ev-body { margin: 8px 0 14px 6px; padding: 2px 0 4px 12px; border-left: 3.5px solid var(--tc, var(--blue)); }
+.ev-title { font-family: var(--serif); font-weight: 700; font-size: 18px; line-height: 1.35; color: var(--navy); }
+.ev-type { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; letter-spacing: .1em; color: var(--muted); margin-top: 3px; }
+.ev-type svg { width: 14px; height: 14px; color: var(--muted); }
+.ev-sub { font-size: 13.5px; color: var(--ink-2); margin-top: 3px; }
+.ev-warn { font-size: 12.5px; color: var(--red); margin-top: 4px; font-weight: 600; }
+.ev-tools { display: none; gap: 6px; margin-top: 6px; }
+.editing .ev-tools { display: flex; }
+.ev.past .ev-body, .ev.past .ev-time { opacity: .5; }
+.ev.now .ev-body { background: linear-gradient(90deg, #EAF2FD, rgba(234, 242, 253, 0)); border-radius: 0 12px 12px 0; }
+.now-badge { display: inline-block; background: var(--blue); color: #fff; font-size: 10px; font-weight: 800; padding: 1px 7px; border-radius: 999px; letter-spacing: .08em; }
+.add-ev { margin: 0 0 0 90px; }
+.day-note { margin-top: 14px; }
 .type-FLIGHT { --tc: var(--t-FLIGHT); } .type-TRANSPORT { --tc: var(--t-TRANSPORT); } .type-LODGING { --tc: var(--t-LODGING); }
 .type-FOOD { --tc: var(--t-FOOD); } .type-CAFE { --tc: var(--t-CAFE); } .type-SIGHT { --tc: var(--t-SIGHT); }
-.type-SHOP { --tc: var(--t-SHOP); } .type-RITUAL { --tc: var(--t-RITUAL); } .type-ONSEN { --tc: var(--t-ONSEN); }
+.type-SHOP { --tc: var(--t-SHOP); } .type-RAMEN { --tc: var(--t-RAMEN); } .type-WORK { --tc: var(--t-WORK); }
 
 /* ---------- wallet ---------- */
-.rate-card { background: linear-gradient(150deg, #173F33, #1E4D3A 60%, #2C6A51); color: #fff; }
+.rate-card { background: linear-gradient(150deg, #1F4FA8, #2F6FDB 60%, #5B8FE6); color: #fff; }
 .rate-card .card-title { color: #fff; }
-.rate-meta { font-size: 12px; opacity: .85; }
+.rate-meta { font-family: var(--sans); font-size: 12px; font-weight: 600; opacity: .85; }
 .conv { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin-top: 6px; }
-.conv-row { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, .12); border-radius: 14px; padding: 8px 12px; }
+.conv-row { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, .14); border-radius: 14px; padding: 8px 12px; }
 .conv-row .cur { width: 46px; font-weight: 800; letter-spacing: .05em; }
 .conv-row input { flex: 1; min-width: 0; width: 100%; background: transparent; border: 0; color: #fff; font-size: 24px; font-weight: 800; text-align: right; outline: none; }
-.conv-row input::placeholder { color: rgba(255, 255, 255, .45); }
-.swap { align-self: center; justify-self: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, .2); font-size: 18px; color: #fff; }
+.conv-row input::placeholder { color: rgba(255, 255, 255, .5); }
+.swap { align-self: center; justify-self: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, .22); font-size: 18px; color: #fff; }
 .rate-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: 13.5px; }
 .rate-line input { width: 92px; border-radius: 10px; border: 0; padding: 6px 8px; font-weight: 800; text-align: center; }
-.rate-line .btn { background: rgba(255, 255, 255, .18); color: #fff; }
-.rate-line .btn.on { background: var(--gold); color: #fff; }
+.rate-line .btn { background: rgba(255, 255, 255, .2); color: #fff; }
+.rate-line .btn.on { background: #fff; color: var(--blue); }
 .total-box { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.total-box .big { font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.total-box .big { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
 .exp-day { font-size: 12.5px; font-weight: 800; color: var(--muted); margin: 14px 0 2px; display: flex; justify-content: space-between; }
 .exp-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
 .exp-row .grow { flex: 1; min-width: 0; }
 .exp-row .amt { font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; }
 .exp-row .amt small { display: block; font-weight: 600; color: var(--muted); font-size: 11.5px; }
-.exp-del { width: 32px; height: 32px; border-radius: 50%; color: var(--muted); font-size: 15px; }
 
 /* ---------- tools ---------- */
-.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.tile { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px; text-align: left; min-height: 104px; display: flex; flex-direction: column; gap: 4px; }
-.tile .ic { font-size: 26px; }
-.tile .nm { font-weight: 800; font-size: 15px; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.tile { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px; text-align: left; min-height: 108px; display: flex; flex-direction: column; gap: 4px; }
+.tile .ic { width: 38px; height: 38px; border-radius: 12px; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; font-size: 20px; }
+.tile .nm { font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--navy); margin-top: 2px; }
 .tile .ds { font-size: 12px; color: var(--muted); line-height: 1.35; }
-.tile.hot { background: var(--berry); color: #fff; }
-.tile.hot .ds { color: rgba(255, 255, 255, .85); }
+.tile.hot { background: var(--red); }
+.tile.hot .ic { background: rgba(255, 255, 255, .2); color: #fff; }
+.tile.hot .nm { color: #fff; }
+.tile.hot .ds { color: rgba(255, 255, 255, .88); }
 .phrase { display: block; width: 100%; text-align: left; padding: 11px 0; border-top: 1px solid var(--line); }
 .phrase:first-child { border-top: 0; }
 .phrase .zh { font-size: 13px; color: var(--muted); }
-.phrase .jp { font-size: 16px; font-weight: 700; margin-top: 1px; }
+.phrase .jp { font-size: 16px; font-weight: 700; margin-top: 1px; color: var(--navy); }
 .cat-tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; scrollbar-width: none; }
 .cat-tabs::-webkit-scrollbar { display: none; }
-.cat-tabs button { flex: none; padding: 7px 14px; border-radius: 999px; background: #EFEBE3; font-weight: 700; font-size: 13.5px; min-height: 36px; }
-.cat-tabs button.on { background: var(--pine); color: #fff; }
+.cat-tabs button { flex: none; padding: 7px 14px; border-radius: 999px; background: #E9EEF6; font-weight: 700; font-size: 13.5px; min-height: 36px; color: var(--ink-2); }
+.cat-tabs button.on { background: var(--blue); color: #fff; }
 .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.gallery figure { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: #EEE; }
+.gallery figure { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: #E9EEF6; }
 .gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gallery figcaption { position: absolute; left: 0; right: 0; bottom: 0; font-size: 10.5px; color: #fff; padding: 2px 6px; background: linear-gradient(transparent, rgba(0, 0, 0, .6)); }
 .sun-table { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
 .sun-table th, .sun-table td { padding: 8px 4px; border-bottom: 1px solid var(--line); text-align: center; }
 .sun-table th { font-size: 12px; color: var(--muted); }
-.ticket-grid { display: grid; grid-template-columns: 64px repeat(3, 1fr); gap: 8px; align-items: center; }
-.ticket { min-height: 44px; border-radius: 12px; border: 2px dashed var(--line); font-weight: 700; font-size: 13px; color: var(--muted); }
-.ticket.on { border-style: solid; border-color: var(--t-ONSEN); background: #E3F2F5; color: var(--t-ONSEN); }
-.progress { height: 8px; border-radius: 99px; background: #EFEBE3; overflow: hidden; margin-top: 8px; }
-.progress > i { display: block; height: 100%; background: linear-gradient(90deg, var(--pine-2), var(--gold)); border-radius: 99px; }
+.progress { height: 8px; border-radius: 99px; background: #E9EEF6; overflow: hidden; margin-top: 8px; }
+.progress > i { display: block; height: 100%; background: linear-gradient(90deg, var(--blue-2), var(--blue)); border-radius: 99px; }
+.kv { display: grid; grid-template-columns: 84px 1fr; gap: 6px 10px; font-size: 14px; }
+.kv dt { color: var(--muted); font-weight: 700; font-size: 12.5px; padding-top: 2px; }
 
 /* ---------- info ---------- */
 .res-card { border-top: 1px solid var(--line); padding: 12px 0; }
 .res-card:first-child { border-top: 0; padding-top: 0; }
 .res-top { display: flex; align-items: flex-start; gap: 10px; }
+.res-top .ico { width: 36px; height: 36px; border-radius: 11px; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; flex: none; }
+.res-top .ico svg { width: 20px; height: 20px; }
 .res-top .grow { flex: 1; min-width: 0; }
-.res-name { font-weight: 800; }
+.res-name { font-weight: 800; color: var(--navy); }
 .res-when { font-size: 12.5px; color: var(--muted); }
 .status { font-size: 12px; font-weight: 800; border-radius: 999px; padding: 4px 10px; border: 0; min-height: 30px; -webkit-appearance: none; appearance: none; }
-.st-已購, .st-已訂 { background: var(--pine-soft); color: var(--pine); }
-.st-未訂 { background: var(--berry-soft); color: var(--berry); }
-.st-不需預約, .st-待查 { background: #EFEBE3; color: var(--ink-2); }
+.st-已購, .st-已訂 { background: var(--blue-soft); color: var(--blue); }
+.st-未訂 { background: var(--red-soft); color: var(--red); }
+.st-不需預約, .st-待查, .st-現場買 { background: #EEF1F6; color: var(--ink-2); }
 .conf-row { display: flex; gap: 8px; margin-top: 8px; }
 .conf-row input { flex: 1; min-width: 0; border: 1.5px solid var(--line); border-radius: 10px; padding: 7px 10px; font-family: ui-monospace, Menlo, monospace; font-weight: 700; letter-spacing: .04em; min-height: 40px; }
+.res-note { width: 100%; margin-top: 8px; border: 1.5px dashed var(--line); border-radius: 10px; padding: 7px 10px; font-size: 13.5px; min-height: 40px; resize: vertical; background: #FAFCFF; }
 .res-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .qr-slot { border-radius: 14px; border: 2px dashed var(--line); min-height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 8px; text-align: center; font-size: 13px; color: var(--muted); overflow: hidden; }
 .qr-slot img { width: 100%; max-height: 160px; object-fit: contain; border-radius: 8px; }
-.qr-slot.has { border-style: solid; border-color: var(--pine-soft); color: var(--ink); }
+.qr-slot.has { border-style: solid; border-color: var(--blue-soft); color: var(--ink); }
 .tel { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); text-decoration: none; }
 .tel:first-child { border-top: 0; }
 .tel .ico { font-size: 22px; width: 30px; text-align: center; }
 .tel .grow { flex: 1; min-width: 0; }
-.tel .num { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--pine); white-space: nowrap; }
+.tel .num { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--blue); white-space: nowrap; }
 .food-tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .food-tbl td { padding: 7px 4px; border-top: 1px solid var(--line); vertical-align: top; }
 .food-tbl tr:first-child td { border-top: 0; }
-.food-tbl td:first-child { font-weight: 800; white-space: nowrap; width: 52px; }
-.kv { display: grid; grid-template-columns: 84px 1fr; gap: 6px 10px; font-size: 14px; }
-.kv dt { color: var(--muted); font-weight: 700; font-size: 12.5px; padding-top: 2px; }
+.food-tbl td:first-child { font-weight: 800; white-space: nowrap; width: 60px; color: var(--navy); }
 .map-frame { width: 100%; height: 320px; border: 0; border-radius: 14px; margin-top: 8px; }
 .status-list { font-size: 13.5px; }
 .status-list div { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); }
 .status-list div:first-child { border-top: 0; }
-.update-banner { display: flex; gap: 10px; align-items: center; background: var(--pine-soft); color: var(--pine); border-radius: 14px; padding: 10px 12px; margin-bottom: 12px; font-size: 13.5px; }
+.update-banner { display: flex; gap: 10px; align-items: center; background: var(--blue-soft); color: var(--blue); border-radius: 14px; padding: 10px 12px; margin: 8px 0 12px; font-size: 13.5px; }
 
 /* ---------- sheets ---------- */
-.backdrop { position: fixed; inset: 0; background: rgba(15, 22, 18, .42); z-index: 60; opacity: 0; transition: opacity .2s; }
+.backdrop { position: fixed; inset: 0; background: rgba(14, 30, 60, .38); z-index: 60; opacity: 0; transition: opacity .2s; }
 .backdrop.show { opacity: 1; }
 .sheet {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 61; margin: 0 auto; max-width: 560px;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 61; margin: 0 auto; max-width: 640px;
   background: var(--bg); border-radius: 22px 22px 0 0; max-height: 90vh; max-height: 90dvh;
   display: flex; flex-direction: column; transform: translateY(100%); transition: transform .24s cubic-bezier(.2, .8, .2, 1);
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, .18);
+  box-shadow: 0 -10px 40px rgba(14, 30, 60, .18);
 }
 .sheet.show { transform: none; }
 .sheet-head { display: flex; align-items: center; gap: 10px; padding: 10px 16px 8px; position: relative; }
-.sheet-head::before { content: ""; position: absolute; top: 6px; left: 50%; margin-left: -20px; width: 40px; height: 5px; border-radius: 9px; background: #D6CFC2; }
-.sheet-title { flex: 1; font-weight: 800; font-size: 17px; padding-top: 10px; }
-.sheet-close { width: 36px; height: 36px; border-radius: 50%; background: #EAE5DB; font-size: 15px; margin-top: 8px; color: var(--ink-2); }
+.sheet-head::before { content: ""; position: absolute; top: 6px; left: 50%; margin-left: -20px; width: 40px; height: 5px; border-radius: 9px; background: #CFD9E8; }
+.sheet-title { flex: 1; font-family: var(--serif); font-weight: 700; font-size: 18px; color: var(--navy); padding-top: 10px; }
+.sheet-close { width: 36px; height: 36px; border-radius: 50%; background: #E6ECF5; font-size: 15px; margin-top: 8px; color: var(--ink-2); }
 .sheet-body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 6px 16px calc(var(--safe-b) + 20px); overscroll-behavior: contain; }
-.det-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; font-weight: 800; color: var(--tc); }
-.det-title { font-size: 21px; font-weight: 800; line-height: 1.3; margin-top: 6px; }
+.det-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; font-weight: 800; color: var(--tc); letter-spacing: .06em; }
+.det-head .tm { font-family: var(--serif); font-size: 17px; color: var(--blue); letter-spacing: 0; }
+.det-title { font-family: var(--serif); font-size: 22px; font-weight: 700; line-height: 1.3; margin-top: 6px; color: var(--navy); }
 .det-sub { color: var(--ink-2); margin-top: 4px; font-size: 14.5px; }
-.det-rows { margin-top: 12px; background: var(--card); border-radius: 14px; padding: 4px 12px; }
-.det-rows > div { display: flex; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 14.5px; }
+.det-rows { margin-top: 12px; background: var(--card); border-radius: 14px; padding: 4px 12px; box-shadow: var(--shadow); }
+.det-rows > div { display: flex; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 14.5px; align-items: center; }
 .det-rows > div:first-child { border-top: 0; }
-.det-rows .k { width: 22px; text-align: center; flex: none; }
+.det-rows .k { width: 22px; text-align: center; flex: none; color: var(--blue); }
 .det-desc { margin-top: 12px; white-space: pre-wrap; font-size: 14.5px; }
 
 /* ---------- full-screen card ---------- */
 .fullcard { position: fixed; inset: 0; z-index: 80; background: #fff; color: #111; display: flex; flex-direction: column; padding: calc(var(--safe-t) + 10px) 18px calc(var(--safe-b) + 18px); overflow-y: auto; }
 .fc-top { display: flex; align-items: center; gap: 8px; }
 .fc-top .seg { flex: 1; overflow-x: auto; }
-.fc-close { width: 44px; height: 44px; border-radius: 50%; background: #F0F0F0; font-size: 18px; flex: none; margin-left: auto; }
+.fc-close { width: 44px; height: 44px; border-radius: 50%; background: #F0F3F8; font-size: 18px; flex: none; margin-left: auto; }
 .fc-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 14px 2px; }
-.fc-badge { display: inline-block; align-self: flex-start; background: var(--berry); color: #fff; font-weight: 800; padding: 4px 12px; border-radius: 999px; font-size: 15px; }
+.fc-badge { display: inline-block; align-self: flex-start; background: var(--red); color: #fff; font-weight: 800; padding: 4px 12px; border-radius: 999px; font-size: 15px; }
+.fc-badge.blue { background: var(--blue); }
 .fc-big { font-size: clamp(30px, 9.5vw, 46px); font-weight: 900; line-height: 1.25; margin-top: 14px; color: #111; }
-.fc-big .ng { color: var(--berry); }
+.fc-big .ng { color: var(--red); }
 .fc-big .nw { white-space: nowrap; }
 .fc-ja { font-size: 18px; line-height: 1.65; margin-top: 14px; }
 .fc-list { list-style: none; margin-top: 12px; font-size: 20px; font-weight: 800; line-height: 1.6; }
-.fc-list li::before { content: "✕ "; color: var(--berry); }
+.fc-list li::before { content: "✕ "; color: var(--red); }
 .fc-list li small { font-size: 15px; font-weight: 600; color: #555; }
 .fc-yn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
 .fc-yn span { display: block; text-align: center; padding: 14px 6px; border-radius: 16px; font-size: 19px; font-weight: 900; }
-.fc-yn .y { background: var(--pine-soft); color: var(--pine); }
-.fc-yn .n { background: var(--berry-soft); color: var(--berry); }
+.fc-yn .y { background: var(--blue-soft); color: var(--blue); }
+.fc-yn .n { background: var(--red-soft); color: var(--red); }
 .fc-zh { margin-top: 18px; font-size: 13.5px; color: #666; border-top: 1px solid #EEE; padding-top: 10px; }
 .fc-sub { font-size: 20px; color: #333; margin-top: 12px; line-height: 1.5; }
 .fc-img { width: 100%; max-height: 72vh; object-fit: contain; }
 
-#toast { position: fixed; left: 50%; bottom: calc(var(--tabbar-h) + var(--safe-b) + 18px); transform: translate(-50%, 20px); background: rgba(29, 35, 32, .94); color: #fff; padding: 10px 16px; border-radius: 14px; font-size: 14px; z-index: 90; opacity: 0; transition: .2s; pointer-events: none; max-width: calc(100% - 32px); text-align: center; }
+#toast { position: fixed; left: 50%; bottom: calc(var(--safe-b) + 96px); transform: translate(-50%, 20px); background: rgba(27, 42, 65, .94); color: #fff; padding: 10px 16px; border-radius: 14px; font-size: 14px; z-index: 90; opacity: 0; transition: .2s; pointer-events: none; max-width: calc(100% - 32px); text-align: center; }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 </style>
 </head>
 <body>
 
 <header class="topbar">
-  <div class="brand">
-    <div class="brand-mark">🎄</div>
-    <div>
-      <div class="brand-title">Kobe X'max</div>
-      <div class="brand-sub">大阪 ＆ 神戶・12.24 – 12.27</div>
-    </div>
-  </div>
-  <div id="countdown" class="countdown"></div>
+  <div class="kicker">大阪 ＆ 神戶</div>
+  <div class="title">【 Kobe。X'max 】</div>
+  <div class="sub-line" id="countdown"></div>
 </header>
 
 <main>
@@ -410,211 +383,220 @@ main { max-width: 560px; margin: 0 auto; padding: 12px 16px calc(var(--tabbar-h)
   <section id="view-info" class="view"></section>
 </main>
 
-<nav class="tabbar">
+<nav class="tabbar" aria-label="分頁">
   <div class="tabbar-inner">
-    <button class="tab active" data-view="trip">
-      <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>行程
-    </button>
-    <button class="tab" data-view="wallet">
-      <svg viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3"/><rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path d="M16 13.5h1.5"/></svg>錢包
-    </button>
-    <button class="tab" data-view="tools">
-      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>工具
-    </button>
-    <button class="tab" data-view="info">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.8v.2"/></svg>資訊
-    </button>
+    <button class="tab active" data-view="trip" aria-label="行程"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>行程</button>
+    <button class="tab" data-view="wallet" aria-label="錢包"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>錢包</button>
+    <button class="tab" data-view="tools" aria-label="工具"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>工具</button>
+    <button class="tab" data-view="info" aria-label="資訊"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>資訊</button>
   </div>
 </nav>
 
 <div id="toast"></div>
 <input type="file" id="filePick" hidden>
-
 <script>
 'use strict';
 
 /* =========================================================
-   資料（公開）：行程 v1.2 + 2026-07-06 餐廳定案
-   訂位確認號、VJW QR、個人電話等只存在手機本機（localStorage / IndexedDB）
+   資料（公開）：2026-10-20 神戶新行程
+   訂位代號、姓名、座位、電話等私人資料不放這裡，只存在手機（localStorage／IndexedDB）
    ========================================================= */
-const DATA_VER = 1;
+const DATA_VER = 2;
+const DATA_LABEL = '神戶新行程 2026-10-20';
 const TRIP_START = '2026-12-24';
 const TRIP_END = '2026-12-27';
 
 const LOCS = {
-  fukushima: { name: '大阪・福島', lat: 34.6966, lon: 135.4847, normal: '12 月平年：高約 11°C／低約 4°C' },
-  usj:       { name: 'USJ・此花', lat: 34.6654, lon: 135.4323, normal: '12 月平年：高約 11°C／低約 4°C' },
-  kobe:      { name: '神戶・三宮', lat: 34.6946, lon: 135.1955, normal: '12 月平年：高約 11°C／低約 4°C' },
-  umeda:     { name: '大阪・梅田', lat: 34.7025, lon: 135.4959, normal: '12 月平年：高約 11°C／低約 4°C' }
+  kobe:      { name: '神戶・美利堅公園', short: '神戶', en: 'Kobe', lat: 34.6800, lon: 135.1890, normal: '12 月平年：高約 11°C／低約 4°C（約略）' },
+  sannomiya: { name: '神戶・三宮', short: '三宮', en: 'Sannomiya', lat: 34.6946, lon: 135.1955, normal: '12 月平年：高約 11°C／低約 4°C（約略）' },
+  usj:       { name: '大阪・USJ', short: 'USJ', en: 'Universal City', lat: 34.6654, lon: 135.4323, normal: '12 月平年：高約 11°C／低約 4°C（約略）' }
 };
 
 const TYPES = {
-  FLIGHT:    { icon: '✈️', label: '航班' },
-  TRANSPORT: { icon: '🚃', label: '交通' },
-  LODGING:   { icon: '🏨', label: '住宿' },
-  FOOD:      { icon: '🍽️', label: '餐廳' },
-  CAFE:      { icon: '☕', label: '咖啡甜點' },
-  SIGHT:     { icon: '📍', label: '景點' },
-  SHOP:      { icon: '🛍️', label: '購物' },
-  RITUAL:    { icon: '🍜', label: '儀式' },
-  ONSEN:     { icon: '♨️', label: '溫泉' }
+  FLIGHT:    { icon: 'flight', en: 'FLIGHT', zh: '航班' },
+  TRANSPORT: { icon: 'train', en: 'TRANSPORT', zh: '交通' },
+  LODGING:   { icon: 'hotel', en: 'LODGING', zh: '住宿' },
+  FOOD:      { icon: 'food', en: 'FOOD', zh: '餐廳' },
+  CAFE:      { icon: 'cafe', en: 'CAFE', zh: '咖啡甜點' },
+  RAMEN:     { icon: 'ramen', en: 'RAMEN', zh: '拉麵儀式' },
+  SIGHT:     { icon: 'place', en: 'SIGHT', zh: '景點' },
+  SHOP:      { icon: 'bag', en: 'SHOPPING', zh: '購物' },
+  WORK:      { icon: 'work', en: 'WORK', zh: '上班' }
 };
 
 const HOTEL = {
-  name: 'ホテル阪神大阪（本館）',
-  zh: '阪神大阪飯店（本館）',
-  addr: '〒553-0003 大阪府大阪市福島区福島5-6-16',
-  phone: '06-6344-1661',
-  url: 'https://www.hankyu-hotel.com/hotel/hs/hanshin',
-  map: 'ホテル阪神大阪',
-  room: 'スーペリアダブル（禁菸）30㎡／床 180×200，2026 年 4 月翻新',
-  price: '3 晚總額 ¥80,700 − 即時折扣 ¥16,120 ＝ 實付 ¥64,580（稅＋服務費込）',
-  checkin: '15:00–21:00（官方 FAQ：超過 24:00 才需事前聯繫）',
-  checkout: '12:00',
-  onsen: '溫泉＋三溫暖入場券每人每晚 1 張｜7F 男湯「阪神サウナ」／6F 女湯｜10:00–23:00（最終入場 22:00）',
-  meals: '無早晚餐（睡到自然醒，餓了再出門吃）',
-  access: '阪神「福島」西口②出口即到｜JR 福島站即到｜JR 東西線新福島站徒步約 2 分'
+  name: '神戸メリケンパークオリエンタルホテル',
+  zh: '神戶美利堅公園東方酒店',
+  addr: '〒650-0042 兵庫県神戸市中央区波止場町5-6',
+  phone: '078-325-8111',
+  url: 'https://www.kobe-orientalhotel.co.jp/',
+  map: '神戸メリケンパークオリエンタルホテル',
+  rows: [
+    ['地址', '〒650-0042 兵庫県神戸市中央区波止場町5-6（メリケンパーク）'],
+    ['交通', 'みなと元町駅 2 號出口徒步約 8 分｜JR・阪神 元町駅徒步約 15 分｜三宮有免費接駁巴士（每日；乘車處與末班待確認）'],
+    ['房型', 'Standard Double Room（West View）標準雙人大床房・西景'],
+    ['入住', '15:00 起（櫃台受理到 23:00）'],
+    ['退房', '11:00'],
+    ['早餐', '含 3 日雙人自助早餐｜3F ALL FLAGS 7:00–11:00（L.O. 10:30），不用預約、先到先入座，人多時限 90 分'],
+    ['付款', '到店付款｜12/22 前免費取消'],
+    ['寄放行李', '退房後寄放行李在公開資料查不到，入住時跟櫃台確認']
+  ],
+  tip: '12/24 搭 21:00 船約 22:00 到飯店（預估）；改搭 22:00 船則約 23:00，剛好壓在櫃台受理時間（到 23:00）。會晚到請先打電話，或請飯店同意晚餐後再入住。',
+  firstNight: '今晚入住（約 22:00，預估）',
+  midStay: '續住｜早餐 7:00–11:00（L.O. 10:30）',
+  lastDay: '11:00 前退房｜行李寄放（入住時向櫃台確認）'
 };
 
 const TRIP_DEFAULT = {
   days: [
     {
-      id: 'd1', date: '2026-12-24', loc: 'fukushima', theme: 'night', bg: '',
-      city: '大阪・福島', title: '抵達＋燒肉＋一蘭儀式',
-      branches: { A: '一蘭 梅田芝田店', B: '一蘭 道頓堀別館 24h' },
-      note: '⭐花くじら本店（關東煮）改列 12/25、12/26 晚歸後的彈性宵夜選項。',
+      id: 'd1', date: '2026-12-24', loc: 'kobe', theme: 'night', bg: '',
+      city: '台北 → 神戶', title: '出發・抵達神戶',
+      branches: { A: '21:00 船', B: '22:00 船（備案）' },
+      note: '19:30 落地後要在 20:40 前辦好船票手續才趕得上 21:00 船（入境＋行李抓 45–75 分，下機排隊也要算進去），來不及就切到 B 案 22:00 船。\nB 案約 23:00 到飯店（櫃台受理到 23:00）、約 23:20 到仔牛屋（L.O. 24:00，只剩約 40 分）：訂位時講清楚；也可以先請飯店同意晚餐後（約 00:30）再入住，計程車直接去仔牛屋。\n若只能搭 0:00 末班（神戶 0:31 到；沒有 Port Liner，船站也沒有計程車招呼站），仔牛屋趕不上，直接吃一蘭（營業到翌 4:00）。\n航班延誤就到 KIX T1 1F 櫃台改搭下一班（櫃台 6:00–0:15）。風浪大時高速船會停航，冬天通常前一天 14:00 左右公告。',
       events: [
-        { id: 'd1e1', time: '15:40', type: 'FLIGHT', official: true, title: 'AirAsia X D7 378 起飛', sub: 'TPE 15:40 → KIX 19:20（已購）', map: '台灣桃園國際機場', res: 'flight-out' },
-        { id: 'd1e2', time: '19:20', type: 'FLIGHT', official: true, title: 'KIX 落地', sub: '入境＋行李抓 60 分', map: '関西国際空港', desc: 'Visit Japan Web QR 在「資訊」分頁。' },
-        { id: 'd1e3', time: '20:40', type: 'TRANSPORT', est: true, title: 'JR 関空快速 → 福島', sub: '直達福島，約 70 分 ¥1,210', map: 'JR福島駅', desc: '兩人 iPhone Wallet 的 ICOCA 直接刷。' },
-        { id: 'd1e4', time: '21:50', type: 'LODGING', est: true, title: 'ホテル阪神大阪 check-in', sub: '超過 24:00 才需事前聯繫，不需寫信', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel', desc: '不放心可在訂房備註加「21時半頃到着予定」。' },
-        { id: 'd1e5', time: '22:00', end: '23:15', type: 'FOOD', title: '焼肉ごりちゃん 福島店', sub: '定案｜4.9｜阪神福島西口徒步 1 分', phone: '06-6454-7036', hours: '17:00–24:00', url: 'https://www.hotpepper.jp/strJ003324789/', map: '焼肉ごりちゃん 福島店', res: 'gorichan', warn: '預約 22:00 場＋告知可能延遲＋玉ねぎ完全NG' },
-        { id: 'd1e6', time: '23:30', type: 'RITUAL', branch: 'A', title: '一蘭儀式 #1｜梅田芝田店', sub: '第一晚必吃｜計程車約 8 分', url: 'https://r.gnavi.co.jp/5hv3s1k00000/', map: '一蘭 梅田芝田店', warn: '深夜營業時間待確認', desc: '金錢換體力＝計程車直達。' },
-        { id: 'd1e7', time: '23:30', type: 'RITUAL', branch: 'B', title: '一蘭儀式 #1｜道頓堀店別館', sub: '第一晚必吃｜24 小時營業｜計程車約 15 分', hours: '24 小時', url: 'https://en.ichiran.com/shop/kinki/dotonbori-south/', map: '一蘭 道頓堀店別館', desc: '金錢換體力＝計程車直達。' },
-        { id: 'd1e8', time: '00:30', label: '歸途', type: 'SHOP', title: '超商買 12/25 早餐', sub: '伴侶可先回飯店休息' }
+        { id: 'd1e1', time: '08:00', label: '早上', type: 'WORK', title: '上班（北大高中）', sub: '行李今天要帶到學校' },
+        { id: 'd1e2', time: '12:00', label: '中午', icon: 'taxi', type: 'TRANSPORT', title: '機場接送：北大高中 → 桃園機場 T1', sub: '下班直接出發｜約 30 km，中午抓 35–45 分', res: 'transfer' },
+        { id: 'd1e3', time: '13:00', est: true, type: 'FLIGHT', title: '桃園機場 第一航廈 報到', sub: 'AirAsia 櫃台 2（AK 改編後待確認）｜櫃台 14:40 關閉、登機門 15:20 關閉', map: '台灣桃園國際機場 第一航廈' },
+        { id: 'd1e4', time: '15:40', official: true, type: 'FLIGHT', title: 'AirAsia AK 176 起飛', sub: 'TPE T1 15:40 → KIX T1 19:30｜托運 20kg＋手提 7kg（每人）', res: 'flight-out', desc: '這條航線 10/25 起由 AirAsia X（D7）改成 AirAsia（AK），時間不變。出發前在 App 再確認一次。' },
+        { id: 'd1e5', time: '19:30', official: true, type: 'FLIGHT', title: '關西機場 T1 落地', sub: '入境＋提領行李（抓 45–75 分）', map: '関西国際空港 第1ターミナル' },
+        { id: 'd1a1', time: '20:30', branch: 'A', est: true, icon: 'boat', type: 'TRANSPORT', title: '買高速船票（20:40 前辦好）', sub: 'T1 1F A 出入口旁櫃台（6:00–0:15）｜大人單程 ¥1,880', res: 'boat-in', map: '関西空港 ベイ・シャトル チケットカウンター', desc: '訪日外國人 ¥500 優惠已在 2026/6/30 停售，一律 ¥1,880。\n「ポートライナーセット券」同價，多送一趟 Port Liner 三宮⇔神戸空港。\n至少開船前 20 分辦好手續；現場票看空位，網路預約者優先。', warn: '現場買要看空位；平安夜可考慮先網路預約' },
+        { id: 'd1a2', time: '20:50', branch: 'A', est: true, icon: 'boat', type: 'TRANSPORT', title: '12 番のりば 接駁巴士 → 船站', sub: '免費，約 6–7 分｜船站不能步行或搭計程車前往' },
+        { id: 'd1a3', time: '21:00', end: '21:31', branch: 'A', icon: 'boat', type: 'TRANSPORT', title: '神戸-関空ベイ・シャトル → 神戸空港', sub: '約 31 分｜現行時刻表，12 月前再確認', url: 'https://www.kobe-access.jp/', map: '神戸空港 海上アクセスターミナル' },
+        { id: 'd1a4', time: '21:35', branch: 'A', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 飯店', sub: '約 20 分｜約 ¥3,000–4,000（預估）', map: '神戸空港 タクシー乗り場', warn: '船站沒有計程車招呼站：走 5–6 分或搭免費接駁到機場航廈 1F 搭車', desc: '深夜計程車可能少：先預約計程車（例：神戸MK）或請飯店安排；叫車 App 在船站常被拒載。' },
+        { id: 'd1a5', time: '22:00', branch: 'A', est: true, type: 'LODGING', title: '飯店 check-in', sub: '櫃台受理到 23:00', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel' },
+        { id: 'd1a6', time: '22:30', branch: 'A', est: true, type: 'FOOD', title: '仔牛屋 神戸三宮店', sub: '神戸牛燒肉・全室包廂｜L.O. 24:00｜飯店搭計程車約 10 分', phone: '078-222-1529', hours: '17:00–25:00（L.O. 24:00）・週日休', addr: '神戸市中央区中山手通1-25-6 ラ・ドルレイ神戸三宮 3F', url: 'https://www.koushiya.jp/sannomiya.html', map: '仔牛屋 神戸三宮店', res: 'koushiya', warn: '尚未預訂：平安夜＋全室包廂，盡快訂；告知可能 22:30–23:30 才到＋玉ねぎ完全NG', desc: '官網、ヒトサラ、ぐるなび都能網路預約，也可以打電話。\n套餐約 ¥16,800 起，平均 ¥7,000–9,000。' },
+        { id: 'd1a7', time: '23:50', branch: 'A', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 先搭計程車回飯店休息｜離仔牛屋走路約 5 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店', desc: '神戶沒有 24 小時的一蘭。平安夜可能人多，官網說客滿時 L.O. 前也可能不能入店。' },
+        { id: 'd1a8', time: '00:30', branch: 'A', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分（走路約 25 分）', map: HOTEL.map },
+        { id: 'd1b1', time: '21:30', branch: 'B', est: true, icon: 'boat', type: 'TRANSPORT', title: '買高速船票（21:40 前辦好）', sub: 'T1 1F A 出入口旁櫃台（6:00–0:15）｜大人單程 ¥1,880', res: 'boat-in', map: '関西空港 ベイ・シャトル チケットカウンター', desc: '至少開船前 20 分辦好手續；現場票看空位，網路預約者優先。之後只剩 0:00 末班。' },
+        { id: 'd1b2', time: '21:50', branch: 'B', est: true, icon: 'boat', type: 'TRANSPORT', title: '12 番のりば 接駁巴士 → 船站', sub: '免費，約 6–7 分' },
+        { id: 'd1b3', time: '22:00', end: '22:31', branch: 'B', icon: 'boat', type: 'TRANSPORT', title: '神戸-関空ベイ・シャトル → 神戸空港', sub: '約 31 分｜現行時刻表，12 月前再確認｜之後只剩 0:00 末班', url: 'https://www.kobe-access.jp/', map: '神戸空港 海上アクセスターミナル' },
+        { id: 'd1b4', time: '22:40', branch: 'B', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 飯店', sub: '約 20 分｜約 ¥3,600–4,800（預估，22:00 後夜間加成）', map: '神戸空港 タクシー乗り場', warn: '船站沒有計程車招呼站：走 5–6 分或搭免費接駁到機場航廈 1F 搭車', desc: '深夜計程車可能少：先預約計程車（例：神戸MK）或請飯店安排；叫車 App 在船站常被拒載。' },
+        { id: 'd1b5', time: '23:00', branch: 'B', est: true, type: 'LODGING', title: '飯店 check-in（壓線）', sub: '櫃台受理到 23:00：先打電話說晚到，或請飯店同意晚餐後再入住、計程車直接去仔牛屋', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel' },
+        { id: 'd1b6', time: '23:20', branch: 'B', est: true, type: 'FOOD', title: '仔牛屋 神戸三宮店', sub: '神戸牛燒肉・全室包廂｜L.O. 24:00', phone: '078-222-1529', hours: '17:00–25:00（L.O. 24:00）・週日休', addr: '神戸市中央区中山手通1-25-6 ラ・ドルレイ神戸三宮 3F', url: 'https://www.koushiya.jp/sannomiya.html', map: '仔牛屋 神戸三宮店', res: 'koushiya', warn: '離 L.O. 24:00 只剩約 40 分：訂位時講清楚可能晚到，請店家保留到約 23:30；玉ねぎ完全NG' },
+        { id: 'd1b7', time: '00:30', branch: 'B', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 先搭計程車回飯店休息｜離仔牛屋走路約 5 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店' },
+        { id: 'd1b8', time: '01:10', branch: 'B', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分', map: HOTEL.map }
       ]
     },
     {
       id: 'd2', date: '2026-12-25', loc: 'usj', theme: 'usj', bg: '',
-      city: 'USJ・此花', title: 'USJ 聖誕日（無快通・過節為主）',
+      city: '大阪・USJ', title: 'USJ 聖誕氣氛日',
       branches: null,
-      note: '前提：年度最高擁擠；表定開園假設 8:30，實際常提早；聖誕樹已落幕，主軸＝夜間秀。\n2026 冬季活動「ユニバーサル・ホリデー・ワンダーズ」11/13–2027/1/17（9/14 公布）。早餐：超商（定案，Onigiri Gorichan 開店來不及）。',
+      note: '去 USJ 是為了聖誕氣氛，不是為了玩設施；抵達時間未定。\n大型聖誕樹 2025 年已落幕，今年主角是夜間秀和霍格華茲城堡投影。\n回程建議 22:30 前離開ユニバーサルシティ（末班車未確認）。',
       events: [
-        { id: 'd2e1', time: '06:45', type: 'TRANSPORT', title: '出門 → USJ', sub: 'JR 福島 → 西九条 → ゆめ咲線，約 15 分 ¥190', map: 'ユニバーサルシティ駅' },
-        { id: 'd2e2', time: '07:15', type: 'SIGHT', title: '閘門排隊卡位', sub: '早餐：前晚買好的超商', res: 'usj' },
-        { id: 'd2e3', time: '08:00', label: '08:00 前後', type: 'SIGHT', title: '開園 rope drop → 往侏羅紀方向', sub: '表定開園假設 8:30，實際常提早' },
-        { id: 'd2e4', time: '08:10', end: '09:00', type: 'SIGHT', title: '飛天翼龍 single rider（Aaron）', sub: '同行者：侏羅紀區咖啡休息／拍照', desc: 'ザ・フライング・ダイナソー。工具 → USJ 快捷區有 single rider 清單。' },
-        { id: 'd2e5', time: '09:00', end: '11:15', type: 'SIGHT', title: '哈利波特園區（兩人同行）', sub: '禁忌之旅 → 鷹馬 → 奶油啤酒＋雪景城堡' },
-        { id: 'd2e6', time: '11:30', end: '12:30', type: 'FOOD', title: '午餐：三根掃帚', sub: '哈利波特園區', warn: '點餐注意洋蔥／芋頭' },
-        { id: 'd2e7', time: '12:45', end: '14:30', type: 'SHOP', title: '紐約區・好萊塢區聖誕巡禮', sub: '限定商店' },
-        { id: 'd2e8', time: '14:30', end: '15:30', type: 'SIGHT', title: '溫和備選', sub: '大白鯊／小小兵聖誕 Greeting；或休息' },
-        { id: 'd2e9', time: '15:30', end: '16:30', type: 'CAFE', title: '園內咖啡＋甜點', sub: '伴侶每日下午咖啡廳 ✓' },
-        { id: 'd2e10', time: '17:00', end: '17:30', type: 'SIGHT', title: '占位聖誕夜間秀' },
-        { id: 'd2e11', time: '17:30', end: '18:30', type: 'SIGHT', title: '🎄 聖誕夜間秀＝本日主目的', sub: '2026：ライト・アップ・ザ・ナイト～クリスマス・セレブレーション～', url: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders/light-up-the-night', warn: '場次 11 月公布 → 填進「工具 → USJ 快捷區」' },
-        { id: 'd2e12', time: '18:45', end: '20:00', type: 'FOOD', title: 'Parkside Grill 牛排', sub: 'TableCheck 優先案內：11/25 台灣 10:00 開搶', url: 'https://www.tablecheck.com/en/shops/parkside-grille/reserve', map: 'パークサイド・グリル USJ', res: 'parkside', warn: '訂位註明：玉ねぎ／タロイモNG、伴侶牛肉熟度適中', desc: '優先案內＝入園日前 1 個月 11:00（JST）開放 → 11/25 台灣時間 10:00。\n備援：當日門口 QR。前日可取消。' },
-        { id: 'd2e13', time: '20:00', end: '20:40', type: 'SHOP', title: '燈飾巡禮＋採買' },
-        { id: 'd2e14', time: '20:45', type: 'TRANSPORT', title: '出園 → 回福島', sub: '21:30（預估）到福島；趕得上可衝溫泉（最終入場 22:00）' }
+        { id: 'd2e1', time: '08:30', label: '早上', type: 'FOOD', title: '飯店早餐', sub: '3F ALL FLAGS 自助餐｜7:00–11:00（L.O. 10:30）', map: HOTEL.map },
+        { id: 'd2e2', time: '10:00', label: '時間未定', icon: 'train', type: 'TRANSPORT', title: '前往 USJ', sub: 'JR 三ノ宮／元町 → 大阪 → 西九条 → ユニバーサルシティ｜約 52 分 ¥660（門到門抓 70–75 分）', map: 'ユニバーサルシティ駅', desc: '比較便宜的走法：阪神 神戸三宮／元町 → 阪神なんば線 → 西九条 → JR ゆめ咲線，約 45 分 ¥500。' },
+        { id: 'd2e3', time: '11:30', label: '抵達後', type: 'SIGHT', title: 'USJ 聖誕巡禮', sub: 'ユニバーサル・ホリデー・ワンダーズ（11/13–1/17）｜冬季限定餐點、Greeting', url: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders', map: 'ユニバーサル・スタジオ・ジャパン', res: 'usj', desc: '工具 → USJ 聖誕 有完整亮點清單與演出場次備忘。' },
+        { id: 'd2e4', time: '17:30', label: '傍晚', type: 'SIGHT', title: '夜間秀：ライト・アップ・ザ・ナイト', sub: 'グラマシーパーク（紐約區）｜聖誕歌、舞蹈、雪、煙火｜2025 年約 17:30、19:30 兩場', url: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders/light-up-the-night', warn: '2026 場次未公布 → 公布後填進「工具 → USJ 聖誕」', desc: '同區還有「ジョイ・オブ・ライツ」（約 10 分，睽違 9 年復活）。\n兩場秀可買「特別鑑賞エリア」¥1,700 起，不用卡位。\n霍格華茲城堡投影「ホグワーツ・マジカル・ナイト〜ウインター・マジック〜」也在晚上。' },
+        { id: 'd2e5', time: '18:30', est: true, type: 'FOOD', title: 'USJ 晚餐', sub: '候選：Parkside Grill（緊鄰夜間秀場地）、Finnegan\'s、Lombard\'s Landing、Studio Stars（聖誕餐盤）', res: 'usj-dinner', warn: '點餐注意玉ねぎ／タロイモ', desc: '「レストラン優先案內」預計入園日前 1 個月 11:00 開放（12/25 → 11/25 11:00），屬非官方資訊，以官方 App 為準。' },
+        { id: 'd2e6', time: '20:30', est: true, icon: 'train', type: 'TRANSPORT', title: '離開 USJ → 神戶', sub: '約 70–75 分到飯店' },
+        { id: 'd2e7', time: '21:45', est: true, type: 'LODGING', title: '回飯店' },
+        { id: 'd2e8', time: '22:15', est: true, type: 'RAMEN', title: '第一旭 三宮本店（Aaron 儀式）', sub: 'JR・阪急高架下｜計程車約 10 分', phone: '078-251-9346', hours: '平日・週六 10:00–翌 2:00（9/4 起有調整，待確認）', addr: '神戸市中央区琴ノ緒町4丁目1-394', url: 'https://www.asahi-foods.co.jp/shop.html', map: '神戸ラーメン第一旭 三宮本店', warn: '9/4 起營業時間有變更，出發前再確認', desc: '2023/12 搬到現址，有些網站還寫舊地址（旭通5-15-2）。客滿可去同系列 三宮西店。' }
       ]
     },
     {
-      id: 'd3', date: '2026-12-26', loc: 'kobe', theme: 'kobe', bg: '',
-      city: '神戶・三宮／Harborland', title: '神戶慢節奏過節版',
-      branches: null,
-      note: '可選插件：北野異人館速覽 90 分。\n神戸ルミナリエ已改到 1/30–2/8，12 月看港區燈飾。',
+      id: 'd3', date: '2026-12-26', loc: 'sannomiya', theme: 'kobe', bg: '',
+      city: '神戶・三宮／港區', title: '神戶慢活・港邊黃昏',
+      branches: { A: '11:00 吃みなと軒', B: '晚餐後吃みなと軒' },
+      note: '原本想早餐前先吃みなと軒，但三宮高架下店 11:00 才開、飯店早餐 10:30 最後點餐，所以分兩個方案：A 早餐後 11:00 一開店就吃；B 石田屋晚餐後再吃（營業到 24:00）。\n原本 Yvonne 在飯店等：A 案她可以在飯店多休息、晚點到ナガサワ會合，或先逛ナガサワ；B 案她先搭計程車回飯店。\n14:00 後查 kobe-access.jp：明天（12/27）的高速船是否停航。\n神戶多數聖誕燈飾到 12/25 結束，今天看港區常設夜景＋摩天輪。',
       events: [
-        { id: 'd3e1', time: '10:30', type: 'TRANSPORT', title: '阪神福島 → 三宮', sub: '直通特急 約 35 分 ¥330', map: '阪神福島駅' },
-        { id: 'd3e2', time: '11:10', type: 'SIGHT', title: '三宮著，散步暖身', map: '三宮駅' },
-        { id: 'd3e3', time: '11:30', end: '13:30', type: 'FOOD', title: '神戸プレジール本店（神戶牛）', sub: '定案｜Hotel The B Kobe 1F', phone: '078-571-0141', hours: 'Lunch 11:30–15:00（L.O. 14:00）', url: 'https://www.tablecheck.com/ja/shops/kobe-kobeplaisir/reserve', map: '神戸プレジール 本店', res: 'plaisir', warn: '訂位備註：玉ねぎ／タロイモ完全NG（鐵板燒常用洋蔥爆香）、伴侶熟度適中、包廂', desc: '伴侶熟度＝適中（不見血、不過熟），Aaron 自由。' },
-        { id: 'd3e4', time: '13:45', end: '15:30', type: 'CAFE', title: '幸せのパンケーキ 神戸店', sub: '舒芙蕾鬆餅｜14:00 入座＋舊居留地散步｜三宮徒步 3 分', phone: '078-392-8888', hours: '週六 10:00–20:30', url: 'https://epark.jp/shopinfo/hit625717/', map: '幸せのパンケーキ 神戸店', res: 'pancake', desc: 'EPARK 或 HotPepper（strJ001262734）預約。\n備選：觀音屋（元町，名物起司蛋糕）。' },
-        { id: 'd3e5', time: '15:30', end: '17:00', type: 'SIGHT', title: 'メリケンパーク', sub: '海邊散步、神戶港塔、BE KOBE', map: 'メリケンパーク' },
-        { id: 'd3e6', time: '17:00', end: '19:00', type: 'SIGHT', title: 'Harborland umie／MOSAIC 聖誕燈飾', sub: '摩天輪夜景', map: 'umie MOSAIC', warn: '2026 點燈時間待公布（去年：センターストリート 16:00–24:30）' },
-        { id: 'd3e7', time: '19:00', end: '20:30', type: 'FOOD', title: 'Osteria Gaudente（MOSAIC 3F）', sub: '義大利麵＋港景｜伴侶：軟絲＞干貝＞蝦', phone: '078-360-2800', url: 'https://www.tablecheck.com/gaudente-kobe', map: 'Osteria Gaudente 神戸ハーバーランド', res: 'gaudente', warn: '訂位註明：玉ねぎ／タロイモNG；伴侶不吃生食', desc: '備選：櫻（2F 神戶牛）／8 EIGHTH BEEF（1F）。' },
-        { id: 'd3e8', time: '21:00', type: 'TRANSPORT', title: '神戶 → 回福島', sub: '21:45（預估）到福島' }
+        { id: 'd3e1', time: '09:00', label: '自然醒', type: 'LODGING', title: '睡到自然醒' },
+        { id: 'd3e2', time: '09:30', est: true, type: 'FOOD', title: '飯店早餐', sub: '3F ALL FLAGS｜L.O. 10:30', map: HOTEL.map },
+        { id: 'd3a1', time: '11:00', branch: 'A', type: 'RAMEN', title: 'みなと軒 三宮高架下店（Aaron 儀式）', sub: '11:00 開店｜Yvonne 可在飯店多休息再到ナガサワ會合，或先逛ナガサワ（走路約 5 分）', phone: '078-391-3288', hours: '11:00–24:00・無休', addr: '神戸市中央区北長狭通1丁目31-35 1F（阪急神戸三宮駅 西口）', map: 'みなと軒 三宮高架下店', warn: '只收現金或 PayPay，不能刷卡', desc: '豚骨拉麵，吧台 11 席。舊的東門店（營業到早上）已顯示休業。' },
+        { id: 'd3e3', time: '11:30', est: true, type: 'SHOP', title: 'ナガサワ文具センター 本店＋三宮輕逛', sub: 'ジュンク堂書店三宮店 3F（三宮センター街）｜北星「大人の鉛筆」', phone: '078-321-4500', hours: '10:00–21:00', addr: '神戸市中央区三宮町1丁目6-18 ジュンク堂書店三宮店 3F', url: 'https://kobe-nagasawa.co.jp/store/main/', map: 'ナガサワ文具センター 本店', desc: '官網只確認有北星「大人の色鉛筆」；「大人の鉛筆」本身很可能有，想確保就先打電話問。' },
+        { id: 'd3e4', time: '14:00', end: '15:30', est: true, type: 'CAFE', title: '幸せのパンケーキ 神戸店', sub: '舒芙蕾鬆餅（Yvonne 下午茶）｜每份約 20 分以上', phone: '078-392-8888', hours: '週末 10:00–20:30（L.O. 19:40，待確認）', addr: '神戸市中央区三宮町1-6-1 パレックスビル 2F 東', url: 'https://hitosara.com/0011100316/', map: '幸せのパンケーキ 神戸店', res: 'pancake', warn: '未預約：週六接近聖誕，預期要排隊；11:30 在ナガサワ時先繞過去看隊伍（同一條街），14:30 還沒入座就放棄，免得錯過黃昏摩天輪', desc: '可用ヒトサラ或電話預約；週末是否接受預約未確認。營業狀態與時間出發前再確認。' },
+        { id: 'd3e5', time: '15:45', est: true, icon: 'train', type: 'TRANSPORT', title: '三宮 → 神戸ハーバーランド', sub: 'JR 三ノ宮 → 神戸 約 4 分，再走約 8 分', map: 'umie MOSAIC' },
+        { id: 'd3e6', time: '16:30', est: true, type: 'SIGHT', title: '黃昏：モザイク大観覧車', sub: '日落約 16:54｜一圈約 10 分 ¥800（導覽書資料，待確認）｜看神戶港、港塔、六甲山', hours: '10:00–22:00（依季節，待確認）', map: 'モザイク大観覧車', warn: '週六傍晚可能排隊；強風或打雷會停駛', desc: '晚上還有 LED 點燈的神戸ポートタワー。\n錯過黃昏也沒關係：石田屋之後（約 20:10）再來搭，看夜景（營業到 22:00）。' },
+        { id: 'd3e7', time: '17:30', est: true, icon: 'train', type: 'TRANSPORT', title: '→ 石田屋（三宮）', sub: 'JR 神戸 → 三ノ宮 約 4 分，或計程車' },
+        { id: 'd3e8', time: '18:00', end: '20:00', booked: true, type: 'FOOD', title: '焼肉しゃぶしゃぶ 石田屋。北野坂店', sub: '已預約（樂天ぐるなび）｜桌位 120 分制｜當天點餐結帳', phone: '050-5484-3236', hours: '週六晚 17:00–21:30（L.O. 21:00）・週一休', addr: '神戸市中央区北長狭通1-20-13 北野坂壱番館 3F', url: 'https://r.gnavi.co.jp/c192807/', map: '焼肉しゃぶしゃぶ 石田屋。北野坂店', res: 'ishidaya', warn: '訂位時沒選套餐：點餐時說玉ねぎ／タロイモNG', desc: '神戶牛壽喜燒、涮涮鍋、燒肉；壽喜燒記得要生蛋液（Yvonne）。\n阪急神戸三宮駅 東口走路 1 分。變更預約直接聯絡店家。\n不要走錯成石田屋本店或 Hanare。' },
+        { id: 'd3b1', time: '20:10', branch: 'B', est: true, type: 'RAMEN', title: 'みなと軒 三宮高架下店（Aaron 儀式）', sub: '營業到 24:00｜離石田屋走路幾分鐘｜Yvonne 先搭計程車回飯店等', phone: '078-391-3288', hours: '11:00–24:00・無休', addr: '神戸市中央区北長狭通1丁目31-35 1F（阪急神戸三宮駅 西口）', map: 'みなと軒 三宮高架下店', warn: '只收現金或 PayPay，不能刷卡' },
+        { id: 'd3e9', time: '20:30', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分（走路約 25 分）', map: HOTEL.map }
       ]
     },
     {
-      id: 'd4', date: '2026-12-27', loc: 'umeda', theme: 'umeda', bg: '',
-      city: '大阪・梅田', title: '自然醒＋泡湯＋梅田收尾',
-      branches: { A: '標準版', B: '血拚版（草案）' },
-      note: 'B 案：りんくう Outlet 路線與一蘭儀式難兼得，要去 Outlet 就把一蘭移到 12:00 午餐前（肉のあさつ改 14:00）——到時候再定。',
+      id: 'd4', date: '2026-12-27', loc: 'kobe', theme: 'motomachi', bg: '',
+      city: '神戶・三宮／元町', title: '元町散步・回台灣',
+      branches: null,
+      note: '一蘭三宮店 4:00–10:00 不營業，所以改成退房後 10:00 開店就吃；也可以改到 12/26 深夜吃（營業到翌 4:00）。\n飯店 11:00 退房；寄放行李要在入住時跟櫃台確認。\n機場留 4 小時＝搭 15:30 船（KIX T1 約 16:10 到），15:10 前要辦好手續，所以最晚 14:05 回到飯店。17:00 船（T1 約 17:40）只剩約 3 小時 15 分；18:00 是最後安全班次（櫃台 19:55 關）。\n時間不夠時先砍旧居留地・南京町散步，再縮短 LIMA COFFEE；船班不動。\n12/26 14:00 後查 kobe-access.jp：今天的船是否停航；低氣壓停航有替代巴士（約 90 分，要在櫃台買），颱風則無。\n旧居留地・南京町的聖誕燈飾通常到 12/25，今天以洋房街景為主。',
       events: [
-        { id: 'd4e1', time: '09:30', label: '～09:30', type: 'LODGING', title: '睡到自然醒', sub: '無早餐行程壓力' },
-        { id: 'd4e2', time: '10:00', end: '11:15', type: 'ONSEN', title: '飯店溫泉＋三溫暖', sub: '10:00 開場人最少｜7F 男湯「阪神サウナ」／6F 女湯', desc: '溫泉券最後一天用好用滿。' },
-        { id: 'd4e3', time: '11:45', type: 'LODGING', title: '12:00 前退房', sub: '行李寄櫃台' },
-        { id: 'd4a1', time: '12:15', end: '13:45', branch: 'A', type: 'FOOD', title: '肉のあさつ 梅田お初天神店', sub: 'すき焼き・黄金出汁しゃぶ＋江戸前寿司（一店雙修）', url: 'https://www.tablecheck.com/ja/nikuno-asatsu/reserve', map: '肉のあさつ 梅田お初天神店', res: 'asatsu', warn: '壽喜燒必配生蛋液｜訂位確認洋蔥可否全去除', desc: '也可用 HotPepper（strJ003411553）預約。' },
-        { id: 'd4a2', time: '14:00', end: '15:15', branch: 'A', type: 'SHOP', title: 'Hands 梅田＋Grand Front', sub: '北星「大人の鉛筆」＋最終採購', map: 'ハンズ梅田' },
-        { id: 'd4a3', time: '15:15', end: '15:50', branch: 'A', type: 'CAFE', title: 'モンシェール 堂島本店', sub: '堂島ロール發源店｜grenier 改外帶選項', map: 'モンシェール 堂島本店', res: 'moncher', warn: '內用現況＋預約方式待查', desc: '順路 ⭐綱敷天神社御旅社參拜。' },
-        { id: 'd4a4', time: '16:00', end: '16:35', branch: 'A', type: 'RITUAL', title: '一蘭儀式 #2（最後一天必吃）', sub: '梅田芝田店 or 阪急東通店', url: 'https://en.ichiran.com/shop/kinki/umeda-hankyu/', map: '一蘭 梅田阪急東通店', warn: '營業時間行前確認', desc: '肚子多飽都要吃。' },
-        { id: 'd4a5', time: '16:45', branch: 'A', type: 'LODGING', title: '回飯店取行李' },
-        { id: 'd4a6', time: '17:00', branch: 'A', type: 'TRANSPORT', title: 'JR 福島 → 関空快速 → KIX', sub: '18:10（預估）到 KIX，起飛前 2 小時 35 分' },
-        { id: 'd4b1', time: '12:00', branch: 'B', type: 'RITUAL', title: '一蘭儀式 #2（提前）', sub: '梅田芝田店 or 阪急東通店', map: '一蘭 梅田阪急東通店', warn: '草案，到時候再定' },
-        { id: 'd4b2', time: '14:00', branch: 'B', type: 'FOOD', title: '肉のあさつ（改 14:00）', sub: 'すき焼き・黄金出汁しゃぶ＋江戸前寿司', url: 'https://www.tablecheck.com/ja/nikuno-asatsu/reserve', map: '肉のあさつ 梅田お初天神店', res: 'asatsu', warn: '草案，到時候再定' },
-        { id: 'd4b3', time: '15:30', branch: 'B', est: true, type: 'TRANSPORT', title: '取行李 → りんくうタウン', sub: 'JR 関空快速' },
-        { id: 'd4b4', time: '16:30', branch: 'B', est: true, type: 'SHOP', title: 'りんくうプレミアム・アウトレット', map: 'りんくうプレミアム・アウトレット', warn: '草案：停留時間到時候再定' },
-        { id: 'd4b5', time: '18:10', branch: 'B', est: true, type: 'TRANSPORT', title: 'りんくうタウン → KIX' },
-        { id: 'd4e9', time: '20:45', type: 'FLIGHT', official: true, title: 'KIX 起飛 → TPE', sub: 'KIX 20:45 → TPE 23:05（已購）', map: '関西国際空港', res: 'flight-back' }
+        { id: 'd4e1', time: '08:00', est: true, type: 'FOOD', title: '飯店早餐', sub: '3F ALL FLAGS｜L.O. 10:30', map: HOTEL.map },
+        { id: 'd4e2', time: '09:30', est: true, type: 'LODGING', title: '退房＋寄放行李', sub: '退房 11:00 前｜寄放行李待確認', map: HOTEL.map, res: 'hotel' },
+        { id: 'd4e3', time: '10:00', type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: '10:00 開店｜建議：Yvonne 可先去広重排隊，或兩人逛三宮後再一起排', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店' },
+        { id: 'd4e3b', time: '10:30', est: true, type: 'SHOP', title: '神戶三宮輕逛', sub: '三宮センター街一帶｜排広重時可以輪流逛', map: '三宮センター街' },
+        { id: 'd4e4', time: '11:00', est: true, type: 'FOOD', title: '神戸牛丼 広重（午餐）', sub: '11:00 開店｜吧台約 10 席', phone: '078-222-6611', hours: '週日 11:00–15:00（賣完即止）・週三休', addr: '神戸市中央区中山手通1-22-21 前川ビル 1F', map: '神戸牛丼 広重', warn: '常排 1.5–3 小時、賣完就關，開店前就要排；12:15 還沒入座就放棄（改便利店或別家），才趕得上 15:30 船', desc: '只賣神戶牛丼（並・大＋溫泉蛋等），價格各文章差很多，以現場為準。' },
+        { id: 'd4e5', time: '12:20', type: 'SIGHT', title: '旧居留地・南京町 聖誕洋房散步', sub: '只走看拍照、不吃｜約 1.2 km、45–60 分', map: '旧居留地 十五番館', desc: '建議路線：三宮センター街 → 神戸市立博物館 → 旧居留地十五番館 → 仲町通・明石町筋（煤氣燈、石造建築）→ 大丸神戸店迴廊 → 南京町 長安門 → 南京町広場 → 西安門 → 元町。\n週日中午南京町很擠，從長安門到広場快速穿過即可。\n時間不夠就先砍這段。' },
+        { id: 'd4e6', time: '13:15', end: '13:55', est: true, type: 'CAFE', title: 'LIMA COFFEE 神戸本店（下午茶）', sub: 'みなと元町駅 2 分｜17 席', phone: '078-335-6308', hours: '9:00–18:00・週三休（2023 資料，待確認）', addr: '神戸市中央区栄町通3-2-6 1F', map: 'LIMA COFFEE 神戸本店', warn: '2026 年中曾暫停營業（7/1 重開），出發前看 IG（limacoffee）或打電話確認', desc: '備選：にしむら珈琲店 元町店（元町通2-6-3，9:00–22:00，92 席）；イスズベーカリー 元町店（元町通1-11-18，只能外帶）。\n筆記寫的「イスズベーカリー元町本店」不存在：元町的是元町店，本店在三宮側。\n有網站還寫 LIMA 舊地址（元町通3-8-1），以栄町通為準。' },
+        { id: 'd4e7', time: '14:05', est: true, type: 'LODGING', title: '回飯店取行李', sub: '從 LIMA COFFEE 走路約 10 分｜最晚 14:05', map: HOTEL.map },
+        { id: 'd4e8', time: '14:20', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 神戸空港', sub: '約 20 分｜15:10 前要辦好手續｜跟司機說「海上アクセスターミナル（ベイ・シャトル乗り場）」', map: '神戸空港 海上アクセスターミナル', warn: '錯過 15:30 船：下一班 17:00（T1 約 17:40），只剩約 3 小時 15 分' },
+        { id: 'd4e9', time: '15:30', end: '16:01', icon: 'boat', type: 'TRANSPORT', title: '高速船 神戸空港 → 關西機場', sub: '¥1,880｜接駁巴士到 T1 約 16:10｜現行時刻表，12 月前再確認｜備案 17:00、18:00', url: 'https://www.kobe-access.jp/', res: 'boat-out' },
+        { id: 'd4e10', time: '17:55', est: true, type: 'FLIGHT', title: 'AirAsia 櫃台開放報到', sub: 'KIX T1 4F 國際線｜櫃台 19:55 關閉、登機門 20:35 關閉', map: '関西国際空港 第1ターミナル' },
+        { id: 'd4e11', time: '20:55', official: true, type: 'FLIGHT', title: 'AirAsia AK 177 起飛', sub: 'KIX T1 20:55 → TPE T1 23:15｜托運 40kg＋手提 7kg（每人，可以多買）', res: 'flight-back' }
       ]
     }
   ]
 };
 
-/* 儀式（優化 ②） */
+/* 儀式：Aaron 的拉麵、Yvonne 的下午茶 */
 const RITUALS = {
-  ichiran1: { icon: '🍜', label: '一蘭 #1', sub: '12/24 深夜｜第一晚必吃', who: 'Aaron' },
-  ichiran2: { icon: '🍜', label: '一蘭 #2', sub: '12/27 下午｜最後一天必吃', who: 'Aaron' },
-  cafe1:    { icon: '☕', label: '下午咖啡 12/25', sub: 'USJ 園內咖啡＋甜點', who: '伴侶' },
-  cafe2:    { icon: '☕', label: '下午咖啡 12/26', sub: '幸せのパンケーキ 神戸店', who: '伴侶' },
-  cafe3:    { icon: '☕', label: '下午咖啡 12/27', sub: 'モンシェール 堂島本店', who: '伴侶' }
+  ramen1: { icon: '🍜', label: '一蘭 12/24', sub: '三宮店｜深夜，Yvonne 先回飯店', who: 'Aaron' },
+  ramen2: { icon: '🍜', label: '第一旭 12/25', sub: '三宮本店｜USJ 回來後', who: 'Aaron' },
+  ramen3: { icon: '🍜', label: 'みなと軒 12/26', sub: '三宮高架下店｜11:00 或晚餐後', who: 'Aaron' },
+  ramen4: { icon: '🍜', label: '一蘭 12/27', sub: '三宮店｜10:00 開店', who: 'Aaron' },
+  cafe1:  { icon: '☕', label: '幸せのパンケーキ 12/26', sub: '神戸店｜舒芙蕾鬆餅', who: 'Yvonne' },
+  cafe2:  { icon: '☕', label: 'LIMA COFFEE 12/27', sub: '元町｜備選 にしむら珈琲・イスズベーカリー', who: 'Yvonne' }
 };
 const DAY_RITUALS = {
-  '2026-12-24': ['ichiran1', 'onsen'],
-  '2026-12-25': ['cafe1', 'onsen'],
-  '2026-12-26': ['cafe2', 'onsen'],
-  '2026-12-27': ['onsen', 'cafe3', 'ichiran2']
+  '2026-12-24': ['ramen1'],
+  '2026-12-25': ['ramen2'],
+  '2026-12-26': ['ramen3', 'cafe1'],
+  '2026-12-27': ['ramen4', 'cafe2']
 };
-const ONSEN_PEOPLE = [['A', 'Aaron'], ['P', '伴侶']];
 
-/* 點燈資訊（優化 ④）。日出日落另以天文公式計算 */
+/* 點燈資訊；日出日落另以天文公式計算 */
 const LIGHTS = [
-  { date: '2026-12-24', name: 'UMEKITA シャンパンゴールド・イルミネーション', place: 'グランフロント大阪・うめきた', time: '17:00–24:00', status: '2026 已公布（11/4–2/28 每日）', url: 'https://bestcalendar.jp/press/155848' },
-  { date: '2026-12-25', name: 'USJ 夜間秀「ライト・アップ・ザ・ナイト」', place: 'USJ（ユニバーサル・ホリデー・ワンダーズ）', time: '場次 11 月公布', status: '待公布；也有報導「ジョイ・オブ・ライツ」睽違 9 年復活', url: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders/light-up-the-night', usj: true },
-  { date: '2026-12-26', name: 'Harborland umie／MOSAIC 冬季燈飾', place: '神戸ハーバーランド', time: '參考去年：センターストリート 16:00–24:30、モザイク広場 10:00–24:30', status: '2026 待公布', url: 'https://www.walkerplus.com/event/ar0728e17606/' },
-  { date: '2026-12-27', name: 'UMEKITA シャンパンゴールド・イルミネーション', place: 'グランフロント大阪・うめきた', time: '17:00–24:00', status: '17:00 你們已出發往機場，B 案也看不到', url: 'https://bestcalendar.jp/press/155848' }
+  { dates: ['2026-12-25'], usj: true, name: 'USJ 夜間秀「ライト・アップ・ザ・ナイト」＋「ジョイ・オブ・ライツ」', place: 'グラマシーパーク（紐約區）｜11/25–1/11', time: '2026 場次未公布（2025 年約 17:30、19:30）', status: '霍格華茲城堡投影也在晚上；特別鑑賞エリア ¥1,700 起', url: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders/light-up-the-night' },
+  { dates: ['2026-12-24', '2026-12-25'], name: '神戸メリケンクリスマス（ドローンショー等）', place: 'メリケンパーク（飯店旁）', time: '2025 年 12/20–12/25', status: '2026 未公布；12/24 深夜才到、12/25 在 USJ，可能會錯過', url: 'https://rurubu.jp/andmore/article/5098' },
+  { dates: ['2026-12-24', '2026-12-25'], name: '旧居留地・南京町 クリスマスライトアップ', place: '旧居留地・南京町', time: '2025 年 11/22–12/25，傍晚起', status: '2026 未公布；12/26 之後可能已撤', url: 'https://www.kobe-kyoryuchi.com/' },
+  { dates: ['2026-12-24', '2026-12-25'], name: '飯店大廳聖誕裝飾', place: '神戸メリケンパークオリエンタルホテル', time: '2025 年 11/1–12/25', status: '2026 未公布', url: 'https://san-tatsu.jp/pressrelease/461450/' },
+  { dates: ['2026-12-26'], name: 'Harborland 冬季燈飾＋モザイク大観覧車 LED', place: '神戸ハーバーランド umie／MOSAIC', time: '參考 2025：センターストリート 16:00–24:30、モザイク広場 10:00–24:30', status: '2026 待公布；聖誕樹通常到 12/25，ガス燈通り燈飾通常到 2 月', url: 'https://www.walkerplus.com/event/ar0728e17606/' },
+  { dates: ['2026-12-26'], name: '神戸ポートタワー LED 點燈', place: 'メリケンパーク', time: '每晚', status: '從摩天輪和飯店都看得到；2026 聖誕配色未確認', url: 'https://www.kobe-port-tower.com/' }
 ];
 
-/* 預約清單（公開資訊）；狀態、確認號存在手機 */
+/* 預約清單（公開資訊）；狀態、確認號、私人備註存在手機 */
 const RESERVATIONS = [
-  { id: 'flight-out', icon: '✈️', name: '去程 AirAsia X D7 378', when: '12/24（四）TPE 15:40 → KIX 19:20', status: '已購' },
-  { id: 'flight-back', icon: '✈️', name: '回程 AirAsia X', when: '12/27（日）KIX 20:45 → TPE 23:05', status: '已購' },
-  { id: 'hotel', icon: '🏨', name: 'ホテル阪神大阪（本館）', when: '12/24–12/27 3 晚｜スーペリアダブル', status: '已訂', phone: HOTEL.phone, url: HOTEL.url },
-  { id: 'usj', icon: '🎢', name: 'USJ 入場券 ×2', when: '12/25（五）', status: '待查', how: '7/6 起每日追蹤開賣；確認是否已購', url: 'https://store.usj.co.jp/ja/jp/c/ticket' },
-  { id: 'gorichan', icon: '🥩', name: '焼肉ごりちゃん 福島店', when: '12/24（四）22:00', status: '未訂', how: '電話／HotPepper｜告知可能延遲＋玉ねぎNG', phone: '06-6454-7036', url: 'https://www.hotpepper.jp/strJ003324789/' },
-  { id: 'parkside', icon: '🥩', name: 'Parkside Grill（USJ）', when: '12/25（五）18:45', status: '未訂', how: 'TableCheck 優先案內｜11/25 台灣 10:00 開搶', url: 'https://www.tablecheck.com/en/shops/parkside-grille/reserve' },
-  { id: 'plaisir', icon: '🐂', name: '神戸プレジール本店', when: '12/26（六）11:30', status: '未訂', how: 'TableCheck｜熟度＋紅線＋包廂', phone: '078-571-0141', url: 'https://www.tablecheck.com/ja/shops/kobe-kobeplaisir/reserve' },
-  { id: 'pancake', icon: '🥞', name: '幸せのパンケーキ 神戸店', when: '12/26（六）14:00', status: '未訂', how: 'EPARK／HotPepper', phone: '078-392-8888', url: 'https://epark.jp/shopinfo/hit625717/' },
-  { id: 'gaudente', icon: '🍝', name: 'Osteria Gaudente（MOSAIC 3F）', when: '12/26（六）19:00', status: '未訂', how: 'TableCheck', phone: '078-360-2800', url: 'https://www.tablecheck.com/gaudente-kobe' },
-  { id: 'asatsu', icon: '🍲', name: '肉のあさつ 梅田お初天神店', when: '12/27（日）12:15', status: '未訂', how: 'TableCheck／HotPepper｜確認洋蔥可否全去除', url: 'https://www.tablecheck.com/ja/nikuno-asatsu/reserve' },
-  { id: 'moncher', icon: '🍰', name: 'モンシェール 堂島本店', when: '12/27（日）15:15', status: '待查', how: '內用現況＋預約方式待查' }
+  { id: 'transfer', icon: 'taxi', name: '機場接送（北大高中 → 桃園 T1）', when: '12/24（四）中午', status: '待查', how: '下班直接出發；行李當天帶到學校' },
+  { id: 'flight-out', icon: 'flight', name: '去程 AirAsia AK 176', when: '12/24（四）TPE T1 15:40 → KIX T1 19:30', status: '已購', how: '托運 20kg＋手提 7kg（每人）', url: 'https://www.airasia.com/' },
+  { id: 'boat-in', icon: 'boat', name: '高速船 KIX → 神戸空港', when: '12/24（四）21:00（B 案 22:00）', status: '現場買', how: '¥1,880／人；網路預約 90 天前開放、1 小時前截止；現場票看空位', url: 'https://www.kobe-access.jp/' },
+  { id: 'hotel', icon: 'hotel', name: '神戸メリケンパークオリエンタルホテル', when: '12/24–12/27 3 晚｜標準雙人房・西景｜含早餐', status: '已訂', how: '到店付款｜12/22 前免費取消', phone: HOTEL.phone, url: HOTEL.url },
+  { id: 'koushiya', icon: 'food', name: '仔牛屋 神戸三宮店', when: '12/24（四）約 22:30（B 案約 23:20）', status: '未訂', how: '官網／ヒトサラ／ぐるなび／電話｜告知可能晚到＋玉ねぎNG', phone: '078-222-1529', url: 'https://www.koushiya.jp/sannomiya.html' },
+  { id: 'usj', icon: 'ticket', name: 'USJ 1 デイ・スタジオ・パス ×2', when: '12/25（五）', status: '待查', how: '日別變動價，越早買越便宜', url: 'https://store.usj.co.jp/ja/jp/c/ticket' },
+  { id: 'usj-dinner', icon: 'food', name: 'USJ 晚餐（レストラン優先案內）', when: '12/25（五）', status: '待查', how: '預計 11/25 11:00 開放（非官方資訊），以官方 App 為準' },
+  { id: 'pancake', icon: 'cafe', name: '幸せのパンケーキ 神戸店', when: '12/26（六）14:00', status: '未訂', how: 'ヒトサラ或電話（週末是否接受預約未確認）', phone: '078-392-8888', url: 'https://hitosara.com/0011100316/' },
+  { id: 'ishidaya', icon: 'food', name: '焼肉しゃぶしゃぶ 石田屋。北野坂店', when: '12/26（六）18:00–（120 分制）', status: '已訂', how: '樂天ぐるなび｜只訂位，當天點餐結帳｜變更直接聯絡店家', phone: '050-5484-3236', url: 'https://r.gnavi.co.jp/c192807/' },
+  { id: 'boat-out', icon: 'boat', name: '高速船 神戸空港 → KIX', when: '12/27（日）15:30（備案 17:00、18:00）', status: '待查', how: '¥1,880／人；購票方式未定，建議網路預約保住 15:30 班（4 小時緩衝）；開船前 20 分辦好手續', url: 'https://www.kobe-access.jp/' },
+  { id: 'flight-back', icon: 'flight', name: '回程 AirAsia AK 177', when: '12/27（日）KIX T1 20:55 → TPE T1 23:15', status: '已購', how: '托運 40kg＋手提 7kg（每人）', url: 'https://www.airasia.com/' }
 ];
-const RES_STATUSES = ['未訂', '已訂', '已購', '不需預約', '待查'];
+const RES_STATUSES = ['未訂', '已訂', '已購', '現場買', '不需預約', '待查'];
 
 /* 行前待辦（日期為建議期限） */
 const TODOS = [
-  { id: 't-usj-ticket', due: '2026-10-31', text: '確認 USJ 12/25 入場券 ×2 是否已購' },
-  { id: 't-usj-cal', due: '2026-10-31', text: '依 9/14 公布的「ユニバーサル・ホリデー・ワンダーズ」校準 12/25' },
-  { id: 't-gorichan', due: '2026-11-24', text: '訂ごりちゃん 12/24 22:00（告知可能延遲＋玉ねぎNG）' },
-  { id: 't-parkside', due: '2026-11-25', text: '台灣 10:00 搶 Parkside Grill（TableCheck 優先案內）' },
-  { id: 't-plaisir', due: '2026-11-26', text: '訂神戸プレジール 12/26 11:30（熟度＋紅線＋包廂）' },
-  { id: 't-pancake', due: '2026-11-26', text: '預約幸せのパンケーキ 12/26 14:00' },
-  { id: 't-gaudente', due: '2026-11-26', text: '訂 Osteria Gaudente 12/26 19:00' },
-  { id: 't-asatsu', due: '2026-11-27', text: '訂肉のあさつ 12/27 12:15（確認洋蔥可否全去除）' },
-  { id: 't-moncher', due: '2026-11-27', text: '查モンシェール堂島本店內用／預約' },
-  { id: 't-ichiran', due: '2026-11-27', text: '確認一蘭梅田芝田店深夜、阪急東通店營業時間' },
-  { id: 't-usj-shows', due: '2026-11-30', text: 'USJ 12 月演出時刻公布 → 填進 USJ 快捷區' },
-  { id: 't-icoca', due: '2026-12-17', text: '兩人 iPhone Wallet 加 ICOCA（Mastercard 儲值）' },
+  { id: 't-usj-ticket', due: '2026-10-31', text: '買 USJ 12/25 入場券 ×2（日別變動價，越早越便宜）' },
+  { id: 't-koushiya', due: '2026-11-15', text: '訂仔牛屋 神戸三宮店 12/24 約 22:30（平安夜包廂；告知可能 23:20 才到＋玉ねぎNG）' },
+  { id: 't-transfer', due: '2026-11-24', text: '預約機場接送：12/24 中午 北大高中 → 桃園 T1' },
+  { id: 't-usj-dinner', due: '2026-11-25', text: 'USJ 晚餐「優先案內」（預計 11/25 11:00 開放）' },
+  { id: 't-usj-view', due: '2026-11-30', text: '考慮買夜間秀「特別鑑賞エリア」¥1,700 起' },
+  { id: 't-pancake', due: '2026-11-30', text: '問幸せのパンケーキ 12/26 能否預約（ヒトサラ／電話）' },
+  { id: 't-boat', due: '2026-11-30', text: '網路預約 12/27 15:30 回程高速船（保 4 小時緩衝）；12/24 去程照計畫現場買，或也預約' },
+  { id: 't-hotel-call', due: '2026-12-10', text: '打給飯店：12/24 可能 22:00–23:00 才到（或晚餐後再入住）＋12/27 退房後寄放行李' },
+  { id: 't-joy', due: '2026-12-14', text: '想在「ジョイ・オブ・ライツ」投影訊息？抽選投稿 12/14 截止' },
+  { id: 't-hours', due: '2026-12-15', text: '再確認第一旭 三宮本店營業時間（9/4 起變更）' },
+  { id: 't-nagasawa', due: '2026-12-15', text: '打給ナガサワ本店問有沒有北星「大人の鉛筆」' },
+  { id: 't-icoca', due: '2026-12-17', text: '兩人 iPhone Wallet 加 ICOCA，出發前先試一次儲值' },
   { id: 't-vjw', due: '2026-12-17', text: '填 Visit Japan Web，QR 存進 APP' },
-  { id: 't-week', due: '2026-12-17', text: '出發前 1 週：班次／天氣／USJ 場次確認' },
-  { id: 't-offline', due: '2026-12-23', text: '出發前一晚：資訊 → 按「離線準備」' }
+  { id: 't-week', due: '2026-12-17', text: '出發前 1 週：AirAsia 航班、高速船時刻、天氣、USJ 場次' },
+  { id: 't-hotel-cancel', due: '2026-12-21', text: '飯店 12/22 前免費取消：確認行程不變' },
+  { id: 't-boat-weather', due: '2026-12-23', text: '12/23 與 12/26 14:00 後看高速船停航公告（kobe-access.jp）' },
+  { id: 't-offline', due: '2026-12-23', text: '出發前一晚：資訊 → 按「離線準備」；行李隔天帶到學校' }
 ];
 
 const EMERGENCY = [
@@ -623,18 +605,20 @@ const EMERGENCY = [
   { icon: '🇹🇼', name: '駐大阪辦事處 急難救助', sub: '24 小時，僅限急難（電話會錄音）', num: '090-8794-4568' },
   { icon: '🏛️', name: '駐大阪辦事處 辦公室', sub: '上班時間；護照、證件等', num: '06-6227-8623' },
   { icon: '☎️', name: 'Japan Visitor Hotline（JNTO）', sub: '24 小時，中英韓日', num: '050-3816-2787' },
-  { icon: '🏨', name: 'ホテル阪神大阪', sub: '飯店代表號', num: HOTEL.phone }
+  { icon: '🏨', name: '神戸メリケンパークオリエンタルホテル', sub: '飯店代表號', num: HOTEL.phone },
+  { icon: '⛴️', name: 'ベイ・シャトル 海上アクセスターミナル', sub: '5:00–23:00；延誤、停航', num: '078-304-0900' }
 ];
 
 /* 給司機看（交通卡片） */
 const TAXI = [
-  { ja: 'ホテル阪神大阪（本館）までお願いします。', sub: HOTEL.addr, zh: '請載我們到阪神大阪飯店' },
-  { ja: '一蘭 道頓堀店別館までお願いします。', sub: '24時間営業の店舗です。', zh: '一蘭 道頓堀別館' },
-  { ja: '一蘭 梅田芝田店までお願いします。', sub: '', zh: '一蘭 梅田芝田店' },
-  { ja: 'ユニバーサル・スタジオ・ジャパンまでお願いします。', sub: '', zh: 'USJ 環球影城' },
-  { ja: '神戸プレジール本店までお願いします。', sub: 'ホテル ザ ビー 神戸 1階', zh: '神戶牛 Plaisir 本店' },
-  { ja: '肉のあさつ 梅田お初天神店までお願いします。', sub: '', zh: '肉のあさつ 梅田お初天神店' },
-  { ja: '関西国際空港までお願いします。', sub: '国際線の出発ロビーです。', zh: '關西機場 國際線出發' }
+  { ja: '神戸メリケンパークオリエンタルホテルまでお願いします。', sub: '〒650-0042 神戸市中央区波止場町5-6（メリケンパーク）', zh: '請載我們到神戶美利堅公園東方酒店' },
+  { ja: '神戸空港の海上アクセスターミナルまでお願いします。', sub: '関空行きの高速船（ベイ・シャトル）に乗ります。', zh: '到神戶機場的高速船碼頭（往關西機場）' },
+  { ja: '仔牛屋 神戸三宮店までお願いします。', sub: '中山手通1-25-6 ラ・ドルレイ神戸三宮 3階', zh: '仔牛屋 神戸三宮店' },
+  { ja: '一蘭 三宮店までお願いします。', sub: '北長狭通1-9-9 第1岸ビル', zh: '一蘭 三宮店' },
+  { ja: '神戸ラーメン第一旭 三宮本店までお願いします。', sub: '琴ノ緒町4-1-394（JR高架下）', zh: '第一旭 三宮本店' },
+  { ja: '焼肉しゃぶしゃぶ 石田屋。北野坂店までお願いします。', sub: '北長狭通1-20-13 北野坂壱番館 3階', zh: '石田屋 北野坂店' },
+  { ja: '神戸ハーバーランドのモザイクまでお願いします。', sub: 'モザイク大観覧車', zh: 'Harborland MOSAIC 摩天輪' },
+  { ja: '三宮駅までお願いします。', sub: '', zh: '三宮站' }
 ];
 const PAY_PHRASES = [
   ['カードで払えますか？', '可以刷卡嗎？'],
@@ -663,30 +647,31 @@ const PHRASES = {
     ['可以刷卡嗎？', 'カードは使えますか？'],
     ['可以外帶嗎？', '持ち帰りできますか？']
   ],
-  '購物': [
-    ['我要這個', 'これをください。'],
-    ['可以免稅嗎？我有護照', '免税できますか？パスポートを持っています。'],
-    ['不需要袋子', '袋は要りません。'],
-    ['請給我袋子', '袋をください。'],
-    ['可以包成禮物嗎？', 'プレゼント用に包んでもらえますか？'],
-    ['〇〇在哪裡？', '〇〇はどこにありますか？'],
-    ['有其他顏色或尺寸嗎？', 'ほかの色やサイズはありますか？']
-  ],
   '交通': [
-    ['請到這個地址', 'この住所までお願いします。'],
+    ['高速船在哪裡搭？', 'ベイ・シャトルの乗り場はどこですか？'],
+    ['兩張到神戶機場的票', '神戸空港まで大人2枚ください。'],
+    ['兩張到關西機場的票', '関西空港まで大人2枚ください。'],
+    ['計程車招呼站在哪裡？', 'タクシー乗り場はどこですか？'],
     ['這班車會到〇〇嗎？', 'この電車は〇〇に行きますか？'],
-    ['〇〇站在哪裡？', '〇〇駅はどこですか？'],
     ['要在哪裡轉車？', 'どこで乗り換えればいいですか？'],
-    ['可以用 ICOCA 嗎？', '交通系ICカードは使えますか？'],
+    ['請到這個地址', 'この住所までお願いします。'],
     ['請在這裡停車', 'ここで止めてください。']
   ],
   '飯店': [
     ['我要辦理入住，訂房名字是〇〇', 'チェックインをお願いします。予約名は〇〇です。'],
-    ['我們大約 21:30 才會到', '到着は21時半頃になります。'],
-    ['可以寄放行李嗎？', '荷物を預かってもらえますか？'],
-    ['溫泉券在哪裡拿？', '温泉の入場券はどこでもらえますか？'],
-    ['溫泉最晚幾點可以進去？', '温泉の最終入場は何時ですか？'],
+    ['我們大約 23:00 才會到', '到着は23時頃になります。'],
+    ['退房後可以寄放行李嗎？', 'チェックアウト後、荷物を預かってもらえますか？'],
+    ['早餐在哪裡？幾點到幾點？', '朝食の会場と時間を教えてください。'],
+    ['去三宮的免費接駁巴士在哪裡搭？', '三宮行きの無料シャトルバスはどこから乗れますか？'],
     ['請幫我們叫計程車', 'タクシーを呼んでもらえますか？']
+  ],
+  '購物': [
+    ['我要這個', 'これをください。'],
+    ['可以免稅嗎？我有護照', '免税できますか？パスポートを持っています。'],
+    ['不需要袋子', '袋は要りません。'],
+    ['可以包成禮物嗎？', 'プレゼント用に包んでもらえますか？'],
+    ['有北星的「大人の鉛筆」嗎？', '北星鉛筆の「大人の鉛筆」はありますか？'],
+    ['〇〇在哪裡？', '〇〇はどこにありますか？']
   ],
   '緊急': [
     ['救命！', '助けてください！'],
@@ -699,46 +684,210 @@ const PHRASES = {
   ]
 };
 
-/* USJ 快捷區（優化 ③） */
+/* USJ 聖誕 */
 const USJ = {
   event: 'ユニバーサル・ホリデー・ワンダーズ ～Discover U!!～',
-  period: '2026/11/13 – 2027/1/17（2026-09-14 公布）',
+  period: '2026/11/13 – 2027/1/17（開幕 25 週年冬季活動）',
+  purpose: '這天是為了聖誕氣氛，不是為了玩設施；到園時間未定。',
   appUrl: 'https://apps.apple.com/jp/app/id532097000',
-  appInfo: 'https://www.usj.co.jp/web/ja/jp/enjoy/app',
-  showUrl: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders/light-up-the-night',
-  singleRider: [
-    ['sr-dino', 'ザ・フライング・ダイナソー', '飛天翼龍｜08:10 Aaron 衝這個'],
-    ['sr-hdr', 'ハリウッド・ドリーム・ザ・ライド', '好萊塢美夢'],
-    ['sr-hp', 'ハリー・ポッター・アンド・ザ・フォービドゥン・ジャーニー', '禁忌之旅（今天兩人同行，不用 SR）'],
-    ['sr-jp', 'ジュラシック・パーク・ザ・ライド', '侏羅紀公園'],
-    ['sr-minion', 'ミニオン・ハチャメチャ・ライド', '小小兵'],
-    ['sr-mario', 'マリオカート ～クッパの挑戦状～', '瑪利歐賽車']
+  eventUrl: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders',
+  highlights: [
+    ['h-lun', 'ライト・アップ・ザ・ナイト ～クリスマス・セレブレーション～', '夜間秀｜グラマシーパーク｜11/25–1/11｜聖誕歌、舞蹈、雪、煙火'],
+    ['h-joy', 'ジョイ・オブ・ライツ', '睽違 9 年復活｜約 10 分｜投影給重要的人的訊息（抽選投稿 12/14 截止）'],
+    ['h-hp', 'ホグワーツ・マジカル・ナイト ～ウインター・マジック～', '霍格華茲城堡雪化＋聖誕樹投影｜約 10 分'],
+    ['h-food', 'ユニバーサル・フード・フェスティバル（冬）', '全區聖誕限定餐點，例如 Studio Stars 的史努比、Hello Kitty 聖誕餐盤'],
+    ['h-greet', '冬季限定 Greeting', '冬裝 Elmo、史努比、Hello Kitty；小小兵 Jingle Bello']
+  ],
+  highlightNote: '大型聖誕樹 2025 年已落幕。兩場夜間秀可買「特別鑑賞エリア」¥1,700 起（9/24 開賣）免卡位。2026 演出時刻官方尚未公布。',
+  route: [
+    ['JR', 'JR 三ノ宮（或元町）→ 新快速 → 大阪 → 環狀線 → 西九条 → ゆめ咲線 → ユニバーサルシティ｜約 52 分 ¥660'],
+    ['阪神', '神戸三宮／元町 → 阪神なんば線 → 西九条 → JR ゆめ咲線｜約 45 分 ¥500'],
+    ['門到門', '從飯店抓 70–75 分（含走到元町／みなと元町）'],
+    ['回程', '建議 22:30 前離開ユニバーサルシティ（末班未確認）']
   ]
 };
 
 const TRANSIT = [
-  ['KIX ⇄ 福島', 'JR 関空快速直達 約 70 分 ¥1,210'],
-  ['福島 → USJ', 'JR 福島 → 西九条 → ゆめ咲線 約 15 分 ¥190'],
-  ['福島 ⇄ 三宮', '阪神直通特急 約 35 分 ¥330'],
-  ['福島 ⇄ 梅田', '徒步約 15 分'],
-  ['付款', '不買任何票券：兩人 iPhone Wallet 加 ICOCA，Apple Pay 儲值（台灣卡用 Mastercard 最穩）'],
-  ['預算', '大眾運輸約 ¥3,750／人＋計程車 ¥4,000–6,000（預估）'],
-  ['Pass', '試算全不划算（JR 關西 1 日 ¥2,800 vs 單日最高 ¥1,210）']
+  ['KIX → 神戶', '高速船「神戸-関空ベイ・シャトル」約 31 分，大人 ¥1,880（訪日外國人優惠 2026/6/30 已停售）'],
+  ['買票', 'KIX T1 1F A 出入口旁櫃台（6:00–0:15）或網路；再到 T1 1F 12 番のりば搭免費接駁巴士（6–7 分）'],
+  ['12/24 船班', 'KIX 發：20:00／21:00／22:00／0:00（末班，沒有 23:00）｜現行時刻表，12 月前再確認'],
+  ['12/27 船班', '神戸空港發：14:00／15:30／17:00／18:00（建議 15:30，T1 約 16:10 到）｜現行時刻表，12 月前再確認'],
+  ['神戸空港 → 飯店', '計程車約 20 分、約 ¥3,000–4,000（預估；22:00 後加成約 2 成）；船站沒有計程車招呼站，走 5–6 分到機場航廈 1F；深夜建議先預約計程車'],
+  ['Port Liner', '神戸空港 ⇄ 三宮 約 18 分 ¥340（末班約 23:45，待確認）；「ポートライナーセット券」同船票價含一趟'],
+  ['飯店 ⇄ 市區', 'みなと元町駅 8 分｜元町駅 15 分｜三宮 計程車約 10 分、約 ¥1,000｜三宮免費接駁巴士（乘車處待確認）'],
+  ['三宮 → USJ', 'JR 經大阪、西九条 約 52 分 ¥660；阪神經西九条 約 45 分 ¥500'],
+  ['付款', '兩人 iPhone Wallet 加 ICOCA，Apple Pay 儲值（7 月規劃的結論是台灣卡用 Mastercard 較穩，出發前先試一次）'],
+  ['停航', '強風巨浪會停航；冬天通常前一天 14:00 左右公告，低氣壓停航時有替代巴士（約 90 分，要在櫃台買）']
 ];
+const TRANSIT_SPOTS = ['神戸メリケンパークオリエンタルホテル', '神戸空港 海上アクセスターミナル', '関西国際空港 第1ターミナル', 'みなと元町駅', '元町駅', '三ノ宮駅', 'ユニバーサルシティ駅'];
+
+/* 主卡插畫（藍色調 SVG），viewBox 400x220 */
+const HERO_ART = {
+  night: `<svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hn-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0A2350"/><stop offset=".65" stop-color="#1D4C9C"/><stop offset="1" stop-color="#3D7BE0"/></linearGradient>
+      <linearGradient id="hn-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16408A"/><stop offset="1" stop-color="#0B2A5E"/></linearGradient>
+    </defs>
+    <rect width="400" height="220" fill="url(#hn-sky)"/>
+    <g fill="#fff" opacity=".85"><circle cx="40" cy="30" r="1.2"/><circle cx="92" cy="58" r="1"/><circle cx="150" cy="22" r="1.4"/><circle cx="210" cy="48" r="1"/><circle cx="262" cy="18" r="1.2"/><circle cx="120" cy="96" r=".9"/><circle cx="60" cy="110" r="1"/><circle cx="235" cy="92" r=".9"/></g>
+    <circle cx="330" cy="42" r="18" fill="#F4F8FF"/><circle cx="338" cy="36" r="16" fill="#0E2B5C"/>
+    <path d="M60 64 L250 38" stroke="#fff" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="3 5"/>
+    <g transform="translate(250 30) rotate(-8) scale(.9)" fill="#F4F8FF"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" transform="rotate(90 12 12)"/></g>
+    <g fill="#0B2A5E" opacity=".95">
+      <rect x="0" y="150" width="400" height="10"/>
+      <rect x="18" y="128" width="26" height="24"/><rect x="48" y="118" width="18" height="34"/><rect x="70" y="134" width="30" height="18"/>
+      <rect x="236" y="124" width="22" height="28"/><rect x="262" y="132" width="34" height="20"/><rect x="368" y="126" width="32" height="26"/>
+      <path d="M318 152 L322 108 Q326 98 322 88 L326 70 L330 70 L334 88 Q330 98 334 108 L338 152 Z"/>
+    </g>
+    <path d="M320 112 L336 112" stroke="#FF8A8A" stroke-width="2"/>
+    <g fill="#FFE7A8" opacity=".9"><rect x="23" y="134" width="3" height="3"/><rect x="31" y="140" width="3" height="3"/><rect x="53" y="124" width="3" height="3"/><rect x="58" y="136" width="3" height="3"/><rect x="242" y="130" width="3" height="3"/><rect x="270" y="138" width="3" height="3"/><rect x="376" y="132" width="3" height="3"/></g>
+    <rect y="158" width="400" height="62" fill="url(#hn-sea)"/>
+    <g stroke="#6FA3F0" stroke-opacity=".5" stroke-width="1.4" fill="none"><path d="M20 176 q10 -4 20 0 t20 0"/><path d="M200 190 q10 -4 20 0 t20 0"/><path d="M300 172 q10 -4 20 0 t20 0"/></g>
+    <g transform="translate(110 162)"><path d="M0 12 L70 12 L62 20 L6 20 Z" fill="#F4F8FF"/><path d="M14 4 L48 4 L56 12 L8 12 Z" fill="#DCE8FB"/><g fill="#2F6FDB"><rect x="18" y="6" width="5" height="3"/><rect x="27" y="6" width="5" height="3"/><rect x="36" y="6" width="5" height="3"/></g><path d="M-30 18 L0 16" stroke="#fff" stroke-opacity=".6" stroke-width="1.5"/></g>
+  </svg>`,
+  usj: `<svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hu-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F2F6B"/><stop offset="1" stop-color="#4A86E8"/></linearGradient>
+      <radialGradient id="hu-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#BFD7FF" stop-opacity=".7"/><stop offset="1" stop-color="#BFD7FF" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="400" height="220" fill="url(#hu-sky)"/>
+    <circle cx="250" cy="96" r="84" fill="url(#hu-glow)"/>
+    <g fill="#fff" opacity=".9"><circle cx="30" cy="40" r="2"/><circle cx="80" cy="20" r="1.5"/><circle cx="130" cy="60" r="2.2"/><circle cx="180" cy="30" r="1.4"/><circle cx="340" cy="30" r="2"/><circle cx="370" cy="80" r="1.5"/><circle cx="60" cy="100" r="1.6"/><circle cx="160" cy="110" r="1.2"/><circle cx="330" cy="130" r="1.8"/></g>
+    <g transform="translate(250 92)" fill="none" stroke="#EAF2FF" stroke-width="2.2">
+      <circle r="46"/><ellipse rx="46" ry="16"/><ellipse rx="46" ry="34"/><line x1="-46" x2="46"/><ellipse rx="16" ry="46"/><ellipse rx="32" ry="46"/><line y1="-46" y2="46"/>
+    </g>
+    <path d="M226 152 L274 152 L268 140 L232 140 Z" fill="#DCE8FB"/>
+    <g transform="translate(92 54)">
+      <path d="M30 0 L44 26 L36 26 L52 52 L42 52 L60 84 L0 84 L18 52 L8 52 L24 26 L16 26 Z" fill="#0B2A5E"/>
+      <rect x="25" y="84" width="10" height="12" fill="#0B2A5E"/>
+      <path d="M30 -10 l3 7 7 0 -6 4 2 7 -6 -4 -6 4 2 -7 -6 -4 7 0z" fill="#FFE08A"/>
+      <g fill="#FFE08A"><circle cx="24" cy="34" r="2.4"/><circle cx="38" cy="44" r="2.4"/><circle cx="20" cy="62" r="2.4"/><circle cx="42" cy="70" r="2.4"/><circle cx="30" cy="54" r="2.4"/></g>
+      <g fill="#FF8A8A"><circle cx="33" cy="30" r="2"/><circle cx="26" cy="48" r="2"/><circle cx="34" cy="76" r="2"/></g>
+    </g>
+    <rect y="160" width="400" height="60" fill="#0B2A5E" opacity=".55"/>
+    <path d="M0 160 Q100 150 200 160 T400 160 V220 H0 Z" fill="#DCE8FB" opacity=".95"/>
+    <g fill="#fff"><circle cx="40" cy="176" r="2"/><circle cx="140" cy="186" r="1.6"/><circle cx="300" cy="180" r="2"/><circle cx="360" cy="196" r="1.6"/></g>
+  </svg>`,
+  kobe: `<svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hk-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#173A7A"/><stop offset=".55" stop-color="#4C86E0"/><stop offset=".85" stop-color="#A9C8F5"/><stop offset="1" stop-color="#F3D2B8"/></linearGradient>
+      <linearGradient id="hk-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2D63C2"/><stop offset="1" stop-color="#123A80"/></linearGradient>
+    </defs>
+    <rect width="400" height="220" fill="url(#hk-sky)"/>
+    <circle cx="196" cy="150" r="24" fill="#FFE7C7" opacity=".9"/>
+    <g transform="translate(96 104)" stroke="#F4F8FF" stroke-width="1.6" fill="none">
+      <circle r="52"/><circle r="46" stroke-opacity=".6"/>
+      <g stroke-opacity=".75"><line x1="-52" x2="52"/><line y1="-52" y2="52"/><line x1="-36.8" y1="-36.8" x2="36.8" y2="36.8"/><line x1="-36.8" y1="36.8" x2="36.8" y2="-36.8"/><line x1="-48" y1="-20" x2="48" y2="20"/><line x1="-48" y1="20" x2="48" y2="-20"/><line x1="-20" y1="-48" x2="20" y2="48"/><line x1="20" y1="-48" x2="-20" y2="48"/></g>
+      <path d="M-14 54 L0 0 L14 54" stroke-width="2.2"/>
+    </g>
+    <g fill="#F4F8FF"><circle cx="96" cy="52" r="3"/><circle cx="148" cy="104" r="3"/><circle cx="44" cy="104" r="3"/><circle cx="96" cy="156" r="3"/><circle cx="132.8" cy="67.2" r="3"/><circle cx="59.2" cy="140.8" r="3"/><circle cx="59.2" cy="67.2" r="3"/><circle cx="132.8" cy="140.8" r="3"/></g>
+    <g fill="#0E2E66">
+      <path d="M232 160 L237 104 Q242 92 237 80 L241 52 L247 52 L251 80 Q246 92 251 104 L256 160 Z"/>
+      <rect x="150" y="146" width="26" height="14"/><path d="M262 160 L262 128 Q296 116 330 128 L330 160 Z"/><rect x="340" y="136" width="60" height="24"/>
+    </g>
+    <path d="M233 120 L255 120" stroke="#FF9A9A" stroke-width="2"/>
+    <g fill="#FFE7A8"><rect x="156" y="150" width="3" height="3"/><rect x="166" y="150" width="3" height="3"/><rect x="348" y="142" width="3" height="3"/><rect x="362" y="146" width="3" height="3"/><rect x="380" y="142" width="3" height="3"/></g>
+    <rect y="160" width="400" height="60" fill="url(#hk-sea)"/>
+    <g fill="#FFE7C7" opacity=".5"><rect x="180" y="166" width="32" height="2" rx="1"/><rect x="186" y="174" width="20" height="2" rx="1"/><rect x="191" y="182" width="10" height="2" rx="1"/></g>
+    <g stroke="#9CC0F5" stroke-opacity=".45" stroke-width="1.4" fill="none"><path d="M20 180 q10 -4 20 0 t20 0"/><path d="M140 196 q10 -4 20 0 t20 0"/><path d="M340 190 q10 -4 20 0 t20 0"/></g>
+  </svg>`,
+  motomachi: `<svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hm-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3F7BDD"/><stop offset=".7" stop-color="#9CC2F6"/><stop offset="1" stop-color="#E6F0FD"/></linearGradient>
+    </defs>
+    <rect width="400" height="220" fill="url(#hm-sky)"/>
+    <g fill="#fff" opacity=".9"><ellipse cx="80" cy="44" rx="34" ry="10"/><ellipse cx="104" cy="38" rx="20" ry="10"/><ellipse cx="300" cy="62" rx="40" ry="9"/></g>
+    <path d="M190 48 L330 22" stroke="#fff" stroke-opacity=".7" stroke-width="1.4" stroke-dasharray="3 5"/>
+    <g transform="translate(330 12) rotate(-12) scale(.85)" fill="#fff"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" transform="rotate(90 12 12)"/></g>
+    <g fill="#1F4C9E">
+      <rect x="10" y="90" width="96" height="110"/><path d="M10 90 L58 70 L106 90 Z"/>
+      <rect x="114" y="104" width="78" height="96"/><rect x="200" y="84" width="88" height="116"/><path d="M200 84 Q244 58 288 84 Z"/>
+      <rect x="296" y="110" width="104" height="90"/>
+    </g>
+    <g fill="#CFE0FB">
+      <path d="M22 110 h14 v14 q-7 -8 -14 0 z"/><path d="M50 110 h14 v14 q-7 -8 -14 0 z"/><path d="M78 110 h14 v14 q-7 -8 -14 0 z"/>
+      <rect x="22" y="140" width="14" height="22"/><rect x="50" y="140" width="14" height="22"/><rect x="78" y="140" width="14" height="22"/>
+      <rect x="126" y="118" width="12" height="16"/><rect x="146" y="118" width="12" height="16"/><rect x="166" y="118" width="12" height="16"/>
+      <rect x="126" y="148" width="12" height="16"/><rect x="146" y="148" width="12" height="16"/><rect x="166" y="148" width="12" height="16"/>
+      <path d="M214 104 h16 v18 q-8 -10 -16 0 z"/><path d="M236 104 h16 v18 q-8 -10 -16 0 z"/><path d="M258 104 h16 v18 q-8 -10 -16 0 z"/>
+      <rect x="214" y="138" width="16" height="22"/><rect x="236" y="138" width="16" height="22"/><rect x="258" y="138" width="16" height="22"/>
+      <rect x="310" y="124" width="14" height="16"/><rect x="334" y="124" width="14" height="16"/><rect x="358" y="124" width="14" height="16"/>
+    </g>
+    <g fill="#FFE08A"><circle cx="20" cy="96" r="2"/><circle cx="40" cy="92" r="2"/><circle cx="60" cy="90" r="2"/><circle cx="80" cy="92" r="2"/><circle cx="100" cy="96" r="2"/><circle cx="210" cy="90" r="2"/><circle cx="230" cy="86" r="2"/><circle cx="250" cy="85" r="2"/><circle cx="270" cy="86" r="2"/></g>
+    <rect y="196" width="400" height="24" fill="#DCE8FB"/>
+    <g transform="translate(318 158)"><path d="M0 8 h30 v16 q0 10 -15 10 q-15 0 -15 -10 z" fill="#fff"/><path d="M30 12 q10 0 10 7 q0 7 -10 7" stroke="#fff" stroke-width="3" fill="none"/><path d="M8 4 q-4 -6 0 -12 M16 4 q-4 -6 0 -12 M24 4 q-4 -6 0 -12" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+  </svg>`
+};
+
+/* =========================================================
+   圖示（Material 風格單色 SVG）
+   ========================================================= */
+const ICONS = {
+  flight: '<path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>',
+  train: '<path d="M4 15.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h12v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V5c0-3.5-3.58-4-8-4s-8 .5-8 4v10.5zm8 1.5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm6-7H6V5h12v5z"/>',
+  boat: '<path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v2h2c1.38 0 2.74-.35 4-.99 2.52 1.29 5.48 1.29 8 0 1.26.65 2.62.99 4 .99h2v-2h-2zM3.95 19H4c1.6 0 3.02-.88 4-2 .98 1.12 2.4 2 4 2s3.02-.88 4-2c.98 1.12 2.4 2 4 2h.05l1.89-6.68c.08-.26.06-.54-.06-.78s-.34-.42-.6-.5L20 10.62V6c0-1.1-.9-2-2-2h-3V1H9v3H6c-1.1 0-2 .9-2 2v4.62l-1.29.42c-.26.08-.48.26-.6.5s-.15.52-.06.78L3.95 19zM6 6h12v3.97L12 8 6 9.97V6z"/>',
+  taxi: '<path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H15V3H9v2H6.5c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>',
+  hotel: '<path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/>',
+  food: '<path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/>',
+  cafe: '<path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/>',
+  place: '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>',
+  bag: '<path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/>',
+  ramen: '<path d="M2 11.5h20a10 10 0 0 1-6 9.17V22H8v-1.33A10 10 0 0 1 2 11.5z"/><path d="M8 10 18.8 2.6l1.1 1.6L10.9 10zM11.5 10l9.6-4.8.9 1.7-6.2 3.1z"/>',
+  work: '<path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/>',
+  refresh: '<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>',
+  edit: '<path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>',
+  trash: '<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>',
+  gear: '<path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>',
+  block: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"/>',
+  globe: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>',
+  sunset: '<path d="M12 9a6 6 0 0 0-6 6h12a6 6 0 0 0-6-6zM3 16.5h18v2H3zM11 3h2v4h-2zM4.2 6.6l1.4-1.4 2.1 2.1-1.4 1.4zM16.3 7.3l2.1-2.1 1.4 1.4-2.1 2.1z"/>',
+  chat: '<path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>',
+  map: '<path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>',
+  phone: '<path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>',
+  clock: '<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>',
+  link: '<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>',
+  ticket: '<path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2zm-9 7.5h-2v-2h2v2zm0-4.5h-2v-2h2v2zm0-4.5h-2v-2h2v2z"/>',
+  check: '<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>'
+};
+const ic = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ''}</svg>`;
+
+const WX_SUN = '<circle cx="12" cy="12" r="4.4"/><g stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 2.6v2.3M12 19.1v2.3M2.6 12h2.3M19.1 12h2.3M5.4 5.4l1.6 1.6M17 17l1.6 1.6M5.4 18.6 7 17M17 7l1.6-1.6"/></g>';
+const WX_CLOUD = 'M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z';
+function wxSvg(c) {
+  const cloudTop = `<path transform="translate(2 0) scale(.84)" d="${WX_CLOUD}"/>`;
+  let inner;
+  if (c === 0) inner = WX_SUN;
+  else if (c === 1 || c === 2) inner = `<g transform="translate(8.5 -.5) scale(.62)">${WX_SUN}</g><path transform="translate(0 6) scale(.78)" d="${WX_CLOUD}"/>`;
+  else if (c === 3) inner = `<path transform="translate(0 2)" d="${WX_CLOUD}"/>`;
+  else if (c === 45 || c === 48) inner = '<g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h18M5 12h14M3 16h18M7 20h10"/></g>';
+  else if ((c >= 51 && c <= 67) || (c >= 80 && c <= 82)) inner = `${cloudTop}<g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 19.5l-1 2.5M12 19.5l-1 2.5M17 19.5l-1 2.5"/></g>`;
+  else if ((c >= 71 && c <= 77) || c === 85 || c === 86) inner = `${cloudTop}<circle cx="7" cy="21" r="1.3"/><circle cx="12" cy="21.5" r="1.3"/><circle cx="17" cy="21" r="1.3"/>`;
+  else if (c >= 95) inner = `${cloudTop}<path d="M12.5 16 9 21.5h3l-1 2.5 4-5.5h-3l1-2.5z"/>`;
+  else inner = `<path transform="translate(0 2)" d="${WX_CLOUD}"/>`;
+  return `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${inner}</svg>`;
+}
+const WX_TEXT = c => (
+  c === 0 ? '晴' : c === 1 ? '大致晴' : c === 2 ? '晴時多雲' : c === 3 ? '陰' : c === 45 || c === 48 ? '霧' :
+  c >= 51 && c <= 57 ? '毛毛雨' : c >= 61 && c <= 67 ? '雨' : c >= 71 && c <= 77 ? '雪' : c >= 80 && c <= 82 ? '陣雨' :
+  c === 85 || c === 86 ? '陣雪' : c >= 95 ? '雷雨' : '—'
+);
 
 /* =========================================================
    工具函式
    ========================================================= */
+const APP_ID = 'osaka-xmas-2026';
 const K = {
-  trip: 'ox26.trip', tripVer: 'ox26.tripVer', exp: 'ox26.exp', rate: 'ox26.rate', wx: 'ox26.wx',
-  rit: 'ox26.rit', todo: 'ox26.todo', res: 'ox26.res', shows: 'ox26.usjShows', sr: 'ox26.sr',
+  trip: 'ox26.trip2', tripVer: 'ox26.tripVer', exp: 'ox26.exp', rate: 'ox26.rate', wx: 'ox26.wx2',
+  rit: 'ox26.rit2', todo: 'ox26.todo', res: 'ox26.res', shows: 'ox26.usjShows', usjSeen: 'ox26.usjSeen',
   map: 'ox26.map', contacts: 'ox26.contacts', ui: 'ox26.ui'
 };
+const OLD_KEYS = ['ox26.trip', 'ox26.rit', 'ox26.sr', 'ox26.wx'];
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const WEEK = '日一二三四五六';
+const WEEK_EN = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -795,7 +944,7 @@ function toast(msg) {
 
 function nowAt(offsetH) {
   const d = new Date(Date.now() + offsetH * 3600e3);
-  return { date: d.toISOString().slice(0, 10), min: d.getUTCHours() * 60 + d.getUTCMinutes() };
+  return { date: d.toISOString().slice(0, 10), min: d.getUTCHours() * 60 + d.getUTCMinutes(), hour: d.getUTCHours() };
 }
 /* 日本時間；凌晨 5 點前算前一天的行程 */
 function jstTripNow() {
@@ -815,11 +964,15 @@ const toMin = t => {
 const daysBetween = (a, b) => Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / 864e5);
 const md = d => `${+d.slice(5, 7)}/${+d.slice(8, 10)}`;
 const wd = d => WEEK[new Date(d + 'T00:00:00Z').getUTCDay()];
+const wdEn = d => WEEK_EN[new Date(d + 'T00:00:00Z').getUTCDay()];
 const fmtTs = ts => {
   const d = new Date(ts);
   return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 };
 const mapUrl = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+const safeUrl = u => /^https?:\/\//i.test(u || '') ? u : '';
+const imgSrc = u => /^data:image\/[a-z+]+;base64,[A-Za-z0-9+/=]+$/.test(u || '') ? u : '';
+const MAP_EMBED_RE = /^https:\/\/(www\.)?google\.[a-z.]+\/maps\//;
 const telHref = n => 'tel:' + String(n).replace(/[^\d+]/g, '');
 const yen = n => '¥' + Math.round(n).toLocaleString('ja-JP');
 const twd = n => 'NT$' + Math.round(n).toLocaleString('zh-TW');
@@ -914,18 +1067,20 @@ function sunTimes(date, lat, lon, alt = -0.833) {
   return { rise: f(Jt - w / 360), set: f(Jt + w / 360) };
 }
 
-const WMO = c => (
-  c === 0 ? ['☀️', '晴'] : c === 1 ? ['🌤️', '大致晴'] : c === 2 ? ['⛅', '多雲'] : c === 3 ? ['☁️', '陰'] :
-  c === 45 || c === 48 ? ['🌫️', '霧'] : c >= 51 && c <= 57 ? ['🌦️', '毛毛雨'] : c >= 61 && c <= 67 ? ['🌧️', '雨'] :
-  c >= 71 && c <= 77 ? ['🌨️', '雪'] : c >= 80 && c <= 82 ? ['🌧️', '陣雨'] : c >= 85 && c <= 86 ? ['🌨️', '陣雪'] :
-  c >= 95 ? ['⛈️', '雷雨'] : ['🌡️', '—']
-);
-
 /* =========================================================
-   狀態
+   狀態（含舊版大阪行程的資料遷移）
    ========================================================= */
+try {
+  /* 舊版大阪 APP 用過這支手機：舊飯店（阪神大阪）的確認號不能沿用到神戶飯店 */
+  if (OLD_KEYS.some(k => localStorage.getItem(k) !== null)) {
+    const r = store.get(K.res, {});
+    delete r.hotel;
+    store.set(K.res, r);
+  }
+} catch (e) { /* 私密模式 */ }
+OLD_KEYS.forEach(k => store.del(k));
 let trip = loadTrip();
-const ui = Object.assign({ view: 'trip', day: 'd1', branch: {}, phraseCat: '餐廳' }, store.get(K.ui, {}));
+const ui = Object.assign({ view: 'trip', day: 'd1', branch: {}, phraseCat: '餐廳', editing: false }, store.get(K.ui, {}));
 const saveUi = () => store.set(K.ui, ui);
 
 function loadTrip() {
@@ -974,7 +1129,7 @@ function askConfirm(msg, okText = '確定', danger = true) {
   return new Promise(res => {
     let done = false;
     const entry = openSheet('確認', `<p style="font-size:15.5px;white-space:pre-wrap">${esc(msg)}</p>
-      <div class="btn-row"><button class="btn btn-ghost" data-a="no">取消</button><button class="btn ${danger ? 'btn-berry' : 'btn-primary'}" data-a="yes">${esc(okText)}</button></div>`, body => {
+      <div class="btn-row"><button class="btn btn-ghost" data-a="no">取消</button><button class="btn ${danger ? 'btn-red' : 'btn-primary'}" data-a="yes">${esc(okText)}</button></div>`, body => {
       body.onclick = e => {
         const a = e.target.closest('[data-a]');
         if (!a) return;
@@ -1035,9 +1190,10 @@ function renderCountdown() {
   const el = $('#countdown');
   const toStart = daysBetween(today, TRIP_START);
   const toEnd = daysBetween(today, TRIP_END);
-  if (toStart > 0) el.textContent = `出發 D-${toStart}`;
-  else if (toEnd >= 0) el.textContent = `🎄 第 ${1 - toStart} 天`;
-  else el.textContent = 'Merry Xmas ✨';
+  const range = `${md(TRIP_START)} – ${md(TRIP_END)}`;
+  if (toStart > 0) el.innerHTML = `${range}・出發倒數 <b>${toStart}</b> 天`;
+  else if (toEnd >= 0) el.innerHTML = `${range}・旅程第 <b>${1 - toStart}</b> 天 🎄`;
+  else el.innerHTML = `${range}・Merry Xmas ✨`;
 }
 
 /* =========================================================
@@ -1056,14 +1212,14 @@ function renderTrip() {
   const days = sortedDays();
   const tripNow = jstTripNow();
   v.innerHTML = `
-    ${nt ? `<button class="next-todo" data-go="todo"><span>📌</span><span>下一步｜<b>${md(nt.due)} 前</b> ${esc(nt.text)}</span></button>` : ''}
-    <div class="date-scroller" id="dateScroller">
-      ${days.map((d, i) => `<button class="date-chip ${d.id === day?.id ? 'active' : ''} ${d.date === tripNow.date ? 'today' : ''}" data-day="${esc(d.id)}">
-        <div class="w">DAY ${i + 1}</div><div class="d">${md(d.date)}</div><div class="w">${wd(d.date)}</div></button>`).join('')}
-      <button class="date-chip add" data-act="add-day" aria-label="新增一天">＋</button>
+    <div class="date-tabs" id="dateTabs">
+      ${days.map(d => `<button class="date-tab ${d.id === day?.id ? 'active' : ''} ${d.date === tripNow.date ? 'today' : ''}" data-day="${esc(d.id)}">
+        <div class="w">${wdEn(d.date)}</div><div class="d">${md(d.date)}</div></button>`).join('')}
+      <button class="date-tab add" data-act="add-day" aria-label="新增一天">＋</button>
     </div>
+    ${nt ? `<button class="next-todo" style="margin-top:12px"><span>📌</span><span>下一步｜<b>${md(nt.due)} 前</b> ${esc(nt.text)}</span></button>` : ''}
     <div id="dayView"></div>`;
-  $('#dateScroller', v).onclick = e => {
+  $('#dateTabs', v).onclick = e => {
     const b = e.target.closest('button');
     if (!b) return;
     if (b.dataset.act === 'add-day') return openDayEditor(null);
@@ -1073,7 +1229,7 @@ function renderTrip() {
   };
   const ntBtn = $('.next-todo', v);
   if (ntBtn) ntBtn.onclick = () => { switchView('info'); setTimeout(() => $('#sec-todo')?.scrollIntoView({ behavior: 'smooth' }), 60); };
-  const active = $('.date-chip.active', v);
+  const active = $('.date-tab.active', v);
   if (active) active.scrollIntoView({ block: 'nearest', inline: 'center' });
   if (day) renderDay(day);
   else $('#dayView').innerHTML = '<div class="empty">還沒有任何一天，按 ＋ 新增</div>';
@@ -1081,45 +1237,57 @@ function renderTrip() {
 
 function renderDay(day) {
   const idx = sortedDays().findIndex(d => d.id === day.id);
-  const loc = LOCS[day.loc] || LOCS.fukushima;
+  const loc = LOCS[day.loc] || LOCS.kobe;
   const br = day.branches ? (ui.branch[day.id] || 'A') : null;
   const rits = DAY_RITUALS[day.date] || [];
   const ritState = store.get(K.rit, {});
   const isFirst = day.date === TRIP_START;
   const isLast = day.date === TRIP_END;
-  const hotelLine = isFirst ? '今晚入住（約 21:50 預估）' : isLast ? '12:00 前退房｜行李寄櫃台' : '續住｜溫泉最終入場 22:00';
+  const hotelLine = isFirst ? HOTEL.firstNight : isLast ? HOTEL.lastDay : HOTEL.midStay;
   const dv = $('#dayView');
   dv.innerHTML = `
-    <div class="hero theme-${esc(day.theme || 'night')}" id="hero">
-      <div class="hero-tools"><button class="icon-btn" data-act="edit-day" aria-label="編輯這天">✎</button></div>
-      <div class="hero-day">DAY ${idx + 1}・${md(day.date)}（${wd(day.date)}）</div>
-      <div class="hero-city">📍 ${esc(day.city || loc.name)}</div>
-      <div class="hero-title">${esc(day.title)}</div>
+    <div class="day-wrap">
+      <div class="day-vert">第${idx + 1}天</div>
+      <div class="hero" id="hero">
+        <div class="hero-art">${day.bg ? '' : HERO_ART[day.theme] || HERO_ART.kobe}</div>
+        <div class="hero-text">
+          <div class="hero-meta"><span class="hero-badge">DAY ${idx + 1}</span><span>${ic('place')} ${esc(day.city || loc.name)}</span></div>
+          <div class="hero-title">${esc(day.title)}</div>
+        </div>
+      </div>
     </div>
-    <div class="strip" id="wx"><div class="strip-head"><b>🌤️ 天氣・${esc(loc.name)}</b><span class="muted small">載入中…</span></div></div>
+    <div class="wx-head">
+      <button class="wx-loc" data-act="wx-retry" aria-label="重新整理天氣">${ic('refresh')}<span>${esc(loc.en)}</span></button>
+      <span class="vbar"></span>
+      <button class="ic-btn" data-act="edit-day" aria-label="編輯這天">${ic('edit')}</button>
+      <button class="ic-btn red" data-act="del-day" aria-label="刪除這天">${ic('trash')}</button>
+      <span class="sp"></span>
+      <button class="ic-btn ${ui.editing ? 'on' : ''}" data-act="toggle-edit" aria-label="編輯模式">${ic('gear')}</button>
+    </div>
+    <div id="wx"><div class="wx-meta">天氣載入中…</div></div>
     ${renderSunStrip(day, loc)}
-    <div class="strip"><button class="hotel-bar" data-act="hotel"><span class="ico">🏨</span><span class="grow"><div class="nm">${esc(HOTEL.name)}</div><div class="muted small">${esc(hotelLine)}</div></span><span class="chev">›</span></button></div>
+    <div class="info-strip"><button class="hotel-bar" data-act="hotel"><span class="ico">${ic('hotel')}</span><span class="grow"><div class="nm">${esc(HOTEL.name)}</div><div class="muted small">${esc(hotelLine)}</div></span><span class="chev">›</span></button></div>
     ${rits.length ? `<div class="rit-chips">${rits.map(r => ritChip(r, ritState)).join('')}</div>` : ''}
     ${day.branches ? `<div class="branch"><span class="lbl">方案</span><div class="seg" id="branchSeg">
       <button data-b="A" class="${br === 'A' ? 'on' : ''}">A ${esc(day.branches.A)}</button>
       <button data-b="B" class="${br === 'B' ? 'on' : ''}">B ${esc(day.branches.B)}</button></div></div>` : ''}
-    <div class="timeline" id="timeline">${renderTimelineHtml(day, br)}</div>
+    <div class="timeline ${ui.editing ? 'editing' : ''}" id="timeline">${renderTimelineHtml(day, br)}</div>
     <div class="add-ev"><button class="btn btn-ghost btn-sm" data-act="add-ev">＋ 新增行程</button></div>
-    ${day.note ? `<div class="card day-note" style="margin-top:14px"><div class="card-title">📝 備註</div><div style="white-space:pre-wrap;font-size:14px">${esc(day.note)}</div></div>` : ''}`;
+    ${day.note ? `<div class="card day-note"><div class="card-title">備註</div><div style="white-space:pre-wrap;font-size:14px">${esc(day.note)}</div></div>` : ''}`;
   applyHeroImage(day);
-  dv.onclick = e => {
+  dv.onclick = async e => {
     const a = e.target.closest('[data-act],[data-ev],[data-rit],[data-b],[data-light]');
     if (!a) return;
+    if (a.dataset.act === 'ev-edit') { e.stopPropagation(); return openEventEditor(day, findEvent(day, a.dataset.id)); }
+    if (a.dataset.act === 'ev-del') { e.stopPropagation(); return deleteEvent(day, a.dataset.id); }
     if (a.dataset.ev) return openEventDetail(day, a.dataset.ev);
     if (a.dataset.b) { ui.branch[day.id] = a.dataset.b; saveUi(); return renderDay(day); }
-    if (a.dataset.rit) {
-      if (a.dataset.rit === 'onsen') return openRituals();
-      toggleRitual(a.dataset.rit);
-      return renderDay(day);
-    }
+    if (a.dataset.rit) { toggleRitual(a.dataset.rit); return renderDay(day); }
     if (a.dataset.light) return a.dataset.light === 'usj' ? openUsj() : openSunLights();
     const act = a.dataset.act;
     if (act === 'edit-day') openDayEditor(day);
+    else if (act === 'del-day') deleteDay(day);
+    else if (act === 'toggle-edit') { ui.editing = !ui.editing; saveUi(); renderDay(day); toast(ui.editing ? '編輯模式：每個行程下方可直接編輯／刪除' : '已關閉編輯模式'); }
     else if (act === 'hotel') openHotel();
     else if (act === 'add-ev') openEventEditor(day, null);
     else if (act === 'wx-retry') renderWeather(day, true);
@@ -1128,10 +1296,6 @@ function renderDay(day) {
 }
 
 function ritChip(id, st) {
-  if (id === 'onsen') {
-    const used = ONSEN_PEOPLE.map(([k]) => [1, 2, 3].filter(n => st['onsen' + k + n]).length);
-    return `<button class="rit-chip" data-rit="onsen">♨️ 溫泉券 ${used[0]}/3・${used[1]}/3</button>`;
-  }
   const r = RITUALS[id];
   return `<button class="rit-chip ${st[id] ? 'on' : ''}" data-rit="${id}">${st[id] ? '✓' : r.icon} ${esc(r.label)}</button>`;
 }
@@ -1150,9 +1314,17 @@ async function applyHeroImage(day) {
     const f = await idb.get(src.slice(4)).catch(() => null);
     src = f && f.dataUrl;
   }
-  if (!src || !$('#hero') || curDay().id !== day.id) return;
-  hero.classList.add('has-img');
-  hero.style.backgroundImage = `linear-gradient(180deg, rgba(0,0,0,.05) 30%, rgba(0,0,0,.6)), url("${src.replace(/"/g, '%22')}")`;
+  const art = $('.hero-art', hero);
+  if (!art || curDay().id !== day.id) return;
+  if (src && !imgSrc(src) && !safeUrl(src)) src = '';
+  if (!src) { art.innerHTML = HERO_ART[day.theme] || HERO_ART.kobe; return; }
+  art.innerHTML = '';
+  const img = document.createElement('img');
+  img.className = 'hero-img';
+  img.alt = '';
+  img.src = src;
+  img.onerror = () => { art.innerHTML = HERO_ART[day.theme] || HERO_ART.kobe; };
+  art.appendChild(img);
 }
 
 function eventsFor(day, br) {
@@ -1171,12 +1343,14 @@ function renderTimelineHtml(day, br) {
     const t = TYPES[e.type] || TYPES.SIGHT;
     const cls = nowIdx < 0 ? '' : i < nowIdx ? 'past' : i === nowIdx ? 'now' : '';
     return `<div class="ev type-${esc(e.type)} ${cls}" role="button" tabindex="0" data-ev="${esc(e.id)}">
-      <div class="ev-time">${esc(e.label || e.time)}${e.end ? `<small>–${esc(e.end)}</small>` : ''}${e.est ? '<span class="tag tag-est">預估</span>' : e.official ? '<span class="tag tag-off">官方</span>' : ''}</div>
+      <div class="ev-time">${esc(e.label || e.time)}${e.end ? `<small>–${esc(e.end)}</small>` : ''}${e.est ? '<span class="tag tag-est">預估</span>' : e.official ? '<span class="tag tag-off">官方</span>' : e.booked ? '<span class="tag tag-off">已訂</span>' : ''}</div>
       <div class="ev-rail"><span class="ev-dot"></span></div>
-      <div class="ev-body"><div class="ev-type">${t.icon} ${esc(t.label)}${cls === 'now' ? '<span class="now-badge">NOW</span>' : ''}</div>
+      <div class="ev-body">
         <div class="ev-title">${esc(e.title)}</div>
+        <div class="ev-type">${ic(e.icon || t.icon)} ${esc(t.en)}${cls === 'now' ? ' <span class="now-badge">NOW</span>' : ''}</div>
         ${e.sub ? `<div class="ev-sub">${esc(e.sub)}</div>` : ''}
         ${e.warn ? `<div class="ev-warn">⚠️ ${esc(e.warn)}</div>` : ''}
+        <div class="ev-tools"><button class="btn btn-sm btn-ghost" data-act="ev-edit" data-id="${esc(e.id)}">${ic('edit')} 編輯</button><button class="btn btn-sm btn-danger" data-act="ev-del" data-id="${esc(e.id)}">${ic('trash')} 刪除</button></div>
       </div></div>`;
   }).join('');
 }
@@ -1192,9 +1366,9 @@ function refreshNowHighlight() {
 function renderSunStrip(day, loc) {
   const s = sunTimes(day.date, loc.lat, loc.lon);
   const dusk = sunTimes(day.date, loc.lat, loc.lon, -6).set;
-  const lights = LIGHTS.filter(l => l.date === day.date);
+  const lights = LIGHTS.filter(l => l.dates.includes(day.date));
   const shows = store.get(K.shows, []);
-  return `<div class="strip"><div class="strip-head"><b>🌇 日落・點燈</b><span class="muted small">計算值</span></div>
+  return `<div class="info-strip"><div class="strip-head"><b>日落・點燈</b><span class="muted small">日出日落為計算值</span></div>
     <div class="sun-row"><span>🌅 日出 <b>${s.rise}</b></span><span>🌇 日落 <b>${s.set}</b></span><span>🌃 天黑 <b>${dusk}</b></span></div>
     ${lights.map(l => `<button class="light-chip" data-light="${l.usj ? 'usj' : 'tbl'}"><div class="n">🎄 ${esc(l.name)}</div>
       <div class="small">${l.usj && shows.length ? esc(shows.map(x => x.time + ' ' + x.name).join('｜')) : esc(l.time)}</div>
@@ -1202,14 +1376,23 @@ function renderSunStrip(day, loc) {
   </div>`;
 }
 
-let wxToken = 0;
-async function renderWeather(day, force = false) {
-  const token = ++wxToken;
-  const loc = LOCS[day.loc] || LOCS.fukushima;
+/* 天氣：16 天內顯示當天逐時預報；更早則顯示目前起 24 小時 */
+function wxRequest(day) {
+  const loc = LOCS[day.loc] || LOCS.kobe;
   const today = nowAt(9).date;
   const ahead = daysBetween(today, day.date);
   const inRange = ahead >= 0 && ahead <= 15;
-  const key = inRange ? `${day.loc}|${day.date}` : `${day.loc}|now`;
+  const base = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&timezone=Asia%2FTokyo&hourly=temperature_2m,precipitation_probability,weather_code`;
+  const url = inRange
+    ? `${base}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&start_date=${day.date}&end_date=${day.date}`
+    : `${base}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=2`;
+  return { loc, inRange, ahead, key: inRange ? `${day.loc}|${day.date}` : `${day.loc}|now`, url };
+}
+
+let wxToken = 0;
+async function renderWeather(day, force = false) {
+  const token = ++wxToken;
+  const { loc, inRange, ahead, key, url } = wxRequest(day);
   const cache = store.get(K.wx, {});
   let data = null;
   let offline = false;
@@ -1217,74 +1400,96 @@ async function renderWeather(day, force = false) {
   if (fresh && !force) data = cache[key];
   else {
     try {
-      const base = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&timezone=Asia%2FTokyo`;
-      const url = inRange
-        ? `${base}&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&start_date=${day.date}&end_date=${day.date}`
-        : `${base}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&forecast_days=1`;
       data = { ts: Date.now(), json: await fetchJson(url) };
       cache[key] = data;
       store.set(K.wx, cache);
+      if (force) toast('天氣已更新');
     } catch (e) {
       data = cache[key] || null;
       offline = true;
+      if (force) toast('連不上天氣服務，顯示快取');
     }
   }
   if (token !== wxToken) return;
   const el = $('#wx');
   if (!el) return;
-  const head = `<div class="strip-head"><b>🌤️ 天氣・${esc(loc.name)}</b><span class="muted small">${data ? (offline ? '離線快取・' : '') + fmtTs(data.ts) : ''}</span></div>`;
   if (!data) {
-    el.innerHTML = `${head}<div class="small muted" style="margin-top:6px">無法取得天氣（離線且沒有快取）。${esc(loc.normal)}</div>
-      <div class="btn-row"><button class="btn btn-ghost btn-sm" data-act="wx-retry">重試</button></div>`;
+    el.innerHTML = `<div class="wx-meta">無法取得天氣（離線且沒有快取）。${esc(loc.normal)}</div>`;
     return;
   }
   const j = data.json;
+  const stamp = `${offline ? '離線快取・' : ''}更新 ${fmtTs(data.ts)}`;
+  let hours = (j.hourly.time || []).map((t, i) => ({ t, h: t.slice(11, 16), temp: j.hourly.temperature_2m[i], p: j.hourly.precipitation_probability[i], c: j.hourly.weather_code[i] }));
+  let summary;
   if (inRange) {
+    hours = hours.filter(x => +x.h.slice(0, 2) >= 6);
     const d = j.daily;
-    const [ic, txt] = WMO(d.weather_code[0]);
-    const hours = (j.hourly.time || []).map((t, i) => ({ h: t.slice(11, 13), t: j.hourly.temperature_2m[i], p: j.hourly.precipitation_probability[i], c: j.hourly.weather_code[i] }))
-      .filter(x => +x.h >= 6 && +x.h % 3 === 0);
-    el.innerHTML = `${head}<div class="wx-big"><span class="e">${ic}</span><span class="t">${Math.round(d.temperature_2m_max[0])}° / ${Math.round(d.temperature_2m_min[0])}°</span>
-      <span class="small muted">${txt}・降雨 ${d.precipitation_probability_max[0] ?? '—'}%</span></div>
-      <div class="wx-hours">${hours.map(x => `<div class="wx-h"><div>${x.h}時</div><div class="e">${WMO(x.c)[0]}</div><div class="t">${Math.round(x.t)}°</div><div class="p">${x.p ?? '—'}%</div></div>`).join('')}</div>`;
+    summary = `<div class="wx-day"><b>${Math.round(d.temperature_2m_max[0])}° / ${Math.round(d.temperature_2m_min[0])}°</b><span>${WX_TEXT(d.weather_code[0])}・降雨 ${d.precipitation_probability_max[0] ?? '—'}%</span></div>
+      <div class="wx-meta">${md(day.date)} ${esc(loc.name)} 逐時預報・${stamp}</div>`;
   } else {
+    const nowKey = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 13);
+    const start = Math.max(0, hours.findIndex(x => x.t.slice(0, 13) === nowKey));
+    hours = hours.slice(start, start + 24);
     const c = j.current || {};
-    const [ic, txt] = WMO(c.weather_code);
-    el.innerHTML = `${head}<div class="wx-big"><span class="e">${ic}</span><span class="t">${Math.round(c.temperature_2m)}°</span><span class="small muted">現在${txt}・今天 ${Math.round(j.daily.temperature_2m_max[0])}°/${Math.round(j.daily.temperature_2m_min[0])}°</span></div>
-      <div class="small muted" style="margin-top:6px">${md(day.date)} 進入 16 天預報範圍後自動換成當天逐時預報。${esc(loc.normal)}</div>`;
+    summary = `<div class="wx-day"><b>${Math.round(c.temperature_2m)}°</b><span>現在${WX_TEXT(c.weather_code)}・今天 ${Math.round(j.daily.temperature_2m_max[0])}°/${Math.round(j.daily.temperature_2m_min[0])}°</span></div>
+      <div class="wx-meta">目前${esc(loc.name)}・${ahead < 0 ? md(day.date) + ' 已過，顯示目前起 24 小時' : md(day.date) + ' 進入 16 天預報範圍後改成當天逐時預報・' + esc(loc.normal)}・${stamp}</div>`;
   }
+  el.innerHTML = `<div class="wx-hours">${hours.map(x => `<div class="wx-h"><div>${x.h}</div>${wxSvg(x.c)}<div class="t">${Math.round(x.temp)}°</div><div class="p">${x.p ? x.p + '%' : ''}</div></div>`).join('')}</div>${summary}`;
 }
 
 /* ---------- 行程詳情與編輯 ---------- */
 function findEvent(day, id) { return day.events.find(e => e.id === id); }
+
+async function deleteEvent(day, id) {
+  const e = findEvent(day, id);
+  if (!e || !(await askConfirm(`刪除「${e.title}」？`, '刪除'))) return false;
+  day.events = day.events.filter(x => x.id !== id);
+  saveTrip();
+  renderDay(day);
+  toast('已刪除');
+  return true;
+}
+
+async function deleteDay(day) {
+  if (trip.days.length <= 1) return toast('至少保留一天');
+  if (!(await askConfirm(`刪除 ${md(day.date)} 整天（含所有行程）？`, '刪除'))) return false;
+  trip.days = trip.days.filter(d => d.id !== day.id);
+  idb.del('hero:' + day.id).catch(() => {});
+  saveTrip();
+  ui.day = sortedDays()[0].id;
+  saveUi();
+  renderTrip();
+  return true;
+}
 
 function openEventDetail(day, id) {
   const e = findEvent(day, id);
   if (!e) return;
   const t = TYPES[e.type] || TYPES.SIGHT;
   const resLocal = e.res ? (store.get(K.res, {})[e.res] || {}) : {};
-  const isFood = e.type === 'FOOD' || e.type === 'CAFE';
+  const isFood = ['FOOD', 'CAFE', 'RAMEN'].includes(e.type);
   const rows = [
-    e.phone && `<div><span class="k">📞</span><a href="${telHref(e.phone)}" style="font-weight:700;color:var(--pine)">${esc(e.phone)}</a></div>`,
-    e.hours && `<div><span class="k">🕒</span><span>${esc(e.hours)}</span></div>`,
-    e.addr && `<div><span class="k">📍</span><span class="ja">${esc(e.addr)}</span></div>`,
-    resLocal.conf && `<div><span class="k">🎫</span><span style="flex:1">預約號 <b>${esc(resLocal.conf)}</b></span><button class="btn btn-sm" data-copy="${esc(resLocal.conf)}">複製</button></div>`
+    e.phone && `<div><span class="k">${ic('phone')}</span><a href="${telHref(e.phone)}" style="font-weight:700;color:var(--blue)">${esc(e.phone)}</a></div>`,
+    e.hours && `<div><span class="k">${ic('clock')}</span><span>${esc(e.hours)}</span></div>`,
+    e.addr && `<div><span class="k">${ic('place')}</span><span class="ja">${esc(e.addr)}</span></div>`,
+    resLocal.conf && `<div><span class="k">${ic('ticket')}</span><span style="flex:1">預約號 <b>${esc(resLocal.conf)}</b></span><button class="btn btn-sm" data-copy="${esc(resLocal.conf)}">複製</button></div>`,
+    resLocal.note && `<div><span class="k">🔒</span><span style="white-space:pre-wrap;font-size:13.5px">${esc(resLocal.note)}</span></div>`
   ].filter(Boolean);
-  openSheet(`${t.icon} ${t.label}`, `
-    <div class="det-head type-${esc(e.type)}"><span>${esc(e.label || e.time)}${e.end ? '–' + esc(e.end) : ''}</span>
-      ${e.est ? '<span class="tag tag-est">預估</span>' : ''}${e.official ? '<span class="tag tag-off">官方時刻</span>' : ''}
-      ${e.branch && day.branches ? `<span class="tag tag-draft">${esc(e.branch)} 案</span>` : ''}</div>
+  openSheet(t.zh, `
+    <div class="det-head type-${esc(e.type)}"><span class="tm">${esc(e.label || e.time)}${e.end ? '–' + esc(e.end) : ''}</span>
+      ${e.est ? '<span class="tag tag-est">預估</span>' : ''}${e.official ? '<span class="tag tag-off">官方時刻</span>' : ''}${e.booked ? '<span class="tag tag-off">已訂</span>' : ''}
+      ${e.branch && day.branches ? `<span class="tag tag-draft">${esc(e.branch)} 案</span>` : ''}<span>${ic(e.icon || t.icon)} ${esc(t.en)}</span></div>
     <div class="det-title">${esc(e.title)}</div>
     ${e.sub ? `<div class="det-sub">${esc(e.sub)}</div>` : ''}
     ${e.warn ? `<div class="warn">⚠️ ${esc(e.warn)}</div>` : ''}
     ${rows.length ? `<div class="det-rows">${rows.join('')}</div>` : ''}
     ${e.desc ? `<div class="det-desc">${esc(e.desc)}</div>` : ''}
     <div class="btn-row">
-      ${e.map || e.addr ? `<a class="btn btn-primary" href="${mapUrl(e.map || e.addr)}" target="_blank" rel="noopener">🗺️ Google Maps</a>` : ''}
-      ${e.url ? `<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">🔗 官網／預約</a>` : ''}
-      ${isFood ? '<button class="btn btn-berry" data-act="redline">🈲 紅線卡</button>' : ''}
+      ${e.map || e.addr ? `<a class="btn btn-primary" href="${mapUrl(e.map || e.addr)}" target="_blank" rel="noopener">${ic('map')} Google Maps</a>` : ''}
+      ${safeUrl(e.url) ? `<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">${ic('link')} 官網／預約</a>` : ''}
+      ${isFood ? `<button class="btn btn-red" data-act="redline">${ic('block')} 紅線卡</button>` : ''}
     </div>
-    <div class="btn-row"><button class="btn btn-ghost" data-act="edit">✎ 編輯</button><button class="btn btn-danger" data-act="del">刪除</button></div>`,
+    <div class="btn-row"><button class="btn btn-ghost" data-act="edit">${ic('edit')} 編輯</button><button class="btn btn-danger" data-act="del">${ic('trash')} 刪除</button></div>`,
   (body, entry) => {
     body.onclick = async ev => {
       const c = ev.target.closest('[data-copy]');
@@ -1293,15 +1498,7 @@ function openEventDetail(day, id) {
       if (!a) return;
       if (a.dataset.act === 'redline') openRedLine();
       else if (a.dataset.act === 'edit') { closeSheet(entry); openEventEditor(day, e); }
-      else if (a.dataset.act === 'del') {
-        if (await askConfirm(`刪除「${e.title}」？`, '刪除')) {
-          day.events = day.events.filter(x => x.id !== e.id);
-          saveTrip();
-          closeSheet(entry);
-          renderDay(day);
-          toast('已刪除');
-        }
-      }
+      else if (a.dataset.act === 'del') { if (await deleteEvent(day, e.id)) closeSheet(entry); }
     };
   });
 }
@@ -1315,12 +1512,12 @@ function openEventEditor(day, e) {
   openSheet(isNew ? '新增行程' : '編輯行程', `<form id="evForm">
     <div class="row2"><label class="field"><span>開始</span><input type="time" name="time" value="${esc(v.time)}" required></label>
       <label class="field"><span>結束（可空）</span><input type="time" name="end" value="${esc(v.end || '')}"></label></div>
-    <label class="field"><span>類型</span><select name="type">${Object.entries(TYPES).map(([k, t]) => `<option value="${k}" ${k === v.type ? 'selected' : ''}>${t.icon} ${t.label}</option>`).join('')}</select></label>
+    <label class="field"><span>類型</span><select name="type">${Object.entries(TYPES).map(([k, t]) => `<option value="${k}" ${k === v.type ? 'selected' : ''}>${t.zh}（${t.en}）</option>`).join('')}</select></label>
     <label class="field"><span>標題</span><input name="title" value="${esc(v.title)}" required></label>
     <label class="field"><span>副標</span><input name="sub" value="${esc(v.sub || '')}"></label>
     ${brOpts}
     <label class="check-line"><input type="checkbox" name="est" ${v.est ? 'checked' : ''}>時間是推算的（標「預估」）</label>
-    <label class="field"><span>時間顯示文字（可空，例如「08:00 前後」）</span><input name="label" value="${esc(v.label || '')}"></label>
+    <label class="field"><span>時間顯示文字（可空，例如「自然醒」）</span><input name="label" value="${esc(v.label || '')}"></label>
     <div class="row2"><label class="field"><span>電話</span><input name="phone" inputmode="tel" value="${esc(v.phone || '')}"></label>
       <label class="field"><span>營業時間</span><input name="hours" value="${esc(v.hours || '')}"></label></div>
     <label class="field"><span>地址</span><input name="addr" value="${esc(v.addr || '')}"></label>
@@ -1354,18 +1551,18 @@ function openDayEditor(day) {
   const isNew = !day;
   const last = sortedDays().slice(-1)[0];
   const nextDate = last ? new Date(Date.parse(last.date + 'T00:00:00Z') + 864e5).toISOString().slice(0, 10) : TRIP_START;
-  const v = day || { date: nextDate, loc: 'fukushima', theme: 'snow', city: '', title: '', bg: '', branches: null, note: '' };
+  const v = day || { date: nextDate, loc: 'kobe', theme: 'kobe', city: '', title: '', bg: '', branches: null, note: '' };
   openSheet(isNew ? '新增一天' : '編輯這天', `<form id="dayForm">
     <label class="field"><span>日期</span><input type="date" name="date" value="${esc(v.date)}" required></label>
     <label class="field"><span>標題</span><input name="title" value="${esc(v.title)}" required></label>
     <label class="field"><span>城市／區域</span><input name="city" value="${esc(v.city)}"></label>
     <div class="row2">
       <label class="field"><span>天氣地點</span><select name="loc">${Object.entries(LOCS).map(([k, l]) => `<option value="${k}" ${k === v.loc ? 'selected' : ''}>${l.name}</option>`).join('')}</select></label>
-      <label class="field"><span>主色</span><select name="theme">${[['night', '聖誕夜'], ['usj', 'USJ'], ['kobe', '港灣'], ['umeda', '金色梅田'], ['snow', '初雪']].map(([k, l]) => `<option value="${k}" ${k === v.theme ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+      <label class="field"><span>主卡插畫</span><select name="theme">${[['night', '夜航・抵達'], ['usj', 'USJ 聖誕'], ['kobe', '神戶港黃昏'], ['motomachi', '元町洋館']].map(([k, l]) => `<option value="${k}" ${k === v.theme ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
     </div>
-    <label class="field"><span>主圖網址（可空）</span><input name="bg" type="url" value="${esc(v.bg && !v.bg.startsWith('idb:') ? v.bg : '')}" placeholder="https://…"></label>
+    <label class="field"><span>主圖網址（可空，填了會蓋過插畫）</span><input name="bg" type="url" value="${esc(v.bg && !v.bg.startsWith('idb:') ? v.bg : '')}" placeholder="https://…"></label>
     <div class="btn-row" style="margin-top:-4px;margin-bottom:12px"><button type="button" class="btn btn-sm" data-act="photo">📷 從相簿選主圖</button>
-      ${v.bg ? '<button type="button" class="btn btn-sm btn-ghost" data-act="nophoto">移除主圖</button>' : ''}</div>
+      ${v.bg ? '<button type="button" class="btn btn-sm btn-ghost" data-act="nophoto">改回插畫</button>' : ''}</div>
     <label class="check-line"><input type="checkbox" name="hasBranch" ${v.branches ? 'checked' : ''}>這天有 A／B 兩個方案</label>
     <div class="row2"><label class="field"><span>A 案名稱</span><input name="brA" value="${esc(v.branches?.A || 'A 案')}"></label>
       <label class="field"><span>B 案名稱</span><input name="brB" value="${esc(v.branches?.B || 'B 案')}"></label></div>
@@ -1385,18 +1582,9 @@ function openDayEditor(day) {
       } else if (a.dataset.act === 'nophoto') {
         pendingBg = '';
         f.bg.value = '';
-        toast('按儲存後移除');
+        toast('按儲存後改回插畫');
       } else if (a.dataset.act === 'del') {
-        if (trip.days.length <= 1) return toast('至少保留一天');
-        if (await askConfirm(`刪除 ${md(day.date)} 整天（含所有行程）？`, '刪除')) {
-          trip.days = trip.days.filter(d => d.id !== day.id);
-          idb.del('hero:' + day.id).catch(() => {});
-          saveTrip();
-          ui.day = sortedDays()[0].id;
-          saveUi();
-          closeSheet(entry);
-          renderTrip();
-        }
+        if (await deleteDay(day)) closeSheet(entry);
       }
     });
     f.onsubmit = async ev => {
@@ -1431,32 +1619,29 @@ function openDayEditor(day) {
 }
 
 function openHotel() {
-  openSheet('🏨 住宿', `
+  const resLocal = store.get(K.res, {}).hotel || {};
+  openSheet('住宿', `
     <div class="det-title ja">${esc(HOTEL.name)}</div>
     <div class="det-sub">${esc(HOTEL.zh)}｜✅ 已訂</div>
-    <dl class="kv" style="margin-top:12px">
-      <dt>地址</dt><dd class="ja">${esc(HOTEL.addr)}</dd>
-      <dt>交通</dt><dd>${esc(HOTEL.access)}</dd>
-      <dt>房型</dt><dd>${esc(HOTEL.room)}</dd>
-      <dt>價格</dt><dd>${esc(HOTEL.price)}</dd>
-      <dt>入住</dt><dd>${esc(HOTEL.checkin)}</dd>
-      <dt>退房</dt><dd><b>${esc(HOTEL.checkout)}</b></dd>
-      <dt>溫泉</dt><dd>${esc(HOTEL.onsen)}</dd>
-      <dt>餐食</dt><dd>${esc(HOTEL.meals)}</dd>
-    </dl>
-    <div class="note" style="margin-top:12px">♨️ 每晚回飯店約 21:30–21:45（預估），最終入場 22:00 很趕；最穩是 12/27 10:00 開場去泡。</div>
+    <dl class="kv" style="margin-top:12px">${HOTEL.rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+    ${resLocal.conf ? `<div class="det-rows"><div><span class="k">${ic('ticket')}</span><span style="flex:1">訂房代號 <b>${esc(resLocal.conf)}</b></span><button class="btn btn-sm" data-copy="${esc(resLocal.conf)}">複製</button></div></div>` : ''}
+    ${HOTEL.tip ? `<div class="note" style="margin-top:12px">${esc(HOTEL.tip)}</div>` : ''}
     <div class="btn-row">
-      <a class="btn btn-primary" href="${telHref(HOTEL.phone)}">📞 ${esc(HOTEL.phone)}</a>
-      <a class="btn" href="${mapUrl(HOTEL.map)}" target="_blank" rel="noopener">🗺️ 地圖</a>
-      <a class="btn" href="${esc(HOTEL.url)}" target="_blank" rel="noopener">🔗 官網</a>
-      <button class="btn" data-act="taxi">🚕 給司機看</button>
+      ${HOTEL.phone ? `<a class="btn btn-primary" href="${telHref(HOTEL.phone)}">${ic('phone')} ${esc(HOTEL.phone)}</a>` : ''}
+      <a class="btn" href="${mapUrl(HOTEL.map)}" target="_blank" rel="noopener">${ic('map')} 地圖</a>
+      ${HOTEL.url ? `<a class="btn" href="${esc(HOTEL.url)}" target="_blank" rel="noopener">${ic('link')} 官網</a>` : ''}
+      <button class="btn" data-act="taxi">${ic('taxi')} 給司機看</button>
     </div>`, body => {
-    $('[data-act=taxi]', body).onclick = () => showTaxiCard(TAXI[0]);
+    body.onclick = e => {
+      const c = e.target.closest('[data-copy]');
+      if (c) return copyText(c.dataset.copy);
+      if (e.target.closest('[data-act=taxi]')) showTaxiCard(TAXI[0]);
+    };
   });
 }
 
 /* =========================================================
-   錢包：匯率（優化 ⑥）＋記帳
+   錢包：匯率（自動抓＋手動鎖定）＋記帳
    ========================================================= */
 const RATE_FALLBACK = 0.21;
 let convDir = 'JPY';
@@ -1500,26 +1685,27 @@ function renderWallet() {
   const byPayer = {};
   exps.forEach(e => { byPayer[e.payer || '共同'] = (byPayer[e.payer || '共同'] || 0) + toJpy(e); });
   v.innerHTML = `
+    <div class="sec-title">WALLET</div>
     <div class="card rate-card">
-      <div class="card-title">💴 匯率換算<span class="sp"></span><span class="rate-meta">${r.locked ? '🔒 已鎖定' : esc(r.src)}${r.ts ? '・' + fmtTs(r.ts) : ''}</span></div>
+      <div class="card-title">匯率換算<span class="sp"></span><span class="rate-meta">${r.locked ? '🔒 已鎖定' : esc(r.src)}${r.ts ? '・' + fmtTs(r.ts) : ''}</span></div>
       <div class="conv">
         <div class="conv-row"><span class="cur" id="curTop">${convDir}</span><input id="convTop" inputmode="decimal" placeholder="0"></div>
         <button class="swap" id="swapBtn" aria-label="交換幣別">⇅</button>
         <div class="conv-row"><span class="cur" id="curBot">${convDir === 'JPY' ? 'TWD' : 'JPY'}</span><input id="convBot" inputmode="decimal" placeholder="0"></div>
       </div>
-      <div class="rate-line">1 JPY = <input id="rateInput" inputmode="decimal" value="${r.rate}"> TWD
+      <div class="rate-line">1 JPY = <input id="rateInput" inputmode="decimal" value="${esc(r.rate)}"> TWD
         <button class="btn btn-sm ${r.locked ? 'on' : ''}" id="lockBtn">${r.locked ? '🔒 已鎖定' : '🔓 鎖定'}</button>
         <button class="btn btn-sm" id="rateRefresh">↻ 更新</button></div>
     </div>
 
     <div class="card">
-      <div class="card-title">✍️ 記一筆</div>
+      <div class="card-title">記一筆</div>
       <form id="expForm">
         <div class="row2">
-          <label class="field"><span>日期</span><select name="date">${[...new Set([...days.map(d => d.date), todayJ])].sort().map(d => `<option value="${d}" ${d === defDate ? 'selected' : ''}>${md(d)}（${wd(d)}）</option>`).join('')}</select></label>
-          <label class="field"><span>付款</span><select name="payer"><option>Aaron</option><option>伴侶</option><option>共同</option></select></label>
+          <label class="field"><span>日期</span><select name="date">${[...new Set([...days.map(d => d.date), todayJ])].sort().map(d => `<option value="${esc(d)}" ${d === defDate ? 'selected' : ''}>${md(d)}（${wd(d)}）</option>`).join('')}</select></label>
+          <label class="field"><span>付款</span><select name="payer"><option>Aaron</option><option>Yvonne</option><option>共同</option></select></label>
         </div>
-        <label class="field"><span>項目</span><input name="name" placeholder="例：一蘭、ICOCA 儲值" required></label>
+        <label class="field"><span>項目</span><input name="name" placeholder="例：一蘭、高速船" required></label>
         <div style="display:flex;gap:10px;align-items:flex-end">
           <label class="field" style="flex:1;margin-bottom:0"><span>金額</span><input name="amt" inputmode="decimal" placeholder="0" required></label>
           <div class="seg" id="curSeg" style="margin-bottom:4px"><button type="button" data-c="JPY" class="on">¥ JPY</button><button type="button" data-c="TWD">NT$</button></div>
@@ -1535,7 +1721,7 @@ function renderWallet() {
         return `<div class="exp-day"><span>${md(d)}（${wd(d)}）</span><span>${yen(sum)}</span></div>` +
           byDate[d].map(e => `<div class="exp-row"><div class="grow"><div style="font-weight:700">${esc(e.name)}</div><div class="small muted">${esc(e.payer || '')}</div></div>
             <div class="amt">${e.cur === 'TWD' ? twd(e.amt) : yen(e.amt)}<small>${e.cur === 'TWD' ? '≈ ' + yen(e.amt / r.rate) : '≈ ' + twd(e.amt * r.rate)}</small></div>
-            <button class="exp-del" data-del="${esc(e.id)}" aria-label="刪除">✕</button></div>`).join('');
+            <button class="x-btn" data-del="${esc(e.id)}" aria-label="刪除">✕</button></div>`).join('');
       }).join('') : '<div class="empty">還沒有記帳</div>'}
       <div class="btn-row"><button class="btn btn-ghost" id="expExport">⬇︎ 匯出 CSV</button><button class="btn btn-danger" id="expClear">清除全部</button></div>
     </div>`;
@@ -1547,9 +1733,8 @@ function renderWallet() {
     const val = parseFloat((from === 'top' ? top : bot).value);
     const target = from === 'top' ? bot : top;
     if (isNaN(val)) { target.value = ''; return; }
-    const topIsJpy = convDir === 'JPY';
-    const out = (from === 'top') === topIsJpy ? val * rt : val / rt;
-    target.value = (from === 'top') === topIsJpy ? (Math.round(out * 10) / 10).toString() : Math.round(out).toString();
+    const fromJpy = (from === 'top') === (convDir === 'JPY');
+    target.value = fromJpy ? (Math.round(val * rt * 10) / 10).toString() : Math.round(val / rt).toString();
   };
   top.oninput = () => calc('top');
   bot.oninput = () => calc('bot');
@@ -1616,7 +1801,7 @@ function renderWallet() {
       return [x.date, x.name, x.amt, x.cur, x.payer || '', Math.round(j), Math.round(j * rt)];
     }));
     const csv = '﻿' + rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
-    download(`osaka-xmas-expenses-${nowAt(8).date}.csv`, csv, 'text/csv');
+    download(`kobe-xmas-expenses-${nowAt(8).date}.csv`, csv, 'text/csv');
   };
   $('#expClear').onclick = async () => {
     if (!store.get(K.exp, []).length) return toast('沒有資料');
@@ -1636,22 +1821,27 @@ function renderWallet() {
 /* =========================================================
    工具
    ========================================================= */
+function ritProgress() {
+  const st = store.get(K.rit, {});
+  const ids = Object.keys(RITUALS);
+  return { done: ids.filter(k => st[k]).length, total: ids.length };
+}
+
 function renderTools() {
   const v = $('#view-tools');
-  const st = store.get(K.rit, {});
-  const ritTotal = Object.keys(RITUALS).length + 6;
-  const ritDone = Object.keys(RITUALS).filter(k => st[k]).length + ONSEN_PEOPLE.reduce((s, [k]) => s + [1, 2, 3].filter(n => st['onsen' + k + n]).length, 0);
-  v.innerHTML = `
-    <div class="tiles">
-      <button class="tile hot" data-t="redline"><span class="ic">🈲</span><span class="nm">過敏紅線卡</span><span class="ds">全螢幕日文卡：玉ねぎ／タロイモ完全NG</span></button>
-      <button class="tile" data-t="rituals"><span class="ic">✅</span><span class="nm">儀式清單</span><span class="ds">一蘭 ×2・溫泉券・下午咖啡｜${ritDone}/${ritTotal}</span></button>
-      <button class="tile" data-t="usj"><span class="ic">🎢</span><span class="nm">USJ 快捷區</span><span class="ds">官方 App、演出場次、single rider</span></button>
-      <button class="tile" data-t="sun"><span class="ic">🌇</span><span class="nm">日落・點燈</span><span class="ds">每日日落時刻＋燈飾時間</span></button>
-      <button class="tile" data-t="phrase"><span class="ic">🗣️</span><span class="nm">指差し会話</span><span class="ds">點一下放大給店員看</span></button>
-      <button class="tile" data-t="taxi"><span class="ic">🚕</span><span class="nm">交通卡片</span><span class="ds">給司機看的目的地＋付款日語</span></button>
-      <button class="tile" data-t="maps"><span class="ic">🗺️</span><span class="nm">離線地圖截圖</span><span class="ds">先存截圖，沒網路也能看</span></button>
-      <button class="tile" data-t="transit"><span class="ic">🚃</span><span class="nm">交通速查</span><span class="ds">票價、時間、ICOCA</span></button>
-    </div>`;
+  const rp = ritProgress();
+  const tiles = [
+    ['redline', 'block', '過敏紅線卡', '全螢幕日文卡：玉ねぎ／タロイモ完全NG', true],
+    ['rituals', 'ramen', '儀式清單', `拉麵 ×4・下午茶 ×2｜${rp.done}/${rp.total}`],
+    ['usj', 'globe', 'USJ 聖誕', '聖誕亮點、演出場次、官方 App'],
+    ['sun', 'sunset', '日落・點燈', '每日日落時刻＋燈飾時間'],
+    ['phrase', 'chat', '指差し会話', '點一下放大給店員看'],
+    ['taxi', 'taxi', '交通卡片', '給司機看的目的地＋付款日語'],
+    ['maps', 'map', '離線地圖截圖', '先存截圖，沒網路也能看'],
+    ['transit', 'boat', '交通速查', '高速船、Port Liner、USJ 路線']
+  ];
+  v.innerHTML = `<div class="sec-title">TOOLS</div><div class="tiles">${tiles.map(([k, icon, nm, ds, hot]) =>
+    `<button class="tile ${hot ? 'hot' : ''}" data-t="${k}"><span class="ic">${ic(icon)}</span><span class="nm">${esc(nm)}</span><span class="ds">${esc(ds)}</span></button>`).join('')}</div>`;
   v.onclick = e => {
     const t = e.target.closest('[data-t]');
     if (!t) return;
@@ -1659,7 +1849,7 @@ function renderTools() {
   };
 }
 
-/* ① 過敏紅線卡 */
+/* 過敏紅線卡 */
 function openRedLine() {
   const ask = `<p class="fc-ja ja" style="font-weight:700">ご対応可能か教えていただけますか？</p>
     <div class="fc-yn ja"><span class="y">⭕ 対応できます</span><span class="n">❌ できません</span></div>`;
@@ -1669,47 +1859,41 @@ function openRedLine() {
       <div class="fc-big ja"><span class="ng">玉ねぎ</span> <span class="nw">完全NG</span></div>${intro}
       <ul class="fc-list ja"><li>玉ねぎ <small>（オニオンソース・オニオンエキスも）</small></li></ul>${ask}
       <p class="fc-zh">Aaron：洋蔥完全不能吃（含醬汁、高湯、配菜、器具接觸）。生魚片 OK。</p>`;
-    if (k === 'P') return `<span class="fc-badge ja">禁忌食材のお願い</span>
+    if (k === 'Y') return `<span class="fc-badge ja">禁忌食材のお願い</span>
       <div class="fc-big ja"><span class="ng">里芋・タロイモ</span> <span class="nw">完全NG</span></div>${intro}
       <ul class="fc-list ja"><li>里芋・タロイモ</li><li>刺身・生もの <small>（すき焼きの生卵だけは大丈夫です）</small></li></ul>
       <p class="fc-ja ja">お肉の焼き加減はミディアムウェル（赤みなし・焼きすぎない程度）でお願いします。</p>${ask}
-      <p class="fc-zh">伴侶：芋頭完全不能吃；不吃生食（壽喜燒生蛋液 OK）；牛肉熟度適中。</p>`;
+      <p class="fc-zh">Yvonne：芋頭完全不能吃；不吃生食（壽喜燒生蛋液 OK）；牛肉熟度適中。</p>`;
     return `<span class="fc-badge ja">食物アレルギー・禁忌食材</span>
       <div class="fc-big ja"><span class="ng">玉ねぎ</span> <span class="nw">完全NG</span><br><span class="ng">里芋・タロイモ</span> <span class="nw">完全NG</span></div>${intro}
       <ul class="fc-list ja"><li>玉ねぎ <small>（1人目）</small></li><li>里芋・タロイモ <small>（2人目）</small></li><li>刺身・生もの <small>（2人目／すき焼きの生卵はOK）</small></li></ul>${ask}
-      <p class="fc-zh">中文：洋蔥、芋頭完全不能吃（含醬汁、高湯、配菜、器具接觸）。伴侶不吃生食（壽喜燒生蛋液 OK）。</p>`;
-  }, [['all', '兩人'], ['A', 'Aaron'], ['P', '伴侶']]);
+      <p class="fc-zh">中文：洋蔥、芋頭完全不能吃（含醬汁、高湯、配菜、器具接觸）。Yvonne 不吃生食（壽喜燒生蛋液 OK）。</p>`;
+  }, [['all', '兩人'], ['A', 'Aaron'], ['Y', 'Yvonne']]);
 }
 
-/* ② 儀式清單 */
+/* 儀式清單 */
 function openRituals() {
   const draw = body => {
     const st = store.get(K.rit, {});
-    const total = Object.keys(RITUALS).length + 6;
-    const done = Object.keys(RITUALS).filter(k => st[k]).length + ONSEN_PEOPLE.reduce((s, [k]) => s + [1, 2, 3].filter(n => st['onsen' + k + n]).length, 0);
+    const { done, total } = ritProgress();
     const item = id => {
       const r = RITUALS[id];
       return `<button class="list-row ${st[id] ? 'done' : ''}" data-r="${id}" style="width:100%;text-align:left"><span class="chk ${st[id] ? 'on' : ''}">${st[id] ? '✓' : ''}</span>
         <span class="grow"><div class="ttl">${r.icon} ${esc(r.label)}</div><div class="small muted">${esc(r.sub)}${st[id] ? '・' + fmtTs(st[id]) : ''}</div></span></button>`;
     };
+    const group = who => Object.keys(RITUALS).filter(k => RITUALS[k].who === who).map(item).join('');
     body.innerHTML = `
       <div class="card"><div class="total-box"><div><div class="muted small">儀式完成度</div><div class="big">${done} / ${total}</div></div><div style="font-size:30px">🎄</div></div>
         <div class="progress"><i style="width:${Math.round(done / total * 100)}%"></i></div></div>
-      <div class="card"><div class="card-title">🍜 一蘭儀式（Aaron）</div>${item('ichiran1')}${item('ichiran2')}</div>
-      <div class="card"><div class="card-title">♨️ 溫泉券（每人每晚 1 張）</div>
-        <div class="ticket-grid">${ONSEN_PEOPLE.map(([k, name]) => `<div style="font-weight:700">${name}</div>` +
-          [1, 2, 3].map(n => `<button class="ticket ${st['onsen' + k + n] ? 'on' : ''}" data-r="onsen${k}${n}">${st['onsen' + k + n] ? '✓ 已用' : '第 ' + n + ' 張'}</button>`).join('')).join('')}</div>
-        <div class="note" style="margin-top:12px">最終入場 22:00；12/27 10:00 開場人最少，券最後一天用好用滿。</div></div>
-      <div class="card"><div class="card-title">☕ 每天下午一間咖啡廳（伴侶）</div>${item('cafe1')}${item('cafe2')}${item('cafe3')}</div>`;
+      <div class="card"><div class="card-title">Aaron 的拉麵儀式</div>${group('Aaron')}</div>
+      <div class="card"><div class="card-title">Yvonne 的下午茶</div>${group('Yvonne')}</div>`;
   };
-  openSheet('✅ 儀式清單', '', body => {
+  openSheet('儀式清單', '', body => {
     draw(body);
     body.onclick = e => {
       const r = e.target.closest('[data-r]');
       if (!r) return;
-      const st = store.get(K.rit, {});
-      if (st[r.dataset.r]) delete st[r.dataset.r]; else st[r.dataset.r] = Date.now();
-      store.set(K.rit, st);
+      toggleRitual(r.dataset.r);
       draw(body);
       refreshBehind();
     };
@@ -1722,35 +1906,35 @@ function refreshBehind() {
   else RENDER[ui.view]();
 }
 
-/* ③ USJ 快捷區 */
+/* USJ 聖誕 */
 function openUsj() {
   const draw = body => {
     const shows = store.get(K.shows, []).sort((a, b) => toMin(a.time) - toMin(b.time));
-    const sr = store.get(K.sr, {});
+    const seen = store.get(K.usjSeen, {});
     body.innerHTML = `
-      <div class="card" style="background:linear-gradient(150deg,#13284B,#4C1D3D 60%,#B4232C);color:#fff">
-        <div class="small" style="opacity:.85;font-weight:700;letter-spacing:.1em">2026 WINTER EVENT</div>
+      <div class="card" style="background:linear-gradient(150deg,#123B7A,#2F6FDB 60%,#5B8FE6);color:#fff">
+        <div class="small" style="opacity:.85;font-weight:800;letter-spacing:.18em">USJ WINTER 2026</div>
         <div class="ja" style="font-weight:800;font-size:17px;margin-top:2px">${esc(USJ.event)}</div>
         <div class="small" style="opacity:.9;margin-top:2px">${esc(USJ.period)}</div>
-        <div class="btn-row"><a class="btn" style="background:#fff;color:#13284B" href="${USJ.appUrl}" target="_blank" rel="noopener">📱 開官方 App（等候時間）</a>
-          <a class="btn" style="background:rgba(255,255,255,.18);color:#fff" href="${USJ.showUrl}" target="_blank" rel="noopener">🎄 夜間秀官方頁</a></div>
+        <div class="small" style="opacity:.95;margin-top:8px">${esc(USJ.purpose)}</div>
+        <div class="btn-row"><a class="btn" style="background:#fff;color:#123B7A" href="${USJ.appUrl}" target="_blank" rel="noopener">📱 官方 App（等候時間・演出）</a>
+          <a class="btn" style="background:rgba(255,255,255,.2);color:#fff" href="${USJ.eventUrl}" target="_blank" rel="noopener">🎄 活動官方頁</a></div>
       </div>
-      <div class="card"><div class="card-title">🎭 12/25 演出場次備忘<span class="sp"></span><span class="small muted">11 月公布後填</span></div>
-        ${shows.length ? shows.map(s => `<div class="list-row"><b style="font-variant-numeric:tabular-nums;width:48px">${esc(s.time)}</b><span class="grow"><div class="ttl">${esc(s.name)}</div>${s.place ? `<div class="small muted">${esc(s.place)}</div>` : ''}</span><button class="exp-del" data-delshow="${esc(s.id)}" aria-label="刪除">✕</button></div>`).join('')
-          : '<div class="empty">還沒有場次。夜間秀「ライト・アップ・ザ・ナイト」場次公布後加在這裡，行程頁的日落・點燈列也會顯示。</div>'}
+      <div class="card"><div class="card-title">聖誕亮點<span class="sp"></span><span class="small muted" style="font-family:var(--sans)">打勾＝看過</span></div>
+        ${USJ.highlights.map(([id, ja, zh]) => `<button class="list-row ${seen[id] ? 'done' : ''}" data-seen="${id}" style="width:100%;text-align:left"><span class="chk ${seen[id] ? 'on' : ''}">${seen[id] ? '✓' : ''}</span><span class="grow"><div class="ttl ja">${esc(ja)}</div><div class="small muted">${esc(zh)}</div></span></button>`).join('')}
+        ${USJ.highlightNote ? `<div class="note small" style="margin-top:8px">${esc(USJ.highlightNote)}</div>` : ''}</div>
+      <div class="card"><div class="card-title">12/25 演出場次備忘<span class="sp"></span><span class="small muted" style="font-family:var(--sans)">公布後填</span></div>
+        ${shows.length ? shows.map(s => `<div class="list-row"><b style="font-variant-numeric:tabular-nums;width:48px">${esc(s.time)}</b><span class="grow"><div class="ttl">${esc(s.name)}</div>${s.place ? `<div class="small muted">${esc(s.place)}</div>` : ''}</span><button class="x-btn" data-delshow="${esc(s.id)}" aria-label="刪除">✕</button></div>`).join('')
+          : '<div class="empty">還沒有場次。夜間秀公布後加在這裡，行程頁的日落・點燈列也會顯示。</div>'}
         <form id="showForm" style="margin-top:10px"><div class="row2"><label class="field"><span>時間</span><input type="time" name="time" required></label>
           <label class="field"><span>地點（可空）</span><input name="place"></label></div>
           <label class="field"><span>演出名稱</span><input name="name" required placeholder="ライト・アップ・ザ・ナイト"></label>
           <button class="btn btn-primary btn-block">＋ 加入場次</button></form></div>
-      <div class="card"><div class="card-title">🧍 Single rider 清單</div>
-        <div class="note small" style="margin-bottom:6px">⚠️ 依 2026-10 網路資料整理，未逐項確認；當天以官方 App／現場標示為準。打勾＝搭過。</div>
-        ${USJ.singleRider.map(([id, ja, zh]) => `<button class="list-row ${sr[id] ? 'done' : ''}" data-sr="${id}" style="width:100%;text-align:left"><span class="chk ${sr[id] ? 'on' : ''}">${sr[id] ? '✓' : ''}</span><span class="grow"><div class="ttl ja">${esc(ja)}</div><div class="small muted">${esc(zh)}</div></span></button>`).join('')}</div>
-      <div class="card"><div class="card-title">🗓️ 12/25 動線</div>
-        <div class="small" style="line-height:1.9">06:45 出門 → 07:15 閘門卡位 → 08:00 前後開園<br>08:10 飛天翼龍 SR（Aaron）→ 09:00 哈利波特<br>11:30 三根掃帚 → 12:45 紐約・好萊塢巡禮<br>15:30 園內咖啡 → 17:00 占位 → <b>17:30 夜間秀</b><br>18:45 Parkside Grill → 20:45 出園</div>
-        <div class="note small" style="margin-top:8px">年度最高擁擠、無快通；表定開園假設 8:30，實際常提早。</div>
+      <div class="card"><div class="card-title">從神戶怎麼去</div>
+        <dl class="kv">${USJ.route.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
         <div class="btn-row"><button class="btn" data-go-day="2026-12-25">看 12/25 時間軸</button></div></div>`;
   };
-  openSheet('🎢 USJ 快捷區', '', (body, entry) => {
+  openSheet('USJ 聖誕', '', body => {
     draw(body);
     body.addEventListener('submit', e => {
       if (e.target.id !== 'showForm') return;
@@ -1763,13 +1947,13 @@ function openUsj() {
       refreshBehind();
     });
     body.addEventListener('click', e => {
-      const sr = e.target.closest('[data-sr]');
+      const sn = e.target.closest('[data-seen]');
       const del = e.target.closest('[data-delshow]');
       const go = e.target.closest('[data-go-day]');
-      if (sr) {
-        const st = store.get(K.sr, {});
-        if (st[sr.dataset.sr]) delete st[sr.dataset.sr]; else st[sr.dataset.sr] = Date.now();
-        store.set(K.sr, st);
+      if (sn) {
+        const st = store.get(K.usjSeen, {});
+        if (st[sn.dataset.seen]) delete st[sn.dataset.seen]; else st[sn.dataset.seen] = Date.now();
+        store.set(K.usjSeen, st);
         draw(body);
       } else if (del) {
         store.set(K.shows, store.get(K.shows, []).filter(s => s.id !== del.dataset.delshow));
@@ -1785,26 +1969,26 @@ function openUsj() {
   });
 }
 
-/* ④ 日落・點燈 */
+/* 日落・點燈 */
 function openSunLights() {
   const days = sortedDays();
   const shows = store.get(K.shows, []);
-  openSheet('🌇 日落・點燈時刻', `
+  openSheet('日落・點燈時刻', `
     <div class="card"><table class="sun-table"><thead><tr><th>日期</th><th>地點</th><th>日出</th><th>日落</th><th>天黑</th></tr></thead><tbody>
       ${days.map(d => {
-        const l = LOCS[d.loc] || LOCS.fukushima;
+        const l = LOCS[d.loc] || LOCS.kobe;
         const s = sunTimes(d.date, l.lat, l.lon);
-        return `<tr><td><b>${md(d.date)}</b> ${wd(d.date)}</td><td class="small">${esc(l.name.replace('大阪・', ''))}</td><td>${s.rise}</td><td><b>${s.set}</b></td><td>${sunTimes(d.date, l.lat, l.lon, -6).set}</td></tr>`;
+        return `<tr><td><b>${md(d.date)}</b> ${wd(d.date)}</td><td class="small">${esc(l.short)}</td><td>${s.rise}</td><td><b>${s.set}</b></td><td>${sunTimes(d.date, l.lat, l.lon, -6).set}</td></tr>`;
       }).join('')}
     </tbody></table>
     <div class="small muted" style="margin-top:8px">計算值（天文公式，誤差約 ±1 分）。「天黑」＝民用暮光結束，燈飾最好看的時候。</div></div>
-    ${LIGHTS.map(l => `<div class="card"><div class="small muted" style="font-weight:800">${md(l.date)}（${wd(l.date)}）</div>
+    ${LIGHTS.map(l => `<div class="card"><div class="small muted" style="font-weight:800">${l.dates.map(d => md(d)).join('、')}</div>
       <div class="card-title ja" style="margin:2px 0 4px">🎄 ${esc(l.name)}</div>
       <div class="small">${esc(l.place)}</div>
       <div style="font-weight:800;margin-top:4px">${esc(l.time)}</div>
       ${l.usj && shows.length ? `<div class="small" style="margin-top:4px">你的備忘：${esc(shows.map(x => x.time + ' ' + x.name).join('｜'))}</div>` : ''}
       <div class="small muted" style="margin-top:4px">${esc(l.status)}</div>
-      <div class="btn-row"><a class="btn btn-sm btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">來源</a></div></div>`).join('')}`);
+      ${l.url ? `<div class="btn-row"><a class="btn btn-sm btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">來源</a></div>` : ''}</div>`).join('')}`);
 }
 
 /* 指差し会話 */
@@ -1815,7 +1999,8 @@ function openPhrases() {
       <div class="card">${list.map(([zh, ja], i) => `<button class="phrase" data-i="${i}"><div class="zh">${esc(zh)}</div><div class="jp ja">${esc(ja)}</div></button>`).join('')}</div>
       <div class="small muted" style="text-align:center">點任一句 → 全螢幕放大給對方看</div>`;
   };
-  openSheet('🗣️ 指差し会話 POINT & SPEAK', '', body => {
+  openSheet('指差し会話 POINT & SPEAK', '', body => {
+    if (!PHRASES[ui.phraseCat]) ui.phraseCat = Object.keys(PHRASES)[0];
     draw(body);
     body.onclick = e => {
       const c = e.target.closest('[data-cat]');
@@ -1830,13 +2015,13 @@ function openPhrases() {
 
 /* 交通卡片（給司機看） */
 function showTaxiCard(t) {
-  openFullCard(() => `<span class="fc-badge ja" style="background:var(--pine)">🚕 タクシー</span>
+  openFullCard(() => `<span class="fc-badge blue ja">🚕 タクシー</span>
     <div class="fc-big ja" style="font-size:clamp(26px,8vw,40px)">${esc(t.ja)}</div>
     ${t.sub ? `<div class="fc-sub ja">${esc(t.sub)}</div>` : ''}
     <p class="fc-zh">${esc(t.zh)}</p>`);
 }
 function openTaxi() {
-  openSheet('🚕 交通卡片', `
+  openSheet('交通卡片', `
     <div class="card"><div class="card-title">給司機看：目的地</div>
       ${TAXI.map((t, i) => `<button class="phrase" data-taxi="${i}"><div class="zh">${esc(t.zh)}</div><div class="jp ja">${esc(t.ja)}</div></button>`).join('')}</div>
     <div class="card"><div class="card-title">付款・下車</div>
@@ -1854,7 +2039,7 @@ function openTaxi() {
   });
 }
 
-/* ⑤ 離線地圖截圖 */
+/* 離線地圖截圖 */
 function openMapShots() {
   const draw = async body => {
     const all = (await idb.all().catch(() => [])).filter(([k]) => k.startsWith('map:')).sort((a, b) => b[1].ts - a[1].ts);
@@ -1862,14 +2047,14 @@ function openMapShots() {
     body.innerHTML = `
       <div class="note small">把 Google Maps 的路線、站內地圖、餐廳位置先截圖存進來。圖片只存在這支手機，沒網路也能看。</div>
       <div class="row2" style="margin-top:12px;align-items:end">
-        <label class="field" style="margin-bottom:0"><span>標記為</span><select id="shotTag"><option value="">一般</option>${days.map(d => `<option value="${d.date}">${md(d.date)} ${esc(d.title)}</option>`).join('')}</select></label>
+        <label class="field" style="margin-bottom:0"><span>標記為</span><select id="shotTag"><option value="">一般</option>${days.map(d => `<option value="${esc(d.date)}">${md(d.date)} ${esc(d.title)}</option>`).join('')}</select></label>
         <button class="btn btn-primary" data-act="add" style="margin-bottom:0">📷 加入截圖</button>
       </div>
       <div class="sec-title">${all.length} 張</div>
-      ${all.length ? `<div class="gallery">${all.map(([k, f]) => `<figure data-k="${esc(k)}"><img src="${f.dataUrl}" alt="${esc(f.name || '')}"><figcaption>${f.tag ? md(f.tag) : '一般'}</figcaption></figure>`).join('')}</div>`
+      ${all.length ? `<div class="gallery">${all.map(([k, f]) => `<figure data-k="${esc(k)}"><img src="${imgSrc(f.dataUrl)}" alt="${esc(f.name || '')}"><figcaption>${f.tag ? md(f.tag) : '一般'}</figcaption></figure>`).join('')}</div>`
         : '<div class="empty">還沒有截圖</div>'}`;
   };
-  openSheet('🗺️ 離線地圖截圖', '<div class="empty">載入中…</div>', body => {
+  openSheet('離線地圖截圖', '<div class="empty">載入中…</div>', body => {
     draw(body);
     body.onclick = async e => {
       if (e.target.closest('[data-act=add]')) {
@@ -1890,13 +2075,13 @@ function openMapShots() {
       const k = fig.dataset.k;
       const f = await idb.get(k);
       if (!f) return;
-      openSheet(f.tag ? md(f.tag) : '截圖', `<img class="fc-img" src="${f.dataUrl}" alt="" style="border-radius:12px;background:#fff">
+      openSheet(f.tag ? md(f.tag) : '截圖', `<img class="fc-img" src="${imgSrc(f.dataUrl)}" alt="" style="border-radius:12px;background:#fff">
         <div class="small muted" style="margin-top:6px">雙指可放大。</div>
         <div class="btn-row"><button class="btn" data-act="full">⛶ 全螢幕</button><button class="btn btn-danger" data-act="del">刪除</button></div>`, (b2, en2) => {
         b2.onclick = async ev => {
           const a = ev.target.closest('[data-act]');
           if (!a) return;
-          if (a.dataset.act === 'full') openFullCard(() => `<img class="fc-img" src="${f.dataUrl}" alt="">`);
+          if (a.dataset.act === 'full') openFullCard(() => `<img class="fc-img" src="${imgSrc(f.dataUrl)}" alt="">`);
           if (a.dataset.act === 'del' && await askConfirm('刪除這張截圖？', '刪除')) {
             await idb.del(k);
             closeSheet(en2);
@@ -1909,9 +2094,9 @@ function openMapShots() {
 }
 
 function openTransit() {
-  openSheet('🚃 交通速查', `<div class="card"><dl class="kv">${TRANSIT.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>
-    <div class="card"><div class="card-title">常用站</div><div class="btn-row">
-      ${['JR福島駅', '阪神福島駅', 'ユニバーサルシティ駅', '神戸三宮駅', '大阪梅田駅', '関西国際空港駅'].map(s => `<a class="btn btn-sm" href="${mapUrl(s)}" target="_blank" rel="noopener">${esc(s)}</a>`).join('')}
+  openSheet('交通速查', `<div class="card"><dl class="kv">${TRANSIT.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>
+    <div class="card"><div class="card-title">常用地點</div><div class="btn-row">
+      ${TRANSIT_SPOTS.map(s => `<a class="btn btn-sm" href="${mapUrl(s)}" target="_blank" rel="noopener">${esc(s)}</a>`).join('')}
     </div></div>`);
 }
 
@@ -1929,86 +2114,89 @@ function renderInfo() {
   const todos = [...TODOS].sort((a, b) => a.due.localeCompare(b.due));
   const tdDone = todos.filter(t => todoDone[t.id]).length;
   v.innerHTML = `
-    ${store.get(K.trip, null) && storedVer < DATA_VER ? `<div class="update-banner"><span>🆕 行程預設資料有新版本</span><button class="btn btn-sm btn-primary" data-act="apply-new" style="margin-left:auto">套用</button></div>` : ''}
+    ${store.get(K.trip, null) && storedVer < DATA_VER ? `<div class="update-banner"><span>行程預設資料有新版本</span><button class="btn btn-sm btn-primary" data-act="apply-new" style="margin-left:auto">套用</button></div>` : ''}
 
-    <div class="sec-title">預約確認號</div>
+    <div class="sec-title">RESERVATIONS</div>
     <div class="card">
-      <div class="note small" style="margin-bottom:12px">🔒 確認號與狀態只存在這支手機，不會上傳到網站。</div>
+      <div class="note small" style="margin-bottom:12px">🔒 確認號、座位與備註只存在這支手機，不會上傳到網站。</div>
       ${RESERVATIONS.map(r => {
         const loc = resLocal[r.id] || {};
-        const status = loc.status || r.status;
-        return `<div class="res-card"><div class="res-top"><span style="font-size:22px">${r.icon}</span>
+        const status = RES_STATUSES.includes(loc.status) ? loc.status : r.status;
+        const note = typeof loc.note === 'string' ? loc.note : '';
+        return `<div class="res-card"><div class="res-top"><span class="ico">${ic(r.icon)}</span>
           <div class="grow"><div class="res-name">${esc(r.name)}</div><div class="res-when">${esc(r.when)}</div>${r.how ? `<div class="small" style="color:var(--ink-2)">${esc(r.how)}</div>` : ''}</div>
           <select class="status st-${esc(status)}" data-status="${r.id}">${RES_STATUSES.map(s => `<option ${s === status ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
-          <div class="conf-row"><input data-conf="${r.id}" value="${esc(loc.conf || '')}" placeholder="確認號／訂位代號" autocomplete="off" autocapitalize="characters">
+          <div class="conf-row"><input data-conf="${r.id}" value="${esc(typeof loc.conf === 'string' ? loc.conf : '')}" placeholder="確認號／訂位代號" autocomplete="off" autocapitalize="characters">
             <button class="btn btn-sm" data-copyconf="${r.id}">複製</button></div>
-          ${r.url || r.phone ? `<div class="res-links">${r.url ? `<a class="btn btn-sm btn-ghost" href="${esc(r.url)}" target="_blank" rel="noopener">🔗 預約頁</a>` : ''}${r.phone ? `<a class="btn btn-sm btn-ghost" href="${telHref(r.phone)}">📞 ${esc(r.phone)}</a>` : ''}</div>` : ''}
+          <textarea class="res-note" data-note="${r.id}" rows="${note ? Math.min(6, note.split('\n').length + 1) : 1}" placeholder="私人備註（座位、訂位人…只存本機）">${esc(note)}</textarea>
+          ${r.url || r.phone ? `<div class="res-links">${r.url ? `<a class="btn btn-sm btn-ghost" href="${esc(r.url)}" target="_blank" rel="noopener">${ic('link')} 預約頁</a>` : ''}${r.phone ? `<a class="btn btn-sm btn-ghost" href="${telHref(r.phone)}">${ic('phone')} ${esc(r.phone)}</a>` : ''}</div>` : ''}
         </div>`;
       }).join('')}
     </div>
 
-    <div class="sec-title">Visit Japan Web</div>
+    <div class="sec-title">VISIT JAPAN WEB</div>
     <div class="card">
-      <div class="card-title">🛂 入境 QR<span class="sp"></span><a class="btn btn-sm btn-ghost" href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener">VJW 官網</a></div>
+      <div class="card-title">入境 QR<span class="sp"></span><a class="btn btn-sm btn-ghost" href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener">VJW 官網</a></div>
       <div class="qr-grid" id="qrGrid"><div class="qr-slot">載入中…</div><div class="qr-slot">載入中…</div></div>
       <div class="small muted" style="margin-top:8px">🔒 QR 截圖只存在這支手機。入境時點一下全螢幕顯示。</div>
     </div>
 
-    <div class="sec-title">緊急聯絡</div>
+    <div class="sec-title">EMERGENCY</div>
     <div class="card">
       ${EMERGENCY.map(c => `<a class="tel" href="${telHref(c.num)}"><span class="ico">${c.icon}</span><span class="grow"><div style="font-weight:700">${esc(c.name)}</div><div class="small muted">${esc(c.sub)}</div></span><span class="num">${esc(c.num)}</span></a>`).join('')}
-      ${contacts.map(c => `<div class="tel"><span class="ico">👤</span><a class="grow" href="${telHref(c.num)}" style="text-decoration:none"><div style="font-weight:700">${esc(c.name)}</div><div class="small muted">${esc(c.num)}</div></a><button class="exp-del" data-delcontact="${esc(c.id)}" aria-label="刪除">✕</button></div>`).join('')}
+      ${contacts.map(c => `<div class="tel"><span class="ico">👤</span><a class="grow" href="${telHref(c.num)}" style="text-decoration:none"><div style="font-weight:700">${esc(c.name)}</div><div class="small muted">${esc(c.num)}</div></a><button class="x-btn" data-delcontact="${esc(c.id)}" aria-label="刪除">✕</button></div>`).join('')}
       <div class="btn-row"><button class="btn btn-ghost btn-sm" data-act="add-contact">＋ 加個人聯絡人（信用卡掛失、保險…）</button>
-        <button class="btn btn-berry btn-sm" data-act="help-card">🆘 求救日語卡</button></div>
+        <button class="btn btn-red btn-sm" data-act="help-card">🆘 求救日語卡</button></div>
     </div>
 
-    <div class="sec-title" id="sec-todo">行前待辦 ${tdDone}/${todos.length}</div>
+    <div class="sec-title" id="sec-todo">TO-DO ${tdDone}/${todos.length}</div>
     <div class="card">
       ${todos.map(t => {
         const done = !!todoDone[t.id];
         const late = !done && t.due < today;
         return `<button class="list-row ${done ? 'done' : ''}" data-todo="${t.id}" style="width:100%;text-align:left"><span class="chk ${done ? 'on' : ''}">${done ? '✓' : ''}</span>
-          <span class="grow"><div class="ttl">${esc(t.text)}</div><div class="small ${late ? '' : 'muted'}" ${late ? 'style="color:var(--berry);font-weight:700"' : ''}>${late ? '⚠️ 已過建議日 ' : '建議 '}${md(t.due)} 前</div></span></button>`;
+          <span class="grow"><div class="ttl">${esc(t.text)}</div><div class="small ${late ? '' : 'muted'}" ${late ? 'style="color:var(--red);font-weight:700"' : ''}>${late ? '⚠️ 已過建議日 ' : '建議 '}${md(t.due)} 前</div></span></button>`;
       }).join('')}
     </div>
 
-    <div class="sec-title">飲食紅線＆偏好</div>
+    <div class="sec-title">FOOD</div>
     <div class="card">
       <table class="food-tbl">
         <tr><td>Aaron</td><td>🚫 <b>洋蔥</b>（餐具碰到都不行）<br>❤️ 生魚片（握壽司／OMAKASE）、拉麵、鰻魚飯</td></tr>
-        <tr><td>伴侶</td><td>🚫 <b>芋頭</b>、<b>生魚片及生食</b>（壽喜燒生蛋液例外，而且必配）<br>❤️ 義大利麵、牛肉（適中：不見血也不過熟）、無骨雞肉（親子丼、香煎雞腿排）<br>海鮮：軟絲＞干貝＞鮮蝦＞花枝＞鮮蚵＞生蠔＞螃蟹；魚肉幾乎不吃；不吃鰻魚<br>☕ 每天下午一間咖啡廳／甜點（超愛舒芙蕾）</td></tr>
-        <tr><td>豬肉</td><td>✅ 非紅線；伴侶不愛，排餐時不當主角</td></tr>
+        <tr><td>Yvonne</td><td>🚫 <b>芋頭</b>、<b>生魚片及生食</b>（壽喜燒生蛋液例外，而且必配）<br>❤️ 義大利麵、牛肉（適中：不見血也不過熟）、無骨雞肉（親子丼、香煎雞腿排）<br>海鮮：軟絲＞干貝＞鮮蝦＞花枝＞鮮蚵＞生蠔＞螃蟹；魚肉幾乎不吃；不吃鰻魚<br>☕ 每天下午一間咖啡廳／甜點（超愛舒芙蕾）</td></tr>
+        <tr><td>豬肉</td><td>✅ 非紅線；Yvonne 不愛，排餐時不當主角</td></tr>
         <tr><td>共同</td><td>🍝 麵食控（義大利麵／烏龍麵），好吃就好、價錢不拘</td></tr>
       </table>
-      <div class="btn-row"><button class="btn btn-berry" data-act="redline">🈲 開紅線卡</button></div>
+      <div class="btn-row"><button class="btn btn-red" data-act="redline">${ic('block')} 開紅線卡</button></div>
     </div>
 
-    <div class="sec-title">住宿</div>
-    <div class="card"><button class="hotel-bar" data-act="hotel"><span class="ico">🏨</span><span class="grow"><div class="nm">${esc(HOTEL.name)}</div><div class="muted small">${esc(HOTEL.addr)}</div></span><span class="chev">›</span></button></div>
+    <div class="sec-title">HOTEL</div>
+    <div class="card"><button class="hotel-bar" data-act="hotel"><span class="ico">${ic('hotel')}</span><span class="grow"><div class="nm">${esc(HOTEL.name)}</div><div class="muted small">${esc(HOTEL.addr)}</div></span><span class="chev">›</span></button></div>
 
-    <div class="sec-title">地圖</div>
+    <div class="sec-title">MAP</div>
     <div class="card">
-      ${mapCfg.embed ? `<iframe class="map-frame" src="${esc(mapCfg.embed)}" loading="lazy" title="地圖"></iframe>` : ''}
+      ${MAP_EMBED_RE.test(mapCfg.embed || '') ? `<iframe class="map-frame" src="${esc(mapCfg.embed)}" loading="lazy" title="地圖"></iframe>` : ''}
       <div class="btn-row">
-        ${mapCfg.link ? `<a class="btn btn-primary" href="${esc(mapCfg.link)}" target="_blank" rel="noopener">⭐ 我的 Google Maps 清單</a>` : ''}
-        <a class="btn" href="${mapUrl(HOTEL.map)}" target="_blank" rel="noopener">🏨 飯店位置</a>
-        <button class="btn btn-ghost" data-act="map-cfg">⚙︎ 設定地圖連結</button>
+        ${safeUrl(mapCfg.link) ? `<a class="btn btn-primary" href="${esc(mapCfg.link)}" target="_blank" rel="noopener">⭐ 我的 Google Maps 清單</a>` : ''}
+        <a class="btn" href="${mapUrl(HOTEL.map)}" target="_blank" rel="noopener">${ic('hotel')} 飯店位置</a>
+        <button class="btn btn-ghost" data-act="map-cfg">${ic('gear')} 設定地圖連結</button>
       </div>
     </div>
 
-    <div class="sec-title">資料與離線</div>
+    <div class="sec-title">DATA & OFFLINE</div>
     <div class="card">
       <div class="status-list" id="offStatus"><div><span>App 離線快取</span><span>檢查中…</span></div></div>
       <button class="btn btn-primary btn-block" data-act="offline-prep" style="margin-top:12px">📶 離線準備（天氣＋匯率＋圖片）</button>
       <div class="btn-row">
         <button class="btn" data-act="export">⬇︎ 匯出備份</button>
         <button class="btn" data-act="import">⬆︎ 匯入備份</button>
+        <button class="btn" data-act="paste-import">📋 貼上匯入碼</button>
         <button class="btn" data-act="offline-img">🖼️ 離線化主圖</button>
         <button class="btn btn-danger" data-act="reset">重置 APP</button>
       </div>
-      <div class="small muted" style="margin-top:10px">備份含行程修改、記帳、確認號、QR 與截圖，可在另一支手機匯入（例如給伴侶一份）。</div>
+      <div class="small muted" style="margin-top:10px">備份含行程修改、記帳、確認號、QR 與截圖，可在另一支手機匯入（例如給 Yvonne 一份）。</div>
     </div>
-    <div class="small muted" style="text-align:center;margin-top:8px">資料版本 v${DATA_VER}・行程 v1.2＋7/6 餐廳定案</div>`;
+    <div class="small muted" style="text-align:center;margin-top:8px">資料版本 v${DATA_VER}・${esc(DATA_LABEL)}</div>`;
 
   renderQr();
   renderOfflineStatus();
@@ -2024,10 +2212,11 @@ function renderInfo() {
     }
   };
   v.oninput = e => {
-    const c = e.target.closest('[data-conf]');
+    const c = e.target.closest('[data-conf],[data-note]');
     if (!c) return;
+    const id = c.dataset.conf || c.dataset.note;
     const all = store.get(K.res, {});
-    all[c.dataset.conf] = Object.assign(all[c.dataset.conf] || {}, { conf: c.value.trim() });
+    all[id] = Object.assign(all[id] || {}, c.dataset.conf ? { conf: c.value.trim() } : { note: c.value });
     store.set(K.res, all);
   };
   v.onclick = async e => {
@@ -2063,6 +2252,7 @@ function renderInfo() {
     else if (act === 'map-cfg') openMapCfg();
     else if (act === 'export') exportBackup();
     else if (act === 'import') importBackup();
+    else if (act === 'paste-import') openPasteImport();
     else if (act === 'offline-img') offlineImages();
     else if (act === 'offline-prep') offlinePrep();
     else if (act === 'reset') resetApp();
@@ -2080,10 +2270,10 @@ function renderInfo() {
 async function renderQr() {
   const grid = $('#qrGrid');
   if (!grid) return;
-  const people = [['A', 'Aaron'], ['P', '伴侶']];
+  const people = [['A', 'Aaron'], ['P', 'Yvonne']];
   const files = await Promise.all(people.map(([k]) => idb.get('vjw:' + k).catch(() => null)));
   grid.innerHTML = people.map(([k, name], i) => files[i]
-    ? `<button class="qr-slot has" data-qr="${k}"><img src="${files[i].dataUrl}" alt="${name} QR"><b>${name}</b></button>`
+    ? `<button class="qr-slot has" data-qr="${k}"><img src="${imgSrc(files[i].dataUrl)}" alt="${name} QR"><b>${name}</b></button>`
     : `<button class="qr-slot" data-qrup="${k}"><span style="font-size:26px">＋</span><span>上傳 ${name} 的 QR 截圖</span></button>`).join('');
   grid.onclick = async e => {
     const up = e.target.closest('[data-qrup]');
@@ -2097,13 +2287,13 @@ async function renderQr() {
     } else if (show) {
       const k = show.dataset.qr;
       const f = await idb.get('vjw:' + k);
-      const name = k === 'A' ? 'Aaron' : '伴侶';
-      openSheet(`🛂 ${name} 的 VJW QR`, `<img class="fc-img" src="${f.dataUrl}" alt="" style="background:#fff;border-radius:12px">
+      const name = k === 'A' ? 'Aaron' : 'Yvonne';
+      openSheet(`${name} 的 VJW QR`, `<img class="fc-img" src="${imgSrc(f.dataUrl)}" alt="" style="background:#fff;border-radius:12px">
         <div class="btn-row"><button class="btn btn-primary" data-act="full">⛶ 全螢幕給海關看</button><button class="btn" data-act="replace">換一張</button><button class="btn btn-danger" data-act="del">刪除</button></div>`, (body, entry) => {
         body.onclick = async ev => {
           const a = ev.target.closest('[data-act]');
           if (!a) return;
-          if (a.dataset.act === 'full') openFullCard(() => `<div style="text-align:center;font-weight:800;font-size:18px;margin-bottom:10px">${name}・Visit Japan Web</div><img class="fc-img" src="${f.dataUrl}" alt="">`);
+          if (a.dataset.act === 'full') openFullCard(() => `<div style="text-align:center;font-weight:800;font-size:18px;margin-bottom:10px">${name}・Visit Japan Web</div><img class="fc-img" src="${imgSrc(f.dataUrl)}" alt="">`);
           if (a.dataset.act === 'replace') {
             const [file] = await pickFile('image/*');
             if (!file) return;
@@ -2123,7 +2313,7 @@ async function renderQr() {
 }
 
 function openContactEditor() {
-  openSheet('＋ 個人聯絡人', `<form id="ctForm"><label class="field"><span>名稱</span><input name="name" required placeholder="例：信用卡掛失（國泰）"></label>
+  openSheet('個人聯絡人', `<form id="ctForm"><label class="field"><span>名稱</span><input name="name" required placeholder="例：信用卡掛失（國泰）"></label>
     <label class="field"><span>電話</span><input name="num" inputmode="tel" required placeholder="+886-2-…"></label>
     <div class="note small" style="margin-bottom:12px">🔒 只存在這支手機。</div>
     <button class="btn btn-primary btn-block">儲存</button></form>`, (body, entry) => {
@@ -2141,7 +2331,7 @@ function openContactEditor() {
 
 function openMapCfg() {
   const cfg = store.get(K.map, { link: '', embed: '' });
-  openSheet('⚙︎ 地圖設定', `<form id="mapForm">
+  openSheet('地圖設定', `<form id="mapForm">
     <label class="field"><span>Google Maps 清單分享連結</span><input name="link" type="url" value="${esc(cfg.link)}" placeholder="https://maps.app.goo.gl/…"></label>
     <label class="field"><span>內嵌地圖網址（My Maps「嵌入」的 src，可空）</span><input name="embed" type="url" value="${esc(cfg.embed)}" placeholder="https://www.google.com/maps/d/embed?mid=…"></label>
     <button class="btn btn-primary btn-block">儲存</button></form>`, (body, entry) => {
@@ -2149,7 +2339,7 @@ function openMapCfg() {
       e.preventDefault();
       const fd = new FormData(e.target);
       const embed = fd.get('embed').trim();
-      if (embed && !/^https:\/\/(www\.)?google\.[a-z.]+\/maps\//.test(embed)) return toast('內嵌網址要是 Google Maps 的網址');
+      if (embed && !MAP_EMBED_RE.test(embed)) return toast('內嵌網址要是 Google Maps 的網址');
       store.set(K.map, { link: fd.get('link').trim(), embed });
       closeSheet(entry);
       renderInfo();
@@ -2169,7 +2359,7 @@ async function renderOfflineStatus() {
   el.innerHTML = `
     <div><span>App 離線快取</span><span>${sw ? '✅ 已啟用' : '⏳ 重新開一次 APP 後生效'}</span></div>
     <div><span>天氣快取</span><span>${wxTs ? fmtTs(wxTs) + '（' + Object.keys(wx).length + ' 筆）' : '—'}</span></div>
-    <div><span>匯率</span><span>${r.rate}${r.locked ? ' 🔒' : ''}${r.ts ? '・' + fmtTs(r.ts) : '（預設值）'}</span></div>
+    <div><span>匯率</span><span>${esc(r.rate)}${r.locked ? ' 🔒' : ''}${r.ts ? '・' + fmtTs(r.ts) : '（預設值）'}</span></div>
     <div><span>VJW QR／地圖截圖／主圖</span><span>${count('vjw:')}／${count('map:')}／${count('hero:')}</span></div>`;
 }
 
@@ -2177,29 +2367,20 @@ async function offlinePrep() {
   toast('準備中…');
   const days = sortedDays();
   let ok = 0;
+  const cache = store.get(K.wx, {});
   for (const d of days) {
-    try { await renderWeatherPrefetch(d); ok++; } catch (e) { /* 單日失敗略過 */ }
+    try {
+      const { key, url } = wxRequest(d);
+      cache[key] = { ts: Date.now(), json: await fetchJson(url) };
+      ok++;
+    } catch (e) { /* 單日失敗略過 */ }
   }
+  store.set(K.wx, cache);
   await refreshRate(!getRate().locked);
   const img = await offlineImages(true);
   if ('serviceWorker' in navigator && navigator.serviceWorker.controller) navigator.serviceWorker.controller.postMessage('precache');
   toast(`完成：天氣 ${ok}/${days.length} 天、主圖 ${img} 張`);
   renderOfflineStatus();
-}
-
-async function renderWeatherPrefetch(day) {
-  const loc = LOCS[day.loc] || LOCS.fukushima;
-  const ahead = daysBetween(nowAt(9).date, day.date);
-  const inRange = ahead >= 0 && ahead <= 15;
-  const key = inRange ? `${day.loc}|${day.date}` : `${day.loc}|now`;
-  const base = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&timezone=Asia%2FTokyo`;
-  const url = inRange
-    ? `${base}&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&start_date=${day.date}&end_date=${day.date}`
-    : `${base}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&forecast_days=1`;
-  const json = await fetchJson(url);
-  const cache = store.get(K.wx, {});
-  cache[key] = { ts: Date.now(), json };
-  store.set(K.wx, cache);
 }
 
 async function offlineImages(silent = false) {
@@ -2217,9 +2398,69 @@ async function offlineImages(silent = false) {
     } catch (e) { fail++; }
   }
   if (n) saveTrip();
-  if (!silent) toast(n || fail ? `離線化 ${n} 張${fail ? `，${fail} 張失敗（網站不允許，可改用相簿上傳）` : ''}` : '沒有需要離線化的網路圖片');
+  if (!silent) toast(n || fail ? `離線化 ${n} 張${fail ? `，${fail} 張失敗（網站不允許，可改用相簿上傳）` : ''}` : '沒有需要離線化的網路圖片（插畫本來就離線可用）');
   if (!silent) renderOfflineStatus();
   return n;
+}
+
+/* 私人資料合併匯入：備份檔 mode=merge，或網址 #import=… */
+async function mergeImport(data, label) {
+  if (!data || typeof data !== 'object' || data.app !== APP_ID || data.mode !== 'merge') return toast('匯入資料格式不對');
+  label = String(label || '私人預約資料').slice(0, 60);
+  const ids = new Set(RESERVATIONS.map(r => r.id));
+  const entries = Object.entries(data.res && typeof data.res === 'object' ? data.res : {})
+    .filter(([k, v]) => ids.has(k) && v && typeof v === 'object');
+  const contacts = Array.isArray(data.contacts) ? data.contacts.filter(c => c && typeof c.name === 'string' && typeof c.num === 'string') : [];
+  if (!entries.length && !contacts.length) return toast('匯入資料裡沒有可用的內容');
+  if (!(await askConfirm(`把「${label}」存進這支手機？\n共 ${entries.length} 筆預約的確認號與備註，只存在本機、不會上傳。`, '存進手機', false))) return;
+  const all = store.get(K.res, {});
+  for (const [k, v] of entries) {
+    const o = {};
+    if (typeof v.conf === 'string') o.conf = v.conf;
+    if (typeof v.note === 'string') o.note = v.note;
+    if (RES_STATUSES.includes(v.status)) o.status = v.status;
+    all[k] = Object.assign(all[k] || {}, o);
+  }
+  store.set(K.res, all);
+  if (contacts.length) {
+    const list = store.get(K.contacts, []);
+    contacts.forEach(c => { if (!list.some(x => x.num === c.num)) list.push({ id: uid('c'), name: c.name, num: c.num }); });
+    store.set(K.contacts, list);
+  }
+  toast('已存進手機');
+  RENDER[ui.view]();
+}
+
+/* 匯入碼＝網址 #import= 後面那段 base64url JSON；也接受整條網址 */
+function decodeImportCode(text) {
+  const m = /#import=([A-Za-z0-9_-]+)/.exec(text) || /^\s*([A-Za-z0-9_-]{20,})\s*$/.exec(text);
+  if (!m) return null;
+  try {
+    const b64 = m[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(b64), c => c.charCodeAt(0))));
+  } catch (e) { return null; }
+}
+
+function checkHashImport() {
+  if (!location.hash.startsWith('#import=')) return;
+  const data = decodeImportCode(location.hash);
+  history.replaceState(null, '', location.pathname + location.search);
+  if (!data) return toast('匯入連結格式不對');
+  mergeImport(data, data.label || '私人預約資料');
+}
+
+/* 主畫面 APP 和 Safari 的資料分開存：在 APP 裡貼上匯入連結 */
+function openPasteImport() {
+  openSheet('貼上匯入碼', `<div class="note small">把私人匯入連結整條複製，貼在下面。加到主畫面的 APP 和 Safari 的資料是分開的，在哪裡用就在哪裡匯入。</div>
+    <label class="field" style="margin-top:12px"><span>匯入連結或匯入碼</span><textarea id="importCode" rows="4" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea></label>
+    <button class="btn btn-primary btn-block" data-act="go">匯入</button>`, (body, entry) => {
+    $('[data-act=go]', body).onclick = () => {
+      const data = decodeImportCode($('#importCode', body).value);
+      if (!data) return toast('看不懂這段匯入碼');
+      closeSheet(entry);
+      mergeImport(data, data.label || '私人預約資料');
+    };
+  });
 }
 
 async function exportBackup() {
@@ -2229,8 +2470,8 @@ async function exportBackup() {
     if (k.startsWith('ox26.')) ls[k] = localStorage.getItem(k);
   }
   const files = await idb.all().catch(() => []);
-  const data = { app: 'osaka-xmas-2026', dataVer: DATA_VER, exportedAt: new Date().toISOString(), ls, files };
-  download(`osaka-xmas-backup-${nowAt(8).date}.json`, JSON.stringify(data), 'application/json');
+  const data = { app: APP_ID, dataVer: DATA_VER, exportedAt: new Date().toISOString(), ls, files };
+  download(`kobe-xmas-backup-${nowAt(8).date}.json`, JSON.stringify(data), 'application/json');
   toast('備份已下載');
 }
 
@@ -2239,7 +2480,8 @@ async function importBackup() {
   if (!file) return;
   let data;
   try { data = JSON.parse(await file.text()); } catch (e) { return toast('檔案格式不對'); }
-  if (data.app !== 'osaka-xmas-2026' || !data.ls) return toast('這不是本 APP 的備份檔');
+  if (data.mode === 'merge') return mergeImport(data, data.label || file.name);
+  if (data.app !== APP_ID || !data.ls) return toast('這不是本 APP 的備份檔');
   if (!(await askConfirm(`匯入 ${String(data.exportedAt || '').slice(0, 10)} 的備份？目前手機上的資料會被覆蓋。`, '匯入'))) return;
   Object.keys(localStorage).filter(k => k.startsWith('ox26.')).forEach(k => localStorage.removeItem(k));
   Object.entries(data.ls).forEach(([k, v]) => { if (k.startsWith('ox26.')) localStorage.setItem(k, v); });
@@ -2267,6 +2509,8 @@ function init() {
   $$('.tab').forEach(t => { t.onclick = () => { closeAllSheets(); switchView(t.dataset.view); }; });
   renderCountdown();
   switchView(RENDER[ui.view] ? ui.view : 'trip');
+  checkHashImport();
+  window.addEventListener('hashchange', checkHashImport);
   setInterval(() => { renderCountdown(); refreshNowHighlight(); }, 60e3);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') return;
