@@ -49,7 +49,7 @@
       line-height: 1.25;
     }
 
-    /* 比較圖形按鈕專用固定樣式（避免動態渲染失效或變空白） */
+    /* 比較圖形按鈕專用固定樣式 */
     .comp-btn {
       display: flex;
       align-items: center;
@@ -200,7 +200,7 @@
     <section class="w-full lg:col-span-7 xl:col-span-8 lg:col-start-6 xl:col-start-5 lg:row-start-1 lg:row-span-2 flex flex-col">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-2.5 sm:p-4 flex flex-col">
 
-        <!-- 畫布頂部工具列（已移除文字放大功能，預設皆不勾選） -->
+        <!-- 畫布頂部工具列（預設不勾選） -->
         <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2 border-b border-slate-100">
           <div class="flex flex-wrap items-center gap-3 scale-xs">
             <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-800 font-semibold select-none whitespace-nowrap">
@@ -231,7 +231,7 @@
           <canvas id="graphCanvas" class="w-full h-full cursor-crosshair"></canvas>
 
           <!-- 左上角浮動動態圖例 -->
-          <div id="floatingLegend" class="hidden absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[240px] sm:max-w-xs scale-xs space-y-1 pointer-events-none"></div>
+          <div id="floatingLegend" class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[240px] sm:max-w-xs scale-xs space-y-1 pointer-events-none"></div>
 
           <!-- 右上角滑鼠/觸控十字游標數值追蹤器 -->
           <div id="cursorReadout" class="hidden absolute top-2.5 right-2.5 bg-slate-900/90 text-white rounded-xl p-2.5 scale-xs mono-font shadow-md pointer-events-none space-y-0.5 min-w-[155px] sm:min-w-[180px]"></div>
@@ -245,7 +245,7 @@
       </div>
     </section>
 
-    <!-- 區塊 3：【二、圖形的比較】（所有按鈕直接內建於 HTML，確保清晰顯示） -->
+    <!-- 區塊 3：【二、圖形的比較】 -->
     <section class="w-full lg:col-span-5 xl:col-span-4 lg:col-start-1 lg:row-start-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5 flex flex-col">
       <div class="flex items-center justify-between mb-2.5">
         <div class="flex items-center gap-2 min-w-0">
@@ -273,17 +273,17 @@
         </button>
       </div>
 
-      <!-- 基準圖形開關（預設不勾選） -->
+      <!-- 基準圖形開關（預設勾選） -->
       <div class="mb-2.5 p-2.5 rounded-xl bg-blue-50/90 border border-blue-200 flex items-center justify-between">
         <label class="flex items-center gap-2 cursor-pointer select-none min-w-0">
-          <input type="checkbox" id="toggleBaseFunc" onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 shrink-0" />
+          <input type="checkbox" id="toggleBaseFunc" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 shrink-0" />
           <span class="w-3 h-3 rounded-full bg-blue-600 inline-block shrink-0"></span>
           <span class="font-bold scale-sm text-blue-950 whitespace-nowrap">基準圖：<span class="math-font">y = a<sup>x</sup></span></span>
         </label>
         <span class="scale-xs text-blue-700 font-bold mono-font shrink-0">(0, 1)</span>
       </div>
 
-      <!-- 11 個比較圖形按鈕清單（直接寫入靜態 HTML，2欄固定） -->
+      <!-- 11 個比較圖形按鈕清單（預設皆不選取） -->
       <div id="comparisonListContainer" class="space-y-2.5 lg:overflow-y-auto custom-scroll pr-0.5 lg:max-h-[390px]">
         <!-- A. 倒數底數與負指數 -->
         <div>
@@ -494,7 +494,7 @@
     ];
 
     // =========================================================================
-    // 2. 全域狀態管理（預設全部不勾選）
+    // 2. 全域狀態管理（預設只勾選基準圖，比較圖形皆不勾選）
     // =========================================================================
     let currentA = 2.00;
     let initialA = 2.00;
@@ -548,7 +548,7 @@
       renderGraph();
     }
 
-    // 全部重設：將所有核取方塊與比較圖形設為「全部不勾選」
+    // 全部重設：預設只勾選「基準圖」，其餘皆不勾選
     function resetAll() {
       currentA = 2.00;
       initialA = 2.00;
