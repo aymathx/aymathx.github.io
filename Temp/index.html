@@ -114,6 +114,40 @@
       color: #34d399;
     }
 
+    /* 交點個數與範圍互動按鈕樣式 */
+    .intersect-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0.5rem 0.65rem;
+      border-radius: 0.75rem;
+      border: 1.5px solid #cbd5e1;
+      background-color: #f8fafc;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .intersect-btn:hover {
+      background-color: #eff6ff;
+      border-color: #60a5fa;
+    }
+    .intersect-btn.active {
+      background-color: #1e293b;
+      color: #ffffff;
+      border-color: #0f172a;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.22);
+    }
+    .intersect-count-tag {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      border-radius: 9999px;
+      font-weight: 800;
+      font-size: 0.75rem;
+    }
+    .intersect-btn.active .intersect-subtext {
+      color: #cbd5e1;
+    }
+
     input[type="range"] {
       accent-color: #2563eb;
     }
@@ -187,14 +221,14 @@
         </div>
       </div>
 
-      <!-- 滑桿 -->
+      <!-- 滑桿（支援細緻拉動觀察臨界交點） -->
       <div class="mb-2.5">
         <div class="flex justify-between scale-xs text-slate-600 font-semibold mb-1 mono-font">
-          <span>0.20</span>
+          <span id="sliderMinLabel">0.03</span>
           <span>a = 1</span>
           <span>5.00</span>
         </div>
-        <input id="aSlider" type="range" min="0.20" max="5.00" step="0.05" value="2.00" class="w-full h-2.5 bg-slate-200 rounded-lg cursor-pointer" />
+        <input id="aSlider" type="range" min="0.03" max="5.00" step="0.01" value="2.00" class="w-full h-2.5 bg-slate-200 rounded-lg cursor-pointer" />
       </div>
 
       <!-- 快速底數按鈕 -->
@@ -226,6 +260,86 @@
           <button type="button" onclick="clearGhostTrails()" class="text-slate-500 hover:text-red-600 font-semibold underline whitespace-nowrap">
             清除殘影
           </button>
+        </div>
+      </div>
+
+      <!-- 模式（3）專屬：y = a^x 與 y = log_a x 的交點個數結果與對應範圍（點擊立即切換圖形） -->
+      <div id="intersectionAnalysisPanel" class="hidden mt-3 pt-3 border-t-2 border-slate-200">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <div class="flex items-center gap-1.5">
+            <span class="px-2 py-0.5 scale-xs font-bold rounded bg-amber-100 text-amber-800">交點探究</span>
+            <h3 class="font-bold text-slate-800 scale-sm">指對數交點個數與範圍（點擊切換）</h3>
+          </div>
+          <span id="liveIntersectCountBadge" class="scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-500 text-white shrink-0">
+            0 個交點
+          </span>
+        </div>
+
+        <!-- a > 1 的三種交點情況 -->
+        <div class="scale-xs font-bold text-slate-500 mb-1 px-0.5">
+          ▸ 當 <span class="math-font">a &gt; 1</span> 時（臨界值 <span class="math-font">a = e<sup>1/e</sup> ≈ 1.445</span>，切點 <span class="math-font">x = e</span>）
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 mb-2.5">
+          <button type="button" id="intBtn_gt_e1e" onclick="selectIntersectionCase('gt_e1e')" class="intersect-btn">
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="intersect-count-tag bg-slate-200 text-slate-800">0 個交點</span>
+            </div>
+            <div class="font-bold scale-xs math-font truncate">a &gt; e<sup>1/e</sup></div>
+            <div class="intersect-subtext text-[11px] text-slate-500 mono-font truncate">a &gt; 1.445 (例 a=2)</div>
+          </button>
+
+          <button type="button" id="intBtn_eq_e1e" onclick="selectIntersectionCase('eq_e1e')" class="intersect-btn">
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="intersect-count-tag bg-amber-200 text-amber-900">1 個交點</span>
+              <span class="text-[10px] font-bold text-amber-500">相切</span>
+            </div>
+            <div class="font-bold scale-xs math-font truncate">x = e , a = e<sup>1/e</sup></div>
+            <div class="intersect-subtext text-[11px] text-slate-500 mono-font truncate">a ≈ 1.445 切於(e,e)</div>
+          </button>
+
+          <button type="button" id="intBtn_1_to_e1e" onclick="selectIntersectionCase('1_to_e1e')" class="intersect-btn">
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="intersect-count-tag bg-emerald-200 text-emerald-900">2 個交點</span>
+            </div>
+            <div class="font-bold scale-xs math-font truncate">1 &lt; a &lt; e<sup>1/e</sup></div>
+            <div class="intersect-subtext text-[11px] text-slate-500 mono-font truncate">例 a=√2 交(2,2),(4,4)</div>
+          </button>
+        </div>
+
+        <!-- 0 < a < 1 的三種交點情況 -->
+        <div class="scale-xs font-bold text-slate-500 mb-1 px-0.5">
+          ▸ 當 <span class="math-font">0 &lt; a &lt; 1</span> 時（臨界值 <span class="math-font">a = (1/e)<sup>e</sup> ≈ 0.066</span>，切點 <span class="math-font">x = 1/e</span>）
+        </div>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button type="button" id="intBtn_gt_emine" onclick="selectIntersectionCase('gt_emine')" class="intersect-btn">
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="intersect-count-tag bg-amber-200 text-amber-900">1 個交點</span>
+            </div>
+            <div class="font-bold scale-xs math-font truncate">(1/e)<sup>e</sup> &lt; a &lt; 1</div>
+            <div class="intersect-subtext text-[11px] text-slate-500 mono-font truncate">0.066 &lt; a &lt; 1 (例1/2)</div>
+          </button>
+
+          <button type="button" id="intBtn_eq_emine" onclick="selectIntersectionCase('eq_emine')" class="intersect-btn">
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="intersect-count-tag bg-amber-200 text-amber-900">1 個交點</span>
+              <span class="text-[10px] font-bold text-amber-500">切點</span>
+            </div>
+            <div class="font-bold scale-xs math-font truncate">x = 1/e , a = (1/e)<sup>e</sup></div>
+            <div class="intersect-subtext text-[11px] text-slate-500 mono-font truncate">a ≈ 0.066 切(1/e,1/e)</div>
+          </button>
+
+          <button type="button" id="intBtn_lt_emine" onclick="selectIntersectionCase('lt_emine')" class="intersect-btn">
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="intersect-count-tag bg-purple-200 text-purple-900">3 個交點</span>
+            </div>
+            <div class="font-bold scale-xs math-font truncate">0 &lt; a &lt; (1/e)<sup>e</sup></div>
+            <div class="intersect-subtext text-[11px] text-slate-500 mono-font truncate">a &lt; 0.066 (例 a=0.04)</div>
+          </button>
+        </div>
+
+        <!-- 目前交點座標即時讀數列 -->
+        <div id="intersectionDetailBox" class="mt-2 px-2.5 py-1.5 rounded-xl bg-amber-50/90 border border-amber-200 scale-xs text-amber-950 font-semibold">
+          目前交點：無交點（a &gt; e<sup>1/e</sup>）
         </div>
       </div>
     </section>
@@ -265,7 +379,7 @@
           <canvas id="graphCanvas" class="w-full h-full cursor-crosshair"></canvas>
 
           <!-- 左上角浮動動態圖例 -->
-          <div id="floatingLegend" class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[250px] sm:max-w-xs scale-xs space-y-1 pointer-events-none"></div>
+          <div id="floatingLegend" class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[260px] sm:max-w-xs scale-xs space-y-1 pointer-events-none"></div>
 
           <!-- 右上角滑鼠/觸控十字游標數值追蹤器 -->
           <div id="cursorReadout" class="hidden absolute top-2.5 right-2.5 bg-slate-900/90 text-white rounded-xl p-2.5 scale-xs mono-font shadow-md pointer-events-none space-y-0.5 min-w-[155px] sm:min-w-[180px]"></div>
@@ -435,13 +549,97 @@
 
   <script>
     // =========================================================================
-    // 1. 定義（1）指數函數、（2）對數函數、（3）指對數比較 的 11 個比較圖形資料
+    // 0. 數學常數與交點求解工具
     // =========================================================================
+    const E_VAL = Math.E;                         // e ≈ 2.718281828
+    const INV_E_VAL = 1 / Math.E;                 // 1/e ≈ 0.367879441
+    const CRIT_A_HIGH = Math.exp(1 / Math.E);     // e^(1/e) ≈ 1.444667861
+    const CRIT_A_LOW = Math.exp(-Math.E);         // (1/e)^e = e^(-e) ≈ 0.065988036
+
     const logBase = (x, a) => {
       if (x <= 0 || a <= 0 || Math.abs(a - 1) < 1e-4) return NaN;
       return Math.log(x) / Math.log(a);
     };
 
+    function bisectRoot(fn, lo, hi, iters = 60) {
+      let flo = fn(lo);
+      let fhi = fn(hi);
+      if (!Number.isFinite(flo) || !Number.isFinite(fhi)) return NaN;
+      if (Math.abs(flo) < 1e-12) return lo;
+      if (Math.abs(fhi) < 1e-12) return hi;
+      if ((flo < 0 && fhi < 0) || (flo > 0 && fhi > 0)) return NaN;
+      for (let i = 0; i < iters; i++) {
+        const mid = 0.5 * (lo + hi);
+        const fmid = fn(mid);
+        if (Math.abs(fmid) < 1e-13) return mid;
+        if ((flo < 0 && fmid < 0) || (flo > 0 && fmid > 0)) {
+          lo = mid;
+          flo = fmid;
+        } else {
+          hi = mid;
+          fhi = fmid;
+        }
+      }
+      return 0.5 * (lo + hi);
+    }
+
+    // 計算 y = a^x 與 y = log_a(x) 的所有交點
+    function computeExpLogIntersections(a) {
+      if (a <= 0 || Math.abs(a - 1) < 1e-4) return [];
+
+      // (A) 當 a > 1 時
+      if (a > 1) {
+        if (Math.abs(a - CRIT_A_HIGH) < 1.5e-3) {
+          return [{ x: E_VAL, y: E_VAL, tag: '(e, e) ≈ (2.72, 2.72) [相切]' }];
+        } else if (a > CRIT_A_HIGH) {
+          return [];
+        } else {
+          // 1 < a < e^(1/e)：在 y = x 上有 2 個交點
+          const fn = x => Math.pow(a, x) - x;
+          const r1 = bisectRoot(fn, 1.00001, E_VAL);
+          let hi = 4.5;
+          while (fn(hi) <= 0 && hi < 500) {
+            hi *= 1.5;
+          }
+          const r2 = bisectRoot(fn, E_VAL, hi);
+          const pts = [];
+          if (Number.isFinite(r1)) {
+            pts.push({ x: r1, y: r1, tag: `(${r1.toFixed(2)}, ${r1.toFixed(2)})` });
+          }
+          if (Number.isFinite(r2)) {
+            pts.push({ x: r2, y: r2, tag: `(${r2.toFixed(2)}, ${r2.toFixed(2)})` });
+          }
+          return pts;
+        }
+      }
+
+      // (B) 當 0 < a < 1 時
+      const fnDiag = x => Math.pow(a, x) - x;
+      const rMid = bisectRoot(fnDiag, 1e-7, 1 - 1e-7);
+
+      if (Math.abs(a - CRIT_A_LOW) < 8e-4) {
+        return [{ x: INV_E_VAL, y: INV_E_VAL, tag: '(1/e, 1/e) ≈ (0.37, 0.37) [切點]' }];
+      } else if (a > CRIT_A_LOW) {
+        return [{ x: rMid, y: rMid, tag: `(${rMid.toFixed(2)}, ${rMid.toFixed(2)})` }];
+      } else {
+        // 0 < a < (1/e)^e：共有 3 個交點（1 個在 y = x 上，2 個對稱於 y = x 兩側）
+        const fnPeriod2 = x => Math.pow(a, Math.pow(a, x)) - x;
+        const rLow = bisectRoot(fnPeriod2, 1e-9, rMid - 1e-4);
+        if (Number.isFinite(rLow)) {
+          const rHigh = Math.pow(a, rLow);
+          return [
+            { x: rLow, y: rHigh, tag: `(${rLow.toFixed(2)}, ${rHigh.toFixed(2)})` },
+            { x: rMid, y: rMid, tag: `(${rMid.toFixed(2)}, ${rMid.toFixed(2)})` },
+            { x: rHigh, y: rLow, tag: `(${rHigh.toFixed(2)}, ${rLow.toFixed(2)})` }
+          ];
+        }
+        return [{ x: rMid, y: rMid, tag: `(${rMid.toFixed(2)}, ${rMid.toFixed(2)})` }];
+      }
+    }
+
+    // =========================================================================
+    // 1. 定義（1）指數函數、（2）對數函數、（3）指對數比較 的 11 個比較圖形資料
+    // =========================================================================
     const EXP_FUNCTIONS = [
       {
         id: 'f1',
@@ -799,7 +997,11 @@
     }
 
     function formatCleanBase(val) {
-      return Number(val.toFixed(2)).toString();
+      if (Math.abs(val - CRIT_A_HIGH) < 1.5e-3) return 'e^(1/e)';
+      if (Math.abs(val - CRIT_A_LOW) < 8e-4) return '(1/e)^e';
+      if (Math.abs(val - Math.SQRT2) < 1e-3) return '√2';
+      if (Math.abs(val - INV_E_VAL) < 1e-3) return '1/e';
+      return Number(val.toFixed(3)).toString();
     }
 
     // =========================================================================
@@ -833,9 +1035,11 @@
       });
 
       const secondBaseBox = document.getElementById('secondBaseContainer');
+      const intersectPanel = document.getElementById('intersectionAnalysisPanel');
 
       if (currentFuncType === 'exp') {
         secondBaseBox.classList.add('hidden');
+        intersectPanel.classList.add('hidden');
         document.getElementById('catTitle_A').textContent = 'A. 倒數底數與負指數';
         document.getElementById('catTitle_B').textContent = 'B. 負號與對稱變換';
         document.getElementById('catTitle_C').textContent = 'C. 絕對值圖形';
@@ -849,6 +1053,7 @@
         document.getElementById('symmetryGuidesLabelText').textContent = '對稱軸／對稱中心';
       } else if (currentFuncType === 'log') {
         secondBaseBox.classList.add('hidden');
+        intersectPanel.classList.add('hidden');
         document.getElementById('catTitle_A').textContent = 'A. 倒數底數與真數變號';
         document.getElementById('catTitle_B').textContent = 'B. 負號與對稱變換';
         document.getElementById('catTitle_C').textContent = 'C. 絕對值圖形';
@@ -863,6 +1068,7 @@
       } else {
         // （3）指數和對數函數的比較
         secondBaseBox.classList.remove('hidden');
+        intersectPanel.classList.remove('hidden');
         document.getElementById('catTitle_A').textContent = 'A. 倒數底數指對數比較';
         document.getElementById('catTitle_B').textContent = 'B. 負號與反函數對稱 (y = ±x)';
         document.getElementById('catTitle_C').textContent = 'C. 絕對值指對數比較';
@@ -874,6 +1080,120 @@
         document.getElementById('baseFixedPointLabel').textContent = '(0, 1)';
         document.getElementById('keyPointsLabelText').innerHTML = '特殊點 <span class="math-font">(0,1)↔(1,0)</span>';
         document.getElementById('symmetryGuidesLabelText').innerHTML = '對稱軸 <span class="math-font">y = x</span> ／ 坐標軸';
+      }
+    }
+
+    // 點擊【交點個數與範圍】按鈕時，自動設定對應底數 a 並調整最佳觀測視角
+    function selectIntersectionCase(caseKey) {
+      document.getElementById('toggleBaseFunc').checked = true;
+      document.getElementById('toggleSecondBaseFunc').checked = true;
+      document.getElementById('showSymmetryGuides').checked = true;
+
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const isMobile = rect.width < 500;
+
+      if (caseKey === 'gt_e1e') {
+        // 0 個交點：a > e^(1/e)，取 a = 2
+        currentA = 2.00;
+        scale = isMobile ? 52 : 68;
+        originOffsetX = 0;
+        originOffsetY = 20;
+      } else if (caseKey === 'eq_e1e') {
+        // 1 個交點 (a > 1 相切)：x = e, a = e^(1/e) ≈ 1.445
+        currentA = CRIT_A_HIGH;
+        scale = isMobile ? 50 : 64;
+        originOffsetX = isMobile ? -45 : -65;
+        originOffsetY = isMobile ? 60 : 85;
+      } else if (caseKey === '1_to_e1e') {
+        // 2 個交點：1 < a < e^(1/e)，取 a = √2 ≈ 1.414，交點為 (2, 2) 與 (4, 4)
+        currentA = Math.SQRT2;
+        scale = isMobile ? 44 : 58;
+        originOffsetX = isMobile ? -60 : -90;
+        originOffsetY = isMobile ? 75 : 110;
+      } else if (caseKey === 'gt_emine') {
+        // 1 個交點 ((1/e)^e < a < 1)：取 a = 0.5
+        currentA = 0.50;
+        scale = isMobile ? 65 : 85;
+        originOffsetX = 0;
+        originOffsetY = 20;
+      } else if (caseKey === 'eq_emine') {
+        // 1 個交點 (切點 x = 1/e)：a = (1/e)^e ≈ 0.066
+        currentA = CRIT_A_LOW;
+        scale = isMobile ? 125 : 165;
+        originOffsetX = isMobile ? -35 : -50;
+        originOffsetY = isMobile ? 35 : 50;
+      } else if (caseKey === 'lt_emine') {
+        // 3 個交點 (0 < a < (1/e)^e)：取 a = 0.04
+        currentA = 0.04;
+        scale = isMobile ? 135 : 180;
+        originOffsetX = isMobile ? -40 : -55;
+        originOffsetY = isMobile ? 40 : 55;
+      }
+
+      document.getElementById('aSlider').value = currentA.toFixed(2);
+      updateBaseDisplays();
+      renderGraph();
+    }
+
+    function updateIntersectionPanelUI() {
+      if (currentFuncType !== 'both') return;
+
+      const caseIds = ['gt_e1e', 'eq_e1e', '1_to_e1e', 'gt_emine', 'eq_emine', 'lt_emine'];
+      caseIds.forEach(id => {
+        const el = document.getElementById('intBtn_' + id);
+        if (el) el.classList.remove('active');
+      });
+
+      let activeCase = null;
+      let rangeDesc = '';
+      if (Math.abs(currentA - 1) < 1e-3) {
+        rangeDesc = 'a = 1（對數函數無意義）';
+      } else if (currentA > 1) {
+        if (Math.abs(currentA - CRIT_A_HIGH) < 1.5e-3) {
+          activeCase = 'eq_e1e';
+          rangeDesc = 'a = e<sup>1/e</sup> ≈ 1.445（切於 x = e）';
+        } else if (currentA > CRIT_A_HIGH) {
+          activeCase = 'gt_e1e';
+          rangeDesc = 'a &gt; e<sup>1/e</sup>（約 a &gt; 1.445）';
+        } else {
+          activeCase = '1_to_e1e';
+          rangeDesc = '1 &lt; a &lt; e<sup>1/e</sup>（約 1 &lt; a &lt; 1.445）';
+        }
+      } else {
+        if (Math.abs(currentA - CRIT_A_LOW) < 8e-4) {
+          activeCase = 'eq_emine';
+          rangeDesc = 'a = (1/e)<sup>e</sup> ≈ 0.066（切於 x = 1/e）';
+        } else if (currentA > CRIT_A_LOW) {
+          activeCase = 'gt_emine';
+          rangeDesc = '(1/e)<sup>e</sup> &lt; a &lt; 1（約 0.066 &lt; a &lt; 1）';
+        } else {
+          activeCase = 'lt_emine';
+          rangeDesc = '0 &lt; a &lt; (1/e)<sup>e</sup>（約 0 &lt; a &lt; 0.066）';
+        }
+      }
+
+      if (activeCase) {
+        const btn = document.getElementById('intBtn_' + activeCase);
+        if (btn) btn.classList.add('active');
+      }
+
+      const pts = computeExpLogIntersections(currentA);
+      const countBadge = document.getElementById('liveIntersectCountBadge');
+      const detailBox = document.getElementById('intersectionDetailBox');
+
+      countBadge.textContent = `${pts.length} 個交點`;
+      if (pts.length === 0) {
+        countBadge.className = 'scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-slate-600 text-white shrink-0';
+        detailBox.innerHTML = `目前範圍：<span class="math-font">${rangeDesc}</span> ➔ <strong>無交點 (0 個)</strong>`;
+      } else if (pts.length === 1) {
+        countBadge.className = 'scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-600 text-white shrink-0';
+        detailBox.innerHTML = `目前範圍：<span class="math-font">${rangeDesc}</span> ➔ <strong>1 個交點：${pts[0].tag}</strong>`;
+      } else if (pts.length === 2) {
+        countBadge.className = 'scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white shrink-0';
+        detailBox.innerHTML = `目前範圍：<span class="math-font">${rangeDesc}</span> ➔ <strong>2 個交點：${pts.map(p => p.tag).join(' , ')}</strong>`;
+      } else {
+        countBadge.className = 'scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-purple-600 text-white shrink-0';
+        detailBox.innerHTML = `目前範圍：<span class="math-font">${rangeDesc}</span> ➔ <strong>3 個交點：${pts.map(p => p.tag).join(' , ')}</strong>`;
       }
     }
 
@@ -1016,6 +1336,7 @@
     function updateBaseDisplays() {
       const curCard = document.getElementById('currentCardContent');
       const initCard = document.getElementById('initialCardContent');
+      const aDisp = formatCleanBase(currentA);
 
       if (currentFuncType === 'exp') {
         curCard.innerHTML = `目前函數：<span class="math-font">y</span> = <span class="mono-font">${currentA.toFixed(2)}</span><sup><span class="math-font">x</span></sup>`;
@@ -1024,7 +1345,7 @@
         curCard.innerHTML = `目前函數：<span class="math-font">y</span> = <span class="math-font">log</span><sub class="mono-font">${currentA.toFixed(2)}</sub> <span class="math-font">x</span>`;
         initCard.innerHTML = `基準函數：<span class="math-font">y</span> = <span class="math-font">log</span><sub class="mono-font">${formatCleanBase(initialA)}</sub> <span class="math-font">x</span>`;
       } else {
-        curCard.innerHTML = `<span class="text-xs sm:text-sm">目前：<span class="math-font">y</span>=<span class="mono-font">${currentA.toFixed(2)}</span><sup><span class="math-font">x</span></sup> , <span class="math-font">log</span><sub class="mono-font">${currentA.toFixed(2)}</sub><span class="math-font">x</span></span>`;
+        curCard.innerHTML = `<span class="text-xs sm:text-sm">目前：<span class="math-font">y</span>=<span class="mono-font">${aDisp}</span><sup><span class="math-font">x</span></sup> , <span class="math-font">log</span><sub class="mono-font">${aDisp}</sub><span class="math-font">x</span></span>`;
         initCard.innerHTML = `<span class="text-xs sm:text-sm">基準：<span class="math-font">y</span>=<span class="mono-font">${formatCleanBase(initialA)}</span><sup><span class="math-font">x</span></sup> , <span class="math-font">log</span><sub class="mono-font">${formatCleanBase(initialA)}</sub><span class="math-font">x</span></span>`;
       }
 
@@ -1039,6 +1360,8 @@
         badge.textContent = '0 < a < 1 遞減';
         badge.className = 'scale-xs font-bold px-2.5 py-1 rounded-full bg-emerald-600 text-white shrink-0 whitespace-nowrap';
       }
+
+      updateIntersectionPanelUI();
     }
 
     // =========================================================================
@@ -1050,7 +1373,7 @@
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (rect.width < 500 && scale > 55) {
+      if (rect.width < 500 && scale > 55 && scale < 100) {
         scale = 52;
       }
       renderGraph();
@@ -1076,7 +1399,7 @@
       };
     }
 
-    // 支援指數與對數（含 x = 0 垂直漸近線與 x = ±1 轉折點）的高精度繪圖函式
+    // 支援指數與對數（含極小底數 a=0.04 及 x = 0 垂直漸近線）的高精度繪圖函式
     function drawSingleBranch(evalSingleY, width, height, strokeStyle, lineWidth, dashPattern = [], alpha = 1.0, dashOffset = 0, breakAtZero = false) {
       ctx.save();
       ctx.strokeStyle = strokeStyle;
@@ -1091,15 +1414,15 @@
       const xRight = screenToMath(width, 0, width, height).x;
 
       const xs = [];
-      const stepPx = 2;
+      const stepPx = 1.5;
       for (let px = 0; px <= width; px += stepPx) {
         xs.push(screenToMath(px, 0, width, height).x);
       }
 
       const criticalXs = [
         -1, 0, 1,
-        -0.02, -0.006, -0.0015, -0.0002, -0.00002,
-        0.00002, 0.0002, 0.0015, 0.006, 0.02
+        -0.1, -0.05, -0.02, -0.01, -0.005, -0.002, -0.0005, -1e-4, -1e-5, -1e-6, -1e-8,
+        1e-8, 1e-6, 1e-5, 1e-4, 0.0005, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1
       ];
       criticalXs.forEach(cxVal => {
         if (cxVal >= xLeft && cxVal <= xRight) {
@@ -1113,7 +1436,7 @@
 
       for (let i = 0; i < xs.length; i++) {
         const x = xs[i];
-        if ((currentFuncType === 'log' || breakAtZero) && Math.abs(x) < 1e-7) {
+        if ((currentFuncType === 'log' || breakAtZero) && Math.abs(x) < 1e-10) {
           penDown = false;
           continue;
         }
@@ -1276,8 +1599,7 @@
           if (showBase && showSecondBase && Math.abs(currentA - 1) >= 0.03) {
             const pairs = [
               [{ x: 0, y: 1 }, { x: 1, y: 0 }],
-              [{ x: 1, y: currentA }, { x: currentA, y: 1 }],
-              [{ x: -1, y: 1 / currentA }, { x: 1 / currentA, y: -1 }]
+              [{ x: 1, y: currentA }, { x: currentA, y: 1 }]
             ];
             ctx.strokeStyle = 'rgba(5, 150, 105, 0.65)';
             ctx.lineWidth = 1.8;
@@ -1293,7 +1615,7 @@
             ctx.setLineDash([]);
           }
 
-          const badgePos = mathToScreen(-1.8, -1.8, width, height);
+          const badgePos = mathToScreen(-1.2, -1.2, width, height);
           const bx = Math.min(width - 135, Math.max(135, badgePos.px));
           const by = Math.min(height - 45, Math.max(45, badgePos.py));
           drawRoundedBadge('⟋ 對稱軸：直線 y = x（反函數對稱） ⟋', bx, by, '#d1fae5', '#065f46', '#10b981');
@@ -1322,7 +1644,7 @@
           ctx.stroke();
           ctx.setLineDash([]);
 
-          const badgePos = mathToScreen(-1.8, 1.8, width, height);
+          const badgePos = mathToScreen(-1.5, 1.5, width, height);
           const bx = Math.min(width - 125, Math.max(125, badgePos.px));
           const by = Math.min(height - 45, Math.max(45, badgePos.py));
           drawRoundedBadge('⟍ 對稱軸：直線 y = −x ⟍', bx, by, '#e0f2fe', '#075985', '#0ea5e9');
@@ -1420,7 +1742,6 @@
               drawSingleBranch(x => logBase(x, bVal), width, height, '#1d4ed8', 2.6, [5, 4], opacity, 0, true);
             }
           } else {
-            // 模式(3)：同步繪製指數與對數的過程殘影
             if (showBase) {
               drawSingleBranch(x => Math.pow(bVal, x), width, height, '#1d4ed8', 2.5, [5, 4], opacity, 0, false);
             }
@@ -1490,7 +1811,6 @@
           }];
         }
       } else {
-        // 模式(3)：同時支援指數基準圖與對數基準圖
         if (showBase) {
           equivBuckets['baseExp'] = [{
             id: 'baseExp',
@@ -1629,7 +1949,39 @@
         overlapBanner.classList.add('hidden');
       }
 
-      // 6. 繪製特殊點
+      // 6. 模式（3）自動標示 y = a^x 與 y = log_a(x) 的交點
+      if (currentFuncType === 'both' && showBase && showSecondBase) {
+        const intersectPts = computeExpLogIntersections(currentA);
+        intersectPts.forEach((pt, idx) => {
+          const { px, py } = mathToScreen(pt.x, pt.y, width, height);
+          if (px >= -20 && px <= width + 20 && py >= -20 && py <= height + 20) {
+            ctx.save();
+            // 外圈金色光暈
+            ctx.fillStyle = 'rgba(245, 158, 11, 0.32)';
+            ctx.beginPath();
+            ctx.arc(px, py, 11, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 內圈醒目紫紅交點圓點
+            ctx.fillStyle = '#fef08a';
+            ctx.strokeStyle = '#b45309';
+            ctx.lineWidth = 2.6;
+            ctx.beginPath();
+            ctx.arc(px, py, 5.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // 交點座標標籤
+            ctx.font = `bold ${Math.round(11.5 * fontScale)}px "Noto Sans TC", JetBrains Mono, sans-serif`;
+            ctx.fillStyle = '#92400e';
+            const offsetY = (intersectPts.length === 3 && idx === 0) ? -10 : (idx % 2 === 0 ? -10 : 18);
+            ctx.fillText(`交點 ${pt.tag}`, px + 9, py + offsetY);
+            ctx.restore();
+          }
+        });
+      }
+
+      // 7. 繪製特殊點
       if (document.getElementById('showKeyPoints').checked) {
         if (currentFuncType === 'exp') {
           const keyXs = [-1, 0, 1];
@@ -1696,12 +2048,12 @@
         }
       }
 
-      // 7. 滑鼠/觸控垂直追蹤線與交點
+      // 8. 滑鼠/觸控垂直追蹤線與交點
       if (mouseMathPos) {
         drawCursorCrosshair(mouseMathPos.x, width, height, showBase, showSecondBase, activeList);
       }
 
-      // 8. 更新左上角浮動圖例
+      // 9. 更新左上角浮動圖例
       updateFloatingLegend(showBase, showSecondBase, isBaseChanged, activeList);
     }
 
@@ -1787,11 +2139,12 @@
     function updateFloatingLegend(showBase, showSecondBase, isBaseChanged, activeList) {
       const box = document.getElementById('floatingLegend');
       let items = [];
+      const aDisp = formatCleanBase(currentA);
 
       if (showBase) {
         const curExpr = currentFuncType === 'log'
-          ? `y = log<sub>${currentA.toFixed(2)}</sub> x`
-          : `y = ${currentA.toFixed(2)}<sup>x</sup>`;
+          ? `y = log<sub>${aDisp}</sub> x`
+          : `y = (${aDisp})<sup>x</sup>`;
         const titlePrefix = currentFuncType === 'both' ? '指數基準：' : '目前函數：';
         items.push(`
           <div class="flex items-center gap-2">
@@ -1805,7 +2158,17 @@
         items.push(`
           <div class="flex items-center gap-2">
             <span class="w-4 h-1 rounded bg-rose-600 inline-block shrink-0"></span>
-            <span class="font-bold text-slate-800 whitespace-nowrap">對數基準：<span class="math-font">y = log<sub>${currentA.toFixed(2)}</sub> x</span></span>
+            <span class="font-bold text-slate-800 whitespace-nowrap">對數基準：<span class="math-font">y = log<sub>${aDisp}</sub> x</span></span>
+          </div>
+        `);
+      }
+
+      if (currentFuncType === 'both' && showBase && showSecondBase) {
+        const pts = computeExpLogIntersections(currentA);
+        items.push(`
+          <div class="flex items-center gap-2 text-amber-800 pt-0.5 border-t border-slate-100">
+            <span class="w-3 h-3 rounded-full bg-amber-300 border-2 border-amber-700 inline-block shrink-0"></span>
+            <span class="font-extrabold whitespace-nowrap">指對數交點：共 ${pts.length} 個</span>
           </div>
         `);
       }
@@ -1910,7 +2273,7 @@
         const dy = e.touches[0].clientY - e.touches[1].clientY;
         const dist = Math.hypot(dx, dy);
         const factor = dist / lastPinchDist;
-        scale = Math.min(Math.max(scale * factor, 28), 160);
+        scale = Math.min(Math.max(scale * factor, 28), 240);
         lastPinchDist = dist;
         renderGraph();
       }
@@ -1922,7 +2285,7 @@
     });
 
     function zoomCanvas(factor) {
-      scale = Math.min(Math.max(scale * factor, 28), 160);
+      scale = Math.min(Math.max(scale * factor, 28), 240);
       renderGraph();
     }
 
