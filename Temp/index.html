@@ -51,7 +51,7 @@
 
     /* 頂部函數類型切換按鈕 */
     .mode-switch-btn {
-      padding: 0.35rem 0.85rem;
+      padding: 0.35rem 0.75rem;
       border-radius: 0.5rem;
       font-weight: 700;
       transition: all 0.15s ease;
@@ -132,18 +132,21 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- 頂部導覽列（含（1）指數函數 /（2）對數函數 切換器） -->
+  <!-- 頂部導覽列（含（1）指數函數 /（2）對數函數 /（3）指數和對數函數的比較 切換器） -->
   <header class="bg-slate-900 text-white shadow-sm border-b border-slate-800 sticky top-0 z-30">
     <div class="max-w-[1600px] mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2">
-      <div class="flex flex-wrap items-center gap-2.5 sm:gap-4">
+      <div class="flex flex-wrap items-center gap-2 sm:gap-4">
         <h1 id="pageMainTitle" class="scale-lg sm:scale-xl font-bold tracking-tight whitespace-nowrap">指對數。函數圖形的探究</h1>
         <!-- 函數選擇切換器 -->
-        <div class="inline-flex bg-slate-800 p-1 rounded-xl border border-slate-700">
+        <div class="inline-flex flex-wrap bg-slate-800 p-1 rounded-xl border border-slate-700 gap-1">
           <button type="button" id="modeBtn_exp" onclick="switchFuncType('exp')" class="mode-switch-btn active scale-xs sm:scale-sm">
             （1）指數函數
           </button>
           <button type="button" id="modeBtn_log" onclick="switchFuncType('log')" class="mode-switch-btn scale-xs sm:scale-sm">
             （2）對數函數
+          </button>
+          <button type="button" id="modeBtn_both" onclick="switchFuncType('both')" class="mode-switch-btn scale-xs sm:scale-sm">
+            （3）指數和對數函數的比較
           </button>
         </div>
       </div>
@@ -171,14 +174,14 @@
 
       <!-- 目前函數與基準函數顯示卡 -->
       <div class="grid grid-cols-2 gap-2 mb-3">
-        <div class="bg-blue-50/90 border border-blue-200 rounded-xl px-2.5 py-3.5 flex items-center justify-center overflow-hidden">
-          <div id="currentCardContent" class="scale-base font-bold text-blue-900 whitespace-nowrap">
+        <div class="bg-blue-50/90 border border-blue-200 rounded-xl px-2.5 py-3 flex items-center justify-center overflow-hidden">
+          <div id="currentCardContent" class="scale-base font-bold text-blue-900 whitespace-nowrap text-center">
             目前函數：<span class="math-font">y</span> = <span class="mono-font">2.00</span><sup><span class="math-font">x</span></sup>
           </div>
         </div>
 
-        <div onclick="lockCurrentAsInitial()" title="點擊可將目前底數設為基準函數 a₀" class="bg-slate-50 hover:bg-slate-100 active:bg-slate-200 cursor-pointer border border-slate-300 border-dashed rounded-xl px-2.5 py-3.5 flex items-center justify-center overflow-hidden transition">
-          <div id="initialCardContent" class="scale-base font-bold text-slate-700 whitespace-nowrap">
+        <div onclick="lockCurrentAsInitial()" title="點擊可將目前底數設為基準函數 a₀" class="bg-slate-50 hover:bg-slate-100 active:bg-slate-200 cursor-pointer border border-slate-300 border-dashed rounded-xl px-2.5 py-3 flex items-center justify-center overflow-hidden transition">
+          <div id="initialCardContent" class="scale-base font-bold text-slate-700 whitespace-nowrap text-center">
             基準函數：<span class="math-font">y</span> = <span class="mono-font">2</span><sup><span class="math-font">x</span></sup>
           </div>
         </div>
@@ -240,7 +243,7 @@
             </label>
             <label class="inline-flex items-center gap-1.5 cursor-pointer text-slate-800 font-semibold select-none whitespace-nowrap">
               <input type="checkbox" id="showSymmetryGuides" onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600" />
-              對稱軸／對稱中心
+              <span id="symmetryGuidesLabelText">對稱軸／對稱中心</span>
             </label>
           </div>
 
@@ -262,7 +265,7 @@
           <canvas id="graphCanvas" class="w-full h-full cursor-crosshair"></canvas>
 
           <!-- 左上角浮動動態圖例 -->
-          <div id="floatingLegend" class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[240px] sm:max-w-xs scale-xs space-y-1 pointer-events-none"></div>
+          <div id="floatingLegend" class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-sm border border-slate-200 rounded-xl p-2.5 shadow-sm max-w-[250px] sm:max-w-xs scale-xs space-y-1 pointer-events-none"></div>
 
           <!-- 右上角滑鼠/觸控十字游標數值追蹤器 -->
           <div id="cursorReadout" class="hidden absolute top-2.5 right-2.5 bg-slate-900/90 text-white rounded-xl p-2.5 scale-xs mono-font shadow-md pointer-events-none space-y-0.5 min-w-[155px] sm:min-w-[180px]"></div>
@@ -304,14 +307,26 @@
         </button>
       </div>
 
-      <!-- 基準圖形開關（預設勾選） -->
-      <div class="mb-2.5 p-2.5 rounded-xl bg-blue-50/90 border border-blue-200 flex items-center justify-between">
-        <label class="flex items-center gap-2 cursor-pointer select-none min-w-0">
-          <input type="checkbox" id="toggleBaseFunc" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 shrink-0" />
-          <span class="w-3 h-3 rounded-full bg-blue-600 inline-block shrink-0"></span>
-          <span id="baseFuncCheckboxLabel" class="font-bold scale-sm text-blue-950 whitespace-nowrap">基準圖：<span class="math-font">y = a<sup>x</sup></span></span>
-        </label>
-        <span id="baseFixedPointLabel" class="scale-xs text-blue-700 font-bold mono-font shrink-0">(0, 1)</span>
+      <!-- 基準圖形開關區（模式(1)(2)顯示單一基準圖；模式(3)同時顯示指數基準圖與對數基準圖） -->
+      <div class="mb-2.5 space-y-1.5">
+        <div class="p-2.5 rounded-xl bg-blue-50/90 border border-blue-200 flex items-center justify-between">
+          <label class="flex items-center gap-2 cursor-pointer select-none min-w-0">
+            <input type="checkbox" id="toggleBaseFunc" checked onchange="renderGraph()" class="w-4 h-4 rounded text-blue-600 shrink-0" />
+            <span class="w-3 h-3 rounded-full bg-blue-600 inline-block shrink-0"></span>
+            <span id="baseFuncCheckboxLabel" class="font-bold scale-sm text-blue-950 whitespace-nowrap">基準圖：<span class="math-font">y = a<sup>x</sup></span></span>
+          </label>
+          <span id="baseFixedPointLabel" class="scale-xs text-blue-700 font-bold mono-font shrink-0">(0, 1)</span>
+        </div>
+
+        <!-- 模式(3)專用：第二基準圖（對數基準圖 y = log_a x） -->
+        <div id="secondBaseContainer" class="hidden p-2.5 rounded-xl bg-rose-50/90 border border-rose-200 flex items-center justify-between">
+          <label class="flex items-center gap-2 cursor-pointer select-none min-w-0">
+            <input type="checkbox" id="toggleSecondBaseFunc" checked onchange="renderGraph()" class="w-4 h-4 rounded text-rose-600 shrink-0" />
+            <span class="w-3 h-3 rounded-full bg-rose-600 inline-block shrink-0"></span>
+            <span class="font-bold scale-sm text-rose-950 whitespace-nowrap">對數基準圖：<span class="math-font">y = log<sub>a</sub> x</span></span>
+          </label>
+          <span class="scale-xs text-rose-700 font-bold mono-font shrink-0">(1, 0)</span>
+        </div>
       </div>
 
       <!-- 11 個比較圖形按鈕清單（預設皆不選取） -->
@@ -420,7 +435,7 @@
 
   <script>
     // =========================================================================
-    // 1. 定義（1）指數函數 與（2）對數函數 的 11 個比較圖形資料
+    // 1. 定義（1）指數函數、（2）對數函數、（3）指對數比較 的 11 個比較圖形資料
     // =========================================================================
     const logBase = (x, a) => {
       if (x <= 0 || a <= 0 || Math.abs(a - 1) < 1e-4) return NaN;
@@ -636,10 +651,124 @@
       }
     ];
 
+    // （3）指數和對數函數的比較 專屬 11 個比較圖形
+    const BOTH_FUNCTIONS = [
+      {
+        id: 'f1',
+        labelHtml: 'y = (1/a)<sup>x</sup>',
+        rawTitle: 'y = (1/a)^x',
+        color: '#7c3aed',
+        equivGroup: 'negExp',
+        symmetryType: 'y-axis',
+        isLog: false,
+        evalY: (x, a) => [Math.pow(1 / a, x)]
+      },
+      {
+        id: 'f2',
+        labelHtml: 'y = log<sub>1/a</sub> x',
+        rawTitle: 'y = log_{1/a}(x)',
+        color: '#f59e0b',
+        equivGroup: 'minusBaseLog',
+        symmetryType: 'y-eq-x',
+        isLog: true,
+        evalY: (x, a) => [-logBase(x, a)]
+      },
+      {
+        id: 'f3',
+        labelHtml: 'y = a<sup>−x</sup>',
+        rawTitle: 'y = a^(-x)',
+        color: '#0284c7',
+        equivGroup: 'negExp',
+        symmetryType: 'y-axis',
+        isLog: false,
+        evalY: (x, a) => [Math.pow(a, -x)]
+      },
+      {
+        id: 'f4',
+        labelHtml: 'y = −a<sup>x</sup>',
+        rawTitle: 'y = -a^x',
+        color: '#ea580c',
+        equivGroup: 'minusBaseExp',
+        symmetryType: 'x-axis',
+        isLog: false,
+        evalY: (x, a) => [-Math.pow(a, x)]
+      },
+      {
+        id: 'f5',
+        labelHtml: 'y = log<sub>a</sub>(−x)',
+        rawTitle: 'y = log_a(-x)',
+        color: '#0d9488',
+        equivGroup: 'negXLog',
+        symmetryType: 'y-eq-x',
+        isLog: true,
+        evalY: (x, a) => [logBase(-x, a)]
+      },
+      {
+        id: 'f6',
+        labelHtml: 'y = −a<sup>−x</sup>',
+        rawTitle: 'y = -a^(-x)',
+        color: '#ec4899',
+        equivGroup: 'minusNegExp',
+        symmetryType: 'y-eq-neg-x',
+        isLog: false,
+        evalY: (x, a) => [-Math.pow(a, -x)]
+      },
+      {
+        id: 'f7',
+        labelHtml: 'y = −log<sub>a</sub>(−x)',
+        rawTitle: 'y = -log_a(-x)',
+        color: '#06b6d4',
+        equivGroup: 'minusNegXLog',
+        symmetryType: 'y-eq-neg-x',
+        isLog: true,
+        evalY: (x, a) => [-logBase(-x, a)]
+      },
+      {
+        id: 'f8',
+        labelHtml: 'y = a<sup>|x|</sup>',
+        rawTitle: 'y = a^|x|',
+        color: '#10b981',
+        equivGroup: 'absXPos',
+        symmetryType: 'even-func',
+        isLog: false,
+        evalY: (x, a) => [Math.pow(a, Math.abs(x))]
+      },
+      {
+        id: 'f9',
+        labelHtml: 'y = log<sub>a</sub> |x|',
+        rawTitle: 'y = log_a|x|',
+        color: '#15803d',
+        equivGroup: 'absXLogPos',
+        symmetryType: 'even-func',
+        isLog: true,
+        evalY: (x, a) => [logBase(Math.abs(x), a)]
+      },
+      {
+        id: 'f10',
+        labelHtml: 'y = |log<sub>a</sub> x|',
+        rawTitle: 'y = |log_a(x)|',
+        color: '#d946ef',
+        equivGroup: 'absLogVal',
+        symmetryType: 'x-fold',
+        isLog: true,
+        evalY: (x, a) => [Math.abs(logBase(x, a))]
+      },
+      {
+        id: 'f11',
+        labelHtml: '|y| = a<sup>x</sup>',
+        rawTitle: '|y| = a^x',
+        color: '#4f46e5',
+        equivGroup: 'absYRel',
+        symmetryType: 'both-x-branches',
+        isLog: false,
+        evalY: (x, a) => [Math.pow(a, x), -Math.pow(a, x)]
+      }
+    ];
+
     // =========================================================================
     // 2. 全域狀態管理（預設只勾選基準圖）
     // =========================================================================
-    let currentFuncType = 'exp'; // 'exp' = 指數函數, 'log' = 對數函數
+    let currentFuncType = 'exp'; // 'exp' = 指數函數, 'log' = 對數函數, 'both' = 指數和對數函數的比較
     let currentA = 2.00;
     let initialA = 2.00;
     let trailBases = [];
@@ -657,15 +786,16 @@
     let lastPinchDist = null;
 
     function getActiveComparisonFunctions() {
-      return currentFuncType === 'exp' ? EXP_FUNCTIONS : LOG_FUNCTIONS;
+      if (currentFuncType === 'exp') return EXP_FUNCTIONS;
+      if (currentFuncType === 'log') return LOG_FUNCTIONS;
+      return BOTH_FUNCTIONS;
     }
 
     function evalBaseFunc(x, a) {
-      if (currentFuncType === 'exp') {
-        return Math.pow(a, x);
-      } else {
+      if (currentFuncType === 'log') {
         return logBase(x, a);
       }
+      return Math.pow(a, x);
     }
 
     function formatCleanBase(val) {
@@ -673,14 +803,19 @@
     }
 
     // =========================================================================
-    // 3. 切換（1）指數函數 /（2）對數函數 與更新介面
+    // 3. 切換（1）指數函數 /（2）對數函數 /（3）指對數比較 與更新介面
     // =========================================================================
     function switchFuncType(type) {
       if (currentFuncType === type) return;
       currentFuncType = type;
+      activeFuncIds.clear();
 
       document.getElementById('modeBtn_exp').classList.toggle('active', type === 'exp');
       document.getElementById('modeBtn_log').classList.toggle('active', type === 'log');
+      document.getElementById('modeBtn_both').classList.toggle('active', type === 'both');
+
+      document.getElementById('toggleBaseFunc').checked = true;
+      document.getElementById('toggleSecondBaseFunc').checked = true;
 
       updateModeLabelsUI();
       updateBaseDisplays();
@@ -693,10 +828,17 @@
       funcs.forEach(f => {
         const lbl = document.getElementById('label_' + f.id);
         if (lbl) lbl.innerHTML = f.labelHtml;
+        const dot = document.querySelector('#btn_' + f.id + ' .color-dot');
+        if (dot) dot.style.backgroundColor = f.color;
       });
 
+      const secondBaseBox = document.getElementById('secondBaseContainer');
+
       if (currentFuncType === 'exp') {
+        secondBaseBox.classList.add('hidden');
         document.getElementById('catTitle_A').textContent = 'A. 倒數底數與負指數';
+        document.getElementById('catTitle_B').textContent = 'B. 負號與對稱變換';
+        document.getElementById('catTitle_C').textContent = 'C. 絕對值圖形';
         document.getElementById('presetBtn_1').innerHTML = '① 倒數與負指數';
         document.getElementById('presetBtn_2').innerHTML = '② 四象限對稱';
         document.getElementById('presetBtn_3').innerHTML = '③ y = ±a<sup>|x|</sup>';
@@ -704,8 +846,12 @@
         document.getElementById('baseFuncCheckboxLabel').innerHTML = '基準圖：<span class="math-font">y = a<sup>x</sup></span>';
         document.getElementById('baseFixedPointLabel').textContent = '(0, 1)';
         document.getElementById('keyPointsLabelText').innerHTML = '特殊點 <span class="math-font">( -1 , 0 , 1 )</span>';
-      } else {
+        document.getElementById('symmetryGuidesLabelText').textContent = '對稱軸／對稱中心';
+      } else if (currentFuncType === 'log') {
+        secondBaseBox.classList.add('hidden');
         document.getElementById('catTitle_A').textContent = 'A. 倒數底數與真數變號';
+        document.getElementById('catTitle_B').textContent = 'B. 負號與對稱變換';
+        document.getElementById('catTitle_C').textContent = 'C. 絕對值圖形';
         document.getElementById('presetBtn_1').innerHTML = '① 倒數底數與變號';
         document.getElementById('presetBtn_2').innerHTML = '② 四象限對稱';
         document.getElementById('presetBtn_3').innerHTML = '③ y = ±log<sub>a</sub> |x|';
@@ -713,6 +859,21 @@
         document.getElementById('baseFuncCheckboxLabel').innerHTML = '基準圖：<span class="math-font">y = log<sub>a</sub> x</span>';
         document.getElementById('baseFixedPointLabel').textContent = '(1, 0)';
         document.getElementById('keyPointsLabelText').innerHTML = '特殊點 <span class="math-font">( 1/a , 1 , a )</span>';
+        document.getElementById('symmetryGuidesLabelText').textContent = '對稱軸／對稱中心';
+      } else {
+        // （3）指數和對數函數的比較
+        secondBaseBox.classList.remove('hidden');
+        document.getElementById('catTitle_A').textContent = 'A. 倒數底數指對數比較';
+        document.getElementById('catTitle_B').textContent = 'B. 負號與反函數對稱 (y = ±x)';
+        document.getElementById('catTitle_C').textContent = 'C. 絕對值指對數比較';
+        document.getElementById('presetBtn_1').innerHTML = '① 倒數底 (1/a)<sup>x</sup> 與 log<sub>1/a</sub> x';
+        document.getElementById('presetBtn_2').innerHTML = '② 負號反函數 −a<sup>x</sup> 與 log<sub>a</sub>(−x)';
+        document.getElementById('presetBtn_3').innerHTML = '③ 對稱 y=−x：−a<sup>−x</sup> 與 −log<sub>a</sub>(−x)';
+        document.getElementById('presetBtn_4').innerHTML = '④ 絕對值 a<sup>|x|</sup> 與 log<sub>a</sub>|x|';
+        document.getElementById('baseFuncCheckboxLabel').innerHTML = '指數基準圖：<span class="math-font">y = a<sup>x</sup></span>';
+        document.getElementById('baseFixedPointLabel').textContent = '(0, 1)';
+        document.getElementById('keyPointsLabelText').innerHTML = '特殊點 <span class="math-font">(0,1)↔(1,0)</span>';
+        document.getElementById('symmetryGuidesLabelText').innerHTML = '對稱軸 <span class="math-font">y = x</span> ／ 坐標軸';
       }
     }
 
@@ -742,6 +903,9 @@
     function clearAllComparisons() {
       activeFuncIds.clear();
       document.getElementById('toggleBaseFunc').checked = true;
+      if (currentFuncType === 'both') {
+        document.getElementById('toggleSecondBaseFunc').checked = true;
+      }
       updateComparisonButtonsUI();
       renderGraph();
     }
@@ -757,6 +921,7 @@
       document.getElementById('showKeyPoints').checked = false;
       document.getElementById('showSymmetryGuides').checked = false;
       document.getElementById('toggleBaseFunc').checked = true;
+      document.getElementById('toggleSecondBaseFunc').checked = true;
       activeFuncIds.clear();
       updateBaseDisplays();
       updateComparisonButtonsUI();
@@ -765,19 +930,36 @@
 
     function applyPreset(presetName) {
       document.getElementById('toggleBaseFunc').checked = true;
+      if (currentFuncType === 'both') {
+        document.getElementById('toggleSecondBaseFunc').checked = true;
+      }
       activeFuncIds.clear();
-      if (presetName === 'reciprocal') {
-        ['f1', 'f2', 'f3'].forEach(id => activeFuncIds.add(id));
-        originOffsetY = currentFuncType === 'exp' ? 50 : 0;
-      } else if (presetName === 'symmetry') {
-        ['f3', 'f4', 'f5'].forEach(id => activeFuncIds.add(id));
+
+      if (currentFuncType === 'both') {
+        if (presetName === 'reciprocal') {
+          ['f1', 'f2'].forEach(id => activeFuncIds.add(id));
+        } else if (presetName === 'symmetry') {
+          ['f4', 'f5'].forEach(id => activeFuncIds.add(id));
+        } else if (presetName === 'absX') {
+          ['f6', 'f7'].forEach(id => activeFuncIds.add(id));
+        } else if (presetName === 'absY') {
+          ['f8', 'f9'].forEach(id => activeFuncIds.add(id));
+        }
         originOffsetY = 0;
-      } else if (presetName === 'absX') {
-        ['f9', 'f11'].forEach(id => activeFuncIds.add(id));
-        originOffsetY = 0;
-      } else if (presetName === 'absY') {
-        ['f8', 'f10'].forEach(id => activeFuncIds.add(id));
-        originOffsetY = 0;
+      } else {
+        if (presetName === 'reciprocal') {
+          ['f1', 'f2', 'f3'].forEach(id => activeFuncIds.add(id));
+          originOffsetY = currentFuncType === 'exp' ? 50 : 0;
+        } else if (presetName === 'symmetry') {
+          ['f3', 'f4', 'f5'].forEach(id => activeFuncIds.add(id));
+          originOffsetY = 0;
+        } else if (presetName === 'absX') {
+          ['f9', 'f11'].forEach(id => activeFuncIds.add(id));
+          originOffsetY = 0;
+        } else if (presetName === 'absY') {
+          ['f8', 'f10'].forEach(id => activeFuncIds.add(id));
+          originOffsetY = 0;
+        }
       }
       updateComparisonButtonsUI();
       renderGraph();
@@ -819,7 +1001,7 @@
     }
 
     function lockCurrentAsInitial() {
-      if (currentFuncType === 'log' && Math.abs(currentA - 1) < 0.03) return;
+      if (currentFuncType !== 'exp' && Math.abs(currentA - 1) < 0.03) return;
       initialA = currentA;
       trailBases = [];
       updateBaseDisplays();
@@ -838,9 +1020,12 @@
       if (currentFuncType === 'exp') {
         curCard.innerHTML = `目前函數：<span class="math-font">y</span> = <span class="mono-font">${currentA.toFixed(2)}</span><sup><span class="math-font">x</span></sup>`;
         initCard.innerHTML = `基準函數：<span class="math-font">y</span> = <span class="mono-font">${formatCleanBase(initialA)}</span><sup><span class="math-font">x</span></sup>`;
-      } else {
+      } else if (currentFuncType === 'log') {
         curCard.innerHTML = `目前函數：<span class="math-font">y</span> = <span class="math-font">log</span><sub class="mono-font">${currentA.toFixed(2)}</sub> <span class="math-font">x</span>`;
         initCard.innerHTML = `基準函數：<span class="math-font">y</span> = <span class="math-font">log</span><sub class="mono-font">${formatCleanBase(initialA)}</sub> <span class="math-font">x</span>`;
+      } else {
+        curCard.innerHTML = `<span class="text-xs sm:text-sm">目前：<span class="math-font">y</span>=<span class="mono-font">${currentA.toFixed(2)}</span><sup><span class="math-font">x</span></sup> , <span class="math-font">log</span><sub class="mono-font">${currentA.toFixed(2)}</sub><span class="math-font">x</span></span>`;
+        initCard.innerHTML = `<span class="text-xs sm:text-sm">基準：<span class="math-font">y</span>=<span class="mono-font">${formatCleanBase(initialA)}</span><sup><span class="math-font">x</span></sup> , <span class="math-font">log</span><sub class="mono-font">${formatCleanBase(initialA)}</sub><span class="math-font">x</span></span>`;
       }
 
       const badge = document.getElementById('baseRegimeBadge');
@@ -892,7 +1077,7 @@
     }
 
     // 支援指數與對數（含 x = 0 垂直漸近線與 x = ±1 轉折點）的高精度繪圖函式
-    function drawSingleBranch(evalSingleY, width, height, strokeStyle, lineWidth, dashPattern = [], alpha = 1.0, dashOffset = 0) {
+    function drawSingleBranch(evalSingleY, width, height, strokeStyle, lineWidth, dashPattern = [], alpha = 1.0, dashOffset = 0, breakAtZero = false) {
       ctx.save();
       ctx.strokeStyle = strokeStyle;
       ctx.lineWidth = lineWidth;
@@ -911,7 +1096,6 @@
         xs.push(screenToMath(px, 0, width, height).x);
       }
 
-      // 加入轉折點與垂直漸近線鄰近加密採樣點，確保對數曲線延伸至畫布邊緣且轉折點精準
       const criticalXs = [
         -1, 0, 1,
         -0.02, -0.006, -0.0015, -0.0002, -0.00002,
@@ -929,8 +1113,7 @@
 
       for (let i = 0; i < xs.length; i++) {
         const x = xs[i];
-        // 避免在 x = 0 漸近線處直接跨過 y 軸連線
-        if (currentFuncType === 'log' && Math.abs(x) < 1e-7) {
+        if ((currentFuncType === 'log' || breakAtZero) && Math.abs(x) < 1e-7) {
           penDown = false;
           continue;
         }
@@ -1052,14 +1235,99 @@
       ctx.fillText('y', cx + 10, 18);
       ctx.restore();
 
+      const showBase = document.getElementById('toggleBaseFunc').checked;
+      const showSecondBase = currentFuncType === 'both' && document.getElementById('toggleSecondBaseFunc').checked;
+      const activeList = allFuncs.filter(f => activeFuncIds.has(f.id));
+
       // 2. 對稱軸與對稱中心視覺高亮輔助線
-      if (document.getElementById('showSymmetryGuides').checked && activeFuncIds.size > 0) {
-        const activeFuncs = allFuncs.filter(f => activeFuncIds.has(f.id));
-        const hasYAxisSym = activeFuncs.some(f => f.symmetryType === 'y-axis' || f.symmetryType === 'even-func' || f.symmetryType === 'even-func-neg');
-        const hasXAxisSym = activeFuncs.some(f => f.symmetryType === 'x-axis' || f.symmetryType === 'both-x-branches' || f.symmetryType === 'x-fold');
-        const hasOriginSym = activeFuncs.some(f => f.symmetryType === 'origin');
+      if (document.getElementById('showSymmetryGuides').checked) {
+        const hasYAxisSym = activeList.some(f => f.symmetryType === 'y-axis' || f.symmetryType === 'even-func' || f.symmetryType === 'even-func-neg');
+        const hasXAxisSym = activeList.some(f => f.symmetryType === 'x-axis' || f.symmetryType === 'both-x-branches' || f.symmetryType === 'x-fold');
+        const hasOriginSym = activeList.some(f => f.symmetryType === 'origin');
+        const hasYEqXSym = (currentFuncType === 'both' && (showBase || showSecondBase || activeList.length > 0)) || activeList.some(f => f.symmetryType === 'y-eq-x');
+        const hasYEqNegXSym = activeList.some(f => f.symmetryType === 'y-eq-neg-x');
 
         ctx.save();
+
+        // 模式(3)反函數對稱軸：直線 y = x
+        if (hasYEqXSym) {
+          const xStart = screenToMath(0, 0, width, height).x;
+          const xEnd = screenToMath(width, 0, width, height).x;
+          const pt1 = mathToScreen(xStart, xStart, width, height);
+          const pt2 = mathToScreen(xEnd, xEnd, width, height);
+
+          ctx.strokeStyle = 'rgba(16, 185, 129, 0.24)';
+          ctx.lineWidth = 14;
+          ctx.beginPath();
+          ctx.moveTo(pt1.px, pt1.py);
+          ctx.lineTo(pt2.px, pt2.py);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#059669';
+          ctx.lineWidth = 3.2;
+          ctx.setLineDash([9, 6]);
+          ctx.beginPath();
+          ctx.moveTo(pt1.px, pt1.py);
+          ctx.lineTo(pt2.px, pt2.py);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // 繪製對稱點連線 (0,1) <-> (1,0) 與 (1,a) <-> (a,1)
+          if (showBase && showSecondBase && Math.abs(currentA - 1) >= 0.03) {
+            const pairs = [
+              [{ x: 0, y: 1 }, { x: 1, y: 0 }],
+              [{ x: 1, y: currentA }, { x: currentA, y: 1 }],
+              [{ x: -1, y: 1 / currentA }, { x: 1 / currentA, y: -1 }]
+            ];
+            ctx.strokeStyle = 'rgba(5, 150, 105, 0.65)';
+            ctx.lineWidth = 1.8;
+            ctx.setLineDash([4, 4]);
+            pairs.forEach(([pA, pB]) => {
+              const sA = mathToScreen(pA.x, pA.y, width, height);
+              const sB = mathToScreen(pB.x, pB.y, width, height);
+              ctx.beginPath();
+              ctx.moveTo(sA.px, sA.py);
+              ctx.lineTo(sB.px, sB.py);
+              ctx.stroke();
+            });
+            ctx.setLineDash([]);
+          }
+
+          const badgePos = mathToScreen(-1.8, -1.8, width, height);
+          const bx = Math.min(width - 135, Math.max(135, badgePos.px));
+          const by = Math.min(height - 45, Math.max(45, badgePos.py));
+          drawRoundedBadge('⟋ 對稱軸：直線 y = x（反函數對稱） ⟋', bx, by, '#d1fae5', '#065f46', '#10b981');
+        }
+
+        // 對稱軸：直線 y = -x
+        if (hasYEqNegXSym) {
+          const xStart = screenToMath(0, 0, width, height).x;
+          const xEnd = screenToMath(width, 0, width, height).x;
+          const pt1 = mathToScreen(xStart, -xStart, width, height);
+          const pt2 = mathToScreen(xEnd, -xEnd, width, height);
+
+          ctx.strokeStyle = 'rgba(14, 165, 233, 0.22)';
+          ctx.lineWidth = 14;
+          ctx.beginPath();
+          ctx.moveTo(pt1.px, pt1.py);
+          ctx.lineTo(pt2.px, pt2.py);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#0284c7';
+          ctx.lineWidth = 3.2;
+          ctx.setLineDash([9, 6]);
+          ctx.beginPath();
+          ctx.moveTo(pt1.px, pt1.py);
+          ctx.lineTo(pt2.px, pt2.py);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          const badgePos = mathToScreen(-1.8, 1.8, width, height);
+          const bx = Math.min(width - 125, Math.max(125, badgePos.px));
+          const by = Math.min(height - 45, Math.max(45, badgePos.py));
+          drawRoundedBadge('⟍ 對稱軸：直線 y = −x ⟍', bx, by, '#e0f2fe', '#075985', '#0ea5e9');
+        }
+
         if (hasYAxisSym) {
           ctx.strokeStyle = 'rgba(217, 70, 239, 0.28)';
           ctx.lineWidth = 16;
@@ -1103,9 +1371,9 @@
         }
 
         if (hasOriginSym) {
-          const samplePt = currentFuncType === 'exp'
-            ? { x: 1, y: currentA }
-            : { x: currentA, y: 1 };
+          const samplePt = currentFuncType === 'log'
+            ? { x: currentA, y: 1 }
+            : { x: 1, y: currentA };
           const p1 = mathToScreen(samplePt.x, samplePt.y, width, height);
           const p2 = mathToScreen(-samplePt.x, -samplePt.y, width, height);
 
@@ -1139,97 +1407,170 @@
         ctx.restore();
       }
 
-      // 3. 繪製「底數變動過程殘影軌跡」（深寶藍 #1d4ed8、高不透明度 0.50~0.90、線寬 2.6px）
+      // 3. 繪製「底數變動過程殘影軌跡」
       const showTrail = document.getElementById('showTrailGhost').checked;
       if (showTrail && trailBases.length > 0) {
         trailBases.forEach((bVal, idx) => {
           if (Math.abs(bVal - currentA) < 0.03 || Math.abs(bVal - initialA) < 0.03) return;
-          if (currentFuncType === 'log' && Math.abs(bVal - 1) < 0.03) return;
           const opacity = 0.50 + (idx / trailBases.length) * 0.40;
-          drawSingleBranch(x => evalBaseFunc(x, bVal), width, height, '#1d4ed8', 2.6, [5, 4], opacity);
+          if (currentFuncType === 'exp') {
+            drawSingleBranch(x => Math.pow(bVal, x), width, height, '#1d4ed8', 2.6, [5, 4], opacity, 0, false);
+          } else if (currentFuncType === 'log') {
+            if (Math.abs(bVal - 1) >= 0.03) {
+              drawSingleBranch(x => logBase(x, bVal), width, height, '#1d4ed8', 2.6, [5, 4], opacity, 0, true);
+            }
+          } else {
+            // 模式(3)：同步繪製指數與對數的過程殘影
+            if (showBase) {
+              drawSingleBranch(x => Math.pow(bVal, x), width, height, '#1d4ed8', 2.5, [5, 4], opacity, 0, false);
+            }
+            if (showSecondBase && Math.abs(bVal - 1) >= 0.03) {
+              drawSingleBranch(x => logBase(x, bVal), width, height, '#e11d48', 2.5, [5, 4], opacity, 0, true);
+            }
+          }
         });
       }
 
       // 4. 繪製「保留基準圖形」
       const showInitialGhost = document.getElementById('showInitialGhost').checked;
       const isBaseChanged = Math.abs(currentA - initialA) >= 0.02;
-      if (showInitialGhost && isBaseChanged && !(currentFuncType === 'log' && Math.abs(initialA - 1) < 0.03)) {
-        drawSingleBranch(x => evalBaseFunc(x, initialA), width, height, '#475569', 2.6, [7, 5], 0.75);
-
-        const ptInit = currentFuncType === 'exp'
-          ? mathToScreen(1, initialA, width, height)
-          : mathToScreen(initialA, 1, width, height);
-
-        if (ptInit.py > 15 && ptInit.py < height - 15 && ptInit.px > 15 && ptInit.px < width - 15) {
-          ctx.save();
-          ctx.fillStyle = 'rgba(71, 85, 105, 0.95)';
-          ctx.beginPath();
-          ctx.arc(ptInit.px, ptInit.py, 4.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.font = `bold ${Math.round(12 * fontScale)}px "Noto Sans TC", sans-serif`;
-          const initLabelText = currentFuncType === 'exp'
-            ? `基準 y = ${formatCleanBase(initialA)}^x`
-            : `基準 y = log_${formatCleanBase(initialA)}(x)`;
-          ctx.fillText(initLabelText, ptInit.px + 8, ptInit.py + 4);
-          ctx.restore();
+      if (showInitialGhost && isBaseChanged) {
+        if (currentFuncType === 'exp' || (currentFuncType === 'both' && showBase)) {
+          drawSingleBranch(x => Math.pow(initialA, x), width, height, '#475569', 2.6, [7, 5], 0.75, 0, false);
+          const ptInit = mathToScreen(1, initialA, width, height);
+          if (ptInit.py > 15 && ptInit.py < height - 15 && ptInit.px > 15 && ptInit.px < width - 15) {
+            ctx.save();
+            ctx.fillStyle = 'rgba(71, 85, 105, 0.95)';
+            ctx.beginPath();
+            ctx.arc(ptInit.px, ptInit.py, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.font = `bold ${Math.round(12 * fontScale)}px "Noto Sans TC", sans-serif`;
+            ctx.fillText(`基準 y = ${formatCleanBase(initialA)}^x`, ptInit.px + 8, ptInit.py + 4);
+            ctx.restore();
+          }
+        }
+        if ((currentFuncType === 'log' || (currentFuncType === 'both' && showSecondBase)) && Math.abs(initialA - 1) >= 0.03) {
+          const ghostColor = currentFuncType === 'both' ? '#9f1239' : '#475569';
+          drawSingleBranch(x => logBase(x, initialA), width, height, ghostColor, 2.6, [7, 5], 0.75, 0, true);
+          const ptInitLog = mathToScreen(initialA, 1, width, height);
+          if (ptInitLog.py > 15 && ptInitLog.py < height - 15 && ptInitLog.px > 15 && ptInitLog.px < width - 15) {
+            ctx.save();
+            ctx.fillStyle = currentFuncType === 'both' ? 'rgba(159, 18, 57, 0.9)' : 'rgba(71, 85, 105, 0.95)';
+            ctx.beginPath();
+            ctx.arc(ptInitLog.px, ptInitLog.py, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.font = `bold ${Math.round(12 * fontScale)}px "Noto Sans TC", sans-serif`;
+            ctx.fillText(`基準 y = log_${formatCleanBase(initialA)}(x)`, ptInitLog.px + 8, ptInitLog.py + 14);
+            ctx.restore();
+          }
         }
       }
 
       // 5. 繪製目前曲線與重合雙色交替段
-      const showBase = document.getElementById('toggleBaseFunc').checked;
-      const activeList = allFuncs.filter(f => activeFuncIds.has(f.id));
-      const baseGroupKey = currentFuncType === 'exp' ? 'baseExp' : 'baseLog';
-      const minusBaseGroupKey = currentFuncType === 'exp' ? 'minusBaseExp' : 'minusBaseLog';
-
       const equivBuckets = {};
-      if (showBase && !(currentFuncType === 'log' && Math.abs(currentA - 1) < 0.03)) {
-        equivBuckets[baseGroupKey] = [{
-          id: 'base',
-          rawTitle: currentFuncType === 'exp' ? 'y = a^x' : 'y = log_a(x)',
-          color: '#2563eb',
-          evalSingle: x => evalBaseFunc(x, currentA)
-        }];
+
+      if (currentFuncType === 'exp') {
+        if (showBase) {
+          equivBuckets['baseExp'] = [{
+            id: 'base',
+            rawTitle: 'y = a^x',
+            color: '#2563eb',
+            breakAtZero: false,
+            evalSingle: x => Math.pow(currentA, x)
+          }];
+        }
+      } else if (currentFuncType === 'log') {
+        if (showBase && Math.abs(currentA - 1) >= 0.03) {
+          equivBuckets['baseLog'] = [{
+            id: 'base',
+            rawTitle: 'y = log_a(x)',
+            color: '#2563eb',
+            breakAtZero: true,
+            evalSingle: x => logBase(x, currentA)
+          }];
+        }
+      } else {
+        // 模式(3)：同時支援指數基準圖與對數基準圖
+        if (showBase) {
+          equivBuckets['baseExp'] = [{
+            id: 'baseExp',
+            rawTitle: 'y = a^x',
+            color: '#2563eb',
+            breakAtZero: false,
+            evalSingle: x => Math.pow(currentA, x)
+          }];
+        }
+        if (showSecondBase && Math.abs(currentA - 1) >= 0.03) {
+          equivBuckets['baseLog'] = [{
+            id: 'baseLog',
+            rawTitle: 'y = log_a(x)',
+            color: '#e11d48',
+            breakAtZero: true,
+            evalSingle: x => logBase(x, currentA)
+          }];
+        }
       }
 
       activeList.forEach(f => {
-        if (currentFuncType === 'log' && Math.abs(currentA - 1) < 0.03) return;
-        if (f.id === 'f10') {
-          if (currentFuncType === 'exp') {
-            if (!equivBuckets[baseGroupKey]) equivBuckets[baseGroupKey] = [];
-            equivBuckets[baseGroupKey].push({
-              id: 'f10_top',
-              rawTitle: '|y| = a^x (上支)',
-              color: f.color,
-              evalSingle: x => Math.pow(currentA, x)
-            });
-            if (!equivBuckets[minusBaseGroupKey]) equivBuckets[minusBaseGroupKey] = [];
-            equivBuckets[minusBaseGroupKey].push({
-              id: 'f10_bot',
-              rawTitle: '|y| = a^x (下支)',
-              color: f.color,
-              evalSingle: x => -Math.pow(currentA, x)
-            });
-          } else {
-            // 對數 |y| = log_a(x) 只在 log_a(x) >= 0 有定義，拆為上下兩支繪製
-            equivBuckets['f10_log_top'] = [{
-              id: 'f10_top',
-              rawTitle: '|y| = log_a(x)',
-              color: f.color,
-              evalSingle: x => f.evalY(x, currentA)[0]
-            }];
-            equivBuckets['f10_log_bot'] = [{
-              id: 'f10_bot',
-              rawTitle: '|y| = log_a(x)',
-              color: f.color,
-              evalSingle: x => f.evalY(x, currentA)[1]
-            }];
-          }
+        const isLogFunc = currentFuncType === 'log' || f.isLog;
+        if (isLogFunc && Math.abs(currentA - 1) < 0.03) return;
+
+        if (f.id === 'f10' && currentFuncType === 'exp') {
+          if (!equivBuckets['baseExp']) equivBuckets['baseExp'] = [];
+          equivBuckets['baseExp'].push({
+            id: 'f10_top',
+            rawTitle: '|y| = a^x (上支)',
+            color: f.color,
+            breakAtZero: false,
+            evalSingle: x => Math.pow(currentA, x)
+          });
+          if (!equivBuckets['minusBaseExp']) equivBuckets['minusBaseExp'] = [];
+          equivBuckets['minusBaseExp'].push({
+            id: 'f10_bot',
+            rawTitle: '|y| = a^x (下支)',
+            color: f.color,
+            breakAtZero: false,
+            evalSingle: x => -Math.pow(currentA, x)
+          });
+        } else if (f.id === 'f11' && currentFuncType === 'both') {
+          if (!equivBuckets['baseExp']) equivBuckets['baseExp'] = [];
+          equivBuckets['baseExp'].push({
+            id: 'f11_top',
+            rawTitle: '|y| = a^x (上支)',
+            color: f.color,
+            breakAtZero: false,
+            evalSingle: x => Math.pow(currentA, x)
+          });
+          if (!equivBuckets['minusBaseExp']) equivBuckets['minusBaseExp'] = [];
+          equivBuckets['minusBaseExp'].push({
+            id: 'f11_bot',
+            rawTitle: '|y| = a^x (下支)',
+            color: f.color,
+            breakAtZero: false,
+            evalSingle: x => -Math.pow(currentA, x)
+          });
+        } else if (f.id === 'f10' && currentFuncType === 'log') {
+          equivBuckets['f10_log_top'] = [{
+            id: 'f10_top',
+            rawTitle: '|y| = log_a(x)',
+            color: f.color,
+            breakAtZero: true,
+            evalSingle: x => f.evalY(x, currentA)[0]
+          }];
+          equivBuckets['f10_log_bot'] = [{
+            id: 'f10_bot',
+            rawTitle: '|y| = log_a(x)',
+            color: f.color,
+            breakAtZero: true,
+            evalSingle: x => f.evalY(x, currentA)[1]
+          }];
         } else {
           if (!equivBuckets[f.equivGroup]) equivBuckets[f.equivGroup] = [];
           equivBuckets[f.equivGroup].push({
             id: f.id,
             rawTitle: f.rawTitle,
             color: f.color,
+            breakAtZero: isLogFunc,
             evalSingle: x => f.evalY(x, currentA)[0]
           });
         }
@@ -1240,9 +1581,9 @@
       Object.keys(equivBuckets).forEach(groupKey => {
         const items = equivBuckets[groupKey];
         if (items.length === 1) {
-          drawSingleBranch(items[0].evalSingle, width, height, items[0].color, 3.2, [], 1.0, 0);
+          drawSingleBranch(items[0].evalSingle, width, height, items[0].color, 3.2, [], 1.0, 0, items[0].breakAtZero);
         } else if (items.length > 1) {
-          drawSingleBranch(items[0].evalSingle, width, height, '#facc15', 11, [], 0.42, 0);
+          drawSingleBranch(items[0].evalSingle, width, height, '#facc15', 11, [], 0.42, 0, items[0].breakAtZero);
 
           const segLen = 16;
           const gapLen = segLen * (items.length - 1);
@@ -1255,7 +1596,8 @@
               4.2,
               [segLen, gapLen],
               1.0,
-              -idx * segLen
+              -idx * segLen,
+              item.breakAtZero
             );
           });
 
@@ -1263,7 +1605,7 @@
           overlapDescriptions.push(names);
 
           let sampleX = 1.15;
-          if (currentFuncType === 'exp') {
+          if (!items[0].breakAtZero) {
             sampleX = currentA >= 1 ? 1.15 : -1.15;
           } else {
             sampleX = (groupKey.includes('NegX') || groupKey.includes('negX')) ? -2.0 : 2.0;
@@ -1287,8 +1629,8 @@
         overlapBanner.classList.add('hidden');
       }
 
-      // 6. 繪製特殊點（指數：x = -1, 0, 1；對數：x = 1/a, 1, a 與對應對稱點）
-      if (document.getElementById('showKeyPoints').checked && !(currentFuncType === 'log' && Math.abs(currentA - 1) < 0.03)) {
+      // 6. 繪製特殊點
+      if (document.getElementById('showKeyPoints').checked) {
         if (currentFuncType === 'exp') {
           const keyXs = [-1, 0, 1];
           if (showBase) {
@@ -1307,8 +1649,7 @@
               });
             });
           });
-        } else {
-          // 對數函數特殊點：x = 1/a, 1, a（以及當函數含 -x 時的 -1/a, -1, -a）
+        } else if (currentFuncType === 'log' && Math.abs(currentA - 1) >= 0.03) {
           const posKeyXs = [1 / currentA, 1, currentA];
           if (showBase) {
             posKeyXs.forEach(kx => {
@@ -1329,16 +1670,39 @@
               });
             });
           });
+        } else if (currentFuncType === 'both') {
+          if (showBase) {
+            [-1, 0, 1].forEach(kx => {
+              const ky = Math.pow(currentA, kx);
+              drawPointMarker(kx, ky, '#1d4ed8', width, height, kx === 1 ? `(1, ${currentA.toFixed(2)})` : kx === 0 ? '(0, 1)' : '');
+            });
+          }
+          if (showSecondBase && Math.abs(currentA - 1) >= 0.03) {
+            [1 / currentA, 1, currentA].forEach(kx => {
+              const ky = logBase(kx, currentA);
+              const label = Math.abs(kx - 1) < 1e-4 ? '(1, 0)' : Math.abs(kx - currentA) < 1e-4 ? `(${currentA.toFixed(2)}, 1)` : '';
+              drawPointMarker(kx, ky, '#e11d48', width, height, label);
+            });
+          }
+          activeList.forEach(f => {
+            const sampleXs = f.isLog ? [1 / currentA, 1, currentA, -1 / currentA, -1, -currentA] : [-1, 0, 1];
+            sampleXs.forEach(kx => {
+              const ys = f.evalY(kx, currentA);
+              ys.forEach(ky => {
+                if (Number.isFinite(ky)) drawPointMarker(kx, ky, f.color, width, height);
+              });
+            });
+          });
         }
       }
 
       // 7. 滑鼠/觸控垂直追蹤線與交點
       if (mouseMathPos) {
-        drawCursorCrosshair(mouseMathPos.x, width, height, showBase, activeList);
+        drawCursorCrosshair(mouseMathPos.x, width, height, showBase, showSecondBase, activeList);
       }
 
       // 8. 更新左上角浮動圖例
-      updateFloatingLegend(showBase, isBaseChanged, activeList);
+      updateFloatingLegend(showBase, showSecondBase, isBaseChanged, activeList);
     }
 
     function drawPointMarker(x, y, color, width, height, labelText = '') {
@@ -1362,7 +1726,7 @@
       ctx.restore();
     }
 
-    function drawCursorCrosshair(mx, width, height, showBase, activeList) {
+    function drawCursorCrosshair(mx, width, height, showBase, showSecondBase, activeList) {
       const { px } = mathToScreen(mx, 0, width, height);
       ctx.save();
       ctx.strokeStyle = 'rgba(15, 23, 42, 0.35)';
@@ -1381,11 +1745,22 @@
 
       if (showBase) {
         const by = evalBaseFunc(mx, currentA);
+        const labelStr = currentFuncType === 'both' ? 'a^x:' : '目前 y:';
         if (Number.isFinite(by)) {
           drawPointMarker(mx, by, '#2563eb', width, height);
-          html += `<div class="flex justify-between gap-2"><span class="text-blue-400">目前 y:</span><span>${by.toFixed(2)}</span></div>`;
+          html += `<div class="flex justify-between gap-2"><span class="text-blue-400">${labelStr}</span><span>${by.toFixed(2)}</span></div>`;
         } else {
-          html += `<div class="flex justify-between gap-2"><span class="text-blue-400">目前 y:</span><span class="text-slate-500">無定義</span></div>`;
+          html += `<div class="flex justify-between gap-2"><span class="text-blue-400">${labelStr}</span><span class="text-slate-500">無定義</span></div>`;
+        }
+      }
+
+      if (showSecondBase) {
+        const ly = logBase(mx, currentA);
+        if (Number.isFinite(ly)) {
+          drawPointMarker(mx, ly, '#e11d48', width, height);
+          html += `<div class="flex justify-between gap-2"><span class="text-rose-400">log_a(x):</span><span>${ly.toFixed(2)}</span></div>`;
+        } else {
+          html += `<div class="flex justify-between gap-2"><span class="text-rose-400">log_a(x):</span><span class="text-slate-500">無定義</span></div>`;
         }
       }
 
@@ -1409,26 +1784,38 @@
       readout.innerHTML = html;
     }
 
-    function updateFloatingLegend(showBase, isBaseChanged, activeList) {
+    function updateFloatingLegend(showBase, showSecondBase, isBaseChanged, activeList) {
       const box = document.getElementById('floatingLegend');
       let items = [];
 
       if (showBase) {
-        const curExpr = currentFuncType === 'exp'
-          ? `y = ${currentA.toFixed(2)}<sup>x</sup>`
-          : `y = log<sub>${currentA.toFixed(2)}</sub> x`;
+        const curExpr = currentFuncType === 'log'
+          ? `y = log<sub>${currentA.toFixed(2)}</sub> x`
+          : `y = ${currentA.toFixed(2)}<sup>x</sup>`;
+        const titlePrefix = currentFuncType === 'both' ? '指數基準：' : '目前函數：';
         items.push(`
           <div class="flex items-center gap-2">
             <span class="w-4 h-1 rounded bg-blue-600 inline-block shrink-0"></span>
-            <span class="font-bold text-slate-800 whitespace-nowrap">目前函數：<span class="math-font">${curExpr}</span></span>
+            <span class="font-bold text-slate-800 whitespace-nowrap">${titlePrefix}<span class="math-font">${curExpr}</span></span>
+          </div>
+        `);
+      }
+
+      if (showSecondBase) {
+        items.push(`
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-1 rounded bg-rose-600 inline-block shrink-0"></span>
+            <span class="font-bold text-slate-800 whitespace-nowrap">對數基準：<span class="math-font">y = log<sub>${currentA.toFixed(2)}</sub> x</span></span>
           </div>
         `);
       }
 
       if (isBaseChanged && document.getElementById('showInitialGhost').checked) {
-        const initExpr = currentFuncType === 'exp'
+        const initExpr = currentFuncType === 'log'
+          ? `y = log<sub>${formatCleanBase(initialA)}</sub> x`
+          : currentFuncType === 'exp'
           ? `y = ${formatCleanBase(initialA)}<sup>x</sup>`
-          : `y = log<sub>${formatCleanBase(initialA)}</sub> x`;
+          : `a<sub>0</sub> = ${formatCleanBase(initialA)}`;
         items.push(`
           <div class="flex items-center gap-2 text-slate-500">
             <span class="w-4 h-0.5 border-b-2 border-dashed border-slate-500 inline-block shrink-0"></span>
