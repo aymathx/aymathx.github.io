@@ -81,7 +81,7 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 
 /* ---------- floating pill nav ---------- */
 .tabbar { position: fixed; left: 0; right: 0; bottom: calc(var(--safe-b) + 14px); z-index: 40; display: flex; justify-content: center; pointer-events: none; }
-.tabbar-inner { pointer-events: auto; display: grid; grid-template-columns: repeat(4, 1fr); width: min(420px, calc(100% - 40px)); background: rgba(255, 255, 255, .95); -webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px); border-radius: 999px; box-shadow: 0 10px 30px -6px rgba(37, 99, 235, .25); padding: 6px; }
+.tabbar-inner { pointer-events: auto; display: grid; grid-template-columns: repeat(5, 1fr); width: min(460px, calc(100% - 28px)); background: rgba(255, 255, 255, .95); -webkit-backdrop-filter: blur(15px); backdrop-filter: blur(15px); border-radius: 999px; box-shadow: 0 10px 30px -6px rgba(37, 99, 235, .25); padding: 6px; }
 .tab { position: relative; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 0 5px; border-radius: 999px; color: #94A3B8; font-size: 10.5px; font-weight: 700; }
 .tab svg { width: 24px; height: 24px; fill: currentColor; }
 .tab.active { color: var(--blue); }
@@ -307,9 +307,11 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 .res-name { font-weight: 800; color: var(--navy); }
 .res-when { font-size: 12.5px; color: var(--muted); }
 .status { font-size: 12px; font-weight: 800; border-radius: 999px; padding: 4px 10px; border: 0; min-height: 30px; -webkit-appearance: none; appearance: none; }
-.st-已購, .st-已訂 { background: var(--blue-soft); color: var(--blue); }
+.st-已購, .st-已訂 { background: #DCFCE7; color: #16A34A; }
 .st-未訂 { background: var(--red-soft); color: var(--red); }
-.st-不需預約, .st-待查, .st-現場買 { background: #EEF1F6; color: var(--ink-2); }
+.st-現場買 { background: #DBEAFE; color: #2563EB; }
+.st-待查 { background: #FEF3C7; color: #B45309; }
+.st-不需預約 { background: #EEF1F6; color: var(--ink-2); }
 .conf-row { display: flex; gap: 8px; margin-top: 8px; }
 .conf-row input { flex: 1; min-width: 0; border: 1.5px solid var(--line); border-radius: 10px; padding: 7px 10px; font-family: ui-monospace, Menlo, monospace; font-weight: 700; letter-spacing: .04em; min-height: 40px; }
 .res-note { width: 100%; margin-top: 8px; border: 1.5px dashed var(--line); border-radius: 10px; padding: 7px 10px; font-size: 13.5px; min-height: 40px; resize: vertical; background: #FAFCFF; }
@@ -332,6 +334,41 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 .status-list div { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); }
 .status-list div:first-child { border-top: 0; }
 .update-banner { display: flex; gap: 10px; align-items: center; background: var(--blue-soft); color: var(--blue); border-radius: 14px; padding: 10px 12px; margin: 8px 0 12px; font-size: 13.5px; }
+
+/* ---------- 2026-10-22 調整：大視窗、清單編輯、資訊頁跳轉、預約列 ---------- */
+.day-note p { font-size: 14px; line-height: 1.7; }
+.day-note p + p { margin-top: 10px; }
+.big-text { width: 100%; min-height: 46vh; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px; background: #fff; line-height: 1.6; resize: vertical; }
+.big-text:focus { outline: none; border-color: var(--blue-2); box-shadow: 0 0 0 3px var(--blue-soft); }
+.field textarea.tap-edit { cursor: pointer; background: #F8FBFF; }
+.sec-row { display: flex; align-items: center; gap: 8px; margin: 24px 4px 10px; }
+.sec-row .sec-title { margin: 0; flex: 1; }
+.le-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid var(--line); }
+.le-row:first-child { border-top: 0; }
+.le-row .grow { flex: 1; min-width: 0; }
+.le-row .ttl { font-weight: 700; }
+.le-tools { display: flex; gap: 4px; flex: none; }
+.le-tools button { width: 34px; height: 34px; border-radius: 10px; background: var(--blue-soft); color: var(--blue); font-weight: 800; font-size: 15px; }
+.le-tools button.red { background: var(--red-soft); color: var(--red); }
+.le-add { margin-top: 10px; }
+.days-pick { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.days-pick label { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+.days-pick input { width: 20px; height: 20px; min-height: 0; accent-color: var(--blue); }
+.quick-nav { display: flex; gap: 4px; overflow-x: auto; margin: 8px -16px 0; padding: 0 6px 2px; scrollbar-width: none; }
+.quick-nav::-webkit-scrollbar { display: none; }
+.quick-nav[hidden] { display: none; }
+.quick-nav button { flex: none; padding: 5px 6px; border-radius: 999px; background: #fff; border: 1px solid var(--card-bd); font-family: var(--num); font-size: 10px; font-weight: 700; letter-spacing: .02em; color: var(--blue); }
+.quick-nav button:first-child { margin-left: auto; }
+.quick-nav button:last-child { margin-right: auto; }
+.topbar .title, .topbar .kicker { cursor: pointer; }
+.info-sec { scroll-margin-top: calc(var(--top-h, 120px) + 6px); }
+.res-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 0; border-top: 1px solid var(--line); }
+.res-row:first-child { border-top: 0; }
+.res-row .ico { width: 34px; height: 34px; border-radius: 10px; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; flex: none; }
+.res-row .ico svg { width: 19px; height: 19px; }
+.res-row .grow { flex: 1; min-width: 0; }
+.res-row .res-name, .res-row .res-when { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st-pill { flex: none; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 4px 10px; }
 
 /* ---------- sheets ---------- */
 .backdrop { position: fixed; inset: 0; background: rgba(14, 30, 60, .38); z-index: 60; opacity: 0; transition: opacity .2s; }
@@ -390,12 +427,16 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 <header class="topbar">
   <div class="kicker" id="countdown">KOBE CHRISTMAS 2026</div>
   <div class="title">【 神戸聖誕之旅 】</div>
+  <nav class="quick-nav" id="quickNav" aria-label="資訊頁快速跳轉" hidden>
+    <button data-jump="sec-visit">VISIT</button><button data-jump="sec-map">MAP</button><button data-jump="sec-emg">EMERGENCY</button><button data-jump="sec-hotel">HOTEL</button><button data-jump="sec-res">RESERVATIONS</button><button data-jump="sec-data">DATA</button>
+  </nav>
 </header>
 
 <main>
   <section id="view-trip" class="view active"></section>
   <section id="view-wallet" class="view"></section>
   <section id="view-tools" class="view"></section>
+  <section id="view-todo" class="view"></section>
   <section id="view-info" class="view"></section>
 </main>
 
@@ -404,6 +445,7 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
     <button class="tab active" data-view="trip" aria-label="行程"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>行程</button>
     <button class="tab" data-view="wallet" aria-label="錢包"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>錢包</button>
     <button class="tab" data-view="tools" aria-label="工具"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>工具</button>
+    <button class="tab" data-view="todo" aria-label="待辦"><svg viewBox="0 0 24 24"><path d="M22 7h-9v2h9V7zm0 8h-9v2h9v-2zM5.54 11 2 7.46l1.41-1.41 2.12 2.12 4.24-4.24 1.41 1.41L5.54 11zm0 8L2 15.46l1.41-1.41 2.12 2.12 4.24-4.24 1.41 1.41L5.54 19z"/></svg>待辦</button>
     <button class="tab" data-view="info" aria-label="資訊"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>資訊</button>
   </div>
 </nav>
@@ -627,77 +669,78 @@ const EMERGENCY = [
 ];
 
 /* 給司機看（交通卡片） */
+/* 2026-10-22：卡片一律加禮貌的開頭與結尾（中文「請問／您好…，謝謝」、日文「すみません…よろしくお願いします」）；緊急類只加結尾 */
 const TAXI = [
-  { ja: '神戸メリケンパークオリエンタルホテルまでお願いします。', sub: '〒650-0042 神戸市中央区波止場町5-6（メリケンパーク）', zh: '請載我們到神戶美利堅公園東方酒店' },
-  { ja: '神戸空港の海上アクセスターミナルまでお願いします。', sub: '関空行きの高速船（ベイ・シャトル）に乗ります。', zh: '到神戶機場的高速船碼頭（往關西機場）' },
-  { ja: '仔牛屋 神戸三宮店までお願いします。', sub: '中山手通1-25-6 ラ・ドルレイ神戸三宮 3階', zh: '仔牛屋 神戸三宮店' },
-  { ja: '一蘭 三宮店までお願いします。', sub: '北長狭通1-9-9 第1岸ビル', zh: '一蘭 三宮店' },
-  { ja: '神戸ラーメン第一旭 三宮本店までお願いします。', sub: '琴ノ緒町4-1-394（JR高架下）', zh: '第一旭 三宮本店' },
-  { ja: '焼肉しゃぶしゃぶ 石田屋。北野坂店までお願いします。', sub: '北長狭通1-20-13 北野坂壱番館 3階', zh: '石田屋 北野坂店' },
-  { ja: '神戸ハーバーランドのモザイクまでお願いします。', sub: 'モザイク大観覧車', zh: 'Harborland MOSAIC 摩天輪' },
-  { ja: '三宮駅までお願いします。', sub: '', zh: '三宮站' }
+  { ja: 'すみません、神戸メリケンパークオリエンタルホテルまでお願いします。ありがとうございます。', sub: '〒650-0042 神戸市中央区波止場町5-6（メリケンパーク）', zh: '請載我們到神戶美利堅公園東方酒店，謝謝。' },
+  { ja: 'すみません、神戸空港の海上アクセスターミナルまでお願いします。ありがとうございます。', sub: '関空行きの高速船（ベイ・シャトル）に乗ります。', zh: '請載我們到神戶機場的高速船碼頭（往關西機場），謝謝。' },
+  { ja: 'すみません、仔牛屋 神戸三宮店までお願いします。ありがとうございます。', sub: '中山手通1-25-6 ラ・ドルレイ神戸三宮 3階', zh: '請載我們到仔牛屋 神戸三宮店，謝謝。' },
+  { ja: 'すみません、一蘭 三宮店までお願いします。ありがとうございます。', sub: '北長狭通1-9-9 第1岸ビル', zh: '請載我們到一蘭 三宮店，謝謝。' },
+  { ja: 'すみません、神戸ラーメン第一旭 三宮本店までお願いします。ありがとうございます。', sub: '琴ノ緒町4-1-394（JR高架下）', zh: '請載我們到第一旭 三宮本店，謝謝。' },
+  { ja: 'すみません、焼肉しゃぶしゃぶ 石田屋。北野坂店までお願いします。ありがとうございます。', sub: '北長狭通1-20-13 北野坂壱番館 3階', zh: '請載我們到石田屋 北野坂店，謝謝。' },
+  { ja: 'すみません、神戸ハーバーランドのモザイクまでお願いします。ありがとうございます。', sub: 'モザイク大観覧車', zh: '請載我們到 Harborland MOSAIC 摩天輪，謝謝。' },
+  { ja: 'すみません、三宮駅までお願いします。ありがとうございます。', sub: '', zh: '請載我們到三宮站，謝謝。' }
 ];
 const PAY_PHRASES = [
-  ['カードで払えますか？', '可以刷卡嗎？'],
-  ['交通系IC（ICOCA）で払えますか？', '可以用 ICOCA 付嗎？'],
-  ['Apple Pay は使えますか？', '可以用 Apple Pay 嗎？'],
-  ['領収書をください。', '請給我收據'],
-  ['トランクに荷物を入れてもいいですか？', '行李可以放後車廂嗎？'],
-  ['ここで降ります。', '我們在這裡下車']
+  ['すみません、カードで払えますか？よろしくお願いします。', '請問可以刷卡嗎？謝謝。'],
+  ['すみません、交通系IC（ICOCA）で払えますか？よろしくお願いします。', '請問可以用 ICOCA 付嗎？謝謝。'],
+  ['すみません、Apple Pay は使えますか？よろしくお願いします。', '請問可以用 Apple Pay 嗎？謝謝。'],
+  ['すみません、領収書をいただけますか？ありがとうございます。', '不好意思，請給我收據，謝謝。'],
+  ['すみません、トランクに荷物を入れてもいいですか？ありがとうございます。', '請問行李可以放後車廂嗎？謝謝。'],
+  ['ここで降ります。ありがとうございました。', '我們在這裡下車，謝謝。']
 ];
 
 /* 指差し会話 POINT & SPEAK */
 const PHRASES = {
   '餐廳': [
-    ['我們兩位，有預約（名字：〇〇）', '2名で予約している〇〇です。'],
-    ['我們兩位，沒有預約', '2名です。予約はしていません。'],
-    ['這道菜有洋蔥嗎？', 'この料理に玉ねぎは入っていますか？'],
-    ['可以不放洋蔥嗎？', '玉ねぎ抜きにできますか？'],
-    ['裡面有芋頭（里芋）嗎？', '里芋・タロイモは入っていますか？'],
-    ['她不吃生的，可以煮全熟嗎？', '彼女は生ものが食べられません。しっかり火を通してもらえますか？'],
-    ['牛肉熟度：不見血、也不要過熟', '焼き加減はミディアムウェルでお願いします。'],
-    ['壽喜燒有附生蛋嗎？', 'すき焼きに生卵は付いていますか？'],
-    ['推薦什麼？', 'おすすめは何ですか？'],
-    ['有中文或英文菜單嗎？', '中国語か英語のメニューはありますか？'],
-    ['請給我水', 'お水をください。'],
-    ['結帳', 'お会計をお願いします。'],
-    ['可以刷卡嗎？', 'カードは使えますか？'],
-    ['可以外帶嗎？', '持ち帰りできますか？']
+    ['您好，我們兩位，有預約（名字：〇〇），謝謝。', 'すみません、2名で予約している〇〇です。よろしくお願いいたします。'],
+    ['您好，我們兩位，沒有預約，請問現在有位子嗎？謝謝。', 'すみません、予約はしていないのですが、2名で入れますか？よろしくお願いいたします。'],
+    ['請問這道菜有洋蔥嗎？謝謝。', 'すみません、この料理に玉ねぎは入っていますか？教えていただけると助かります。'],
+    ['請問可以不放洋蔥嗎？謝謝。', '恐れ入りますが、玉ねぎ抜きにしていただけますか？よろしくお願いいたします。'],
+    ['請問裡面有芋頭（里芋）嗎？謝謝。', 'すみません、里芋・タロイモは入っていますか？教えていただけると助かります。'],
+    ['不好意思，她不吃生的，請問可以煮全熟嗎？謝謝。', '恐れ入りますが、彼女は生ものが食べられません。しっかり火を通していただけますか？よろしくお願いいたします。'],
+    ['請問牛肉可以煎到不見血、也不要過熟嗎？謝謝。', '恐れ入りますが、お肉の焼き加減はミディアムウェルでお願いできますか？よろしくお願いいたします。'],
+    ['請問壽喜燒有附生蛋嗎？謝謝。', 'すみません、すき焼きに生卵は付いていますか？教えていただけると助かります。'],
+    ['請問推薦什麼？謝謝。', 'すみません、おすすめは何ですか？教えていただけると嬉しいです。'],
+    ['請問有中文或英文菜單嗎？謝謝。', 'すみません、中国語か英語のメニューはありますか？よろしくお願いします。'],
+    ['不好意思，請給我水，謝謝。', 'すみません、お水をいただけますか？ありがとうございます。'],
+    ['不好意思，我們要結帳，謝謝。', 'すみません、お会計をお願いします。ごちそうさまでした。'],
+    ['請問可以刷卡嗎？謝謝。', 'すみません、カードは使えますか？よろしくお願いします。'],
+    ['請問可以外帶嗎？謝謝。', 'すみません、持ち帰りはできますか？よろしくお願いします。']
   ],
   '交通': [
-    ['高速船在哪裡搭？', 'ベイ・シャトルの乗り場はどこですか？'],
-    ['兩張到神戶機場的票', '神戸空港まで大人2枚ください。'],
-    ['兩張到關西機場的票', '関西空港まで大人2枚ください。'],
-    ['計程車招呼站在哪裡？', 'タクシー乗り場はどこですか？'],
-    ['這班車會到〇〇嗎？', 'この電車は〇〇に行きますか？'],
-    ['要在哪裡轉車？', 'どこで乗り換えればいいですか？'],
-    ['請到這個地址', 'この住所までお願いします。'],
-    ['請在這裡停車', 'ここで止めてください。']
+    ['請問高速船在哪裡搭？謝謝。', 'すみません、ベイ・シャトルの乗り場はどこですか？教えていただけると助かります。'],
+    ['您好，請給我兩張到神戶機場的票，謝謝。', 'すみません、神戸空港まで大人2枚お願いします。ありがとうございます。'],
+    ['您好，請給我兩張到關西機場的票，謝謝。', 'すみません、関西空港まで大人2枚お願いします。ありがとうございます。'],
+    ['請問計程車招呼站在哪裡？謝謝。', 'すみません、タクシー乗り場はどこですか？教えていただけると助かります。'],
+    ['請問這班車會到〇〇嗎？謝謝。', 'すみません、この電車は〇〇に行きますか？教えていただけると助かります。'],
+    ['請問要在哪裡轉車？謝謝。', 'すみません、どこで乗り換えればいいですか？教えていただけると助かります。'],
+    ['您好，請載我們到這個地址，謝謝。', 'すみません、この住所までお願いします。ありがとうございます。'],
+    ['不好意思，請在這裡停車，謝謝。', 'すみません、ここで止めていただけますか？ありがとうございます。']
   ],
   '飯店': [
-    ['我要辦理入住，訂房名字是〇〇', 'チェックインをお願いします。予約名は〇〇です。'],
-    ['我們大約 23:00 才會到', '到着は23時頃になります。'],
-    ['退房後可以寄放行李嗎？', 'チェックアウト後、荷物を預かってもらえますか？'],
-    ['早餐在哪裡？幾點到幾點？', '朝食の会場と時間を教えてください。'],
-    ['去三宮的免費接駁巴士在哪裡搭？', '三宮行きの無料シャトルバスはどこから乗れますか？'],
-    ['請幫我們叫計程車', 'タクシーを呼んでもらえますか？']
+    ['您好，我要辦理入住，訂房名字是〇〇，謝謝。', 'すみません、チェックインをお願いします。予約名は〇〇です。よろしくお願いいたします。'],
+    ['不好意思，我們大約 23:00 才會到，謝謝。', '恐れ入りますが、到着は23時頃になります。よろしくお願いいたします。'],
+    ['請問退房後可以寄放行李嗎？謝謝。', 'すみません、チェックアウト後に荷物を預かっていただけますか？よろしくお願いいたします。'],
+    ['請問早餐在哪裡？幾點到幾點？謝謝。', 'すみません、朝食の会場と時間を教えていただけますか？ありがとうございます。'],
+    ['請問去三宮的免費接駁巴士在哪裡搭？謝謝。', 'すみません、三宮行きの無料シャトルバスはどこから乗れますか？教えていただけると助かります。'],
+    ['不好意思，請幫我們叫計程車，謝謝。', 'すみません、タクシーを呼んでいただけますか？よろしくお願いいたします。']
   ],
   '購物': [
-    ['我要這個', 'これをください。'],
-    ['可以免稅嗎？我有護照', '免税できますか？パスポートを持っています。'],
-    ['不需要袋子', '袋は要りません。'],
-    ['可以包成禮物嗎？', 'プレゼント用に包んでもらえますか？'],
-    ['有北星的「大人の鉛筆」嗎？', '北星鉛筆の「大人の鉛筆」はありますか？'],
-    ['〇〇在哪裡？', '〇〇はどこにありますか？']
+    ['您好，我要這個，謝謝。', 'すみません、こちらをお願いします。ありがとうございます。'],
+    ['請問可以免稅嗎？我有護照，謝謝。', 'すみません、免税はできますか？パスポートを持っています。よろしくお願いします。'],
+    ['不好意思，不需要袋子，謝謝。', 'すみません、袋は大丈夫です。ありがとうございます。'],
+    ['請問可以包成禮物嗎？謝謝。', 'すみません、プレゼント用に包んでいただけますか？よろしくお願いします。'],
+    ['請問有北星的「大人の鉛筆」嗎？謝謝。', 'すみません、北星鉛筆の「大人の鉛筆」はありますか？教えていただけると助かります。'],
+    ['請問〇〇在哪裡？謝謝。', 'すみません、〇〇はどこにありますか？教えていただけると助かります。']
   ],
   '緊急': [
-    ['救命！', '助けてください！'],
-    ['請叫救護車', '救急車を呼んでください。'],
-    ['請叫警察', '警察を呼んでください。'],
-    ['我的錢包／手機掉了', '財布（スマホ）をなくしました。'],
-    ['我身體不舒服', '気分が悪いです。'],
-    ['請帶我去醫院', '病院に連れて行ってください。'],
-    ['有會說中文或英文的人嗎？', '中国語か英語を話せる人はいますか？']
+    ['救命！請幫幫我！', '助けてください！お願いします！'],
+    ['請叫救護車，拜託！', '救急車を呼んでください。お願いします！'],
+    ['請叫警察，拜託！', '警察を呼んでください。お願いします！'],
+    ['我的錢包／手機掉了，請幫幫我。', '財布（スマホ）をなくしました。助けていただけますか？'],
+    ['我身體不舒服，請幫幫我。', '気分が悪いです。助けていただけますか？'],
+    ['請帶我去醫院，拜託。', '病院に連れて行っていただけますか？お願いします。'],
+    ['請問有會說中文或英文的人嗎？謝謝。', 'すみません、中国語か英語を話せる方はいますか？お願いします。']
   ]
 };
 
@@ -1190,6 +1233,130 @@ function openFullCard(render, tabs) {
 }
 
 /* =========================================================
+   可編輯清單：預設內容寫在程式裡；改過就整份存進手機（ox26.list.名稱）
+   編輯模式下每一項有 ↑ ↓ ✎ ✕，新增和修改都用小視窗
+   ========================================================= */
+const LIST_KEY = 'ox26.list.';
+const LIST_DEFAULTS = {
+  todo: () => TODOS,
+  rit: () => Object.entries(RITUALS).map(([id, r]) => ({ id, ...r })),
+  usjHl: () => USJ.highlights.map(([id, name, desc]) => ({ id, name, desc })),
+  res: () => RESERVATIONS,
+  emg: () => EMERGENCY.map((c, i) => ({ id: 'em' + i, ...c })),
+  taxi: () => TAXI.map((t, i) => ({ id: 'tx' + i, ...t })),
+  pay: () => PAY_PHRASES.map(([ja, zh], i) => ({ id: 'pp' + i, ja, zh })),
+  phrase: () => Object.entries(PHRASES).flatMap(([cat, arr]) => arr.map(([zh, ja], i) => ({ id: `ph-${cat}-${i}`, cat, zh, ja }))),
+  light: () => LIGHTS.map((l, i) => ({ id: 'lt' + i, ...l })),
+  transit: () => TRANSIT.map(([k, v], i) => ({ id: 'tr' + i, k, v }))
+};
+const RES_ICONS = [['flight', '✈️ 航班'], ['boat', '⛴️ 船'], ['taxi', '🚕 車'], ['train', '🚃 電車'], ['hotel', '🏨 住宿'], ['food', '🍴 餐廳'], ['cafe', '☕ 咖啡'], ['ticket', '🎟️ 票券'], ['place', '📍 地點']];
+const F = (k, label, type = 'text', req = false, opts = []) => ({ k, label, type, req, opts });
+const LIST_FIELDS = {
+  todo: [F('text', '待辦內容', 'textarea', true), F('due', '建議期限', 'date', true)],
+  rit: [F('label', '名稱（例：一蘭 12/24）', 'text', true), F('sub', '說明'), F('who', '誰的儀式', 'select', true, [['Aaron', 'Aaron 的拉麵'], ['Yvonne', 'Yvonne 的下午茶']]), F('icon', '圖示（一個 emoji，可空）')],
+  usjHl: [F('name', '亮點名稱', 'text', true), F('desc', '說明', 'textarea')],
+  res: [F('name', '名稱', 'text', true), F('when', '時間'), F('how', '怎麼訂（公開資訊）', 'textarea'), F('icon', '圖示', 'select', true, RES_ICONS), F('status', '預設狀態', 'select', true, RES_STATUSES.map(s => [s, s])), F('phone', '電話', 'tel'), F('url', '預約網址', 'url')],
+  emg: [F('name', '名稱', 'text', true), F('sub', '說明'), F('num', '電話', 'tel', true), F('icon', '圖示（一個 emoji，可空）')],
+  taxi: [F('zh', '中文（自己看）', 'text', true), F('ja', '日文（給司機看）', 'textarea', true), F('sub', '地址或補充（可空）')],
+  pay: [F('zh', '中文', 'text', true), F('ja', '日文（給對方看）', 'textarea', true)],
+  phrase: [F('cat', '分類（選既有的或打新的）', 'cat', true), F('zh', '中文', 'textarea', true), F('ja', '日文（給對方看）', 'textarea', true)],
+  light: [F('name', '名稱', 'text', true), F('place', '地點'), F('time', '時間'), F('status', '狀態／備註', 'textarea'), F('dates', '顯示在哪幾天的行程頁', 'days'), F('url', '來源網址', 'url')],
+  transit: [F('k', '項目', 'text', true), F('v', '內容', 'textarea', true)]
+};
+const LIST_GROUP = { rit: 'who', phrase: 'cat' };
+let listEdit = null;
+
+function getList(name) {
+  const v = store.get(LIST_KEY + name, null);
+  return Array.isArray(v) ? v : structuredClone(LIST_DEFAULTS[name]());
+}
+function saveList(name, arr) { store.set(LIST_KEY + name, arr); }
+const itemTitle = it => it.label || it.name || it.text || it.zh || it.k || '這一項';
+
+function leToggle(name) {
+  return `<button class="btn btn-sm ${listEdit === name ? 'btn-primary' : 'btn-ghost'}" data-le-toggle="${name}">${listEdit === name ? '✓ 完成' : ic('edit') + ' 編輯'}</button>`;
+}
+function leTools(name, id) {
+  const b = (act, label, txt, cls = '') => `<button class="${cls}" data-le="${act}" data-name="${name}" data-id="${esc(id)}" aria-label="${label}">${txt}</button>`;
+  return `<span class="le-tools">${b('up', '上移', '↑')}${b('down', '下移', '↓')}${b('edit', '編輯', '✎')}${b('del', '刪除', '✕', 'red')}</span>`;
+}
+function leAdd(name, preset = {}) {
+  return `<button class="btn btn-ghost btn-block le-add" data-le="add" data-name="${name}" data-preset="${esc(JSON.stringify(preset))}">＋ 新增</button>`;
+}
+/* 上下移；分組的清單（儀式、會話）只在同一組裡移動 */
+function moveItem(list, i, dir, gk) {
+  let j = i + dir;
+  while (gk && j >= 0 && j < list.length && list[j][gk] !== list[i][gk]) j += dir;
+  if (j < 0 || j >= list.length) return false;
+  [list[i], list[j]] = [list[j], list[i]];
+  return true;
+}
+
+/* 清單編輯的點擊；處理了就回傳 true */
+async function listClick(e, redraw) {
+  const tg = e.target.closest('[data-le-toggle]');
+  if (tg) { listEdit = listEdit === tg.dataset.leToggle ? null : tg.dataset.leToggle; redraw(); return true; }
+  const b = e.target.closest('[data-le]');
+  if (!b) return false;
+  const name = b.dataset.name;
+  const list = getList(name);
+  const i = list.findIndex(x => x.id === b.dataset.id);
+  const act = b.dataset.le;
+  const done = () => { saveList(name, list); redraw(); refreshBehind(); };
+  if (act === 'add') {
+    openItemForm(name, JSON.parse(b.dataset.preset || '{}'), true, item => {
+      /* 待辦依期限插進去，其他放最後 */
+      const at = name === 'todo' ? list.findIndex(t => t.due > item.due) : -1;
+      list.splice(at < 0 ? list.length : at, 0, item);
+      done();
+    });
+  } else if (i < 0) {
+    return true;
+  } else if (act === 'edit') {
+    openItemForm(name, list[i], false, item => { list[i] = item; done(); });
+  } else if (act === 'del') {
+    if (await askConfirm(`刪除「${itemTitle(list[i])}」？`, '刪除')) { list.splice(i, 1); done(); }
+  } else if (moveItem(list, i, act === 'up' ? -1 : 1, LIST_GROUP[name])) done();
+  return true;
+}
+
+/* 新增／編輯的小視窗 */
+function openItemForm(name, item, isNew, onSave) {
+  const fields = LIST_FIELDS[name];
+  const days = sortedDays();
+  const input = f => {
+    const v = item[f.k] ?? '';
+    const req = f.req ? 'required' : '';
+    if (f.type === 'textarea') return `<textarea name="${f.k}" ${req}>${esc(v)}</textarea>`;
+    if (f.type === 'select') return `<select name="${f.k}">${f.opts.map(([val, lab]) => `<option value="${esc(val)}" ${val === v ? 'selected' : ''}>${esc(lab)}</option>`).join('')}</select>`;
+    if (f.type === 'days') return `<div class="days-pick">${days.map(d => `<label><input type="checkbox" name="${f.k}" value="${esc(d.date)}" ${(Array.isArray(v) ? v : []).includes(d.date) ? 'checked' : ''}>${md(d.date)}（${wd(d.date)}）</label>`).join('')}</div>`;
+    if (f.type === 'cat') return `<input name="${f.k}" list="leCats" value="${esc(v)}" ${req}><datalist id="leCats">${[...new Set(getList('phrase').map(p => p.cat))].map(c => `<option value="${esc(c)}">`).join('')}</datalist>`;
+    const type = { tel: 'tel', url: 'url', date: 'date' }[f.type] || 'text';
+    return `<input name="${f.k}" type="${type}" value="${esc(v)}" ${req}>`;
+  };
+  openSheet(isNew ? '新增' : '編輯', `<form id="leForm">${fields.map(f => f.type === 'days'
+      ? `<div class="field"><span>${esc(f.label)}</span>${input(f)}</div>`
+      : `<label class="field"><span>${esc(f.label)}</span>${input(f)}</label>`).join('')}
+    <div class="btn-row"><button type="button" class="btn btn-ghost" data-a="cancel">取消</button><button class="btn btn-primary">儲存</button></div></form>`, (body, entry) => {
+    const form = $('#leForm', body);
+    $('[data-a=cancel]', body).onclick = () => closeSheet(entry);
+    form.onsubmit = ev => {
+      ev.preventDefault();
+      const fd = new FormData(form);
+      const out = Object.assign({}, item, { id: item.id || uid(name) });
+      for (const f of fields) {
+        if (f.type === 'days') { out[f.k] = fd.getAll(f.k); continue; }
+        const val = String(fd.get(f.k) ?? '').trim();
+        if (f.type === 'url' && val && !safeUrl(val)) return toast('網址要用 http:// 或 https:// 開頭');
+        if (val) out[f.k] = val; else delete out[f.k];
+      }
+      closeSheet(entry);
+      onSave(out);
+    };
+  });
+}
+
+/* =========================================================
    導覽
    ========================================================= */
 function switchView(v) {
@@ -1198,10 +1365,15 @@ function switchView(v) {
   $$('.view').forEach(el => el.classList.toggle('active', el.id === 'view-' + v));
   $$('.tab').forEach(el => el.classList.toggle('active', el.dataset.view === v));
   $('#nowFab').classList.toggle('show', v === 'trip');
+  $('#quickNav').hidden = v !== 'info';
+  setTopH();
+  listEdit = null;
   RENDER[v]();
   window.scrollTo(0, 0);
 }
-const RENDER = { trip: renderTrip, wallet: renderWallet, tools: renderTools, info: renderInfo };
+const RENDER = { trip: renderTrip, wallet: renderWallet, tools: renderTools, todo: renderTodo, info: renderInfo };
+/* 置頂標題列的高度：資訊頁跳轉時不要被標題蓋住 */
+const setTopH = () => document.documentElement.style.setProperty('--top-h', $('.topbar').offsetHeight + 'px');
 
 function renderCountdown() {
   const today = nowAt(8).date;
@@ -1213,15 +1385,45 @@ function renderCountdown() {
   else el.innerHTML = `KOBE CHRISTMAS 2026 ・ MERRY X'MAS ✨`;
 }
 
-/* 下一步待辦改成「資訊」分頁上的小紅點：14 天內到期或已過期、還沒打勾 */
+/* 「待辦」分頁上的小紅點：14 天內到期或已過期、還沒打勾 */
 function updateTabDots() {
   const today = nowAt(8).date;
   const soon = new Date(Date.parse(today + 'T00:00:00Z') + 14 * 864e5).toISOString().slice(0, 10);
   const done = store.get(K.todo, {});
-  const due = today <= TRIP_END && TODOS.some(t => !done[t.id] && t.due <= soon);
-  const tab = $('.tab[data-view="info"]');
+  const due = today <= TRIP_END && getList('todo').some(t => !done[t.id] && t.due <= soon);
+  const tab = $('.tab[data-view="todo"]');
   tab.classList.toggle('dot', due);
-  tab.setAttribute('aria-label', due ? '資訊（有快到期的待辦）' : '資訊');
+  tab.setAttribute('aria-label', due ? '待辦（有快到期的項目）' : '待辦');
+}
+
+/* =========================================================
+   待辦（行前 TO-DO）
+   ========================================================= */
+function renderTodo() {
+  const v = $('#view-todo');
+  const done = store.get(K.todo, {});
+  const today = nowAt(8).date;
+  const list = getList('todo');
+  const ed = listEdit === 'todo';
+  v.innerHTML = `<div class="sec-row"><div class="sec-title">TO-DO ${list.filter(t => done[t.id]).length}/${list.length}</div>${leToggle('todo')}</div>
+    <div class="card">${list.map(t => {
+      const ok = !!done[t.id];
+      const late = !ok && t.due < today;
+      const due = `<div class="small ${late ? '' : 'muted'}" ${late ? 'style="color:var(--red);font-weight:700"' : ''}>${late ? '⚠️ 已過建議日 ' : '建議 '}${md(t.due)} 前</div>`;
+      return ed ? `<div class="le-row"><span class="grow"><div class="ttl">${esc(t.text)}</div>${due}</span>${leTools('todo', t.id)}</div>`
+        : `<button class="list-row ${ok ? 'done' : ''}" data-todo="${esc(t.id)}" style="width:100%;text-align:left"><span class="chk ${ok ? 'on' : ''}">${ok ? '✓' : ''}</span><span class="grow"><div class="ttl">${esc(t.text)}</div>${due}</span></button>`;
+    }).join('') || '<div class="empty">沒有待辦</div>'}
+    ${ed ? leAdd('todo', { due: today }) : ''}</div>`;
+  updateTabDots();
+  v.onclick = async e => {
+    if (await listClick(e, renderTodo)) return;
+    const td = e.target.closest('[data-todo]');
+    if (!td) return;
+    const all = store.get(K.todo, {});
+    if (all[td.dataset.todo]) delete all[td.dataset.todo]; else all[td.dataset.todo] = Date.now();
+    store.set(K.todo, all);
+    renderTodo();
+  };
 }
 
 /* =========================================================
@@ -1262,7 +1464,7 @@ function renderDay(day) {
   const isLast = day.date === TRIP_END;
   const hotelLine = isFirst ? HOTEL.firstNight : isLast ? HOTEL.lastDay : HOTEL.midStay;
   const sun = sunTimes(day.date, loc.lat, loc.lon);
-  const nLights = LIGHTS.filter(l => l.dates.includes(day.date)).length;
+  const nLights = getList('light').filter(l => (l.dates || []).includes(day.date)).length;
   const dv = $('#dayView');
   dv.innerHTML = `
     <div class="day-wrap">
@@ -1292,7 +1494,7 @@ function renderDay(day) {
     <div class="timeline ${ui.editing ? 'editing' : ''}" id="timeline">${renderTimelineHtml(day, br)}</div>
     <div class="add-ev"><button class="btn btn-ghost btn-sm" data-act="add-ev">＋ 新增行程</button></div>
     ${dayMapHtml(day)}
-    ${day.note ? `<div class="card day-note"><div class="card-title">備註</div><div style="white-space:pre-wrap;font-size:14px">${esc(day.note)}</div></div>` : ''}`;
+    ${day.note ? `<div class="card day-note"><div class="card-title">備註</div>${noteHtml(day.note)}</div>` : ''}`;
   applyHeroImage(day);
   dv.onclick = async e => {
     const a = e.target.closest('[data-act],[data-ev],[data-b]');
@@ -1311,6 +1513,33 @@ function renderDay(day) {
     else if (act === 'wx-retry') renderWeather(day, true);
   };
   renderWeather(day);
+}
+
+/* 備註：每段一個區塊，句號「。」後換行 */
+function noteHtml(text) {
+  return String(text).split('\n').filter(l => l.trim())
+    .map(l => `<p>${esc(l.trim()).replace(/。(?!$)/g, '。<br>')}</p>`).join('');
+}
+
+/* 長文字用大視窗編輯（舊版「編輯內容」視窗）；Enter、Shift＋Enter 都是換行，按確定才帶回 */
+function openTextEditor(title, value, onOk) {
+  openSheet(title, `<textarea class="big-text" id="bigText">${esc(value)}</textarea>
+    <div class="small muted" style="margin-top:6px">Enter 或 Shift＋Enter 都是換行，按「確定」才會帶回表單。</div>
+    <div class="btn-row"><button type="button" class="btn btn-ghost" data-a="no">取消</button><button type="button" class="btn btn-primary" data-a="ok">確定</button></div>`, (body, entry) => {
+    const ta = $('#bigText', body);
+    setTimeout(() => ta.focus(), 260);
+    body.onclick = e => {
+      const a = e.target.closest('[data-a]');
+      if (!a) return;
+      if (a.dataset.a === 'ok') onOk(ta.value);
+      closeSheet(entry);
+    };
+  });
+}
+/* 表單裡的唯讀 textarea：點一下開大視窗 */
+function bindTextEditor(ta, title) {
+  ta.readOnly = true;
+  ta.onclick = () => openTextEditor(title, ta.value, v => { ta.value = v; });
 }
 
 /* 當天的日出日落＋點燈（原本攤在行程頁，設計稿 2B 收成一行） */
@@ -1418,7 +1647,7 @@ function refreshNowHighlight() {
 function renderSunStrip(day, loc) {
   const s = sunTimes(day.date, loc.lat, loc.lon);
   const dusk = sunTimes(day.date, loc.lat, loc.lon, -6).set;
-  const lights = LIGHTS.filter(l => l.dates.includes(day.date));
+  const lights = getList('light').filter(l => (l.dates || []).includes(day.date));
   const shows = store.get(K.shows, []);
   return `<div class="info-strip"><div class="strip-head"><b>日落・點燈</b><span class="muted small">日出日落為計算值</span></div>
     <div class="sun-row"><span>🌅 日出 <b>${s.rise}</b></span><span>🌇 日落 <b>${s.set}</b></span><span>🌃 天黑 <b>${dusk}</b></span></div>
@@ -1575,10 +1804,11 @@ function openEventEditor(day, e) {
     <label class="field"><span>Google Maps 搜尋字</span><input name="map" value="${esc(v.map || '')}"></label>
     <label class="field"><span>官網／預約連結</span><input name="url" type="url" value="${esc(v.url || '')}"></label>
     <label class="field"><span>注意事項（紅字）</span><input name="warn" value="${esc(v.warn || '')}"></label>
-    <label class="field"><span>說明</span><textarea name="desc">${esc(v.desc || '')}</textarea></label>
+    <label class="field"><span>說明（點一下用大視窗編輯）</span><textarea name="desc" class="tap-edit">${esc(v.desc || '')}</textarea></label>
     <div class="btn-row"><button type="button" class="btn btn-ghost" data-act="cancel">取消</button><button class="btn btn-primary">儲存</button></div>
   </form>`, (body, entry) => {
     const f = $('#evForm', body);
+    bindTextEditor(f.desc, '說明');
     $('[data-act=cancel]', body).onclick = () => closeSheet(entry);
     f.onsubmit = ev => {
       ev.preventDefault();
@@ -1617,12 +1847,13 @@ function openDayEditor(day) {
     <label class="check-line"><input type="checkbox" name="hasBranch" ${v.branches ? 'checked' : ''}>這天有 A／B 兩個方案</label>
     <div class="row2"><label class="field"><span>A 案名稱</span><input name="brA" value="${esc(v.branches?.A || 'A 案')}"></label>
       <label class="field"><span>B 案名稱</span><input name="brB" value="${esc(v.branches?.B || 'B 案')}"></label></div>
-    <label class="field"><span>備註</span><textarea name="note">${esc(v.note || '')}</textarea></label>
+    <label class="field"><span>備註（點一下用大視窗編輯）</span><textarea name="note" class="tap-edit">${esc(v.note || '')}</textarea></label>
     <label class="field"><span>今日地圖（可空：填地點名稱，或貼 Google 地圖的嵌入網址）</span><input name="mapEmbed" value="${esc(v.mapEmbed || '')}" placeholder="例：メリケンパーク"></label>
     <label class="field"><span>地圖連結（可空：Google Maps 清單或導航網址）</span><input name="mapLink" type="url" value="${esc(v.mapLink || '')}" placeholder="https://maps.app.goo.gl/…"></label>
     <div class="btn-row">${isNew ? '' : '<button type="button" class="btn btn-danger" data-act="del">刪除這天</button>'}<button class="btn btn-primary">儲存</button></div>
   </form>`, (body, entry) => {
     const f = $('#dayForm', body);
+    bindTextEditor(f.note, '備註');
     let pendingBg = null;
     body.addEventListener('click', async ev => {
       const a = ev.target.closest('[data-act]');
@@ -1692,7 +1923,7 @@ function openHotel() {
     body.onclick = e => {
       const c = e.target.closest('[data-copy]');
       if (c) return copyText(c.dataset.copy);
-      if (e.target.closest('[data-act=taxi]')) showTaxiCard(TAXI[0]);
+      if (e.target.closest('[data-act=taxi]')) showTaxiCard(getList('taxi')[0] || TAXI[0]);
     };
   });
 }
@@ -1744,7 +1975,7 @@ function renderWallet() {
   v.innerHTML = `
     <div class="sec-title">WALLET</div>
     <div class="card rate-card">
-      <div class="card-title">匯率換算<span class="sp"></span><span class="rate-meta">${r.locked ? '🔒 已鎖定' : esc(r.src)}${r.ts ? '・' + fmtTs(r.ts) : ''}</span></div>
+      <div class="card-title">匯率換算</div>
       <div class="conv">
         <div class="conv-row"><span class="cur" id="curTop">${convDir}</span><input id="convTop" inputmode="decimal" placeholder="0"></div>
         <button class="swap" id="swapBtn" aria-label="交換幣別">⇅</button>
@@ -1880,16 +2111,16 @@ function renderWallet() {
    ========================================================= */
 function ritProgress() {
   const st = store.get(K.rit, {});
-  const ids = Object.keys(RITUALS);
-  return { done: ids.filter(k => st[k]).length, total: ids.length };
+  const list = getList('rit');
+  return { done: list.filter(r => st[r.id]).length, total: list.length, a: list.filter(r => r.who === 'Aaron').length, y: list.filter(r => r.who === 'Yvonne').length };
 }
 
 function renderTools() {
   const v = $('#view-tools');
   const rp = ritProgress();
   const tiles = [
-    ['redline', 'block', '過敏紅線卡', '全螢幕日文卡：玉ねぎ／タロイモ完全NG', true],
-    ['rituals', 'ramen', '儀式清單', `拉麵 ×4・下午茶 ×2｜${rp.done}/${rp.total}`],
+    ['redline', 'block', '過敏紅線卡', '全螢幕日文卡：玉ねぎ／タロイモ完全NG＋兩人飲食喜好', true],
+    ['rituals', 'ramen', '儀式清單', `拉麵 ×${rp.a}・下午茶 ×${rp.y}｜${rp.done}/${rp.total}`],
     ['usj', 'globe', 'USJ 聖誕', '聖誕亮點、演出場次、官方 App'],
     ['sun', 'sunset', '日落・點燈', '每日日落時刻＋燈飾時間'],
     ['phrase', 'chat', '指差し会話', '點一下放大給店員看'],
@@ -1912,6 +2143,7 @@ function openRedLine() {
     <div class="fc-yn ja"><span class="y">⭕ 対応できます</span><span class="n">❌ できません</span></div>`;
   const intro = `<p class="fc-ja ja">申し訳ありませんが、以下の食材が一切食べられません。<br>ソース・だし・調味料・付け合わせに入っている場合や、調理器具・鉄板への接触もNGです。</p>`;
   openFullCard(k => {
+    if (k === 'pref') return `<span class="fc-badge blue">飲食喜好・給自己看</span><div style="margin-top:14px;font-size:15px">${FOOD_PREFS}</div>`;
     if (k === 'A') return `<span class="fc-badge ja">禁忌食材のお願い</span>
       <div class="fc-big ja"><span class="ng">玉ねぎ</span> <span class="nw">完全NG</span></div>${intro}
       <ul class="fc-list ja"><li>玉ねぎ <small>（オニオンソース・オニオンエキスも）</small></li></ul>${ask}
@@ -1925,29 +2157,34 @@ function openRedLine() {
       <div class="fc-big ja"><span class="ng">玉ねぎ</span> <span class="nw">完全NG</span><br><span class="ng">里芋・タロイモ</span> <span class="nw">完全NG</span></div>${intro}
       <ul class="fc-list ja"><li>玉ねぎ <small>（1人目）</small></li><li>里芋・タロイモ <small>（2人目）</small></li><li>刺身・生もの <small>（2人目／すき焼きの生卵はOK）</small></li></ul>${ask}
       <p class="fc-zh">中文：洋蔥、芋頭完全不能吃（含醬汁、高湯、配菜、器具接觸）。Yvonne 不吃生食（壽喜燒生蛋液 OK）。</p>`;
-  }, [['all', '兩人'], ['A', 'Aaron'], ['Y', 'Yvonne']]);
+  }, [['all', '兩人'], ['A', 'Aaron'], ['Y', 'Yvonne'], ['pref', '飲食喜好']]);
 }
 
 /* 儀式清單 */
 function openRituals() {
+  listEdit = null;
   const draw = body => {
     const st = store.get(K.rit, {});
+    const list = getList('rit');
     const { done, total } = ritProgress();
-    const item = id => {
-      const r = RITUALS[id];
-      return `<button class="list-row ${st[id] ? 'done' : ''}" data-r="${id}" style="width:100%;text-align:left"><span class="chk ${st[id] ? 'on' : ''}">${st[id] ? '✓' : ''}</span>
-        <span class="grow"><div class="ttl">${r.icon} ${esc(r.label)}</div><div class="small muted">${esc(r.sub)}${st[id] ? '・' + fmtTs(st[id]) : ''}</div></span></button>`;
+    const ed = listEdit === 'rit';
+    const item = r => {
+      const txt = `<span class="grow"><div class="ttl">${esc(r.icon || (r.who === 'Yvonne' ? '☕' : '🍜'))} ${esc(r.label)}</div><div class="small muted">${esc(r.sub || '')}${st[r.id] ? '・' + fmtTs(st[r.id]) : ''}</div></span>`;
+      return ed ? `<div class="le-row">${txt}${leTools('rit', r.id)}</div>`
+        : `<button class="list-row ${st[r.id] ? 'done' : ''}" data-r="${esc(r.id)}" style="width:100%;text-align:left"><span class="chk ${st[r.id] ? 'on' : ''}">${st[r.id] ? '✓' : ''}</span>${txt}</button>`;
     };
-    const group = who => Object.keys(RITUALS).filter(k => RITUALS[k].who === who).map(item).join('');
+    const group = who => list.filter(r => r.who === who).map(item).join('') || '<div class="empty">還沒有項目</div>';
     body.innerHTML = `
       <div class="card"><div class="total-box"><div><div class="muted small">儀式完成度</div><div class="big">${done} / ${total}</div></div><div style="font-size:30px">🎄</div></div>
-        <div class="progress"><i style="width:${Math.round(done / total * 100)}%"></i></div></div>
-      <div class="card"><div class="card-title">Aaron 的拉麵儀式</div>${group('Aaron')}</div>
-      <div class="card"><div class="card-title">Yvonne 的下午茶</div>${group('Yvonne')}</div>`;
+        <div class="progress"><i style="width:${total ? Math.round(done / total * 100) : 0}%"></i></div></div>
+      <div class="sec-row" style="margin:0 2px 10px"><span class="small muted" style="flex:1">點一下打勾；按編輯可以新增、修改、刪除、排序</span>${leToggle('rit')}</div>
+      <div class="card"><div class="card-title">Aaron 的拉麵儀式</div>${group('Aaron')}${ed ? leAdd('rit', { who: 'Aaron' }) : ''}</div>
+      <div class="card"><div class="card-title">Yvonne 的下午茶</div>${group('Yvonne')}${ed ? leAdd('rit', { who: 'Yvonne' }) : ''}</div>`;
   };
   openSheet('儀式清單', '', body => {
     draw(body);
-    body.onclick = e => {
+    body.onclick = async e => {
+      if (await listClick(e, () => draw(body))) return;
       const r = e.target.closest('[data-r]');
       if (!r) return;
       toggleRitual(r.dataset.r);
@@ -1965,9 +2202,12 @@ function refreshBehind() {
 
 /* USJ 聖誕 */
 function openUsj() {
+  listEdit = null;
   const draw = body => {
     const shows = store.get(K.shows, []).sort((a, b) => toMin(a.time) - toMin(b.time));
     const seen = store.get(K.usjSeen, {});
+    const hl = getList('usjHl');
+    const ed = listEdit === 'usjHl';
     body.innerHTML = `
       <div class="card" style="background:linear-gradient(150deg,#123B7A,#2F6FDB 60%,#5B8FE6);color:#fff">
         <div class="small" style="opacity:.85;font-weight:800;letter-spacing:.18em">USJ WINTER 2026</div>
@@ -1977,8 +2217,14 @@ function openUsj() {
         <div class="btn-row"><a class="btn" style="background:#fff;color:#123B7A" href="${USJ.appUrl}" target="_blank" rel="noopener">📱 官方 App（等候時間・演出）</a>
           <a class="btn" style="background:rgba(255,255,255,.2);color:#fff" href="${USJ.eventUrl}" target="_blank" rel="noopener">🎄 活動官方頁</a></div>
       </div>
-      <div class="card"><div class="card-title">聖誕亮點<span class="sp"></span><span class="small muted" style="font-family:var(--sans)">打勾＝看過</span></div>
-        ${USJ.highlights.map(([id, ja, zh]) => `<button class="list-row ${seen[id] ? 'done' : ''}" data-seen="${id}" style="width:100%;text-align:left"><span class="chk ${seen[id] ? 'on' : ''}">${seen[id] ? '✓' : ''}</span><span class="grow"><div class="ttl ja">${esc(ja)}</div><div class="small muted">${esc(zh)}</div></span></button>`).join('')}
+      <div class="card"><div class="card-title">聖誕亮點<span class="sp"></span>${leToggle('usjHl')}</div>
+        <div class="small muted" style="margin:-4px 0 4px">打勾＝看過</div>
+        ${hl.map(h => {
+          const txt = `<span class="grow"><div class="ttl ja">${esc(h.name)}</div><div class="small muted">${esc(h.desc || '')}</div></span>`;
+          return ed ? `<div class="le-row">${txt}${leTools('usjHl', h.id)}</div>`
+            : `<button class="list-row ${seen[h.id] ? 'done' : ''}" data-seen="${esc(h.id)}" style="width:100%;text-align:left"><span class="chk ${seen[h.id] ? 'on' : ''}">${seen[h.id] ? '✓' : ''}</span>${txt}</button>`;
+        }).join('') || '<div class="empty">還沒有亮點</div>'}
+        ${ed ? leAdd('usjHl') : ''}
         ${USJ.highlightNote ? `<div class="note small" style="margin-top:8px">${esc(USJ.highlightNote)}</div>` : ''}</div>
       <div class="card"><div class="card-title">12/25 演出場次備忘<span class="sp"></span><span class="small muted" style="font-family:var(--sans)">公布後填</span></div>
         ${shows.length ? shows.map(s => `<div class="list-row"><b style="font-variant-numeric:tabular-nums;width:48px">${esc(s.time)}</b><span class="grow"><div class="ttl">${esc(s.name)}</div>${s.place ? `<div class="small muted">${esc(s.place)}</div>` : ''}</span><button class="x-btn" data-delshow="${esc(s.id)}" aria-label="刪除">✕</button></div>`).join('')
@@ -2003,7 +2249,8 @@ function openUsj() {
       draw(body);
       refreshBehind();
     });
-    body.addEventListener('click', e => {
+    body.addEventListener('click', async e => {
+      if (await listClick(e, () => draw(body))) return;
       const sn = e.target.closest('[data-seen]');
       const del = e.target.closest('[data-delshow]');
       const go = e.target.closest('[data-go-day]');
@@ -2028,9 +2275,12 @@ function openUsj() {
 
 /* 日落・點燈 */
 function openSunLights() {
-  const days = sortedDays();
-  const shows = store.get(K.shows, []);
-  openSheet('日落・點燈時刻', `
+  listEdit = null;
+  const draw = body => {
+    const days = sortedDays();
+    const shows = store.get(K.shows, []);
+    const ed = listEdit === 'light';
+    body.innerHTML = `
     <div class="card"><table class="sun-table"><thead><tr><th>日期</th><th>地點</th><th>日出</th><th>日落</th><th>天黑</th></tr></thead><tbody>
       ${days.map(d => {
         const l = LOCS[d.loc] || LOCS.kobe;
@@ -2039,33 +2289,55 @@ function openSunLights() {
       }).join('')}
     </tbody></table>
     <div class="small muted" style="margin-top:8px">計算值（天文公式，誤差約 ±1 分）。「天黑」＝民用暮光結束，燈飾最好看的時候。</div></div>
-    ${LIGHTS.map(l => `<div class="card"><div class="small muted" style="font-weight:800">${l.dates.map(d => md(d)).join('、')}</div>
+    <div class="sec-row" style="margin:4px 2px 10px"><div class="sec-title">燈飾</div>${leToggle('light')}</div>
+    ${getList('light').map(l => `<div class="card"><div class="small muted" style="font-weight:800">${(l.dates || []).map(d => md(d)).join('、') || '（沒有指定日期）'}</div>
       <div class="card-title ja" style="margin:2px 0 4px">🎄 ${esc(l.name)}</div>
-      <div class="small">${esc(l.place)}</div>
-      <div style="font-weight:800;margin-top:4px">${esc(l.time)}</div>
+      ${l.place ? `<div class="small">${esc(l.place)}</div>` : ''}
+      ${l.time ? `<div style="font-weight:800;margin-top:4px">${esc(l.time)}</div>` : ''}
       ${l.usj && shows.length ? `<div class="small" style="margin-top:4px">你的備忘：${esc(shows.map(x => x.time + ' ' + x.name).join('｜'))}</div>` : ''}
-      <div class="small muted" style="margin-top:4px">${esc(l.status)}</div>
-      ${l.url ? `<div class="btn-row"><a class="btn btn-sm btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">來源</a></div>` : ''}</div>`).join('')}`);
+      ${l.status ? `<div class="small muted" style="margin-top:4px">${esc(l.status)}</div>` : ''}
+      ${ed ? `<div class="btn-row" style="justify-content:flex-end">${leTools('light', l.id)}</div>`
+        : l.url ? `<div class="btn-row"><a class="btn btn-sm btn-ghost" href="${esc(l.url)}" target="_blank" rel="noopener">來源</a></div>` : ''}</div>`).join('')}
+    ${ed ? leAdd('light', { dates: [] }) : ''}`;
+  };
+  openSheet('日落・點燈時刻', '', body => {
+    draw(body);
+    body.onclick = e => listClick(e, () => draw(body));
+  });
 }
+
+/* 兩人的飲食禁忌與喜好（原本在資訊頁 FOOD，2026-10-22 併進紅線卡） */
+const FOOD_PREFS = `<table class="food-tbl">
+  <tr><td>Aaron</td><td>🚫 <b>洋蔥</b>（餐具碰到都不行）<br>❤️ 生魚片（握壽司／OMAKASE）、拉麵、鰻魚飯</td></tr>
+  <tr><td>Yvonne</td><td>🚫 <b>芋頭</b>、<b>生魚片及生食</b>（壽喜燒生蛋液例外，而且必配）<br>❤️ 義大利麵、牛肉（適中：不見血也不過熟）、無骨雞肉（親子丼、香煎雞腿排）<br>海鮮：軟絲＞干貝＞鮮蝦＞花枝＞鮮蚵＞生蠔＞螃蟹；魚肉幾乎不吃；不吃鰻魚<br>☕ 每天下午一間咖啡廳／甜點（超愛舒芙蕾）</td></tr>
+  <tr><td>豬肉</td><td>✅ 非紅線；Yvonne 不愛，排餐時不當主角</td></tr>
+  <tr><td>共同</td><td>🍝 麵食控（義大利麵／烏龍麵），好吃就好、價錢不拘</td></tr>
+</table>`;
 
 /* 指差し会話 */
 function openPhrases() {
+  listEdit = null;
   const draw = body => {
-    const list = PHRASES[ui.phraseCat] || [];
-    body.innerHTML = `<div class="cat-tabs">${Object.keys(PHRASES).map(c => `<button data-cat="${c}" class="${c === ui.phraseCat ? 'on' : ''}">${c}</button>`).join('')}</div>
-      <div class="card">${list.map(([zh, ja], i) => `<button class="phrase" data-i="${i}"><div class="zh">${esc(zh)}</div><div class="jp ja">${esc(ja)}</div></button>`).join('')}</div>
-      <div class="small muted" style="text-align:center">點任一句 → 全螢幕放大給對方看</div>`;
+    const all = getList('phrase');
+    const cats = [...new Set(all.map(p => p.cat))];
+    if (!cats.includes(ui.phraseCat)) ui.phraseCat = cats[0] || '';
+    const ed = listEdit === 'phrase';
+    body.innerHTML = `<div class="cat-tabs">${cats.map(c => `<button data-cat="${esc(c)}" class="${c === ui.phraseCat ? 'on' : ''}">${esc(c)}</button>`).join('')}</div>
+      <div class="sec-row" style="margin:0 2px 10px"><span class="small muted" style="flex:1">點任一句 → 全螢幕放大給對方看</span>${leToggle('phrase')}</div>
+      <div class="card">${all.filter(p => p.cat === ui.phraseCat).map(p => ed
+        ? `<div class="le-row"><span class="grow"><div class="small muted">${esc(p.zh)}</div><div class="ja" style="font-weight:700;color:var(--navy)">${esc(p.ja)}</div></span>${leTools('phrase', p.id)}</div>`
+        : `<button class="phrase" data-ph="${esc(p.id)}"><div class="zh">${esc(p.zh)}</div><div class="jp ja">${esc(p.ja)}</div></button>`).join('') || '<div class="empty">這個分類還沒有句子</div>'}
+        ${ed ? leAdd('phrase', { cat: ui.phraseCat }) : ''}</div>`;
   };
   openSheet('指差し会話 POINT & SPEAK', '', body => {
-    if (!PHRASES[ui.phraseCat]) ui.phraseCat = Object.keys(PHRASES)[0];
     draw(body);
-    body.onclick = e => {
+    body.onclick = async e => {
+      if (await listClick(e, () => draw(body))) return;
       const c = e.target.closest('[data-cat]');
       if (c) { ui.phraseCat = c.dataset.cat; saveUi(); return draw(body); }
-      const p = e.target.closest('[data-i]');
-      if (!p) return;
-      const [zh, ja] = PHRASES[ui.phraseCat][+p.dataset.i];
-      openFullCard(() => `<div class="fc-big ja" style="font-size:clamp(28px,8.5vw,42px)">${esc(ja)}</div><p class="fc-zh">${esc(zh)}</p>`);
+      const p = e.target.closest('[data-ph]');
+      const it = p && getList('phrase').find(x => x.id === p.dataset.ph);
+      if (it) openFullCard(() => `<div class="fc-big ja" style="font-size:clamp(28px,8.5vw,42px)">${esc(it.ja)}</div><p class="fc-zh">${esc(it.zh)}</p>`);
     };
   });
 }
@@ -2078,20 +2350,28 @@ function showTaxiCard(t) {
     <p class="fc-zh">${esc(t.zh)}</p>`);
 }
 function openTaxi() {
-  openSheet('交通卡片', `
-    <div class="card"><div class="card-title">給司機看：目的地</div>
-      ${TAXI.map((t, i) => `<button class="phrase" data-taxi="${i}"><div class="zh">${esc(t.zh)}</div><div class="jp ja">${esc(t.ja)}</div></button>`).join('')}</div>
-    <div class="card"><div class="card-title">付款・下車</div>
-      ${PAY_PHRASES.map(([ja, zh], i) => `<button class="phrase" data-pay="${i}"><div class="zh">${esc(zh)}</div><div class="jp ja">${esc(ja)}</div></button>`).join('')}</div>
-    <div class="note small">其他目的地：行程裡每個點都有 Google Maps 按鈕，也可以直接把地圖給司機看。</div>`, body => {
-    body.onclick = e => {
+  listEdit = null;
+  const draw = body => {
+    const row = (name, it, attr) => listEdit === name
+      ? `<div class="le-row"><span class="grow"><div class="small muted">${esc(it.zh)}</div><div class="ja" style="font-weight:700;color:var(--navy)">${esc(it.ja)}</div></span>${leTools(name, it.id)}</div>`
+      : `<button class="phrase" ${attr}="${esc(it.id)}"><div class="zh">${esc(it.zh)}</div><div class="jp ja">${esc(it.ja)}</div></button>`;
+    body.innerHTML = `
+      <div class="card"><div class="card-title">給司機看：目的地<span class="sp"></span>${leToggle('taxi')}</div>
+        ${getList('taxi').map(t => row('taxi', t, 'data-taxi')).join('')}${listEdit === 'taxi' ? leAdd('taxi') : ''}</div>
+      <div class="card"><div class="card-title">付款・下車<span class="sp"></span>${leToggle('pay')}</div>
+        ${getList('pay').map(p => row('pay', p, 'data-pay')).join('')}${listEdit === 'pay' ? leAdd('pay') : ''}</div>
+      <div class="note small">其他目的地：行程裡每個點都有 Google Maps 按鈕，也可以直接把地圖給司機看。</div>`;
+  };
+  openSheet('交通卡片', '', body => {
+    draw(body);
+    body.onclick = async e => {
+      if (await listClick(e, () => draw(body))) return;
       const t = e.target.closest('[data-taxi]');
       const p = e.target.closest('[data-pay]');
-      if (t) showTaxiCard(TAXI[+t.dataset.taxi]);
-      if (p) {
-        const [ja, zh] = PAY_PHRASES[+p.dataset.pay];
-        openFullCard(() => `<div class="fc-big ja">${esc(ja)}</div><p class="fc-zh">${esc(zh)}</p>`);
-      }
+      const tx = t && getList('taxi').find(x => x.id === t.dataset.taxi);
+      const pp = p && getList('pay').find(x => x.id === p.dataset.pay);
+      if (tx) showTaxiCard(tx);
+      if (pp) openFullCard(() => `<div class="fc-big ja">${esc(pp.ja)}</div><p class="fc-zh">${esc(pp.zh)}</p>`);
     };
   });
 }
@@ -2151,10 +2431,21 @@ function openMapShots() {
 }
 
 function openTransit() {
-  openSheet('交通速查', `<div class="card"><dl class="kv">${TRANSIT.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>
-    <div class="card"><div class="card-title">常用地點</div><div class="btn-row">
-      ${TRANSIT_SPOTS.map(s => `<a class="btn btn-sm" href="${mapUrl(s)}" target="_blank" rel="noopener">${esc(s)}</a>`).join('')}
-    </div></div>`);
+  listEdit = null;
+  const draw = body => {
+    const list = getList('transit');
+    body.innerHTML = `<div class="card"><div class="card-title">速查表<span class="sp"></span>${leToggle('transit')}</div>
+      ${listEdit === 'transit'
+        ? list.map(t => `<div class="le-row"><span class="grow"><div class="ttl">${esc(t.k)}</div><div class="small muted">${esc(t.v)}</div></span>${leTools('transit', t.id)}</div>`).join('') + leAdd('transit')
+        : `<dl class="kv">${list.map(t => `<dt>${esc(t.k)}</dt><dd>${esc(t.v)}</dd>`).join('')}</dl>`}</div>
+      <div class="card"><div class="card-title">常用地點</div><div class="btn-row">
+        ${TRANSIT_SPOTS.map(s => `<a class="btn btn-sm" href="${mapUrl(s)}" target="_blank" rel="noopener">${esc(s)}</a>`).join('')}
+      </div></div>`;
+  };
+  openSheet('交通速查', '', body => {
+    draw(body);
+    body.onclick = e => listClick(e, () => draw(body));
+  });
 }
 
 /* =========================================================
@@ -2163,73 +2454,26 @@ function openTransit() {
 function renderInfo() {
   const v = $('#view-info');
   const resLocal = store.get(K.res, {});
-  const todoDone = store.get(K.todo, {});
   const mapCfg = store.get(K.map, { link: '', embed: '' });
   const contacts = store.get(K.contacts, []);
   const storedVer = store.get(K.tripVer, DATA_VER);
-  const today = nowAt(8).date;
-  const todos = [...TODOS].sort((a, b) => a.due.localeCompare(b.due));
-  const tdDone = todos.filter(t => todoDone[t.id]).length;
+  const edEmg = listEdit === 'emg';
+  const edRes = listEdit === 'res';
+  const resStatus = r => { const s = (resLocal[r.id] || {}).status; return RES_STATUSES.includes(s) ? s : r.status; };
+  /* 區塊順序（2026-10-22）：VISIT → MAP → EMERGENCY → HOTEL → RESERVATIONS → DATA，標題列有同順序的跳轉按鈕 */
   v.innerHTML = `
     ${store.get(K.trip, null) && storedVer < DATA_VER ? `<div class="update-banner"><span>行程預設資料有新版本</span><button class="btn btn-sm btn-primary" data-act="apply-new" style="margin-left:auto">套用</button></div>` : ''}
 
-    <div class="sec-title">RESERVATIONS</div>
-    <div class="card">
-      <div class="note small" style="margin-bottom:12px">🔒 確認號、座位與備註只存在這支手機，不會上傳到網站。</div>
-      ${RESERVATIONS.map(r => {
-        const loc = resLocal[r.id] || {};
-        const status = RES_STATUSES.includes(loc.status) ? loc.status : r.status;
-        const note = typeof loc.note === 'string' ? loc.note : '';
-        return `<div class="res-card"><div class="res-top"><span class="ico">${ic(r.icon)}</span>
-          <div class="grow"><div class="res-name">${esc(r.name)}</div><div class="res-when">${esc(r.when)}</div>${r.how ? `<div class="small" style="color:var(--ink-2)">${esc(r.how)}</div>` : ''}</div>
-          <select class="status st-${esc(status)}" data-status="${r.id}">${RES_STATUSES.map(s => `<option ${s === status ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
-          <div class="conf-row"><input data-conf="${r.id}" value="${esc(typeof loc.conf === 'string' ? loc.conf : '')}" placeholder="確認號／訂位代號" autocomplete="off" autocapitalize="characters">
-            <button class="btn btn-sm" data-copyconf="${r.id}">複製</button></div>
-          <textarea class="res-note" data-note="${r.id}" rows="${note ? Math.min(6, note.split('\n').length + 1) : 1}" placeholder="私人備註（座位、訂位人…只存本機）">${esc(note)}</textarea>
-          ${r.url || r.phone ? `<div class="res-links">${r.url ? `<a class="btn btn-sm btn-ghost" href="${esc(r.url)}" target="_blank" rel="noopener">${ic('link')} 預約頁</a>` : ''}${r.phone ? `<a class="btn btn-sm btn-ghost" href="${telHref(r.phone)}">${ic('phone')} ${esc(r.phone)}</a>` : ''}</div>` : ''}
-        </div>`;
-      }).join('')}
-    </div>
-
+    <section class="info-sec" id="sec-visit">
     <div class="sec-title">VISIT JAPAN WEB</div>
     <div class="card">
       <div class="card-title">入境 QR<span class="sp"></span><a class="btn btn-sm btn-ghost" href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener">VJW 官網</a></div>
       <div class="qr-grid" id="qrGrid"><div class="qr-slot">載入中…</div><div class="qr-slot">載入中…</div></div>
       <div class="small muted" style="margin-top:8px">🔒 QR 截圖只存在這支手機。入境時點一下全螢幕顯示。</div>
     </div>
+    </section>
 
-    <div class="sec-title">EMERGENCY</div>
-    <div class="card">
-      ${EMERGENCY.map(c => `<a class="tel" href="${telHref(c.num)}"><span class="ico">${c.icon}</span><span class="grow"><div style="font-weight:700">${esc(c.name)}</div><div class="small muted">${esc(c.sub)}</div></span><span class="num">${esc(c.num)}</span></a>`).join('')}
-      ${contacts.map(c => `<div class="tel"><span class="ico">👤</span><a class="grow" href="${telHref(c.num)}" style="text-decoration:none"><div style="font-weight:700">${esc(c.name)}</div><div class="small muted">${esc(c.num)}</div></a><button class="x-btn" data-delcontact="${esc(c.id)}" aria-label="刪除">✕</button></div>`).join('')}
-      <div class="btn-row"><button class="btn btn-ghost btn-sm" data-act="add-contact">＋ 加個人聯絡人（信用卡掛失、保險…）</button>
-        <button class="btn btn-red btn-sm" data-act="help-card">🆘 求救日語卡</button></div>
-    </div>
-
-    <div class="sec-title" id="sec-todo">TO-DO ${tdDone}/${todos.length}</div>
-    <div class="card">
-      ${todos.map(t => {
-        const done = !!todoDone[t.id];
-        const late = !done && t.due < today;
-        return `<button class="list-row ${done ? 'done' : ''}" data-todo="${t.id}" style="width:100%;text-align:left"><span class="chk ${done ? 'on' : ''}">${done ? '✓' : ''}</span>
-          <span class="grow"><div class="ttl">${esc(t.text)}</div><div class="small ${late ? '' : 'muted'}" ${late ? 'style="color:var(--red);font-weight:700"' : ''}>${late ? '⚠️ 已過建議日 ' : '建議 '}${md(t.due)} 前</div></span></button>`;
-      }).join('')}
-    </div>
-
-    <div class="sec-title">FOOD</div>
-    <div class="card">
-      <table class="food-tbl">
-        <tr><td>Aaron</td><td>🚫 <b>洋蔥</b>（餐具碰到都不行）<br>❤️ 生魚片（握壽司／OMAKASE）、拉麵、鰻魚飯</td></tr>
-        <tr><td>Yvonne</td><td>🚫 <b>芋頭</b>、<b>生魚片及生食</b>（壽喜燒生蛋液例外，而且必配）<br>❤️ 義大利麵、牛肉（適中：不見血也不過熟）、無骨雞肉（親子丼、香煎雞腿排）<br>海鮮：軟絲＞干貝＞鮮蝦＞花枝＞鮮蚵＞生蠔＞螃蟹；魚肉幾乎不吃；不吃鰻魚<br>☕ 每天下午一間咖啡廳／甜點（超愛舒芙蕾）</td></tr>
-        <tr><td>豬肉</td><td>✅ 非紅線；Yvonne 不愛，排餐時不當主角</td></tr>
-        <tr><td>共同</td><td>🍝 麵食控（義大利麵／烏龍麵），好吃就好、價錢不拘</td></tr>
-      </table>
-      <div class="btn-row"><button class="btn btn-red" data-act="redline">${ic('block')} 開紅線卡</button></div>
-    </div>
-
-    <div class="sec-title">HOTEL</div>
-    <div class="card"><button class="hotel-bar" data-act="hotel"><span class="ico">${ic('hotel')}</span><span class="grow"><div class="nm">${esc(HOTEL.name)}</div><div class="muted small">${esc(HOTEL.addr)}</div></span><span class="chev">›</span></button></div>
-
+    <section class="info-sec" id="sec-map">
     <div class="sec-title">MAP</div>
     <div class="card">
       ${MAP_EMBED_RE.test(mapCfg.embed || '') ? `<iframe class="map-frame" src="${esc(mapCfg.embed)}" loading="lazy" title="地圖"></iframe>` : ''}
@@ -2239,7 +2483,38 @@ function renderInfo() {
         <button class="btn btn-ghost" data-act="map-cfg">${ic('gear')} 設定地圖連結</button>
       </div>
     </div>
+    </section>
 
+    <section class="info-sec" id="sec-emg">
+    <div class="sec-row"><div class="sec-title">EMERGENCY</div>${leToggle('emg')}</div>
+    <div class="card">
+      ${getList('emg').map(c => edEmg
+        ? `<div class="le-row"><span style="font-size:22px;width:30px;text-align:center">${esc(c.icon || '☎️')}</span><span class="grow"><div class="ttl">${esc(c.name)}</div><div class="small muted">${esc(c.num)}</div></span>${leTools('emg', c.id)}</div>`
+        : `<a class="tel" href="${telHref(c.num)}"><span class="ico">${esc(c.icon || '☎️')}</span><span class="grow"><div style="font-weight:700">${esc(c.name)}</div><div class="small muted">${esc(c.sub || '')}</div></span><span class="num">${esc(c.num)}</span></a>`).join('')}
+      ${edEmg ? leAdd('emg') : ''}
+      ${contacts.map(c => `<div class="tel"><span class="ico">👤</span><a class="grow" href="${telHref(c.num)}" style="text-decoration:none"><div style="font-weight:700">${esc(c.name)}</div><div class="small muted">${esc(c.num)}</div></a><button class="x-btn" data-delcontact="${esc(c.id)}" aria-label="刪除">✕</button></div>`).join('')}
+      <div class="btn-row"><button class="btn btn-ghost btn-sm" data-act="add-contact">＋ 加個人聯絡人（信用卡掛失、保險…）</button>
+        <button class="btn btn-red btn-sm" data-act="help-card">🆘 求救日語卡</button></div>
+    </div>
+    </section>
+
+    <section class="info-sec" id="sec-hotel">
+    <div class="sec-title">HOTEL</div>
+    <div class="card"><button class="hotel-bar" data-act="hotel"><span class="ico">${ic('hotel')}</span><span class="grow"><div class="nm">${esc(HOTEL.name)}</div><div class="muted small">${esc(HOTEL.addr)}</div></span><span class="chev">›</span></button></div>
+    </section>
+
+    <section class="info-sec" id="sec-res">
+    <div class="sec-row"><div class="sec-title">RESERVATIONS</div>${leToggle('res')}</div>
+    <div class="card">
+      <div class="note small" style="margin-bottom:6px">🔒 確認號和私人備註只存在這支手機。點一下預約就能看、改、複製確認號。</div>
+      ${getList('res').map(r => edRes
+        ? `<div class="le-row"><span class="grow"><div class="ttl">${esc(r.name)}</div><div class="small muted">${esc(r.when || '')}</div></span>${leTools('res', r.id)}</div>`
+        : `<button class="res-row" data-res="${esc(r.id)}"><span class="ico">${ic(r.icon || 'ticket')}</span><span class="grow"><div class="res-name">${esc(r.name)}</div><div class="res-when">${esc(r.when || '')}</div></span><span class="st-pill st-${esc(resStatus(r))}">${esc(resStatus(r))}</span></button>`).join('')}
+      ${edRes ? leAdd('res', { status: '未訂', icon: 'ticket' }) : ''}
+    </div>
+    </section>
+
+    <section class="info-sec" id="sec-data">
     <div class="sec-title">DATA & OFFLINE</div>
     <div class="card">
       <div class="status-list" id="offStatus"><div><span>App 離線快取</span><span>檢查中…</span></div></div>
@@ -2251,45 +2526,16 @@ function renderInfo() {
         <button class="btn" data-act="offline-img">🖼️ 離線化主圖</button>
         <button class="btn btn-danger" data-act="reset">重置 APP</button>
       </div>
-      <div class="small muted" style="margin-top:10px">備份含行程修改、記帳、確認號、QR 與截圖，可在另一支手機匯入（例如給 Yvonne 一份）。</div>
     </div>
-    <div class="small muted" style="text-align:center;margin-top:8px">資料版本 v${DATA_VER}・${esc(DATA_LABEL)}</div>`;
+    </section>`;
 
   renderQr();
   renderOfflineStatus();
 
-  v.onchange = e => {
-    const s = e.target.closest('[data-status]');
-    if (s) {
-      const all = store.get(K.res, {});
-      all[s.dataset.status] = Object.assign(all[s.dataset.status] || {}, { status: s.value });
-      store.set(K.res, all);
-      s.className = 'status st-' + s.value;
-      toast('已更新狀態');
-    }
-  };
-  v.oninput = e => {
-    const c = e.target.closest('[data-conf],[data-note]');
-    if (!c) return;
-    const id = c.dataset.conf || c.dataset.note;
-    const all = store.get(K.res, {});
-    all[id] = Object.assign(all[id] || {}, c.dataset.conf ? { conf: c.value.trim() } : { note: c.value });
-    store.set(K.res, all);
-  };
   v.onclick = async e => {
-    const cc = e.target.closest('[data-copyconf]');
-    if (cc) {
-      const val = (store.get(K.res, {})[cc.dataset.copyconf] || {}).conf;
-      return val ? copyText(val) : toast('還沒有填確認號');
-    }
-    const td = e.target.closest('[data-todo]');
-    if (td) {
-      const all = store.get(K.todo, {});
-      if (all[td.dataset.todo]) delete all[td.dataset.todo]; else all[td.dataset.todo] = Date.now();
-      store.set(K.todo, all);
-      updateTabDots();
-      return renderInfo();
-    }
+    if (await listClick(e, renderInfo)) return;
+    const rr = e.target.closest('[data-res]');
+    if (rr) return openResDetail(rr.dataset.res);
     const dc = e.target.closest('[data-delcontact]');
     if (dc) {
       if (await askConfirm('刪除這個聯絡人？', '刪除')) {
@@ -2301,8 +2547,7 @@ function renderInfo() {
     const a = e.target.closest('[data-act]');
     if (!a) return;
     const act = a.dataset.act;
-    if (act === 'redline') openRedLine();
-    else if (act === 'hotel') openHotel();
+    if (act === 'hotel') openHotel();
     else if (act === 'help-card') openFullCard(() => `<span class="fc-badge ja">SOS</span><div class="fc-big ja">助けてください！</div>
       <div class="fc-sub ja">救急車を呼んでください。<br>警察を呼んでください。<br>中国語か英語を話せる人はいますか？</div>
       <p class="fc-zh">救命！請叫救護車／警察。有會說中文或英文的人嗎？</p>`);
@@ -2323,6 +2568,32 @@ function renderInfo() {
       }
     }
   };
+}
+
+/* 預約小視窗：狀態、確認號（可改、可複製）、私人備註，改了就存在手機 */
+function openResDetail(id) {
+  const r = getList('res').find(x => x.id === id);
+  if (!r) return;
+  const loc = store.get(K.res, {})[id] || {};
+  const status = RES_STATUSES.includes(loc.status) ? loc.status : r.status;
+  openSheet(r.name, `
+    ${r.when ? `<div class="det-sub">${esc(r.when)}</div>` : ''}
+    ${r.how ? `<div class="small" style="margin-top:6px;color:var(--ink-2)">${esc(r.how)}</div>` : ''}
+    <label class="field" style="margin-top:14px"><span>狀態</span><select id="rdStatus">${RES_STATUSES.map(s => `<option ${s === status ? 'selected' : ''}>${s}</option>`).join('')}</select></label>
+    <div class="field"><span>確認號／訂位代號</span><div class="conf-row" style="margin:0"><input id="rdConf" value="${esc(typeof loc.conf === 'string' ? loc.conf : '')}" placeholder="還沒有填" autocomplete="off" autocapitalize="characters"><button type="button" class="btn btn-sm" data-a="copy">複製</button></div></div>
+    <label class="field"><span>私人備註（座位、訂位人…）</span><textarea id="rdNote" placeholder="只存在這支手機">${esc(typeof loc.note === 'string' ? loc.note : '')}</textarea></label>
+    <div class="small muted">🔒 只存在這支手機，改了就自動存。</div>
+    ${r.url || r.phone ? `<div class="btn-row">${r.url ? `<a class="btn btn-ghost" href="${esc(r.url)}" target="_blank" rel="noopener">${ic('link')} 預約頁</a>` : ''}${r.phone ? `<a class="btn btn-ghost" href="${telHref(r.phone)}">${ic('phone')} ${esc(r.phone)}</a>` : ''}</div>` : ''}`, body => {
+    const save = patch => { const all = store.get(K.res, {}); all[id] = Object.assign(all[id] || {}, patch); store.set(K.res, all); };
+    $('#rdStatus', body).onchange = e => { save({ status: e.target.value }); refreshBehind(); toast('已更新狀態'); };
+    $('#rdConf', body).oninput = e => save({ conf: e.target.value.trim() });
+    $('#rdNote', body).oninput = e => save({ note: e.target.value });
+    body.onclick = e => {
+      if (!e.target.closest('[data-a=copy]')) return;
+      const val = $('#rdConf', body).value.trim();
+      if (val) copyText(val); else toast('還沒有填確認號');
+    };
+  });
 }
 
 async function renderQr() {
@@ -2465,7 +2736,7 @@ async function offlineImages(silent = false) {
 async function mergeImport(data, label) {
   if (!data || typeof data !== 'object' || data.app !== APP_ID || data.mode !== 'merge') return toast('匯入資料格式不對');
   label = String(label || '私人預約資料').slice(0, 60);
-  const ids = new Set(RESERVATIONS.map(r => r.id));
+  const ids = new Set(getList('res').map(r => r.id));
   const entries = Object.entries(data.res && typeof data.res === 'object' ? data.res : {})
     .filter(([k, v]) => ids.has(k) && v && typeof v === 'object');
   const contacts = Array.isArray(data.contacts) ? data.contacts.filter(c => c && typeof c.name === 'string' && typeof c.num === 'string') : [];
@@ -2566,6 +2837,13 @@ function init() {
   if (!trip.days.some(d => d.id === ui.day)) ui.day = sortedDays()[0]?.id;
   $$('.tab').forEach(t => { t.onclick = () => { closeAllSheets(); switchView(t.dataset.view); }; });
   $('#nowFab').onclick = scrollToNow;
+  $('#quickNav').onclick = e => {
+    const b = e.target.closest('[data-jump]');
+    if (b) document.getElementById(b.dataset.jump)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  /* 點最上面的標題回到頁面最上方 */
+  $('.topbar').addEventListener('click', e => { if (!e.target.closest('#quickNav')) window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  window.addEventListener('resize', setTopH);
   renderCountdown();
   updateTabDots();
   switchView(RENDER[ui.view] ? ui.view : 'trip');
