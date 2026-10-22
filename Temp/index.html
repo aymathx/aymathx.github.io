@@ -267,8 +267,8 @@
       <div id="intersectionAnalysisPanel" class="hidden mt-3 pt-3 border-t-2 border-slate-200">
         <div class="flex items-center justify-between gap-2 mb-2">
           <div class="flex items-center gap-1.5">
-            <span class="px-2 py-0.5 scale-xs font-bold rounded bg-amber-100 text-amber-800">交點探究</span>
-            <h3 class="font-bold text-slate-800 scale-sm">指對數交點個數與範圍（點擊切換）</h3>
+            <span class="px-2 py-0.5 scale-xs font-bold rounded bg-amber-100 text-amber-800">交點</span>
+            <h3 class="font-bold text-slate-800 scale-sm">個數與範圍</h3>
           </div>
           <span id="liveIntersectCountBadge" class="scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-500 text-white shrink-0">
             0 個交點
@@ -1184,16 +1184,16 @@
       countBadge.textContent = `${pts.length} 個交點`;
       if (pts.length === 0) {
         countBadge.className = 'scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-slate-600 text-white shrink-0';
-        detailBox.innerHTML = `目前範圍：<span class="math-font">${rangeDesc}</span> ➔ <strong>無交點 (0 個)</strong>`;
+        detailBox.innerHTML = `範圍：<span class="math-font">${rangeDesc}</span><br> ➔ <strong>無交點 (0 個)</strong>`;
       } else if (pts.length === 1) {
         countBadge.className = 'scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-600 text-white shrink-0';
-        detailBox.innerHTML = `目前範圍：<span class="math-font">${rangeDesc}</span> ➔ <strong>1 個交點：${pts[0].tag}</strong>`;
+        detailBox.innerHTML = `範圍：<span class="math-font">${rangeDesc}</span><br> ➔ <strong>1 個交點：${pts[0].tag}</strong>`;
       } else if (pts.length === 2) {
         countBadge.className = 'scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white shrink-0';
-        detailBox.innerHTML = `目前範圍：<span class="math-font">${rangeDesc}</span> ➔ <strong>2 個交點：${pts.map(p => p.tag).join(' , ')}</strong>`;
+        detailBox.innerHTML = `範圍：<span class="math-font">${rangeDesc}</span><br> ➔ <strong>2 個交點：${pts.map(p => p.tag).join(' , ')}</strong>`;
       } else {
         countBadge.className = 'scale-xs font-extrabold px-2.5 py-0.5 rounded-full bg-purple-600 text-white shrink-0';
-        detailBox.innerHTML = `目前範圍：<span class="math-font">${rangeDesc}</span> ➔ <strong>3 個交點：${pts.map(p => p.tag).join(' , ')}</strong>`;
+        detailBox.innerHTML = `範圍：<span class="math-font">${rangeDesc}</span><br> ➔ <strong>3 個交點：${pts.map(p => p.tag).join(' , ')}</strong>`;
       }
     }
 
