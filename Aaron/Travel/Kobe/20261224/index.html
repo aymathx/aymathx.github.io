@@ -28,6 +28,9 @@
   --blue: #3B82F6;
   --blue-2: #60A5FA;
   --blue-soft: #E3EEFF;
+  --blue-fill: #3B82F6;
+  --field: #FFFFFF;
+  --chip: #E9EEF6;
   --navy: #1E3A8A;
   --red: #E5484D;
   --red-soft: #FDECEC;
@@ -245,27 +248,64 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 .type-FOOD { --tc: var(--t-FOOD); } .type-CAFE { --tc: var(--t-CAFE); } .type-SIGHT { --tc: var(--t-SIGHT); }
 .type-SHOP { --tc: var(--t-SHOP); } .type-RAMEN { --tc: var(--t-RAMEN); } .type-WORK { --tc: var(--t-WORK); }
 
-/* ---------- wallet ---------- */
-.rate-card { background: linear-gradient(150deg, #1F4FA8, #2F6FDB 60%, #5B8FE6); color: #fff; }
-.rate-card .card-title { color: #fff; }
-.rate-meta { font-family: var(--sans); font-size: 12px; font-weight: 600; opacity: .85; }
-.conv { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin-top: 6px; }
-.conv-row { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, .14); border-radius: 14px; padding: 8px 12px; }
-.conv-row .cur { width: 46px; font-weight: 800; letter-spacing: .05em; }
-.conv-row input { flex: 1; min-width: 0; width: 100%; background: transparent; border: 0; color: #fff; font-size: 24px; font-weight: 800; text-align: right; outline: none; }
-.conv-row input::placeholder { color: rgba(255, 255, 255, .5); }
-.swap { align-self: center; justify-self: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, .22); font-size: 18px; color: #fff; }
-.rate-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: 13.5px; }
-.rate-line input { width: 92px; border-radius: 10px; border: 0; padding: 6px 8px; font-weight: 800; text-align: center; }
-.rate-line .btn { background: rgba(255, 255, 255, .2); color: #fff; }
-.rate-line .btn.on { background: #fff; color: var(--blue); }
+/* ---------- wallet（設計稿 5C：舊版匯率卡＋一行快記＋分類；8-1 預算；8-2 收據 AI） ---------- */
+.rate-head { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 10px; }
+.rate-t { font-weight: 700; font-size: 15px; color: var(--blue); padding: 4px 8px; border-radius: 8px; }
+.rate-t b { font-family: var(--num); }
+.lock-btn { width: 34px; height: 34px; border-radius: 50%; font-size: 15px; background: var(--blue-soft); }
+.lock-btn.on { background: var(--red-soft); }
+.calc { display: grid; }
+.calc-row { display: flex; align-items: center; gap: 10px; background: var(--field); border: 1.5px solid var(--line); border-radius: 14px; padding: 4px 14px; }
+.calc-row .cur { width: 40px; font-family: var(--num); font-weight: 800; font-size: 14px; color: var(--ink-2); }
+.calc-row input { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; text-align: right; font-family: var(--num); font-size: 24px; font-weight: 700; color: var(--ink); outline: none; min-height: 44px; }
+.calc-swap { justify-self: center; position: relative; z-index: 1; width: 34px; height: 34px; margin: -7px 0; border-radius: 50%; background: var(--card); border: 1.5px solid var(--line); color: var(--blue); font-size: 16px; }
+.quick-amt { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
+.quick-amt button { background: var(--bg); border: 1px solid var(--card-bd); color: var(--ink); border-radius: 10px; min-height: 36px; font-family: var(--num); font-weight: 700; font-size: 13px; }
+.tot-lbl { text-align: center; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+.tot-big { text-align: center; font-family: var(--serif); font-size: 30px; font-weight: 700; color: var(--navy); line-height: 1.25; font-variant-numeric: tabular-nums; }
+.tot-sub { text-align: center; font-size: 12.5px; color: var(--muted); }
+.tot-sub span { white-space: nowrap; }
+.budget { display: block; width: 100%; text-align: left; margin-top: 12px; }
+.budget-txt { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
+.budget-txt .go { color: var(--blue); font-weight: 700; }
+.budget-txt .over { color: var(--red); font-weight: 700; }
+.cat-bar { display: flex; height: 10px; border-radius: 99px; background: var(--chip); overflow: hidden; }
+.cat-bar.over { box-shadow: 0 0 0 2px var(--red); }
+.cat-bar i { display: block; height: 100%; }
+.cat-legend { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-top: 7px; font-size: 12.5px; color: var(--ink-2); }
+.cat-legend b { font-family: var(--num); }
+.cat-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: 1px; }
+.exp-form { border-top: 1px dashed var(--line); margin-top: 14px; padding-top: 12px; }
+.chip-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
+.chip-row .gap { flex: 1; }
+.chip { min-height: 34px; padding: 0 12px; border-radius: 999px; border: 1.5px solid var(--card-bd); background: var(--card); color: var(--muted); font-size: 13.5px; font-weight: 700; }
+.chip.on { background: var(--blue-fill); border-color: var(--blue-fill); color: #fff; }
+.sel-chip { position: relative; display: inline-flex; align-items: center; gap: 4px; min-height: 36px; padding: 0 28px 0 12px; border-radius: 999px; border: 1.5px solid var(--card-bd); background: var(--card); color: var(--ink); font-weight: 700; }
+.sel-chip::after { content: "▾"; position: absolute; right: 11px; color: var(--blue); font-size: 12px; pointer-events: none; }
+.sel-chip select { border: 0; background: transparent; font-weight: 700; color: inherit; -webkit-appearance: none; appearance: none; outline: none; }
+.in-row { display: flex; gap: 6px; }
+.in-row input { flex: 1; min-width: 0; width: 100%; min-height: 46px; border: 1.5px solid var(--line); border-radius: 12px; padding: 0 12px; background: var(--field); }
+.in-row input:focus { outline: none; border-color: var(--blue-2); box-shadow: 0 0 0 3px var(--blue-soft); }
+.in-row .amt-in { flex: .7; text-align: right; font-family: var(--num); font-weight: 700; }
+.add-btn { flex: none; width: 48px; border-radius: 12px; background: var(--blue-fill); color: #fff; font-size: 24px; font-weight: 700; }
+.exp-day { display: flex; justify-content: space-between; font-family: var(--num); font-size: 12.5px; font-weight: 800; color: var(--blue); margin: 14px 0 2px; }
+.exp-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-top: 1px dashed var(--line); cursor: pointer; }
+.exp-row .grow { flex: 1; min-width: 0; }
+.exp-row .nm { font-weight: 700; }
+.exp-row .its { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.exp-row .amt { font-family: var(--num); font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.exp-row .amt small { display: block; font-weight: 600; color: var(--muted); font-size: 11.5px; }
+.exp-row.pending { background: var(--gold-soft); border-radius: 10px; margin: 2px -8px; padding: 9px 8px; border-top-color: transparent; }
+.pend-tag { display: inline-block; font-size: 11px; font-weight: 800; background: #FDE68A; color: #92400E; border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: 1px; white-space: nowrap; font-family: var(--sans); }
+.ai-card summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: var(--serif); font-weight: 700; font-size: 17px; color: var(--navy); }
+.ai-card summary::-webkit-details-marker { display: none; }
+.ai-card summary .chev { margin-left: auto; transition: transform .2s; }
+.ai-card[open] summary .chev { transform: rotate(90deg); }
+.ai-warn { background: var(--gold-soft); color: #92400E; border-radius: 12px; padding: 8px 11px; font-size: 13px; margin-top: 10px; }
+.ai-paste { width: 100%; min-height: 120px; margin-top: 8px; border: 1.5px dashed var(--line); border-radius: 12px; padding: 10px; background: var(--field); font-family: ui-monospace, Menlo, monospace; font-size: 13px; resize: vertical; }
+/* 儀式完成度等小總計 */
 .total-box { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 .total-box .big { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
-.exp-day { font-size: 12.5px; font-weight: 800; color: var(--muted); margin: 14px 0 2px; display: flex; justify-content: space-between; }
-.exp-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
-.exp-row .grow { flex: 1; min-width: 0; }
-.exp-row .amt { font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; }
-.exp-row .amt small { display: block; font-weight: 600; color: var(--muted); font-size: 11.5px; }
 
 /* ---------- tools ---------- */
 .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
@@ -369,6 +409,88 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 .res-row .grow { flex: 1; min-width: 0; }
 .res-row .res-name, .res-row .res-when { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .st-pill { flex: none; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 4px 10px; }
+
+/* ---------- 2026-10-22 第 3 段：醫療卡、釘選卡、穿搭 ---------- */
+.tile.sky { background: #0284C7; }
+.tile.sky .ic { background: rgba(255, 255, 255, .2); color: #fff; }
+.tile.sky .nm { color: #fff; }
+.tile.sky .ds { color: rgba(255, 255, 255, .88); }
+.tiles .tile:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 0; }
+.fc-badge.sky { background: #0284C7; }
+.med-name { font-family: var(--serif); font-size: 22px; font-weight: 700; color: #0F172A; margin-top: 12px; }
+.med-dl { display: grid; grid-template-columns: auto 1fr; gap: 0 12px; margin-top: 14px; border-top: 1px solid #EEE; }
+.med-dl dt, .med-dl dd { padding: 9px 0; border-bottom: 1px solid #EEE; }
+.med-dl dt { font-weight: 800; font-size: 15px; color: #333; }
+.med-dl dt small { display: block; font-size: 11.5px; font-weight: 500; color: #888; }
+.med-dl dd { align-self: center; font-size: 18px; font-weight: 800; color: #111; word-break: break-word; }
+.med-dl dd.ng { color: var(--red); }
+.med-dl .empty-v { font-size: 14px; font-weight: 500; color: #AAA; }
+.med-tel { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.med-tel a { display: block; text-align: center; padding: 13px 6px; border-radius: 14px; background: var(--red-soft); color: var(--red); font-weight: 900; font-size: 17px; text-decoration: none; }
+.pin-card { background: linear-gradient(135deg, #233B7D, #3B5BAB); color: #fff; border-radius: var(--radius); padding: 16px 16px 10px; margin-bottom: 14px; box-shadow: 0 6px 18px rgba(35, 59, 125, .3); }
+.pin-head { font-weight: 700; font-size: 15px; margin-bottom: 10px; }
+.pin-row { display: flex; gap: 10px; margin-bottom: 8px; font-size: 14px; line-height: 1.45; }
+.pin-k { flex: none; width: 58px; opacity: .85; }
+.pin-v { flex: 1; min-width: 0; font-weight: 600; }
+.pin-v small { display: block; font-weight: 400; font-size: 12.5px; opacity: .85; }
+.pin-dv { height: 1px; background: rgba(255, 255, 255, .2); margin: 10px 0; }
+.pin-addr { display: block; width: 100%; text-align: left; background: rgba(255, 255, 255, .15); color: #fff; border-radius: 12px; padding: 10px 12px; margin: 2px 0 10px; font-size: 14.5px; font-weight: 600; }
+.pin-addr .cp { float: right; margin-left: 6px; background: rgba(255, 255, 255, .22); border-radius: 999px; padding: 1px 9px; font-size: 12px; }
+.pin-addr small { display: block; clear: both; margin-top: 3px; font-size: 11.5px; font-weight: 400; opacity: .8; }
+.pin-conf { display: inline-block; margin-top: 4px; background: rgba(255, 255, 255, .18); color: #fff; border-radius: 8px; padding: 2px 8px; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; font-weight: 700; }
+.pin-tel { color: #fff; font-family: var(--num); font-weight: 700; }
+.pin-call { margin-left: 10px; background: #fff; color: #233B7D; border-radius: 999px; padding: 2px 10px; font-size: 12.5px; font-weight: 700; text-decoration: none; }
+.outfit-temp { font-weight: 800; color: var(--navy); }
+.outfit-list { margin: 6px 0 0 18px; font-size: 14px; color: var(--ink-2); line-height: 1.7; }
+
+/* ---------- 字級（8-5）：頁面和小視窗整體放大 ---------- */
+html.fs-1 main, html.fs-1 .sheet-body { zoom: 1.12; }
+html.fs-2 main, html.fs-2 .sheet-body { zoom: 1.25; }
+
+/* ---------- 深色模式（8-5）：換色票，再補寫死顏色的地方；全螢幕卡維持白底給店員看 ---------- */
+html.dark {
+  --bg: #0F172A; --card: #1E293B; --card-bd: #334155; --ink: #E2E8F0; --ink-2: #CBD5E1; --muted: #94A3B8; --line: #334155;
+  --blue: #60A5FA; --blue-2: #93C5FD; --blue-soft: #1E3A5F; --blue-fill: #2563EB; --field: #0F172A; --chip: #334155;
+  --navy: #BFDBFE; --red: #F87171; --red-soft: #3F1D24; --gold-soft: #3A2E12; --shadow: none;
+  color-scheme: dark;
+}
+html.dark .topbar { background: rgba(15, 23, 42, .92); }
+html.dark .tabbar-inner { background: rgba(30, 41, 59, .96); box-shadow: 0 10px 30px -6px rgba(0, 0, 0, .6); }
+html.dark .tab.dot::after { border-color: #1E293B; }
+html.dark .tag-est { color: #FCD34D; }
+html.dark .tag-draft, html.dark .st-不需預約 { background: #334155; color: var(--ink-2); }
+html.dark .warn { color: #FECACA; }
+html.dark .note { color: #BFDBFE; }
+html.dark .btn-ghost, html.dark .quick-nav button { background: var(--card); }
+html.dark .btn-primary, html.dark .now-fab, html.dark .now-badge, html.dark .cat-tabs button.on, html.dark .ic-btn.on { background: #2563EB; color: #fff; }
+html.dark .btn-red, html.dark .tile.hot { background: #DC2626; }
+html.dark .btn-danger { color: #FCA5A5; }
+html.dark .chk { background: transparent; border-color: #475569; }
+html.dark .chk.on { background: #2563EB; border-color: #2563EB; }
+html.dark .field input, html.dark .field select, html.dark .field textarea, html.dark .conf-row input, html.dark .res-note, html.dark .big-text { background: var(--field); color: var(--ink); }
+html.dark .seg, html.dark .branch-toggle { background: #0F172A; }
+html.dark .seg button.on, html.dark .branch-toggle button.on { background: #334155; }
+html.dark .ev-rail::before { background: #334155; }
+html.dark .ev-dot { border-color: #475569; }
+html.dark .ev.now .ev-dot { background: #2563EB; border-color: #2563EB; box-shadow: 0 0 0 4px #1E3A5F; }
+html.dark .wx-h .p { color: var(--blue); }
+html.dark .ev-type .ok { color: #4ADE80; }
+html.dark .cat-tabs button, html.dark .gallery figure, html.dark .progress { background: #334155; }
+html.dark .st-已購, html.dark .st-已訂 { background: #14532D; color: #86EFAC; }
+html.dark .st-現場買 { background: #1E3A5F; color: #93C5FD; }
+html.dark .st-待查 { background: #422006; color: #FCD34D; }
+html.dark .sheet-head::before { background: #475569; }
+html.dark .sheet-close { background: #334155; }
+html.dark .ai-warn { color: #FDE68A; }
+html.dark .pend-tag { background: #78350F; color: #FDE68A; }
+html.dark .fullcard {
+  --blue: #3B82F6; --blue-soft: #E3EEFF; --red: #E5484D; --red-soft: #FDECEC; --line: #DBEAFE; --ink: #1E3A8A; --ink-2: #334155;
+  --muted: #64748B; --card: #FFFFFF; --card-bd: #DBEAFE; --field: #FFFFFF; --navy: #1E3A8A; --blue-fill: #3B82F6;
+  color-scheme: light;
+}
+html.dark .fullcard .seg { background: #DBEAFE; }
+html.dark .fullcard .seg button.on { background: #fff; }
+html.dark .fullcard .btn-ghost { background: #fff; }
 
 /* ---------- sheets ---------- */
 .backdrop { position: fixed; inset: 0; background: rgba(14, 30, 60, .38); z-index: 60; opacity: 0; transition: opacity .2s; }
@@ -490,6 +612,7 @@ const HOTEL = {
   phone: '078-325-8111',
   url: 'https://www.kobe-orientalhotel.co.jp/',
   map: '神戸メリケンパークオリエンタルホテル',
+  inOut: 'IN 15:00／OUT 11:00',
   rows: [
     ['地址', '〒650-0042 兵庫県神戸市中央区波止場町5-6（メリケンパーク）'],
     ['交通', 'みなと元町駅 2 號出口徒步約 8 分｜JR・阪神 元町駅徒步約 15 分｜三宮有免費接駁巴士（每日；乘車處與末班待確認）'],
@@ -657,6 +780,10 @@ const TODOS = [
   { id: 't-boat-weather', due: '2026-12-23', text: '12/23 與 12/26 14:00 後看高速船停航公告（kobe-access.jp）' },
   { id: 't-offline', due: '2026-12-23', text: '出發前一晚：資訊 → 按「離線準備」；行李隔天帶到學校' }
 ];
+
+/* 打包清單、伴手禮清單（舊版內容；可在 APP 裡改） */
+const PACK_ITEMS = ['護照／機票確認', '現金＆信用卡', '手機 ICOCA／Apple Pay', '常備藥＆個人藥', '暖暖包', '口罩', '保暖外套／發熱衣', '圍巾・手套・毛帽', '雨傘／雨具', '行動電源＆充電線', '保濕・護唇膏', '隱形眼鏡／眼鏡', '環保購物袋'];
+const SOUV_ITEMS = ['白色戀人／Royce 生巧', '薯條三兄弟', '面膜（LuLuLun）', '藥妝（合力他命／休足時間／蒸氣眼罩）', '神戸布丁／甜點', '抹茶點心', '神戸・元町ケーキ', '神戸フランツ 魔法の壺プリン'];
 
 const EMERGENCY = [
   { icon: '🚓', name: '警察', sub: '日本全國', num: '110' },
@@ -907,7 +1034,8 @@ const ICONS = {
   clock: '<path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>',
   link: '<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>',
   ticket: '<path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2zm-9 7.5h-2v-2h2v2zm0-4.5h-2v-2h2v2zm0-4.5h-2v-2h2v2z"/>',
-  check: '<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>'
+  check: '<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+  med: '<path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4zm6 11h-3v3h-2v-3H8v-2h3v-3h2v3h3v2z"/>'
 };
 const ic = (name, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name] || ''}</svg>`;
 
@@ -939,7 +1067,8 @@ const APP_ID = 'osaka-xmas-2026';
 const K = {
   trip: 'ox26.trip2', tripVer: 'ox26.tripVer', exp: 'ox26.exp', rate: 'ox26.rate', wx: 'ox26.wx2',
   rit: 'ox26.rit2', todo: 'ox26.todo', res: 'ox26.res', shows: 'ox26.usjShows', usjSeen: 'ox26.usjSeen',
-  map: 'ox26.map', contacts: 'ox26.contacts', ui: 'ox26.ui'
+  map: 'ox26.map', contacts: 'ox26.contacts', ui: 'ox26.ui',
+  budget: 'ox26.budget', check: 'ox26.check', med: 'ox26.med', disp: 'ox26.disp'
 };
 const OLD_KEYS = ['ox26.trip', 'ox26.rit', 'ox26.sr', 'ox26.wx'];
 const $ = (s, r = document) => r.querySelector(s);
@@ -1164,6 +1293,8 @@ function openSheet(title, html, onMount) {
   const sh = document.createElement('div');
   sh.className = 'sheet';
   sh.innerHTML = `<div class="sheet-head"><div class="sheet-title">${esc(title)}</div><button class="sheet-close" aria-label="關閉">✕</button></div><div class="sheet-body">${html}</div>`;
+  /* 從全螢幕卡（例：醫療卡）開的小視窗要蓋在卡片上面 */
+  if ($('.fullcard')) { bd.style.zIndex = 85; sh.style.zIndex = 86; }
   document.body.append(bd, sh);
   document.body.classList.add('locked');
   requestAnimationFrame(() => { bd.classList.add('show'); sh.classList.add('show'); });
@@ -1230,6 +1361,7 @@ function openFullCard(render, tabs) {
   document.body.appendChild(fc);
   document.body.classList.add('locked');
   keepAwake(true);
+  return { el: fc, redraw: draw, close };
 }
 
 /* =========================================================
@@ -1247,7 +1379,9 @@ const LIST_DEFAULTS = {
   pay: () => PAY_PHRASES.map(([ja, zh], i) => ({ id: 'pp' + i, ja, zh })),
   phrase: () => Object.entries(PHRASES).flatMap(([cat, arr]) => arr.map(([zh, ja], i) => ({ id: `ph-${cat}-${i}`, cat, zh, ja }))),
   light: () => LIGHTS.map((l, i) => ({ id: 'lt' + i, ...l })),
-  transit: () => TRANSIT.map(([k, v], i) => ({ id: 'tr' + i, k, v }))
+  transit: () => TRANSIT.map(([k, v], i) => ({ id: 'tr' + i, k, v })),
+  pack: () => PACK_ITEMS.map((text, i) => ({ id: 'pk' + i, text })),
+  souv: () => SOUV_ITEMS.map((text, i) => ({ id: 'sv' + i, text }))
 };
 const RES_ICONS = [['flight', '✈️ 航班'], ['boat', '⛴️ 船'], ['taxi', '🚕 車'], ['train', '🚃 電車'], ['hotel', '🏨 住宿'], ['food', '🍴 餐廳'], ['cafe', '☕ 咖啡'], ['ticket', '🎟️ 票券'], ['place', '📍 地點']];
 const F = (k, label, type = 'text', req = false, opts = []) => ({ k, label, type, req, opts });
@@ -1261,7 +1395,9 @@ const LIST_FIELDS = {
   pay: [F('zh', '中文', 'text', true), F('ja', '日文（給對方看）', 'textarea', true)],
   phrase: [F('cat', '分類（選既有的或打新的）', 'cat', true), F('zh', '中文', 'textarea', true), F('ja', '日文（給對方看）', 'textarea', true)],
   light: [F('name', '名稱', 'text', true), F('place', '地點'), F('time', '時間'), F('status', '狀態／備註', 'textarea'), F('dates', '顯示在哪幾天的行程頁', 'days'), F('url', '來源網址', 'url')],
-  transit: [F('k', '項目', 'text', true), F('v', '內容', 'textarea', true)]
+  transit: [F('k', '項目', 'text', true), F('v', '內容', 'textarea', true)],
+  pack: [F('text', '要帶的東西', 'text', true), F('sub', '補充（可空）')],
+  souv: [F('text', '要買的東西', 'text', true), F('sub', '在哪買、幫誰買（可空）')]
 };
 const LIST_GROUP = { rit: 'who', phrase: 'cat' };
 let listEdit = null;
@@ -1413,17 +1549,35 @@ function renderTodo() {
       return ed ? `<div class="le-row"><span class="grow"><div class="ttl">${esc(t.text)}</div>${due}</span>${leTools('todo', t.id)}</div>`
         : `<button class="list-row ${ok ? 'done' : ''}" data-todo="${esc(t.id)}" style="width:100%;text-align:left"><span class="chk ${ok ? 'on' : ''}">${ok ? '✓' : ''}</span><span class="grow"><div class="ttl">${esc(t.text)}</div>${due}</span></button>`;
     }).join('') || '<div class="empty">沒有待辦</div>'}
-    ${ed ? leAdd('todo', { due: today }) : ''}</div>`;
+    ${ed ? leAdd('todo', { due: today }) : ''}</div>
+    ${checkSec('pack', 'PACKING 打包')}
+    ${checkSec('souv', 'SOUVENIRS 伴手禮')}`;
   updateTabDots();
   v.onclick = async e => {
     if (await listClick(e, renderTodo)) return;
     const td = e.target.closest('[data-todo]');
-    if (!td) return;
-    const all = store.get(K.todo, {});
-    if (all[td.dataset.todo]) delete all[td.dataset.todo]; else all[td.dataset.todo] = Date.now();
-    store.set(K.todo, all);
+    const ck = e.target.closest('[data-chk]');
+    if (!td && !ck) return;
+    const key = td ? K.todo : K.check;
+    const id = td ? td.dataset.todo : ck.dataset.chk;
+    const all = store.get(key, {});
+    if (all[id]) delete all[id]; else all[id] = Date.now();
+    store.set(key, all);
     renderTodo();
   };
+}
+
+/* 打包、伴手禮：可以打勾、可以編輯（8-4） */
+function checkSec(name, title) {
+  const done = store.get(K.check, {});
+  const list = getList(name);
+  const ed = listEdit === name;
+  const txt = t => `<span class="grow"><div class="ttl">${esc(t.text)}</div>${t.sub ? `<div class="small muted">${esc(t.sub)}</div>` : ''}</span>`;
+  return `<div class="sec-row"><div class="sec-title">${title} ${list.filter(t => done[t.id]).length}/${list.length}</div>${leToggle(name)}</div>
+    <div class="card">${list.map(t => ed
+      ? `<div class="le-row">${txt(t)}${leTools(name, t.id)}</div>`
+      : `<button class="list-row ${done[t.id] ? 'done' : ''}" data-chk="${esc(t.id)}" style="width:100%;text-align:left"><span class="chk ${done[t.id] ? 'on' : ''}">${done[t.id] ? '✓' : ''}</span>${txt(t)}</button>`).join('') || '<div class="empty">還沒有項目</div>'}
+    ${ed ? leAdd(name) : ''}</div>`;
 }
 
 /* =========================================================
@@ -1958,61 +2112,100 @@ async function refreshRate(force = false) {
   return r;
 }
 
+/* 記帳分類（設計稿 5C：多了「住宿」）；顏色跟行程類型一致 */
+const EXP_CATS = ['餐飲', '交通', '購物', '門票', '住宿', '其他'];
+const CAT_COLORS = { 餐飲: '#2563EB', 交通: '#EF4444', 購物: '#F97316', 門票: '#14B8A6', 住宿: '#EAB308', 其他: '#94A3B8' };
+const PAYERS = ['Aaron', 'Yvonne', '共同'];
+let expDate = '';   /* 這次開 APP 選的記帳日期；沒選過就是今天 */
+
+/* 付款人、幣別、分類記住上一次的選擇 */
+const expPref = () => Object.assign({ payer: 'Aaron', cur: 'JPY', cat: '餐飲' }, ui.exp);
+const setExpPref = patch => { ui.exp = Object.assign(expPref(), patch); saveUi(); };
+const expCat = e => EXP_CATS.includes(e.cat) ? e.cat : '其他';
+const dateLabel = d => `${md(d)}（${wd(d)}）`;
+const expDates = (...extra) => [...new Set([...sortedDays().map(d => d.date), nowAt(9).date, ...extra.filter(Boolean)])].sort();
+
 function renderWallet() {
   const v = $('#view-wallet');
   const r = getRate();
   const exps = store.get(K.exp, []);
-  const days = sortedDays();
-  const todayJ = nowAt(9).date;
-  const defDate = days.some(d => d.date === todayJ) ? todayJ : days[0]?.date || todayJ;
+  const pf = expPref();
+  const dates = expDates();
+  if (!dates.includes(expDate)) expDate = nowAt(9).date;
   const toJpy = e => e.cur === 'TWD' ? e.amt / r.rate : e.amt;
+  const sumBy = f => exps.reduce((o, e) => { const k = f(e); o[k] = (o[k] || 0) + toJpy(e); return o; }, {});
   const totalJ = exps.reduce((s, e) => s + toJpy(e), 0);
+  const byPayer = sumBy(e => e.payer || '共同');
+  const byCat = sumBy(expCat);
   const byDate = {};
   exps.forEach(e => { (byDate[e.date] = byDate[e.date] || []).push(e); });
-  const dates = Object.keys(byDate).sort();
-  const byPayer = {};
-  exps.forEach(e => { byPayer[e.payer || '共同'] = (byPayer[e.payer || '共同'] || 0) + toJpy(e); });
+  const budget = +store.get(K.budget, 0) || 0;
+  const pct = budget ? Math.round(totalJ / budget * 100) : 0;
+  /* 分類長條：有預算時整條＝預算，沒預算時整條＝總支出 */
+  const scale = Math.max(budget, totalJ) || 1;
+  const pend = exps.filter(e => e.pending).length;
+  const expRow = e => `<div class="exp-row ${e.pending ? 'pending' : ''}" data-exp="${esc(e.id)}" role="button" tabindex="0">
+      <div class="grow"><div class="nm">${esc(e.name)}${e.pending ? '<span class="pend-tag">待確認</span>' : ''}</div>
+        <div class="small muted">${esc([e.payer || '共同', expCat(e), e.pay, e.note].filter(Boolean).join('・'))}</div>
+        ${e.items ? `<div class="its">${esc(e.items)}</div>` : ''}</div>
+      <div class="amt">${e.cur === 'TWD' ? twd(e.amt) : yen(e.amt)}<small>${e.cur === 'TWD' ? '≈ ' + yen(e.amt / r.rate) : '≈ ' + twd(e.amt * r.rate)}</small></div>
+      <button class="x-btn" data-del="${esc(e.id)}" aria-label="刪除">✕</button></div>`;
   v.innerHTML = `
     <div class="sec-title">WALLET</div>
-    <div class="card rate-card">
-      <div class="card-title">匯率換算</div>
-      <div class="conv">
-        <div class="conv-row"><span class="cur" id="curTop">${convDir}</span><input id="convTop" inputmode="decimal" placeholder="0"></div>
-        <button class="swap" id="swapBtn" aria-label="交換幣別">⇅</button>
-        <div class="conv-row"><span class="cur" id="curBot">${convDir === 'JPY' ? 'TWD' : 'JPY'}</span><input id="convBot" inputmode="decimal" placeholder="0"></div>
+    <div class="card">
+      <div class="rate-head"><button class="rate-t" id="rateEdit">匯率換算 [ <b>${(+r.rate).toFixed(3)}</b> ]</button>
+        <button class="lock-btn ${r.locked ? 'on' : ''}" id="lockBtn" aria-label="${r.locked ? '解除鎖定匯率' : '鎖定匯率'}">${r.locked ? '🔒' : '🔓'}</button></div>
+      <div class="calc">
+        <div class="calc-row"><span class="cur" id="curTop">${convDir}</span><input id="convTop" inputmode="decimal" placeholder="0" aria-label="換算金額"></div>
+        <button class="calc-swap" id="swapBtn" aria-label="交換幣別">⇅</button>
+        <div class="calc-row"><span class="cur" id="curBot">${convDir === 'JPY' ? 'TWD' : 'JPY'}</span><input id="convBot" inputmode="decimal" placeholder="0" aria-label="換算結果"></div>
       </div>
-      <div class="rate-line">1 JPY = <input id="rateInput" inputmode="decimal" value="${esc(r.rate)}"> TWD
-        <button class="btn btn-sm ${r.locked ? 'on' : ''}" id="lockBtn">${r.locked ? '🔒 已鎖定' : '🔓 鎖定'}</button>
-        <button class="btn btn-sm" id="rateRefresh">↻ 更新</button></div>
+      <div class="quick-amt">${[500, 1000, 3000, 5000, 10000].map(n => `<button data-q="${n}">${n === 10000 ? '¥1萬' : '¥' + n}</button>`).join('')}</div>
     </div>
 
     <div class="card">
-      <div class="card-title">記一筆</div>
-      <form id="expForm">
-        <div class="row2">
-          <label class="field"><span>日期</span><select name="date">${[...new Set([...days.map(d => d.date), todayJ])].sort().map(d => `<option value="${esc(d)}" ${d === defDate ? 'selected' : ''}>${md(d)}（${wd(d)}）</option>`).join('')}</select></label>
-          <label class="field"><span>付款</span><select name="payer"><option>Aaron</option><option>Yvonne</option><option>共同</option></select></label>
+      <div class="tot-lbl">總支出</div>
+      <div class="tot-big">${yen(totalJ)}</div>
+      <div class="tot-sub"><span>≈ ${twd(totalJ * r.rate)}</span>${PAYERS.filter(p => byPayer[p]).map(p => `・<span>${p} ${yen(byPayer[p])}</span>`).join('')}</div>
+      <button class="budget" data-w="budget">
+        <div class="budget-txt">${budget
+          ? `<span>預算 ${yen(budget)}</span>${pct > 100 ? `<span class="over">超支 ${yen(totalJ - budget)}</span>` : `<span>已花 ${pct}%・剩 ${yen(budget - totalJ)}</span>`}`
+          : '<span>總預算</span><span class="go">設定 ›</span>'}</div>
+        <div class="cat-bar ${budget && pct > 100 ? 'over' : ''}">${EXP_CATS.filter(c => byCat[c] > 0).map(c => `<i style="width:${byCat[c] / scale * 100}%;background:${CAT_COLORS[c]}"></i>`).join('')}</div>
+        ${totalJ ? `<div class="cat-legend">${EXP_CATS.filter(c => byCat[c] > 0).map(c => `<span><i class="cat-dot" style="background:${CAT_COLORS[c]}"></i>${c} <b>${yen(byCat[c])}</b></span>`).join('')}</div>` : ''}
+      </button>
+      <form class="exp-form" id="expForm" autocomplete="off">
+        <div class="chip-row">
+          <label class="sel-chip">📅<select id="expDateSel" aria-label="日期">${dates.map(d => `<option value="${esc(d)}" ${d === expDate ? 'selected' : ''}>${dateLabel(d)}</option>`).join('')}</select></label>
+          <label class="sel-chip"><select id="expCatSel" aria-label="分類">${EXP_CATS.map(c => `<option ${c === pf.cat ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
         </div>
-        <label class="field"><span>項目</span><input name="name" placeholder="例：一蘭、高速船" required></label>
-        <div style="display:flex;gap:10px;align-items:flex-end">
-          <label class="field" style="flex:1;margin-bottom:0"><span>金額</span><input name="amt" inputmode="decimal" placeholder="0" required></label>
-          <div class="seg" id="curSeg" style="margin-bottom:4px"><button type="button" data-c="JPY" class="on">¥ JPY</button><button type="button" data-c="TWD">NT$</button></div>
+        <div class="chip-row">
+          ${PAYERS.map(p => `<button type="button" class="chip ${p === pf.payer ? 'on' : ''}" data-payer="${p}">${p}</button>`).join('')}
+          <span class="gap"></span>
+          <button type="button" class="chip ${pf.cur === 'JPY' ? 'on' : ''}" data-cur="JPY">¥</button><button type="button" class="chip ${pf.cur === 'TWD' ? 'on' : ''}" data-cur="TWD">NT$</button>
         </div>
-        <button class="btn btn-primary btn-block" style="margin-top:12px">＋ 加入</button>
+        <div class="in-row"><input name="name" placeholder="項目" required aria-label="項目"><input name="amt" class="amt-in" inputmode="decimal" placeholder="${pf.cur === 'TWD' ? '台幣' : '日幣'}" required aria-label="金額"><button class="add-btn" aria-label="加入">＋</button></div>
       </form>
     </div>
 
     <div class="card">
-      <div class="total-box"><div><div class="muted small">總支出</div><div class="big">${yen(totalJ)}</div></div><div class="muted" style="text-align:right">≈ ${twd(totalJ * r.rate)}<div class="small">${Object.entries(byPayer).map(([k, s]) => `${esc(k)} ${yen(s)}`).join('・')}</div></div></div>
-      ${dates.length ? dates.map(d => {
+      <div class="card-title">明細<span class="sp"></span>${pend ? `<span class="pend-tag">${pend} 筆待確認</span>` : ''}</div>
+      ${exps.length ? Object.keys(byDate).sort().reverse().map(d => {
         const sum = byDate[d].reduce((s, e) => s + toJpy(e), 0);
-        return `<div class="exp-day"><span>${md(d)}（${wd(d)}）</span><span>${yen(sum)}</span></div>` +
-          byDate[d].map(e => `<div class="exp-row"><div class="grow"><div style="font-weight:700">${esc(e.name)}</div><div class="small muted">${esc(e.payer || '')}</div></div>
-            <div class="amt">${e.cur === 'TWD' ? twd(e.amt) : yen(e.amt)}<small>${e.cur === 'TWD' ? '≈ ' + yen(e.amt / r.rate) : '≈ ' + twd(e.amt * r.rate)}</small></div>
-            <button class="x-btn" data-del="${esc(e.id)}" aria-label="刪除">✕</button></div>`).join('');
+        return `<div class="exp-day"><span>${dateLabel(d)}</span><span>${yen(sum)}</span></div>` + byDate[d].map(expRow).join('');
       }).join('') : '<div class="empty">還沒有記帳</div>'}
-      <div class="btn-row"><button class="btn btn-ghost" id="expExport">⬇︎ 匯出 CSV</button><button class="btn btn-danger" id="expClear">清除全部</button></div>
-    </div>`;
+      <div class="small muted" style="margin-top:8px">點一筆可以修改；黃色是收據 AI 看不清楚、要對照原收據的。</div>
+      <div class="btn-row"><button class="btn btn-ghost" data-w="export">⬇︎ 匯出 CSV</button><button class="btn btn-danger" data-w="clear">清除全部</button></div>
+    </div>
+
+    <details class="card ai-card">
+      <summary>🧾 收據 AI 整理匯入<span class="chev">›</span></summary>
+      <div class="ai-warn">拍照前先遮住卡號、會員編號、QR Code。AI 可能看錯小字，入帳前請對照原收據。</div>
+      <ol class="small" style="margin:10px 0 0 18px;color:var(--ink-2)"><li>按「複製提示詞」，連同收據照片傳給 Claude 或 ChatGPT（可以一次好幾張）。</li><li>把 AI 回覆的表格整段貼到下面，按「匯入」。</li><li>同一張收據、同一分類會合併成一筆；付款人用上面選的。</li></ol>
+      <button class="btn btn-block" data-w="prompt" style="margin-top:10px">📋 複製收據整理提示詞</button>
+      <textarea id="aiPaste" class="ai-paste" placeholder="| 日期 | 店名 | 品項 | 數量 | 含稅金額 | 付款方式 | 分類 | 備註 |"></textarea>
+      <button class="btn btn-primary btn-block" data-w="ai-import" style="margin-top:8px">⬆︎ 匯入表格到記帳</button>
+    </details>`;
 
   const top = $('#convTop'), bot = $('#convBot');
   const rateNow = () => getRate().rate;
@@ -2024,86 +2217,267 @@ function renderWallet() {
     const fromJpy = (from === 'top') === (convDir === 'JPY');
     target.value = fromJpy ? (Math.round(val * rt * 10) / 10).toString() : Math.round(val / rt).toString();
   };
-  top.oninput = () => calc('top');
-  bot.oninput = () => calc('bot');
-  $('#swapBtn').onclick = () => {
+  const swap = () => {
     convDir = convDir === 'JPY' ? 'TWD' : 'JPY';
     $('#curTop').textContent = convDir;
     $('#curBot').textContent = convDir === 'JPY' ? 'TWD' : 'JPY';
     top.value = bot.value;
     calc('top');
   };
-  $('#rateInput').onchange = e => {
-    const val = parseFloat(e.target.value);
-    if (!(val > 0)) return toast('匯率格式不對');
-    store.set(K.rate, { rate: val, src: '手動', ts: Date.now(), locked: true });
-    toast('已改用手動匯率並鎖定');
-    renderWallet();
-  };
+  top.oninput = () => calc('top');
+  bot.oninput = () => calc('bot');
+  $('#swapBtn').onclick = swap;
+  $('#rateEdit').onclick = openRateSheet;
   $('#lockBtn').onclick = () => {
     const cur = getRate();
     cur.locked = !cur.locked;
     store.set(K.rate, cur);
-    toast(cur.locked ? '匯率已鎖定，不再自動更新' : '已解鎖，會自動抓最新匯率');
+    toast(cur.locked ? '匯率已鎖定，不再自動更新' : '已解鎖，有網路時會自動抓最新匯率');
     renderWallet();
   };
-  $('#rateRefresh').onclick = async () => {
-    const cur = getRate();
-    if (cur.locked && !(await askConfirm('匯率目前鎖定中，要解鎖並抓最新匯率嗎？', '解鎖並更新', false))) return;
-    cur.locked = false;
-    store.set(K.rate, cur);
-    await refreshRate(true);
-    renderWallet();
-  };
-  let cur = 'JPY';
-  $('#curSeg').onclick = e => {
-    const b = e.target.closest('[data-c]');
-    if (!b) return;
-    cur = b.dataset.c;
-    $$('#curSeg button').forEach(x => x.classList.toggle('on', x === b));
-  };
+  $('#expDateSel').onchange = e => { expDate = e.target.value; };
+  $('#expCatSel').onchange = e => setExpPref({ cat: e.target.value });
   $('#expForm').onsubmit = e => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    const amt = parseFloat(String(fd.get('amt')).replace(/[,，]/g, ''));
+    const amt = parseFloat(String(fd.get('amt')).replace(/[,，¥＄$]/g, ''));
     if (!(amt > 0)) return toast('金額要大於 0');
+    const p = expPref();
     const list = store.get(K.exp, []);
-    list.push({ id: uid('x'), date: fd.get('date'), name: fd.get('name').trim(), amt, cur, payer: fd.get('payer'), ts: Date.now() });
+    list.push({ id: uid('x'), date: expDate, name: String(fd.get('name')).trim(), amt, cur: p.cur, payer: p.payer, cat: p.cat, ts: Date.now() });
     store.set(K.exp, list);
-    toast('已記帳');
+    toast(`已記帳：${p.payer}・${p.cat}`);
     renderWallet();
   };
   v.onclick = async e => {
+    const q = e.target.closest('[data-q]');
+    if (q) { if (convDir !== 'JPY') swap(); top.value = q.dataset.q; calc('top'); return; }
+    const pay = e.target.closest('[data-payer]');
+    const cu = e.target.closest('[data-cur]');
+    if (pay || cu) {
+      setExpPref(pay ? { payer: pay.dataset.payer } : { cur: cu.dataset.cur });
+      $$(pay ? '[data-payer]' : '[data-cur]', v).forEach(b => b.classList.toggle('on', b === (pay || cu)));
+      if (cu) $('.amt-in', v).placeholder = cu.dataset.cur === 'TWD' ? '台幣' : '日幣';
+      return;
+    }
     const d = e.target.closest('[data-del]');
-    if (!d) return;
-    if (!(await askConfirm('刪除這筆？', '刪除'))) return;
-    store.set(K.exp, store.get(K.exp, []).filter(x => x.id !== d.dataset.del));
-    renderWallet();
-  };
-  $('#expExport').onclick = () => {
-    const list = store.get(K.exp, []);
-    if (!list.length) return toast('沒有資料');
-    const rt = rateNow();
-    const rows = [['日期', '項目', '金額', '幣別', '付款', '約合 JPY', '約合 TWD']].concat(list.map(x => {
-      const j = x.cur === 'TWD' ? x.amt / rt : x.amt;
-      return [x.date, x.name, x.amt, x.cur, x.payer || '', Math.round(j), Math.round(j * rt)];
-    }));
-    const csv = '﻿' + rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
-    download(`kobe-xmas-expenses-${nowAt(8).date}.csv`, csv, 'text/csv');
-  };
-  $('#expClear').onclick = async () => {
-    if (!store.get(K.exp, []).length) return toast('沒有資料');
-    if (await askConfirm('清除全部記帳？建議先匯出 CSV。', '全部清除')) {
-      store.set(K.exp, []);
-      renderWallet();
+    if (d) {
+      if (!(await askConfirm('刪除這筆？', '刪除'))) return;
+      store.set(K.exp, store.get(K.exp, []).filter(x => x.id !== d.dataset.del));
+      return renderWallet();
+    }
+    const row = e.target.closest('[data-exp]');
+    if (row) return openExpEditor(row.dataset.exp);
+    const w = e.target.closest('[data-w]');
+    if (!w) return;
+    const act = w.dataset.w;
+    if (act === 'budget') openBudget();
+    else if (act === 'export') exportExpCsv();
+    else if (act === 'prompt') { await copyText(RECEIPT_PROMPT); toast('已複製提示詞，傳給 AI 時記得附上收據照片'); }
+    else if (act === 'ai-import') { if (await importReceipt($('#aiPaste').value)) renderWallet(); }
+    else if (act === 'clear') {
+      if (!store.get(K.exp, []).length) return toast('沒有資料');
+      if (await askConfirm('清除全部記帳？建議先匯出 CSV。', '全部清除')) { store.set(K.exp, []); renderWallet(); }
     }
   };
+  v.onkeydown = e => { if (e.key === 'Enter' && e.target.matches('[data-exp]')) openExpEditor(e.target.dataset.exp); };
   if (!r.locked && (!r.ts || Date.now() - r.ts > 6 * 3600e3)) {
     refreshRate().then(nr => {
-      const typing = document.activeElement && document.activeElement.closest('#view-wallet input, #view-wallet select');
+      const typing = document.activeElement && document.activeElement.closest('#view-wallet input, #view-wallet select, #view-wallet textarea');
       if (nr.ts !== r.ts && ui.view === 'wallet' && !sheets.length && !typing) renderWallet();
     });
   }
+}
+
+/* 匯率小視窗：手動輸入（並鎖定）或抓最新 */
+function openRateSheet() {
+  const r = getRate();
+  openSheet('匯率', `<form id="rtForm">
+    <label class="field"><span>1 日圓＝幾台幣</span><input name="rate" inputmode="decimal" value="${esc(r.rate)}" required></label>
+    <div class="small muted">${r.locked ? '🔒 目前鎖定，不會自動更新。' : '🔓 沒鎖定：有網路時每 6 小時自動更新。'}</div>
+    <div class="btn-row"><button type="button" class="btn" data-a="refresh">${ic('refresh')} 抓最新匯率</button><button class="btn btn-primary">用這個匯率並鎖定</button></div></form>`, (body, entry) => {
+    $('#rtForm', body).onsubmit = e => {
+      e.preventDefault();
+      const val = parseFloat(new FormData(e.target).get('rate'));
+      if (!(val > 0 && val < 10)) return toast('匯率格式不對');
+      store.set(K.rate, { rate: val, src: '手動', ts: Date.now(), locked: true });
+      closeSheet(entry);
+      toast('已改用手動匯率並鎖定');
+      renderWallet();
+    };
+    $('[data-a=refresh]', body).onclick = async () => {
+      const cur = getRate();
+      cur.locked = false;
+      store.set(K.rate, cur);
+      const nr = await refreshRate(true);
+      closeSheet(entry);
+      if (nr.ts !== r.ts) toast('匯率已更新：' + nr.rate);
+      renderWallet();
+    };
+  });
+}
+
+/* 總預算小視窗（8-1） */
+function openBudget() {
+  const cur = +store.get(K.budget, 0) || 0;
+  const rate = getRate().rate;
+  openSheet('總預算', `<form id="bgForm">
+    <label class="field"><span>兩人這趟的總預算（日幣）</span><input name="b" inputmode="numeric" value="${cur || ''}" placeholder="例：200000"></label>
+    <div class="small muted" id="bgTwd">${cur ? '≈ ' + twd(cur * rate) : '台幣記的帳會照匯率換成日幣計算。'}</div>
+    <div class="btn-row">${cur ? '<button type="button" class="btn btn-ghost" data-a="clear">不設預算</button>' : ''}<button class="btn btn-primary">儲存</button></div></form>`, (body, entry) => {
+    const inp = $('[name=b]', body);
+    inp.oninput = () => { const n = parseInt(inp.value.replace(/[^\d]/g, ''), 10); $('#bgTwd', body).textContent = n ? '≈ ' + twd(n * rate) : ''; };
+    $('#bgForm', body).onsubmit = e => {
+      e.preventDefault();
+      const n = parseInt(inp.value.replace(/[^\d]/g, ''), 10) || 0;
+      store.set(K.budget, n);
+      closeSheet(entry);
+      renderWallet();
+    };
+    const clr = $('[data-a=clear]', body);
+    if (clr) clr.onclick = () => { store.set(K.budget, 0); closeSheet(entry); renderWallet(); };
+  });
+}
+
+/* 修改一筆；「待確認」的也在這裡對照原收據補完（9/15 記帳設計稿 3B） */
+function openExpEditor(id) {
+  const e = store.get(K.exp, []).find(x => x.id === id);
+  if (!e) return;
+  const sel = (name, opts, val) => `<select name="${name}">${opts.map(([v, l]) => `<option value="${esc(v)}" ${v === val ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
+  openSheet(e.pending ? '對照原收據補上' : '修改這筆', `<form id="exForm" autocomplete="off">
+    ${e.pending ? '<div class="ai-warn" style="margin:0 0 12px">AI 看不清楚的地方標成「待確認」。對照原收據改好金額和內容，再按「確認入帳」。</div>' : ''}
+    <label class="field"><span>項目</span><input name="name" value="${esc(e.name)}" required></label>
+    <div class="row2"><label class="field"><span>金額</span><input name="amt" inputmode="decimal" value="${e.amt || ''}" placeholder="0" required></label>
+      <label class="field"><span>幣別</span>${sel('cur', [['JPY', '¥ 日幣'], ['TWD', 'NT$ 台幣']], e.cur || 'JPY')}</label></div>
+    <div class="row2"><label class="field"><span>日期</span>${sel('date', expDates(e.date).map(d => [d, dateLabel(d)]), e.date)}</label>
+      <label class="field"><span>分類</span>${sel('cat', EXP_CATS.map(c => [c, c]), expCat(e))}</label></div>
+    <label class="field"><span>付款人</span>${sel('payer', PAYERS.map(p => [p, p]), e.payer || '共同')}</label>
+    <label class="field"><span>明細（可空）</span><textarea name="items" placeholder="例：飯糰、綠茶">${esc(e.items || '')}</textarea></label>
+    <label class="field"><span>備註（可空）</span><input name="note" value="${esc(e.note || '')}" placeholder="例：免稅"></label>
+    <div class="btn-row"><button type="button" class="btn btn-danger" data-a="del">刪除</button><button class="btn btn-primary">${e.pending ? '確認入帳' : '儲存'}</button></div></form>`, (body, entry) => {
+    $('#exForm', body).onsubmit = ev => {
+      ev.preventDefault();
+      const fd = new FormData(ev.target);
+      const amt = parseFloat(String(fd.get('amt')).replace(/[,，¥＄$]/g, ''));
+      if (!(amt > 0)) return toast('金額要大於 0');
+      const list = store.get(K.exp, []);
+      const x = list.find(y => y.id === id);
+      if (!x) return closeSheet(entry);
+      Object.assign(x, { name: String(fd.get('name')).trim(), amt, cur: fd.get('cur'), date: fd.get('date'), cat: fd.get('cat'), payer: fd.get('payer') });
+      for (const k of ['items', 'note']) { const val = String(fd.get(k)).trim(); if (val) x[k] = val; else delete x[k]; }
+      delete x.pending;
+      store.set(K.exp, list);
+      closeSheet(entry);
+      toast(e.pending ? '已確認入帳' : '已修改');
+      renderWallet();
+    };
+    $('[data-a=del]', body).onclick = async () => {
+      if (!(await askConfirm(`刪除「${e.name}」？`, '刪除'))) return;
+      store.set(K.exp, store.get(K.exp, []).filter(y => y.id !== id));
+      closeSheet(entry);
+      renderWallet();
+    };
+  });
+}
+
+function exportExpCsv() {
+  const list = store.get(K.exp, []);
+  if (!list.length) return toast('沒有資料');
+  const rt = getRate().rate;
+  const rows = [['日期', '項目', '明細', '分類', '金額', '幣別', '付款人', '付款方式', '備註', '約合 JPY', '約合 TWD', '待確認']].concat(
+    [...list].sort((a, b) => a.date.localeCompare(b.date) || a.ts - b.ts).map(x => {
+      const j = x.cur === 'TWD' ? x.amt / rt : x.amt;
+      return [x.date, x.name, x.items || '', expCat(x), x.amt, x.cur, x.payer || '', x.pay || '', x.note || '', Math.round(j), Math.round(j * rt), x.pending ? '是' : ''];
+    }));
+  const csv = '﻿' + rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+  download(`kobe-xmas-expenses-${nowAt(8).date}.csv`, csv, 'text/csv');
+}
+
+/* 收據 AI 整理（8-2）：提示詞＋把 AI 回覆的表格匯入 */
+const RECEIPT_PROMPT = `請讀取這張日本收據照片，整理成下面這個 Markdown 表格，只輸出表格，不要其他文字：
+
+| 日期 | 店名 | 品項 | 數量 | 含稅金額 | 付款方式 | 分類 | 備註 |
+
+規則：
+1. 日期寫成 YYYY-MM-DD。
+2. 店名、品項翻成台灣繁體中文，後面括號保留日文原文。
+3. 含稅金額只寫日圓數字，不加 ¥ 和逗號。一張收據有多個品項就分成多列，不要加合計列；品項價格若未含稅，另加一列「消費稅」，讓各列加總等於收據合計。
+4. 付款方式只能寫：現金、信用卡、IC卡、其他。
+5. 分類只能寫：餐飲、交通、購物、門票、住宿、其他。
+6. 任何看不清楚的文字或數字，那一格寫「待確認」，不要自行猜測。
+7. 免稅、折扣、服務費寫在備註。
+8. 有好幾張收據就全部放在同一個表格。`;
+
+/* 解析 AI 表格：同一張收據（日期＋店名＋付款方式）同分類合併成一筆，消費稅依金額比例分到各分類（9/15 記帳設計稿 2C） */
+function parseReceipt(raw, fallbackDate, payer) {
+  const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(l => l && !/^\|?\s*:?-{3,}/.test(l));
+  const cellsOf = l => (l.includes('\t') ? l.split('\t') : l.replace(/^\|/, '').replace(/\|$/, '').split('|')).map(c => c.trim());
+  let head = null;
+  const groups = new Map();
+  for (const line of lines) {
+    const c = cellsOf(line);
+    if (!head) { if (c.some(x => x.includes('日期')) && c.some(x => x.includes('金額'))) head = c; continue; }
+    if (c.every(x => !x)) continue;
+    const g = k => { const i = head.findIndex(h => h.includes(k)); return i >= 0 ? (c[i] || '') : ''; };
+    const [date0, shop, item, qty, amt, pay, cat0, note] = ['日期', '店名', '品項', '數量', '金額', '付款', '分類', '備註'].map(g);
+    if (/合計|小計|總計/.test(item || shop)) continue;
+    let pending = [date0, shop, item, qty, amt, cat0].some(x => x.includes('待確認'));
+    const yenAmt = parseInt(amt.replace(/[^\d]/g, ''), 10) || 0;
+    if (!yenAmt) pending = true;
+    let date = date0;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date0)) { date = fallbackDate; pending = true; }
+    const isTax = /消費稅|消費税/.test(item);
+    let cat = cat0;
+    if (!isTax && !EXP_CATS.includes(cat0)) { cat = '其他'; pending = true; }
+    const key = [date, shop, pay].join('|');
+    if (!groups.has(key)) groups.set(key, { date, shop, pay, tax: 0, taxPending: false, cats: new Map() });
+    const gr = groups.get(key);
+    if (isTax) { gr.tax += yenAmt; if (pending) gr.taxPending = true; continue; }
+    if (!gr.cats.has(cat)) gr.cats.set(cat, { amt: 0, items: [], notes: new Set(), pending: false });
+    const cg = gr.cats.get(cat);
+    cg.amt += yenAmt;
+    const q = parseInt(qty, 10);
+    cg.items.push((item || '未命名') + (q > 1 ? '×' + q : ''));
+    if (note && note !== '-') cg.notes.add(note);
+    if (pending) cg.pending = true;
+  }
+  const recs = [];
+  for (const gr of groups.values()) {
+    const cats = [...gr.cats.entries()];
+    if (!cats.length) cats.push(['其他', { amt: 0, items: ['消費稅'], notes: new Set(), pending: true }]);
+    const base = cats.reduce((s, [, cg]) => s + cg.amt, 0);
+    let left = gr.tax;
+    cats.forEach(([, cg], i) => {
+      const share = i === cats.length - 1 ? left : Math.round(gr.tax * (base ? cg.amt / base : 1 / cats.length));
+      cg.amt += share;
+      left -= share;
+    });
+    for (const [cat, cg] of cats) {
+      const rec = { id: uid('x'), date: gr.date, name: gr.shop || cg.items[0] || '收據', items: cg.items.join('、'), amt: cg.amt, cur: 'JPY', payer, cat, ts: Date.now() + recs.length, src: 'ai' };
+      if (gr.pay) rec.pay = gr.pay;
+      if (cg.notes.size) rec.note = [...cg.notes].join('、');
+      if (cg.pending || gr.taxPending || !cg.amt) rec.pending = true;
+      recs.push(rec);
+    }
+  }
+  return { head, recs };
+}
+
+async function importReceipt(text) {
+  const raw = String(text || '').trim();
+  if (!raw) { toast('請先貼上 AI 回覆的表格'); return false; }
+  const pf = expPref();
+  const { head, recs } = parseReceipt(raw, expDate || nowAt(9).date, pf.payer);
+  if (!head) { toast('找不到表頭：表格第一列要有「日期」和「含稅金額」'); return false; }
+  if (!recs.length) { toast('表格裡沒有可以匯入的資料'); return false; }
+  const pend = recs.filter(r => r.pending).length;
+  const sum = recs.reduce((s, r) => s + r.amt, 0);
+  const msg = `匯入 ${recs.length} 筆，合計 ${yen(sum)}（同一張收據、同一分類合併成一筆）。\n付款人記為「${pf.payer}」，之後可以點那一筆修改。` +
+    (pend ? `\n其中 ${pend} 筆有「待確認」，會用黃底標示：對照原收據點一下補上。` : '');
+  if (!(await askConfirm(msg, '匯入', false))) return false;
+  store.set(K.exp, store.get(K.exp, []).concat(recs));
+  toast('已匯入');
+  return true;
 }
 
 /* =========================================================
@@ -2119,7 +2493,8 @@ function renderTools() {
   const v = $('#view-tools');
   const rp = ritProgress();
   const tiles = [
-    ['redline', 'block', '過敏紅線卡', '全螢幕日文卡：玉ねぎ／タロイモ完全NG＋兩人飲食喜好', true],
+    ['redline', 'block', '過敏紅線卡', '全螢幕日文卡：玉ねぎ／タロイモ完全NG＋兩人飲食喜好', 'hot'],
+    ['med', 'med', '緊急醫療卡', '血型、常用藥、保險、緊急聯絡人＋「請叫救護車」', 'sky'],
     ['rituals', 'ramen', '儀式清單', `拉麵 ×${rp.a}・下午茶 ×${rp.y}｜${rp.done}/${rp.total}`],
     ['usj', 'globe', 'USJ 聖誕', '聖誕亮點、演出場次、官方 App'],
     ['sun', 'sunset', '日落・點燈', '每日日落時刻＋燈飾時間'],
@@ -2128,13 +2503,68 @@ function renderTools() {
     ['maps', 'map', '離線地圖截圖', '先存截圖，沒網路也能看'],
     ['transit', 'boat', '交通速查', '高速船、Port Liner、USJ 路線']
   ];
-  v.innerHTML = `<div class="sec-title">TOOLS</div><div class="tiles">${tiles.map(([k, icon, nm, ds, hot]) =>
-    `<button class="tile ${hot ? 'hot' : ''}" data-t="${k}"><span class="ic">${ic(icon)}</span><span class="nm">${esc(nm)}</span><span class="ds">${esc(ds)}</span></button>`).join('')}</div>`;
+  v.innerHTML = `<div class="sec-title">TOOLS</div><div class="tiles">${tiles.map(([k, icon, nm, ds, cls = '']) =>
+    `<button class="tile ${cls}" data-t="${k}"><span class="ic">${ic(icon)}</span><span class="nm">${esc(nm)}</span><span class="ds">${esc(ds)}</span></button>`).join('')}</div>`;
   v.onclick = e => {
     const t = e.target.closest('[data-t]');
     if (!t) return;
-    ({ redline: openRedLine, rituals: openRituals, usj: openUsj, sun: openSunLights, phrase: openPhrases, taxi: openTaxi, maps: openMapShots, transit: openTransit })[t.dataset.t]();
+    ({ redline: openRedLine, med: openMedical, rituals: openRituals, usj: openUsj, sun: openSunLights, phrase: openPhrases, taxi: openTaxi, maps: openMapShots, transit: openTransit })[t.dataset.t]();
   };
+}
+
+/* 緊急醫療卡（8-3）：全螢幕給醫護人員看；個人資料只存在手機 */
+const MED_FIELDS = [
+  ['blood', '血液型', '血型', 'A／B／O／AB（Rh+／Rh−）'],
+  ['meds', '持病・常用薬', '慢性病・常用藥', '無／病名、藥名'],
+  ['ins', '海外旅行保険', '保險', '保險公司＋24 小時電話'],
+  ['emg', '緊急連絡先', '緊急聯絡人', '姓名／關係／電話']
+];
+const MED_PEOPLE = {
+  A: { name: 'Aaron', ng: '玉ねぎ（オニオンエキスも）', def: { ins: '新光樂遊卡 886-2-2326-6722' } },
+  Y: { name: 'Yvonne', ng: '里芋・タロイモ／刺身・生もの', def: {} }
+};
+const medOf = k => Object.assign({}, MED_PEOPLE[k].def, store.get(K.med, {})[k]);
+
+function openMedical() {
+  const card = openFullCard(k => {
+    const p = MED_PEOPLE[k];
+    const m = medOf(k);
+    return `<span class="fc-badge sky ja">緊急医療・MEDICAL</span>
+      <div class="med-name">${esc(p.name)}</div>
+      <div class="fc-big ja" style="font-size:clamp(26px,8vw,38px)">救急車を<span class="nw">呼んでください</span></div>
+      <p class="fc-zh" style="border:0;padding:0;margin-top:4px">請幫我叫救護車</p>
+      <dl class="med-dl">
+        <dt class="ja">食物アレルギー<small>過敏、不能吃</small></dt><dd class="ja ng">${esc(p.ng)}</dd>
+        ${MED_FIELDS.map(([f, ja, zh]) => `<dt class="ja">${ja}<small>${zh}</small></dt><dd>${m[f] ? esc(m[f]) : '<span class="empty-v">還沒填</span>'}</dd>`).join('')}
+      </dl>
+      <div class="med-tel"><a href="tel:119">🚑 119 救急・消防</a><a href="tel:110">🚓 110 警察</a></div>
+      <button class="btn btn-ghost btn-block" data-med-edit="${k}" style="margin-top:14px">${ic('edit')} 編輯 ${esc(p.name)} 的資料</button>
+      <p class="fc-zh">🔒 只存在這支手機。給醫護人員看時，點上面的名字切換兩人。</p>`;
+  }, [['A', 'Aaron'], ['Y', 'Yvonne']]);
+  card.el.addEventListener('click', e => {
+    const b = e.target.closest('[data-med-edit]');
+    if (b) openMedEditor(b.dataset.medEdit, card.redraw);
+  });
+}
+
+function openMedEditor(k, done) {
+  const m = medOf(k);
+  openSheet(`${MED_PEOPLE[k].name} 的醫療資料`, `<form id="medForm">
+    ${MED_FIELDS.map(([f, , zh, ph]) => `<label class="field"><span>${zh}</span><input name="${f}" value="${esc(m[f] || '')}" placeholder="${esc(ph)}"></label>`).join('')}
+    <div class="small muted" style="margin-bottom:12px">🔒 只存在這支手機，不會上傳。</div>
+    <div class="btn-row"><button type="button" class="btn btn-ghost" data-a="cancel">取消</button><button class="btn btn-primary">儲存</button></div></form>`, (body, entry) => {
+    $('[data-a=cancel]', body).onclick = () => closeSheet(entry);
+    $('#medForm', body).onsubmit = e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const all = store.get(K.med, {});
+      all[k] = Object.fromEntries(MED_FIELDS.map(([f]) => [f, String(fd.get(f) || '').trim()]));
+      store.set(K.med, all);
+      closeSheet(entry);
+      toast('已儲存');
+      done();
+    };
+  });
 }
 
 /* 過敏紅線卡 */
@@ -2289,6 +2719,7 @@ function openSunLights() {
       }).join('')}
     </tbody></table>
     <div class="small muted" style="margin-top:8px">計算值（天文公式，誤差約 ±1 分）。「天黑」＝民用暮光結束，燈飾最好看的時候。</div></div>
+    ${outfitHtml(days)}
     <div class="sec-row" style="margin:4px 2px 10px"><div class="sec-title">燈飾</div>${leToggle('light')}</div>
     ${getList('light').map(l => `<div class="card"><div class="small muted" style="font-weight:800">${(l.dates || []).map(d => md(d)).join('、') || '（沒有指定日期）'}</div>
       <div class="card-title ja" style="margin:2px 0 4px">🎄 ${esc(l.name)}</div>
@@ -2304,6 +2735,21 @@ function openSunLights() {
     draw(body);
     body.onclick = e => listClick(e, () => draw(body));
   });
+}
+
+/* 12 月穿搭建議（8-6）：日落時間用天文公式算 */
+function outfitHtml(days) {
+  const sets = days.map(d => { const l = LOCS[d.loc] || LOCS.kobe; return sunTimes(d.date, l.lat, l.lon).set; }).filter(Boolean).sort();
+  const sun = sets.length ? (sets[0] === sets[sets.length - 1] ? sets[0] : `${sets[0]}–${sets[sets.length - 1]}`) : '';
+  return `<div class="card"><div class="card-title">👕 12 月神戶穿搭</div>
+    <div class="outfit-temp">🌡️ 平年 約 4–11°C・洋蔥式穿搭</div>
+    <ul class="outfit-list">
+      <li>發熱衣＋毛衣或刷毛＋防風保暖外套</li>
+      <li>圍巾、手套、毛帽；好走的防水鞋</li>
+      <li>室內、電車暖氣很強，外套要好穿脫</li>
+      <li>${sun ? `日落約 ${sun}，` : ''}天黑得早，傍晚以後更冷；港邊（美利堅公園、摩天輪）風大</li>
+      <li>USJ 晚上排隊看夜間秀要站很久，多帶暖暖包</li>
+    </ul></div>`;
 }
 
 /* 兩人的飲食禁忌與喜好（原本在資訊頁 FOOD，2026-10-22 併進紅線卡） */
@@ -2459,6 +2905,7 @@ function renderInfo() {
   const storedVer = store.get(K.tripVer, DATA_VER);
   const edEmg = listEdit === 'emg';
   const edRes = listEdit === 'res';
+  const disp = getDisp();
   const resStatus = r => { const s = (resLocal[r.id] || {}).status; return RES_STATUSES.includes(s) ? s : r.status; };
   /* 區塊順序（2026-10-22）：VISIT → MAP → EMERGENCY → HOTEL → RESERVATIONS → DATA，標題列有同順序的跳轉按鈕 */
   v.innerHTML = `
@@ -2500,6 +2947,7 @@ function renderInfo() {
 
     <section class="info-sec" id="sec-hotel">
     <div class="sec-title">HOTEL</div>
+    ${pinCardHtml()}
     <div class="card"><button class="hotel-bar" data-act="hotel"><span class="ico">${ic('hotel')}</span><span class="grow"><div class="nm">${esc(HOTEL.name)}</div><div class="muted small">${esc(HOTEL.addr)}</div></span><span class="chev">›</span></button></div>
     </section>
 
@@ -2527,6 +2975,14 @@ function renderInfo() {
         <button class="btn btn-danger" data-act="reset">重置 APP</button>
       </div>
     </div>
+    <div class="card">
+      <div class="card-title">顯示設定</div>
+      <div class="btn-row" style="margin-top:0">
+        <button class="btn" data-act="disp-dark">${disp.dark ? '☀️ 改回淺色' : '🌙 深色模式'}</button>
+        <button class="btn" data-act="disp-font">🔠 字級：${FONT_LABELS[disp.fs] || FONT_LABELS[0]}</button>
+      </div>
+      <div class="small muted" style="margin-top:8px">只改這支手機的顯示。字級按一下換一段：標準 → 大 → 特大。</div>
+    </div>
     </section>`;
 
   renderQr();
@@ -2534,6 +2990,8 @@ function renderInfo() {
 
   v.onclick = async e => {
     if (await listClick(e, renderInfo)) return;
+    const cp = e.target.closest('[data-copy]');
+    if (cp) return copyText(cp.dataset.copy);
     const rr = e.target.closest('[data-res]');
     if (rr) return openResDetail(rr.dataset.res);
     const dc = e.target.closest('[data-delcontact]');
@@ -2559,6 +3017,13 @@ function renderInfo() {
     else if (act === 'offline-img') offlineImages();
     else if (act === 'offline-prep') offlinePrep();
     else if (act === 'reset') resetApp();
+    else if (act === 'disp-dark' || act === 'disp-font') {
+      const d = getDisp();
+      if (act === 'disp-dark') d.dark = !d.dark; else d.fs = (d.fs + 1) % FONT_LABELS.length;
+      store.set(K.disp, d);
+      applyDisp();
+      renderInfo();
+    }
     else if (act === 'apply-new') {
       if (await askConfirm('套用新版預設行程？你在 APP 裡改過的行程會被覆蓋（記帳、確認號、QR 不受影響）。', '套用')) {
         trip = structuredClone(TRIP_DEFAULT);
@@ -2568,6 +3033,23 @@ function renderInfo() {
       }
     }
   };
+}
+
+/* 舊版釘選卡（6C）：航班直接讀預約清單，改了預約這裡跟著變；地址點一下複製給司機 */
+function pinCardHtml() {
+  const local = store.get(K.res, {});
+  const conf = id => { const c = (local[id] || {}).conf; return typeof c === 'string' && c ? `<button class="pin-conf" data-copy="${esc(c)}">代號 ${esc(c)}　複製</button>` : ''; };
+  const flights = getList('res').filter(r => r.icon === 'flight').map(r => {
+    const m = /^(去程|回程)\s*(.*)$/.exec(r.name);
+    return `<div class="pin-row"><span class="pin-k">✈️ ${m ? m[1] : '航班'}</span><span class="pin-v">${esc(m ? m[2] : r.name)}<small>${esc(r.when || '')}</small>${conf(r.id)}</span></div>`;
+  }).join('');
+  return `<div class="pin-card">
+    <div class="pin-head">📌 重要資訊・釘選</div>
+    ${flights}${flights ? '<div class="pin-dv"></div>' : ''}
+    <div class="pin-row"><span class="pin-k">🏨 飯店</span><span class="pin-v ja">${esc(HOTEL.name)}<small>${esc(HOTEL.inOut)}</small>${conf('hotel')}</span></div>
+    <button class="pin-addr ja" data-copy="${esc(HOTEL.addr + ' ' + HOTEL.name)}">${esc(HOTEL.addr)}<span class="cp">複製</span><small>點一下複製日文地址給計程車司機</small></button>
+    <div class="pin-row"><span class="pin-k">☎ 飯店</span><span class="pin-v"><button class="pin-tel" data-copy="${esc(HOTEL.phone)}">${esc(HOTEL.phone)}　複製</button><a class="pin-call" href="${telHref(HOTEL.phone)}">撥打</a></span></div>
+  </div>`;
 }
 
 /* 預約小視窗：狀態、確認號（可改、可複製）、私人備註，改了就存在手機 */
@@ -2827,10 +3309,26 @@ async function resetApp() {
   location.reload();
 }
 
+/* 顯示設定（8-5）：深色模式、字級三段；只存在這支手機 */
+const FONT_LABELS = ['標準', '大', '特大'];
+function getDisp() {
+  const d = store.get(K.disp, {});
+  return { dark: !!d.dark, fs: [0, 1, 2].includes(d.fs) ? d.fs : 0 };
+}
+function applyDisp() {
+  const d = getDisp();
+  const root = document.documentElement;
+  root.classList.toggle('dark', d.dark);
+  root.classList.remove('fs-1', 'fs-2');
+  if (d.fs) root.classList.add('fs-' + d.fs);
+  $('meta[name="theme-color"]').setAttribute('content', d.dark ? '#0F172A' : '#EFF6FF');
+}
+
 /* =========================================================
    啟動
    ========================================================= */
 function init() {
+  applyDisp();
   const n = jstTripNow();
   const todayDay = trip.days.find(d => d.date === n.date);
   if (todayDay) ui.day = todayDay.id;
