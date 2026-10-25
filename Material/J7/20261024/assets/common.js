@@ -1,4 +1,4 @@
-/* 國七。二段練習區 — 學生端、老師端共用的工具（API、數學排版、PDF、提示） */
+/* 國七。二段練習 — 學生端、老師端共用的工具（API、數學排版、PDF、提示） */
 'use strict';
 
 const $ = s => document.querySelector(s);
@@ -100,7 +100,8 @@ const dshort = ms => { if (!ms) return '—'; const d = new Date(ms); return `${
 
 /* ---------- 外部函式庫（用到才載入） ---------- */
 const LIBS = {
-  pdf: 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+  h2c: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  jspdf: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
   xlsx: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
 };
 const loaded = {};
@@ -115,22 +116,111 @@ function lib(name) {
   return loaded[name];
 }
 
+/* PDF：先把內容排成一頁一頁（A4 內容區，760px 寬），每頁各自轉成圖片再放進 PDF。
+   每次下載結果都一樣，不受畫面捲動位置影響，也不會超過手機瀏覽器的畫布大小上限。 */
+const PDF_W = 760, PDF_H = Math.round(PDF_W * 275 / 190);   // A4 扣掉邊界（左右 10、上 10、下 12 mm）
+const PDF_FOOT = 24;                                          // 頁碼列
+
+/** 攤平成一塊一塊：外層包裝（無 class、.pg、.pb）往內拆，.pb 包裝的第一塊要換頁 */
+function pdfBlocks(root) {
+  const out = [];
+  const walk = (el, brk) => Array.from(el.children).forEach(c => {
+    const wrap = c.tagName === 'DIV' && (!c.className || /^(pg|pb)( |$)/.test(c.className));
+    if (wrap && c.children.length) { walk(c, brk || c.classList.contains('pb')); brk = false; return; }
+    out.push({ el: c, brk }); brk = false;
+  });
+  walk(root, false);
+  return out;
+}
+
+/** 把塊排進頁面；放不下的框（.box 內有多項、或表格）拆成一項一項接到下一頁 */
+function pdfPaginate(st, blocks) {
+  const pages = [], LIMIT = PDF_H - PDF_FOOT;
+  let pg;
+  const newPage = () => { pg = document.createElement('div'); pg.className = 'pdfpage'; st.appendChild(pg); pages.push(pg); };
+  const over = () => pg.offsetHeight > LIMIT;
+  const split = b => {
+    const tbl = Array.from(b.children).find(c => c.tagName === 'TABLE');
+    let items, mk;
+    if (tbl && tbl.tBodies[0] && tbl.tBodies[0].rows.length > 1) {
+      items = Array.from(tbl.tBodies[0].rows);
+      mk = () => {
+        const sh = b.cloneNode(false);
+        Array.from(b.children).forEach(c => {
+          if (c !== tbl) { if (c.tagName === 'H2') sh.appendChild(c.cloneNode(true)); return; }
+          const t = tbl.cloneNode(false);
+          if (tbl.tHead) t.appendChild(tbl.tHead.cloneNode(true));
+          t.appendChild(document.createElement('tbody'));
+          sh.appendChild(t);
+        });
+        return [sh, sh.querySelector('tbody')];
+      };
+    } else {
+      const heads = Array.from(b.children).filter(c => c.tagName === 'H2');
+      items = Array.from(b.children).filter(c => c.tagName !== 'H2');
+      if (items.length < 2) return false;
+      mk = () => { const sh = b.cloneNode(false); heads.forEach(h => sh.appendChild(h.cloneNode(true))); return [sh, sh]; };
+    }
+    let i = 0, first = true;
+    while (i < items.length) {
+      const [sh, slot] = mk();
+      const h = sh.querySelector('h2');
+      if (h && !first) h.textContent += '（續）';
+      pg.appendChild(sh);
+      let n = 0;
+      while (i < items.length) {
+        slot.appendChild(items[i]);
+        if (over()) { slot.removeChild(items[i]); break; }
+        i++; n++;
+      }
+      if (!n) {
+        if (pg.childElementCount > 1) { pg.removeChild(sh); newPage(); continue; }
+        slot.appendChild(items[i++]);                     // 單一項目就比一頁高，只好硬放
+      }
+      first = false;
+      if (i < items.length) newPage();
+    }
+    return true;
+  };
+  blocks.forEach(({ el, brk }) => {
+    if (!pg || (brk && pg.childElementCount)) newPage();
+    pg.appendChild(el);
+    if (!over()) return;
+    pg.removeChild(el);
+    if (pg.childElementCount && !split(el)) { newPage(); pg.appendChild(el); return; }
+    if (!pg.childElementCount && !split(el)) pg.appendChild(el);
+  });
+  return pages;
+}
+
 /** 把一段 HTML 排成 A4 PDF 下載 */
 async function savePdf(html, filename) {
-  await lib('pdf');
+  await Promise.all([lib('h2c'), lib('jspdf')]);
   if (document.fonts && document.fonts.ready) await document.fonts.ready;
   let st = $('#pdfStage');
   if (!st) { st = document.createElement('div'); st.id = 'pdfStage'; document.body.appendChild(st); }
   st.innerHTML = html;
   await Promise.all(Array.from(st.querySelectorAll('img')).map(im => im.complete ? 0 : new Promise(r => { im.onload = im.onerror = r; })));
   try {
-    await window.html2pdf().set({
-      margin: [10, 10, 12, 10], filename,
-      image: { type: 'jpeg', quality: 0.92 },
-      html2canvas: { scale: 2, useCORS: true, backgroundColor: '#FFFFFF' },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['css', 'legacy'], avoid: ['.rv', '.box', '.goal', 'tr'] }
-    }).from(st.firstElementChild || st).save();
+    const src = st.firstElementChild || st;
+    const pages = pdfPaginate(st, pdfBlocks(src));
+    src.remove();
+    pages.forEach((p, i) => {
+      p.classList.add('fixed');
+      p.insertAdjacentHTML('beforeend', `<div class="pf">${i + 1}／${pages.length}</div>`);
+      p.hidden = true;
+    });
+    const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    for (let i = 0; i < pages.length; i++) {
+      pages.forEach((p, j) => { p.hidden = j !== i; });  // 一次只顯示一頁，固定在畫面左上角轉圖
+      const cv = await window.html2canvas(pages[i], {
+        scale: 2, useCORS: true, backgroundColor: '#FFFFFF', logging: false, scrollX: 0, scrollY: 0,
+        onclone: doc => { doc.getElementById('pdfStage').style.opacity = '1'; }
+      });
+      if (i) pdf.addPage();
+      pdf.addImage(cv.toDataURL('image/jpeg', 0.9), 'JPEG', 10, 10, 190, 275);
+    }
+    pdf.save(filename);
   } finally { st.innerHTML = ''; }
 }
 
@@ -196,7 +286,7 @@ const pct = (c, n) => n ? Math.round(c / n * 100) : 0;
 
 /** 一次測驗的 PDF 內容 */
 function reportPdfHtml(r, brand) {
-  const head = `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(brand.term || '')} ${r.type === '模擬' ? '段考模擬' : '小節練習'}</div><h1>${esc(brand.site || '國七。二段練習區')}</h1></div>
+  const head = `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(brand.term || '')} ${r.type === '模擬' ? '段考模擬' : '小節練習'}</div><h1>${esc(brand.site || '國七。二段練習')}</h1></div>
     <div class="r">${brand.logo ? `<img src="${BRAND_LOGO}" alt="">` : ''}${brand.brand ? `<b style="color:#1D63B8;letter-spacing:.08em">${esc(brand.brandName)}</b><br>` : ''}${esc(r.uid && r.uid.indexOf('G-') !== 0 ? r.uid + ' ' + r.name : '訪客')}<br>${dt(r.start, true)}</div></div>`;
   const score = `<div class="box" style="display:flex;gap:20px;align-items:center">
     <div class="big">${r.score}<small style="font-size:15px;color:#5E6E80">／100</small></div>

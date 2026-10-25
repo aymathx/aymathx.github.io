@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>國七。二段練習區</title>
+<title>國七。二段練習</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/ay-logo-blue.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
-<link rel="stylesheet" href="assets/app.css?v=1">
+<link rel="stylesheet" href="assets/app.css?v=3">
 </head>
 <body>
 <div class="app">
@@ -19,8 +19,8 @@
   <section class="screen" id="s-login" hidden>
     <div class="brand">
       <img id="loginLogo" src="assets/ay-logo-blue.png?v=2" alt="AY MATH 標誌" hidden>
-      <span class="eyebrow" id="loginEyebrow">115-01</span>
-      <h1 id="siteTitle">國七。二段練習區</h1>
+      <span class="eyebrow" id="loginEyebrow">115年上學期</span>
+      <h1 id="siteTitle">國七。二段練習</h1>
       <p>範圍：2-1 因數與倍數～2-4 指數律</p>
     </div>
     <form class="panel field" id="loginForm" novalidate hidden>
@@ -43,9 +43,8 @@
     <p class="rule">每次 <b class="mono">10</b> 題・限時 <b class="mono" id="qminTxt">25</b> 分鐘，每次重新抽題</p>
     <div class="units" id="units"></div>
     <div class="panel" style="display:grid;gap:12px" id="mockPanel">
-      <div class="row between"><h2>段考模擬卷</h2><span class="small muted">比照段考測驗時間，<span id="mminTxt">45</span> 分鐘</span></div>
-      <div class="mini-mocks" id="miniMocks"></div>
-      <p class="small muted">易～難：A → E</p>
+      <div class="row between"><h2>段考模擬卷</h2><span class="small muted">測驗時間，<span id="mminTxt">45</span> 分鐘</span></div>
+      <div class="mocks" id="miniMocks"></div>
     </div>
     <div class="panel" id="histPanel" style="display:grid;gap:4px">
       <div class="row between"><h2>我的測驗報告</h2><span class="small muted">每次完成都可以下載 PDF</span></div>
@@ -75,12 +74,11 @@
   <!-- 分析報告 -->
   <section class="screen" id="s-report" hidden>
     <div class="panel score">
-      <div class="rb" id="rBrand"></div>
       <div class="num" id="rScore"></div>
       <span class="level" id="rLevel"></span>
       <div class="small" id="rMeta"></div>
     </div>
-    <p style="font-size:16px;font-weight:700" id="rLine"></p>
+    <p style="font-size:16px;font-weight:700;text-align:center" id="rLine"></p>
     <div class="panel secbars" id="rSecs" hidden></div>
     <div class="panel" id="rGoalPanel">
       <div class="row between" style="margin-bottom:4px"><h2>學習目標</h2><span class="small muted">● 掌握　▲ 不穩　✕ 需加強</span></div>
@@ -132,7 +130,7 @@
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script src="assets/config.js?v=1"></script>
-<script src="assets/common.js?v=1"></script>
-<script src="assets/app.js?v=1"></script>
+<script src="assets/common.js?v=2"></script>
+<script src="assets/app.js?v=3"></script>
 </body>
 </html>

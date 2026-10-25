@@ -1,4 +1,4 @@
-/* 國七。二段練習區 — 學生端 */
+/* 國七。二段練習 — 學生端 */
 'use strict';
 
 let CFG = null;                         // 後端公開設定（開放登入、出處、品牌…）
@@ -20,14 +20,14 @@ function show(name) {
 function paintBrand(screen) {
   const c = CFG || {};
   $('#loginLogo').hidden = !c.logo;
-  $('#loginEyebrow').textContent = (c.brand ? c.brandName + '｜' : '') + (c.term || '115-01');
-  $('#siteTitle').textContent = c.site || '國七。二段練習區';
-  document.title = c.site || '國七。二段練習區';
+  $('#loginEyebrow').textContent = (c.brand ? c.brandName + '｜' : '') + (c.term || '115年上學期');
+  $('#siteTitle').textContent = c.site || '國七。二段練習';
+  document.title = c.site || '國七。二段練習';
   const parts = [];
   if (c.logo) parts.push(`<img src="${BRAND_LOGO}" alt="AY MATH 標誌">`);
   if (c.brand) parts.push(`<span class="bn">${esc(c.brandName)}</span>`);
   if (parts.length) parts.push('<span class="sep"></span>');
-  parts.push(`<span class="ttl">${esc(c.site || '國七。二段練習區')}</span>`);
+  parts.push(`<span class="ttl">${esc(c.site || '國七。二段練習')}</span>`);
   $('#appbar').innerHTML = parts.join('');
   $('#appbar').hidden = screen === 'login';
 }
@@ -112,7 +112,7 @@ const leftOf = (deadline, offset) => Math.max(0, Math.round((deadline - (Date.no
 function renderHome() {
   const u = HOME.user, g = !!u.guest;
   $('#whoName').textContent = g ? '訪客' : u.name;
-  $('#whoClass').textContent = g ? '開放練習，不保存個人報告' : `${u.cls} 班 ${u.seat} 號`;
+  $('#whoClass').textContent = g ? '開放練習，不保存個人報告' : u.id;
   $('#logout').innerHTML = ICON.out + (g ? '離開' : '登出');
   $('#qminTxt').textContent = HOME.st.qmin;
   $('#mminTxt').textContent = HOME.st.mmin;
@@ -124,13 +124,15 @@ function renderHome() {
       <div class="no">${x.no}</div>
       <h3>${esc(x.name)}</h3>
       <div class="go">${btn}</div>
-      <div class="meta">${act ? `<span class="resume">作答中，剩 ${mmss(leftOf(x.active.deadline, HOME.offset))}</span><br>` : ''}${g ? '' : (x.times ? `練習 ${x.times} 次・最高 ${x.best} 分・` : '還沒練習・')}已完成 <b class="mono" style="color:var(--ink)">${g ? '—' : x.cover + '%'}</b><div class="bar" style="margin-top:6px"><i style="width:${g ? 0 : x.cover}%"></i></div></div>
+      <div class="meta">${act ? `<span class="resume">作答中，剩 ${mmss(leftOf(x.active.deadline, HOME.offset))}</span>` : ''}<span>${g ? '' : (x.times ? `練習 ${x.times} 次・最高 ${x.best} 分・` : '還沒練習・')}已完成 <b class="mono" style="color:var(--ink)">${g ? '—' : x.cover + '%'}</b></span><div class="bar"><i style="width:${g ? 0 : x.cover}%"></i></div></div>
       <div class="weak">${g ? '' : x.weak.map(w => `<span class="chip t-難">✕ ${esc(w)}</span>`).join('')}</div>
     </div>`;
   }).join('');
   const papers = HOME.papers || [];
   $('#mockPanel').hidden = !papers.length;
-  $('#miniMocks').innerHTML = papers.map((p, i) => `<button data-mock="${i}" aria-label="${esc(p.name)}">${esc(p.L)}</button>`).join('');
+  $('#miniMocks').innerHTML = papers.map((p, i) => `<button class="mock" data-mock="${i}" aria-label="${esc(p.name)}">
+    <span class="L">${esc(p.L)}</span><span class="lw small">${esc(p.word)}</span>
+    <span class="meter">${[1, 2, 3, 4, 5].map(k => `<i class="${k <= p.lv ? 'on' : ''}"></i>`).join('')}</span></button>`).join('');
   $('#histPanel').hidden = g;
   $('#hist').innerHTML = HOME.history.length ? HOME.history.map(h => {
     const label = h.type === '模擬' ? `模擬${h.scope}卷` : h.scope;
@@ -335,7 +337,6 @@ function renderReport() {
   const r = REPORT, guest = HOME && HOME.user.guest;
   $('#rScore').innerHTML = `${r.score}<small>／100</small>`;
   $('#rLevel').textContent = r.level; $('#rLevel').className = 'level lv-' + r.level;
-  $('#rBrand').innerHTML = (CFG.logo ? `<img src="${BRAND_LOGO}" alt="">` : '') + (CFG.brand ? `<span>${esc(CFG.brandName)}</span>` : '');
   $('#rMeta').innerHTML = `${esc(r.title)}<br>用時 <span class="mono">${mmss(r.used)}</span>・答對 ${r.nRight}／${r.n}<br>平均每題 <span class="mono">${r.avgSec}</span> 秒${r.type === '練習' ? `・快速作答 <span class="mono">${r.fast}</span> 題` : ''}`;
   $('#rLine').textContent = r.line;
   $('#rSecs').hidden = !r.secs;

@@ -1,4 +1,4 @@
-/* 國七。二段練習區 — 老師端（teacher.html）與補習班主任唯讀檢視（director.html） */
+/* 國七。二段練習 — 老師端（teacher.html）與補習班主任唯讀檢視（director.html） */
 'use strict';
 
 const ROLE = document.body.dataset.role;              // teacher | director
@@ -232,7 +232,7 @@ async function attemptPdf(aid) {
 /* ---------- PDF 內容 ---------- */
 function pdfHead(title, right) {
   const c = D.config || {};
-  return `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(c.term || '')} ${esc(title)}</div><h1>${esc(c.site || '國七。二段練習區')}</h1></div>
+  return `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(c.term || '')} ${esc(title)}</div><h1>${esc(c.site || '國七。二段練習')}</h1></div>
     <div class="r">${c.logo ? `<img src="${BRAND_LOGO}" alt="">` : ''}${c.brand ? `<b style="color:#1D63B8;letter-spacing:.08em">${esc(c.brandName)}</b><br>` : ''}${right}<br>製表 ${dt(Date.now(), true)}</div></div>`;
 }
 

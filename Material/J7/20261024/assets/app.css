@@ -1,4 +1,4 @@
-/* 國七。二段練習區（正式版樣式，2026-10-24）
+/* 國七。二段練習（正式版樣式，2026-10-24）
    Layout: phone-first single column; white cards on a pale blue-grey page.
    Color: one light theme by choice (dark mode felt too heavy). Royal blue from the AY logo for actions, brand orange only for small accents. */
 :root {
@@ -36,7 +36,7 @@ p { margin: 0 }
 svg.i { width: 18px; height: 18px; flex: none }
 
 /* app bar */
-.appbar { display: flex; align-items: center; gap: 10px; padding: 14px 0 0 }
+.appbar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 0 0 }
 .appbar img { height: 34px; width: auto }
 .appbar .bn { font-weight: 900; letter-spacing: .06em; font-size: 13px; color: var(--primary); white-space: nowrap }
 .appbar .ttl { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0 }
@@ -89,11 +89,16 @@ svg.i { width: 18px; height: 18px; flex: none }
 .rule { display: flex; gap: 6px; align-items: center; font-weight: 700; color: var(--muted); font-size: 14px }
 .rule b { color: var(--primary); font-size: 16px }
 .units { display: grid; gap: 12px }
-.unit { display: grid; grid-template-columns: 58px 1fr auto; gap: 4px 14px; align-items: center }
-.unit .no { font-family: var(--f-mono); font-size: 15px; font-weight: 600; color: var(--primary); background: var(--primary-soft); border-radius: 10px; height: 44px; display: grid; place-items: center; grid-row: span 3; align-self: start }
-.unit h3 { font-size: 17px }
-.unit .meta { font-size: 13px; color: var(--muted) }
-.unit .go { grid-row: span 3 }
+/* 小節卡：第 1 列＝編號・標題（垂直置中）・按鈕；下面是進度、需加強 */
+.unit { display: grid; grid-template-columns: 58px 1fr auto; gap: 8px 14px; align-items: center }
+.unit .no { font-family: var(--f-mono); font-size: 15px; font-weight: 600; color: var(--primary); background: var(--primary-soft); border-radius: 10px; height: 44px; display: grid; place-items: center; grid-row: 1; grid-column: 1 }
+.unit h3 { font-size: 17px; grid-row: 1; grid-column: 2 }
+.unit .go { grid-row: 1; grid-column: 3 }
+.unit .meta { font-size: 13px; color: var(--muted); grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px }
+.unit .meta .resume { flex-basis: 100% }
+.unit .meta .bar { flex: 1 1 48px }
+.unit .weak { grid-column: 2 / -1 }
+.unit .weak:empty { display: none }
 .bar { height: 6px; border-radius: 3px; background: #E8EDF3; overflow: hidden }
 .bar i { display: block; height: 100%; background: var(--primary); border-radius: 3px }
 .weak { display: flex; flex-wrap: wrap; gap: 6px }
@@ -250,8 +255,8 @@ select { height: 40px; border: 1px solid var(--line-strong); background: var(--s
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 30; background: var(--ink); color: #FFF; padding: 10px 16px; border-radius: 10px; font-size: 14px; max-width: min(92vw, 520px); text-align: center; box-shadow: var(--shadow-md) }
 @media (max-width: 600px) {
   .mocks { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px }
-  .mock { padding: 10px 2px } .mock .L { font-size: 26px } .mock .lw { font-size: 11px }
-  .unit { grid-template-columns: 50px 1fr } .unit .go { grid-row: auto; grid-column: 1 / 3 } .unit .go .btn { width: 100% }
+  .mock { padding: 10px 2px } .mock .L { font-size: 26px } .mock .lw { font-size: 11px } .meter { gap: 2px } .meter i { width: 6px; height: 10px }
+  .unit { grid-template-columns: 50px 1fr } .unit .go { grid-row: 2; grid-column: 1 / -1 } .unit .go .btn { width: 100% } .unit .meta, .unit .weak { grid-column: 1 / -1 }
   .kpis, .cards4 { grid-template-columns: repeat(2, minmax(0, 1fr)) }
   .cols { grid-template-columns: 1fr }
   .hb { grid-template-columns: minmax(0, 8em) 1fr 3em }
@@ -297,7 +302,12 @@ select { height: 40px; border: 1px solid var(--line-strong); background: var(--s
 .tag-gk { font-size: 12px; color: var(--exam); font-weight: 700 }
 .ex-pending { color: var(--muted); font-style: italic }
 /* PDF 版面：放在畫面外渲染，A4 寬 */
-#pdfStage { position: fixed; left: -12000px; top: 0; width: 760px; background: #FFF; color: #1B2838; font: 14px/1.7 var(--f-body) }
+/* PDF 排版區：固定在左上角、看不見（轉圖時在複製的畫面裡才顯示），一次只顯示一頁 */
+#pdfStage { position: fixed; left: 0; top: 0; z-index: -1; opacity: 0; pointer-events: none; width: 760px; background: #FFF; color: #1B2838; font: 14px/1.7 var(--f-body) }
+#pdfStage .pdfpage { position: relative; width: 760px; background: #FFF; display: flow-root }
+#pdfStage .pdfpage.fixed { height: 1100px; overflow: hidden }
+#pdfStage .pdfpage[hidden] { display: none }
+#pdfStage .pf { position: absolute; left: 0; right: 0; bottom: 0; text-align: right; font-size: 11px; color: #8A97A6 }
 #pdfStage .pg { padding: 6px 4px }
 #pdfStage .ph { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #1D63B8; padding-bottom: 8px; margin-bottom: 14px }
 #pdfStage .ph h1 { font-size: 22px; font-weight: 900; letter-spacing: .04em }
