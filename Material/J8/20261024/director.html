@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>115年上學期｜國八。二段 ( 學習狀況 )</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/ay-logo-blue.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="assets/app.css?v=5">
+</head>
+<body data-role="director">
+<div class="app">
+  <section class="screen" id="s-login" hidden>
+    <form class="panel field login-t" id="loginForm" novalidate>
+      <h2 style="font-size:20px">學生學習動態（唯讀）</h2>
+      <label for="pass">存取碼</label>
+      <input id="pass" autocomplete="off" autocapitalize="characters" placeholder="例：HD-1234">
+      <p class="small muted">存取碼由老師提供。只能查看，不能修改。</p>
+      <div class="err-box" id="loginErr" hidden></div>
+      <button class="btn wide" type="submit">進入</button>
+    </form>
+  </section>
+
+  <section class="screen" id="s-main" hidden>
+    <div class="roles">
+      <div><h2 style="font-size:20px" id="tTitle">學生學習動態</h2><p class="small muted" id="tSub">唯讀檢視，只看得到老師開放的欄位。</p></div>
+      <div class="row"><button class="btn ghost sm" id="reload">重新整理</button><button class="btn ghost sm" id="logout">登出</button></div>
+    </div>
+    <nav class="tnav" id="tnav" hidden></nav>
+    <div id="tBody" style="display:grid;gap:16px"></div>
+  </section>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/config.js?v=1"></script>
+<script src="assets/common.js?v=4"></script>
+<script src="assets/admin.js?v=4"></script>
+</body>
+</html>

@@ -1,1 +1,137 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>115年上學期｜國八。二段</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/ay-logo-blue.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="assets/app.css?v=5">
+</head>
+<body>
+<div class="app">
+  <header class="appbar" id="appbar" hidden></header>
 
+  <!-- 登入 -->
+  <section class="screen" id="s-login" hidden>
+    <div class="brand">
+      <img id="loginLogo" src="assets/ay-logo-blue.png?v=2" alt="AY MATH 標誌" hidden>
+      <span class="eyebrow" id="loginEyebrow">115年上學期</span>
+      <h1 id="siteTitle">國八。二段練習</h1>
+      <p>範圍：2-2 根式的運算～3-2 十字交乘法</p>
+    </div>
+    <form class="panel field" id="loginForm" novalidate hidden>
+      <label for="who">請輸入班級座號姓名（中間不用空格）</label>
+      <input id="who" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例：80101陳大田">
+      <div class="parse" id="parse" aria-live="polite"></div>
+      <button class="btn wide" type="submit">登入練習<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <div class="panel openbox" id="openBox" hidden>
+      <h2>目前開放練習</h2>
+      <p class="muted">不用輸入姓名，直接開始。</p>
+      <button class="btn" id="guestGo">開始練習<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+    <div class="err-box" id="loginErr" hidden></div>
+  </section>
+
+  <!-- 選小節 -->
+  <section class="screen" id="s-home" hidden>
+    <div class="who"><div><b id="whoName"></b> <span class="muted small" id="whoClass"></span></div><button class="btn ghost sm" id="logout"></button></div>
+    <p class="rule">每次 <b class="mono">10</b> 題・限時 <b class="mono" id="qminTxt">25</b> 分鐘，每次重新抽題</p>
+    <div class="units" id="units"></div>
+    <div class="panel" style="display:grid;gap:12px" id="mockPanel">
+      <div class="row between"><h2>段考模擬卷</h2><span class="small muted">測驗時間，<span id="mminTxt">45</span> 分鐘</span></div>
+      <div class="mocks" id="miniMocks"></div>
+    </div>
+    <div class="panel" id="histPanel" style="display:grid;gap:4px">
+      <div class="row between"><h2>我的測驗報告</h2><span class="small muted">每次完成都可以下載 PDF</span></div>
+      <div class="hist-tabs" id="histTabs" role="group" aria-label="依範圍篩選報告"></div>
+      <div class="hist" id="hist"></div>
+    </div>
+  </section>
+
+  <!-- 小節測驗 -->
+  <section class="screen" id="s-quiz" hidden>
+    <div class="qbar">
+      <div class="sec" id="qSec"></div>
+      <div class="timer" id="timer" role="timer" aria-label="剩餘時間">25:00</div>
+      <div class="pos" id="pos">已答 0 / 10</div>
+    </div>
+    <div class="navq">
+      <div class="prog"><i id="progBar" style="width:0%"></i></div>
+      <div class="nav10" id="nav10"></div>
+    </div>
+    <article class="panel" id="qcard"></article>
+    <div id="confirmBox"></div>
+    <div class="qnav">
+      <button class="btn ghost" id="prev"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>上一題</button>
+      <button class="btn" id="next"><span id="nextLabel">下一題</span><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+  </section>
+
+  <!-- 分析報告 -->
+  <section class="screen" id="s-report" hidden>
+    <div class="panel score">
+      <div class="num" id="rScore"></div>
+      <span class="level" id="rLevel"></span>
+      <div class="small" id="rMeta"></div>
+    </div>
+    <p style="font-size:16px;font-weight:700;text-align:center" id="rLine"></p>
+    <div class="panel secbars" id="rSecs" hidden></div>
+    <div class="panel" id="rGoalPanel">
+      <div class="row between" style="margin-bottom:4px"><h2>學習目標</h2><span class="small muted">● 掌握　▲ 不穩　✕ 需加強</span></div>
+      <div id="rGoals"></div>
+      <p class="small muted" style="margin-top:8px">右邊數字＝這次這個目標答對幾題／考了幾題。燈號會再加上最近 3 次一起判斷。</p>
+    </div>
+    <div class="panel" style="display:grid;gap:6px">
+      <div class="row between"><h2>題目回顧與解析</h2><div class="seg" id="rvSeg"><button aria-pressed="true" data-rv="wrong">只看錯題</button><button aria-pressed="false" data-rv="all" id="rvAll">全部 10 題</button></div></div>
+      <div id="rvList"></div>
+    </div>
+    <div class="row">
+      <button class="btn" id="again"></button>
+      <button class="btn ghost" id="dl"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>下載本次報告（PDF）</button>
+      <button class="btn ghost" id="toHome">回小節列表</button>
+    </div>
+  </section>
+
+  <!-- 段考模擬：選卷 -->
+  <section class="screen" id="s-mock" hidden>
+    <button class="back" id="mockBack"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>回小節列表</button>
+    <div><h2 style="font-size:20px">段考模擬卷</h2><p class="muted small" style="margin-top:4px">選一份難度，完整作答一次，跟真正的段考一樣計時。</p></div>
+    <div class="mocks" id="mocks"></div>
+    <div class="paper" id="paper"></div>
+  </section>
+
+  <!-- 段考模擬：作答 -->
+  <section class="screen" id="s-mquiz" hidden>
+    <div class="qbar">
+      <div class="sec" id="mqName"></div>
+      <div class="timer" id="mtimer" role="timer" aria-label="剩餘時間">45:00</div>
+      <div class="pos" id="mpos"></div>
+    </div>
+    <div class="mpaper" id="mpaper"></div>
+    <div class="panel sticky-keys keys" id="mkeys" hidden></div>
+    <div id="mconfirm"></div>
+    <div class="row"><button class="btn wide" id="msubmit">完成交卷</button></div>
+  </section>
+</div>
+
+<div class="overlay" id="timeout" hidden>
+  <div class="panel">
+    <div class="big">時間到</div>
+    <p id="toMsg">時間內沒有交卷，這次不計分。</p>
+    <p class="small muted">已看過的題目仍會記錄，下次重新抽題。</p>
+    <button class="btn" id="retry">重新測驗</button>
+    <button class="btn ghost" id="toHome2">回小節列表</button>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="assets/config.js?v=1"></script>
+<script src="assets/common.js?v=4"></script>
+<script src="assets/app.js?v=5"></script>
+</body>
+</html>
