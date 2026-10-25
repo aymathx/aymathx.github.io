@@ -69,11 +69,13 @@ svg.i { width: 18px; height: 18px; flex: none }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); font-weight: 700; box-shadow: var(--shadow-sm) }
 
 /* login */
-.brand { padding-top: 22px; display: grid; gap: 8px; justify-items: start }
-.brand img { height: 72px; width: auto; margin-bottom: 4px }
-.brand .eyebrow { font-size: 13px; letter-spacing: .08em; color: var(--accent); font-weight: 700 }
-.brand h1 { font-weight: 900; font-size: clamp(30px, 8vw, 42px); letter-spacing: .04em }
-.brand p { color: var(--muted) }
+/* 登入頁標頭：LOGO 在左，右邊上排是網站名稱、下排是品牌｜期別；沒有 LOGO 時就只有右邊兩排 */
+.brand { padding-top: 22px; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; row-gap: 4px; align-items: center }
+.brand img { grid-column: 1; grid-row: 1 / span 2; height: 72px; width: auto }
+.brand h1 { grid-column: 2; grid-row: 1; align-self: end; font-weight: 900; font-size: clamp(30px, 8vw, 42px); letter-spacing: .04em; line-height: 1.15 }
+.brand .eyebrow { grid-column: 2; grid-row: 2; align-self: start; font-size: 13px; letter-spacing: .08em; color: var(--accent); font-weight: 700 }
+.brand p { grid-column: 1 / -1; margin-top: 10px; color: var(--muted) }
+.brand.nologo h1, .brand.nologo .eyebrow { grid-column: 1 / -1 }
 .field { display: grid; gap: 10px }
 .field label { font-weight: 700 }
 .field input { height: 52px; border: 1.5px solid var(--line-strong); background: var(--surface); border-radius: 10px; padding: 0 14px; font-size: 19px; letter-spacing: .04em; width: 100%; transition: border-color .15s, box-shadow .15s }
@@ -223,6 +225,16 @@ sup { font-size: .72em; line-height: 0 }
 .cards4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px }
 .card { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 14px; display: grid; gap: 4px; box-shadow: var(--shadow-sm) }
 button.card:hover { border-color: var(--primary) }
+.card.on { border-color: var(--primary); background: var(--primary-soft); box-shadow: 0 0 0 1px var(--primary) inset }
+/* 老師端：學生某一節答錯過的題目 */
+.wqs { display: grid; gap: 10px; margin-top: 8px }
+.wq { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; min-width: 0 }
+.wq .stem { font-size: 15px; overflow-wrap: anywhere }
+/* 主任端：學生列表上方的篩選與勾選匯出 */
+.dirbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px }
+.dirbar .hist-tabs { flex: 1 1 320px; max-width: 480px; margin: 0 }
+.tbl .ck { width: 44px; text-align: center }
+.tbl .ck input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; vertical-align: middle }
 .card b { font-family: var(--f-mono); color: var(--primary); font-size: 18px }
 .tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow-sm) }
 table { border-collapse: collapse; font-size: 14px; width: 100%; min-width: 560px }
@@ -262,6 +274,7 @@ select { height: 40px; border: 1px solid var(--line-strong); background: var(--s
   .hb { grid-template-columns: minmax(0, 8em) 1fr 3em }
   .nav10 { gap: 4px } .qn { height: 30px; font-size: 12px }
   .score .num { font-size: 52px }
+  .brand img { height: 60px } .brand .eyebrow { font-size: 12px; letter-spacing: .04em }
   .appbar { gap: 8px } .appbar img { height: 28px } .appbar .bn { font-size: 11px; letter-spacing: .04em } .appbar .ttl { font-size: 14px }
 }
 
@@ -273,8 +286,18 @@ select { height: 40px; border: 1px solid var(--line-strong); background: var(--s
 @keyframes spin { to { transform: rotate(360deg) } }
 .fig { display: block; max-width: 100%; height: auto; margin: 12px auto 0; border-radius: 8px }
 .fig.small { max-width: min(100%, 320px) }
-.aline { margin-top: 18px; font-size: 16px; line-height: 2.6; display: flex; flex-wrap: wrap; align-items: center; gap: 0 4px }
-.aline .lbl { font-weight: 700; font-size: 14px; color: var(--muted); width: 100% ; line-height: 1.6 }
+/* 多格填充：每一格一列，像選擇題選項一樣直排，列與列之間留間距 */
+.aline { margin-top: 18px; font-size: 16px; display: grid; gap: 12px }
+.aline .lbl { font-weight: 700; font-size: 14px; line-height: 1.6 }
+.bkrow { display: flex; align-items: center; gap: 10px; min-width: 0 }
+.bkrow .bk { flex: 1 1 auto; width: auto; min-width: 0 }
+.bkrow .bkl { flex: none; min-width: 1.6em; font-weight: 700; color: var(--primary) }
+.bkrow .bku { flex: none; white-space: nowrap; color: var(--muted) }
+/* 我的測驗報告：範圍篩選 */
+.hist-tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin: 4px 0 6px }
+.hist-tabs button { height: 34px; border: 1px solid var(--line-strong); background: var(--surface); border-radius: 8px; font: 700 13px var(--f-body); color: var(--muted); padding: 0 2px; white-space: nowrap }
+.hist-tabs button[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #FFF }
+.hist-tabs button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px }
 .bk { height: 44px; min-width: 7em; width: 9em; max-width: 100%; border: 1.5px solid var(--line-strong); background: var(--surface); border-radius: 10px; padding: 0 12px; font: 600 18px var(--f-mono); vertical-align: middle }
 .bk.wide { width: 100%; height: 50px; font-size: 20px }
 .bk:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); outline: none }
@@ -303,7 +326,9 @@ select { height: 40px; border: 1px solid var(--line-strong); background: var(--s
 .ex-pending { color: var(--muted); font-style: italic }
 /* PDF 版面：放在畫面外渲染，A4 寬 */
 /* PDF 排版區：固定在左上角、看不見（轉圖時在複製的畫面裡才顯示），一次只顯示一頁 */
-#pdfStage { position: fixed; left: 0; top: 0; z-index: -1; opacity: 0; pointer-events: none; width: 760px; background: #FFF; color: #1B2838; font: 14px/1.7 var(--f-body) }
+/* iPhone Safari 會自動放大寬區塊裡的字，量出來的高度比實際畫出來的大，造成「放得下卻換頁」→ 關掉自動放大 */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100% }
+#pdfStage { -webkit-text-size-adjust: none; text-size-adjust: none; position: fixed; left: 0; top: 0; z-index: -1; opacity: 0; pointer-events: none; width: 760px; background: #FFF; color: #1B2838; font: 14px/1.7 var(--f-body) }
 #pdfStage .pdfpage { position: relative; width: 760px; background: #FFF; display: flow-root }
 #pdfStage .pdfpage.fixed { height: 1100px; overflow: hidden }
 #pdfStage .pdfpage[hidden] { display: none }

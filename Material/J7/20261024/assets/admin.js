@@ -33,6 +33,8 @@ $('#reload').onclick = () => load().catch(() => { });
 async function load() {
   D = await run('讀取資料中…', () => api(ROLE === 'teacher' ? 'tAll' : 'dAll', { token: TOKEN }));
   if (ROLE === 'teacher') $('#tSub').textContent = `名單 ${D.students.length} 人・題庫 ${Object.keys(D.bank).reduce((t, k) => t + D.bank[k].all, 0)} 題・資料時間 ${dt(Date.now())}`;
+  const term = (ROLE === 'teacher' ? D.config && D.config.term : D.term) || '115年上學期';
+  document.title = `${term}｜國七。二段 ( ${ROLE === 'teacher' ? '系統管理者' : '學習狀況'} )`;
   show('main');
   render();
 }
@@ -40,28 +42,75 @@ async function load() {
 /* ---------- 版面 ---------- */
 const TABS = [['overview', '總覽'], ['students', '學生'], ['sections', '小節'], ['mocks', '模擬卷'], ['export', '匯出與權限'], ['settings', '網站設定'], ['bank', '題庫與名單']];
 function render() {
+  const [base, ...args] = view.split(':');
   if (ROLE === 'teacher') {
-    const base = view.split(':')[0];
-    const cur = { student: 'students', section: 'sections' }[base] || base;
+    const cur = { student: 'students', section: 'sections', mock: 'mocks' }[base] || base;
     $('#tnav').innerHTML = TABS.map(([k, l]) => `<button data-tv="${k}" aria-current="${cur === k}">${l}</button>`).join('');
   }
-  const [base, arg] = view.split(':');
-  $('#tBody').innerHTML = VIEWS[base](arg);
+  $('#tBody').innerHTML = VIEWS[base](...args);
+  const all = $('#dirAll');
+  if (all) { const n = D.students.filter(x => DSEL.has(x.id)).length; all.indeterminate = n > 0 && n < D.students.length; }
 }
 document.addEventListener('click', e => {
+  if (e.target.closest('.ck')) return;                  // 勾選格不要觸發整列的連結
   const v = e.target.closest('[data-tv]');
   if (v) { view = v.dataset.tv; render(); scrollTo({ top: 0 }); }
 });
 
-function donut(lv) {
+function donut(lv, unit) {
   const tot = sum(lv) || 1; let acc = 0;
   const vars = ['var(--ok)', 'var(--exam)', 'var(--warn)', 'var(--bad)'];
   const stops = lv.map((v, i) => { const a = acc; acc += v / tot * 100; return `${vars[i]} ${a}% ${acc}%`; }).join(',');
-  return `<div class="donutwrap"><div class="donut" style="background:${sum(lv) ? `conic-gradient(${stops})` : '#E8EDF3'}"><span>${sum(lv)}<br>人次</span></div>
+  return `<div class="donutwrap"><div class="donut" style="background:${sum(lv) ? `conic-gradient(${stops})` : '#E8EDF3'}"><span>${sum(lv)}<br>${unit || '人次'}</span></div>
     <div class="legend2">${lv.map((v, i) => `<span><i class="c-${LVC[i]}"></i>${LVN[i]}　<span class="mono">${v}</span></span>`).join('')}</div></div>`;
 }
 const trendBars = list => list.length ? `<div class="trend">${list.map(t => `<div title="${esc(scopeLabel(t))} ${dt(t.start)}"><span>${t.score === null ? '逾時' : t.score}</span><i class="${t.score === null ? 'c-bad' : colorFor(t.score)}" style="height:${Math.max(t.score || 0, 6) * 0.8}px"></i><em>${esc(t.type === '模擬' ? t.scope + '卷' : t.scope)}</em></div>`).join('')}</div>` : '<p class="muted" style="margin-top:8px">還沒有紀錄。</p>';
 const attList = (list, pdfAttr) => list.length ? `<div class="hist">${list.map(a => `<div class="h"><div><b>${esc(scopeLabel(a))}</b>　<span class="mono small muted">${dt(a.start)}</span>　<span class="small ${a.status === '逾時' ? 'x' : ''}">${a.status === '逾時' ? '逾時' : a.score + ' 分・' + a.level}</span></div>${a.status === '完成' ? `<button class="btn ghost sm" ${pdfAttr}="${a.aid}">${ICON.down}PDF</button>` : ''}</div>`).join('')}</div>` : '<p class="muted small">沒有紀錄。</p>';
+
+/* ---------- 篩選鈕、學生各小節分析 ---------- */
+const FSEL = { list: '全部', att: '全部' };            // 主任學生列表、測驗紀錄的篩選
+const DSEL = new Set();                                 // 主任勾選的學生
+const nv = v => v === null || v === undefined ? '—' : v;
+const fTabs = key => `<div class="hist-tabs" role="group" aria-label="依範圍篩選">${['全部'].concat(D.units.map(u => u.no), ['模擬卷']).map(t => `<button type="button" data-hk="${key}" data-ht="${esc(t)}" aria-pressed="${FSEL[key] === t}">${esc(t)}</button>`).join('')}</div>`;
+const fAtts = (list, key) => list.filter(a => FSEL[key] === '全部' || (FSEL[key] === '模擬卷' ? a.type === '模擬' : a.type !== '模擬' && a.scope === FSEL[key]));
+
+/** 學生的四個小節卡片：點一下展開這一節的分析，再點一下收起 */
+const secCards = (s, sel, base) => `<div class="cards4">${D.units.map((u, i) => {
+  const on = sel === u.no;
+  return `<button class="card${on ? ' on' : ''}" data-tv="${base}:${s.id}${on ? '' : ':' + u.no}" aria-pressed="${on}"><span class="small muted">${u.no} ${esc(u.name)}</span>${s.cnt ? `<b>${s.cnt[i]} 次</b>` : ''}${s.best ? `<span class="small">${s.best[i] === null ? '還沒完成' : '最高 ' + s.best[i] + ' 分'}</span>` : ''}<span class="small" style="color:var(--primary);font-weight:700">${on ? '收起' : ROLE === 'teacher' ? '看觀念分析與錯題' : '看觀念分析'}</span></button>`;
+}).join('')}</div>`;
+
+/** 一位學生在某一小節的分析：各觀念答對率、等第分布；老師另外看得到答錯過的題目 */
+function secAnalysis(s, no, back) {
+  const i = D.units.findIndex(u => u.no === no), x = s.bySec && s.bySec[i];
+  if (!x) return '';
+  const goals = x.goals.slice().sort((a, b) => pct(a.c, a.n) - pct(b.c, b.n));
+  const wrong = ROLE === 'teacher' ? x.wrong || [] : null;
+  const sub = t => `<div class="small muted" style="font-weight:700">${t}</div>`;
+  return `<div class="panel" style="display:grid;gap:14px">
+    <div class="row between"><h3>${esc(unitName(no))}　<span class="small muted">${esc(s.name)} 的觀念分析</span></h3><button class="btn ghost sm" data-tv="${back}">收起</button></div>
+    <div class="cols">
+      <div>${sub('各觀念答對率')}<div style="margin-top:6px">${goals.map(g => hbar(g.name, pct(g.c, g.n), colorFor(pct(g.c, g.n)), `${g.c}／${g.n}`)).join('') || '<p class="muted">這一節還沒有完成的練習。</p>'}</div></div>
+      <div>${sub('等第分布（這一節完成的練習）')}<div style="margin-top:8px">${donut(x.lv, '次')}</div></div>
+    </div>
+    ${wrong ? `<div>${sub(`答錯過的題目（${wrong.length} 題，答錯次數多的在前）`)}${wrong.length ? `<div class="wqs">${wrong.map(w => `<div class="wq">
+      <div class="qhead" style="margin:0">${tierChip(w.tier, true)}<span class="small muted">${esc(w.src)}　${esc(w.qid)}</span><span class="x small">錯 ${w.w}／${w.n} 次</span></div>
+      <div class="stem">${fmt(w.stem)}</div>${w.fig ? `<img class="fig small" src="assets/fig/${esc(w.fig)}" alt="題目附圖">` : ''}</div>`).join('')}</div>` : '<p class="muted" style="margin-top:6px">這一節沒有答錯過的題目。</p>'}</div>` : ''}
+  </div>`;
+}
+
+/** 小節或模擬卷的全班分析（老師端） */
+function groupBody(s, kind) {
+  return `<div class="cols">
+      <div class="panel"><h3>各觀念答對率</h3><div style="margin-top:8px">${s.goals.slice().sort((a, b) => pct(a.c, a.n) - pct(b.c, b.n)).map(g => hbar(g.name, pct(g.c, g.n), colorFor(pct(g.c, g.n)), `${pct(g.c, g.n)}%`)).join('') || '<p class="muted">資料還不夠。</p>'}</div></div>
+      <div class="panel"><h3>等第分布</h3><div style="margin-top:10px">${donut(s.lv)}</div></div>
+    </div>
+    ${kind === 'mock' ? `<div class="panel"><h3>各小節答對率</h3><div style="margin-top:8px">${(s.secs || []).map(x => hbar(`${x.no} ${x.name}`, pct(x.c, x.n), colorFor(pct(x.c, x.n)), `${pct(x.c, x.n)}%`)).join('') || '<p class="muted">資料還不夠。</p>'}</div></div>` : ''}
+    <div class="cols">
+      <div class="panel"><h3>最常錯的題目</h3><div style="margin-top:8px;display:grid;gap:10px">${s.miss.map(m => `<div>${hbar(`${m.qid}（${m.src}）`, pct(m.c, m.n), colorFor(pct(m.c, m.n)), `${m.c}／${m.n}`)}<div class="small muted">${fmt(m.stem)}…</div></div>`).join('') || '<p class="muted">資料還不夠（每題至少 2 人次才列）。</p>'}</div></div>
+      <div class="panel"><h3>需要關心的學生</h3><p class="small muted">最近一次${kind === 'mock' ? '這份模擬卷' : '這節練習'}不到 60 分</p><div class="weak" style="margin-top:10px">${s.watch.map(w => `<button class="chip t-中" style="border:0" data-tv="student:${w.id}">${esc(w.name)}（${w.score} 分）</button>`).join('') || '<span class="muted">目前沒有</span>'}</div></div>
+    </div>`;
+}
 
 const VIEWS = {
   overview: () => {
@@ -84,20 +133,21 @@ const VIEWS = {
     ${D.students.map(s => `<tr class="link" data-tv="student:${s.id}"><td class="mono">${s.id}</td><td>${esc(s.name)}</td><td>${sum(s.cnt) || '<span class="x">0</span>'}</td><td>${s.mock || 0}</td><td>${s.avg === null ? '—' : s.avg}</td><td>${dshort(s.last)}</td><td>${esc(s.weak.slice(0, 2).join('、')) || '—'}</td></tr>`).join('') || '<tr><td colspan="7" class="muted">名單是空的，請到「題庫與名單」貼上名單。</td></tr>'}
     </tbody></table></div>`,
 
-  student: id => {
+  student: (id, sec) => {
     const s = D.students.find(x => x.id === id);
     if (!s) return '<p class="muted">找不到這位學生。</p>';
     const atts = D.attempts.filter(a => a.uid === id).sort((a, b) => b.start - a.start);
     const goalBars = D.goals.filter(g => s.goals[g.code]).map(g => { const v = s.goals[g.code]; return [g, pct(v.c, v.n), v]; }).sort((a, b) => a[1] - b[1]);
     return `<button class="back" data-tv="students">${ICON.back}學生列表</button>
     <div class="row between"><h3 style="font-size:20px">${esc(s.name)} <span class="muted small mono">${esc(s.id)}</span></h3><button class="btn ghost sm" data-spdf="${s.id}">${ICON.down}匯出這位學生的報告</button></div>
-    <div class="cards4">${D.units.map((u, i) => `<div class="card"><span class="small muted">${u.no} ${esc(u.name)}</span><b>${s.cnt[i]} 次</b><span class="small">${s.best[i] === null ? '還沒完成' : '最高 ' + s.best[i] + ' 分'}</span></div>`).join('')}</div>
+    ${secCards(s, sec, 'student')}
+    ${sec ? secAnalysis(s, sec, 'student:' + id) : ''}
     <div class="cols">
       <div class="panel"><h3>最近幾次分數</h3>${trendBars(s.trend)}</div>
       <div class="panel"><h3>需加強的觀念</h3><div class="weak" style="margin-top:10px">${s.weak.map(w => `<span class="chip t-難">✕ ${esc(w)}</span>`).join('') || '<span class="muted">目前沒有</span>'}</div></div>
     </div>
     <div class="panel"><h3>各觀念答對率（小節練習累計）</h3><div style="margin-top:8px">${goalBars.map(([g, p, v]) => hbar(`${g.sec} ${g.name}`, p, colorFor(p), `${v.c}／${v.n}`)).join('') || '<p class="muted">還沒有資料。</p>'}</div></div>
-    <div class="panel" style="display:grid;gap:4px"><h3>測驗紀錄</h3>${attList(atts, 'data-apdf')}</div>`;
+    <div class="panel" style="display:grid;gap:4px"><h3>測驗紀錄</h3>${fTabs('att')}${attList(fAtts(atts, 'att'), 'data-apdf')}</div>`;
   },
 
   sections: () => `<p class="small muted">點一個小節，看全班在哪些觀念比較弱。</p>
@@ -108,20 +158,24 @@ const VIEWS = {
     return `<button class="back" data-tv="sections">${ICON.back}小節列表</button>
     <div class="row between"><h3 style="font-size:20px">${s.no} ${esc(s.name)}</h3><button class="btn ghost sm" data-secpdf="${s.no}">${ICON.down}匯出這個小節的報告</button></div>
     <p class="small muted">${s.tries} 人次（其中逾時 ${s.timeouts}）・平均 ${s.avg === null ? '—' : s.avg + ' 分'}</p>
-    <div class="cols">
-      <div class="panel"><h3>各觀念答對率</h3><div style="margin-top:8px">${s.goals.slice().sort((a, b) => pct(a.c, a.n) - pct(b.c, b.n)).map(g => hbar(g.name, pct(g.c, g.n), colorFor(pct(g.c, g.n)), `${pct(g.c, g.n)}%`)).join('') || '<p class="muted">資料還不夠。</p>'}</div></div>
-      <div class="panel"><h3>等第分布</h3><div style="margin-top:10px">${donut(s.lv)}</div></div>
-    </div>
-    <div class="cols">
-      <div class="panel"><h3>最常錯的題目</h3><div style="margin-top:8px;display:grid;gap:10px">${s.miss.map(m => `<div>${hbar(`${m.qid}（${m.src}）`, pct(m.c, m.n), colorFor(pct(m.c, m.n)), `${m.c}／${m.n}`)}<div class="small muted">${fmt(m.stem)}…</div></div>`).join('') || '<p class="muted">資料還不夠（每題至少 2 人次才列）。</p>'}</div></div>
-      <div class="panel"><h3>需要關心的學生</h3><p class="small muted">最近一次這節練習不到 60 分</p><div class="weak" style="margin-top:10px">${s.watch.map(w => `<button class="chip t-中" style="border:0" data-tv="student:${w.id}">${esc(w.name)}（${w.score} 分）</button>`).join('') || '<span class="muted">目前沒有</span>'}</div></div>
-    </div>`;
+    ${groupBody(s, 'unit')}`;
   },
 
-  mocks: () => `<div class="tbl"><table><thead><tr><th>卷別</th><th>來源（學生看不到）</th><th>難度</th><th>作答人次</th><th>平均分數</th></tr></thead><tbody>
-    ${D.mocks.map(m => `<tr><td><b>${esc(m.name)}</b></td><td>${esc(m.src)}</td><td>${esc(m.word)}</td><td>${m.tries}</td><td>${m.avg === null ? '—' : m.avg}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">還沒有匯入模擬卷。</td></tr>'}
+  mocks: () => `<p class="small muted">點一份模擬卷，看全班的分析報告。</p>
+    <div class="tbl"><table><thead><tr><th>卷別</th><th>來源（學生看不到）</th><th>難度</th><th>作答人次</th><th>平均分數</th><th>分析報告</th></tr></thead><tbody>
+    ${D.mocks.map(m => `<tr class="link" data-tv="mock:${esc(m.L)}"><td><b>${esc(m.name)}</b></td><td>${esc(m.src)}</td><td>${esc(m.word)}</td><td>${m.tries}</td><td>${m.avg === null ? '—' : m.avg}</td><td><span class="small" style="color:var(--primary);font-weight:700">查看</span></td></tr>`).join('') || '<tr><td colspan="6" class="muted">還沒有匯入模擬卷。</td></tr>'}
     </tbody></table></div>
     <div class="panel" style="display:grid;gap:4px"><h3>模擬卷作答紀錄</h3>${attList(D.attempts.filter(a => a.type === '模擬').sort((a, b) => b.start - a.start).slice(0, 30).map(a => Object.assign({}, a, { scope: a.scope })), 'data-apdf')}</div>`,
+
+  mock: L => {
+    const m = D.mocks.find(x => x.L === L);
+    if (!m) return '<p class="muted">找不到這份模擬卷。</p>';
+    return `<button class="back" data-tv="mocks">${ICON.back}模擬卷列表</button>
+    <div class="row between"><h3 style="font-size:20px">${esc(m.name)} <span class="small muted">${esc(m.word)}・${esc(m.src)}</span></h3><button class="btn ghost sm" data-mockpdf="${esc(m.L)}">${ICON.down}匯出這份模擬卷的報告</button></div>
+    <p class="small muted">${m.tries} 人次（其中逾時 ${m.timeouts}）・平均 ${m.avg === null ? '—' : m.avg + ' 分'}</p>
+    ${groupBody(m, 'mock')}
+    <div class="panel" style="display:grid;gap:4px"><h3>這份模擬卷的作答紀錄</h3>${attList(D.attempts.filter(a => a.type === '模擬' && a.scope === m.L).sort((a, b) => b.start - a.start), 'data-apdf')}</div>`;
+  },
 
   export: () => `<div class="cols">
       <div class="panel" style="display:grid;gap:10px"><h3>個別學生報告</h3><select id="exStu" aria-label="選擇學生">${D.students.map(s => `<option value="${s.id}">${s.id} ${esc(s.name)}</option>`).join('')}</select><div class="row"><button class="btn sm" id="exStuBtn">${ICON.down}匯出 PDF</button></div></div>
@@ -132,7 +186,7 @@ const VIEWS = {
         <p class="small muted">主任用存取碼登入「學習動態」網頁，只能看、不能改，看不到題目和答案。</p>
         <div>存取碼　<span class="code">${esc(D.dcode)}</span></div>
         <div class="small">網址　<span class="mono">${esc(location.href.replace(/teacher\.html.*$/, 'director.html'))}</span>　<button class="btn ghost sm" id="copyDir">複製</button></div>
-        <div class="checks">${['練習次數', '最近練習', '平均分數', '學習報告', '需加強'].map(k => `<label><input type="checkbox" data-field="${k}"${D.dfields.indexOf(k) >= 0 ? ' checked' : ''}> ${k === '學習報告' ? '下載學習報告' : k === '需加強' ? '需加強的觀念' : k}</label>`).join('')}<label class="muted"><input type="checkbox" disabled> 題目與答案（不開放）</label></div>
+        <div class="checks">${['練習次數', '最近練習', '平均分數', '學習報告', '需加強', '觀念分析'].map(k => `<label><input type="checkbox" data-field="${k}"${D.dfields.indexOf(k) >= 0 ? ' checked' : ''}> ${{ 學習報告: '下載學習報告', 需加強: '需加強的觀念', 觀念分析: '個別學生各小節觀念分析' }[k] || k}</label>`).join('')}<label class="muted"><input type="checkbox" disabled> 題目與答案（不開放）</label></div>
         <p class="small muted">存取碼要改的話，到試算表「設定」改「主任存取碼」。</p>
       </div>
     </div>`,
@@ -169,24 +223,51 @@ const VIEWS = {
 
   /* ---- 主任 ---- */
   dir: () => {
-    const F = D.fields;
-    const has = k => F.indexOf(k) >= 0;
-    return `<div class="tbl"><table><thead><tr><th>座號</th><th>姓名</th>${has('練習次數') ? '<th>練習次數</th><th>模擬卷</th>' : ''}${has('最近練習') ? '<th>最近練習</th>' : ''}${has('平均分數') ? '<th>平均分數</th>' : ''}${has('需加強') ? '<th>需加強</th>' : ''}${has('學習報告') ? '<th>學習報告</th>' : ''}</tr></thead><tbody>
-    ${D.students.map(s => `<tr${has('學習報告') ? ` class="link" data-tv="dstu:${s.id}"` : ''}><td class="mono">${esc(s.id)}</td><td>${esc(s.name)}</td>${has('練習次數') ? `<td>${sum(s.cnt)}</td><td>${s.mock || 0}</td>` : ''}${has('最近練習') ? `<td>${dshort(s.last)}</td>` : ''}${has('平均分數') ? `<td>${s.avg === null || s.avg === undefined ? '—' : s.avg}</td>` : ''}${has('需加強') ? `<td>${esc((s.weak || []).slice(0, 2).join('、')) || '—'}</td>` : ''}${has('學習報告') ? `<td><span class="small" style="color:var(--primary);font-weight:700">查看</span></td>` : ''}</tr>`).join('')}
+    const F = D.fields, has = k => F.indexOf(k) >= 0, sel = FSEL.list;
+    const i = D.units.findIndex(u => u.no === sel), mk = sel === '模擬卷';
+    const cols = [];                                     // [欄名, 取值]
+    if (sel === '全部') {
+      if (has('練習次數')) cols.push(['練習次數', s => sum(s.cnt)], ['模擬卷', s => s.mock || 0]);
+      if (has('最近練習')) cols.push(['最近練習', s => dshort(s.last)]);
+      if (has('平均分數')) cols.push(['平均分數', s => nv(s.avg)]);
+      if (has('需加強')) cols.push(['需加強', s => esc((s.weak || []).slice(0, 2).join('、')) || '—']);
+    } else {
+      if (has('練習次數')) cols.push([mk ? '作答次數' : '練習次數', s => mk ? s.mock || 0 : (s.cnt || [])[i]]);
+      if (has('平均分數')) cols.push(['最高分', s => nv(mk ? s.mockBest : (s.best || [])[i])], ['平均分數', s => nv(mk ? s.mockAvg : (s.avgBy || [])[i])]);
+      if (has('最近練習')) cols.push(['最近練習', s => dshort(mk ? s.mockLast : (s.lastBy || [])[i])]);
+    }
+    const rep = has('學習報告'), link = rep || has('觀念分析');
+    const n = D.students.filter(s => DSEL.has(s.id)).length;
+    return `<div class="dirbar">${fTabs('list')}${rep ? `<button class="btn sm" id="dirPdf"${n ? '' : ' disabled'}>${ICON.down}下載勾選學生的學習報告（${n} 人）</button>` : ''}</div>
+    <div class="tbl"><table><thead><tr>${rep ? `<th class="ck"><input type="checkbox" id="dirAll" aria-label="全選"${n && n === D.students.length ? ' checked' : ''}></th>` : ''}<th>座號</th><th>姓名</th>${cols.map(c => `<th>${c[0]}</th>`).join('')}${link ? '<th>詳細</th>' : ''}</tr></thead><tbody>
+    ${D.students.map(s => `<tr${link ? ` class="link" data-tv="dstu:${s.id}"` : ''}>${rep ? `<td class="ck"><input type="checkbox" data-dsel="${esc(s.id)}" aria-label="勾選 ${esc(s.name)}"${DSEL.has(s.id) ? ' checked' : ''}></td>` : ''}<td class="mono">${esc(s.id)}</td><td>${esc(s.name)}</td>${cols.map(c => `<td>${c[1](s)}</td>`).join('')}${link ? '<td><span class="small" style="color:var(--primary);font-weight:700">查看</span></td>' : ''}</tr>`).join('')}
     </tbody></table></div>`;
   },
-  dstu: id => {
+  dstu: (id, sec) => {
     const s = D.students.find(x => x.id === id);
+    if (!s) return '<p class="muted">找不到這位學生。</p>';
+    const has = k => D.fields.indexOf(k) >= 0;
     const atts = D.attempts.filter(a => a.uid === id).sort((a, b) => b.start - a.start);
     return `<button class="back" data-tv="dir">${ICON.back}學生列表</button>
-    <div class="row between"><h3 style="font-size:20px">${esc(s.name)} <span class="muted small mono">${esc(s.id)}</span></h3><button class="btn ghost sm" data-spdf="${s.id}">${ICON.down}學習報告 PDF</button></div>
-    <div class="panel" style="display:grid;gap:4px"><h3>每次測驗的報告</h3>${attList(atts, 'data-apdf')}</div>`;
+    <div class="row between"><h3 style="font-size:20px">${esc(s.name)} <span class="muted small mono">${esc(s.id)}</span></h3>${has('學習報告') ? `<button class="btn ghost sm" data-spdf="${s.id}">${ICON.down}學習報告 PDF</button>` : ''}</div>
+    ${s.bySec ? secCards(s, sec, 'dstu') + (sec ? secAnalysis(s, sec, 'dstu:' + id) : '') : ''}
+    ${has('學習報告') ? `<div class="panel" style="display:grid;gap:4px"><h3>每次測驗的報告</h3>${fTabs('att')}${attList(fAtts(atts, 'att'), 'data-apdf')}</div>` : ''}`;
   }
 };
 
 /* ---------- 互動 ---------- */
 $('#tBody').addEventListener('click', async e => {
   const t = e.target;
+  const ht = t.closest('[data-ht]');
+  if (ht) { FSEL[ht.dataset.hk] = ht.dataset.ht; render(); return; }
+  if (t.id === 'dirPdf') {
+    const list = D.students.filter(x => DSEL.has(x.id));
+    if (!list.length) return;
+    return run(`產生 PDF 中（${list.length} 人）…`, () => savePdf(`<div>${list.map((x, k) => `<div class="${k ? 'pb' : ''}">${studentPage(x.id)}</div>`).join('')}</div>`,
+      `國七二段_學習報告_${list.length === 1 ? list[0].id + list[0].name : '勾選' + list.length + '人'}_${dshort(Date.now()).replace('/', '')}.pdf`)).catch(() => { });
+  }
+  const mp = t.closest('[data-mockpdf]');
+  if (mp) return mockPdf(mp.dataset.mockpdf);
   const sw = t.closest('[data-set]');
   if (sw) {
     const k = sw.dataset.set;
@@ -214,6 +295,9 @@ $('#tBody').addEventListener('click', async e => {
   if (ro) return importRoster(ro.dataset.roster);
 });
 $('#tBody').addEventListener('change', async e => {
+  const ds = e.target.dataset.dsel;
+  if (ds) { if (e.target.checked) DSEL.add(ds); else DSEL.delete(ds); render(); return; }
+  if (e.target.id === 'dirAll') { if (e.target.checked) D.students.forEach(x => DSEL.add(x.id)); else DSEL.clear(); render(); return; }
   const f = e.target.dataset.field;
   if (!f) return;
   const fields = $$('[data-field]').filter(x => x.checked).map(x => x.dataset.field);
@@ -243,6 +327,7 @@ function studentPage(id) {
   const has = k => F.indexOf(k) >= 0;
   const unitRows = D.units.map((u, i) => `<tr><td>${u.no} ${esc(u.name)}</td><td>${s.cnt ? s.cnt[i] : '—'}</td><td>${s.best && s.best[i] !== null ? s.best[i] : '—'}</td></tr>`).join('');
   const goals = ROLE === 'teacher' && s.goals ? D.goals.filter(g => s.goals[g.code]).map(g => { const v = s.goals[g.code]; return [g, pct(v.c, v.n), v]; }).sort((a, b) => a[1] - b[1]) : [];
+  const secGoals = ROLE === 'director' && has('觀念分析') && s.bySec ? D.units.map((u, i) => [u, s.bySec[i]]).filter(([u, x]) => x && x.goals.length) : [];
   return `${pdfHead('學習報告', esc(s.id + ' ' + s.name))}
     <div class="box" style="display:flex;gap:24px;flex-wrap:wrap">
       <div><div class="small" style="color:#5E6E80">學生</div><b style="font-size:20px">${esc(s.name)}</b> <span class="mono">${esc(s.id)}</span></div>
@@ -253,6 +338,7 @@ function studentPage(id) {
     ${has('練習次數') || has('平均分數') ? `<div class="box"><h2>各小節</h2><table><thead><tr><th>小節</th><th>練習次數</th><th>最高分</th></tr></thead><tbody>${unitRows}</tbody></table></div>` : ''}
     ${has('需加強') && s.weak ? `<div class="box"><h2>需加強的觀念</h2>${s.weak.length ? s.weak.map(w => `<span class="chip t-難" style="margin:2px 6px 2px 0">✕ ${esc(w)}</span>`).join('') : '<span style="color:#5E6E80">目前沒有</span>'}</div>` : ''}
     ${goals.length ? `<div class="box"><h2>各觀念答對率</h2>${goals.map(([g, p, v]) => hbar(`${g.sec} ${g.name}`, p, colorFor(p), `${v.c}／${v.n}`)).join('')}</div>` : ''}
+    ${secGoals.length ? `<div class="box"><h2>各小節觀念答對率</h2>${secGoals.map(([u, x]) => `<div style="font-weight:700;margin:8px 0 2px">${u.no} ${esc(u.name)}</div>` + x.goals.slice().sort((a, b) => pct(a.c, a.n) - pct(b.c, b.n)).map(g => hbar(g.name, pct(g.c, g.n), colorFor(pct(g.c, g.n)), `${g.c}／${g.n}`)).join('')).join('')}</div>` : ''}
     ${atts.length ? `<div class="box"><h2>測驗紀錄</h2><table><thead><tr><th>時間</th><th>範圍</th><th>分數</th><th>等第</th><th>用時</th></tr></thead><tbody>${atts.map(a => `<tr><td>${dt(a.start)}</td><td>${esc(scopeLabel(a))}</td><td>${a.status === '逾時' ? '逾時' : a.score}</td><td>${a.level || '—'}</td><td>${mmss(a.used)}</td></tr>`).join('')}</tbody></table></div>` : ''}`;
 }
 
@@ -266,6 +352,19 @@ function sectionPdf(no) {
     <div class="box"><h2>需要關心的學生</h2>${s.watch.map(w => `${esc(w.name)}（${w.score} 分）`).join('、') || '目前沒有'}</div>
     <div class="box"><h2>學生最高分</h2><table><thead><tr><th>座號</th><th>姓名</th><th>練習次數</th><th>最高分</th></tr></thead><tbody>${D.students.map(st => { const i = D.units.findIndex(u => u.no === no); return `<tr><td>${esc(st.id)}</td><td>${esc(st.name)}</td><td>${st.cnt[i]}</td><td>${st.best[i] === null ? '—' : st.best[i]}</td></tr>`; }).join('')}</tbody></table></div></div>`;
   return run('產生 PDF 中…', () => savePdf(html, `國七二段_小節報告_${no}.pdf`)).catch(() => { });
+}
+
+function mockPdf(L) {
+  const m = D.mocks.find(x => x.L === L);
+  const bars = (list, val) => list.map(x => hbar(x.label, pct(x.c, x.n), colorFor(pct(x.c, x.n)), val(x))).join('') || '資料還不夠。';
+  const html = `<div>${pdfHead('模擬卷報告', esc(m.name))}
+    <div class="box"><b style="font-size:18px">${esc(m.name)}</b>　${esc(m.word)}・${esc(m.src)}　${m.tries} 人次（逾時 ${m.timeouts}）・平均 ${m.avg === null ? '—' : m.avg + ' 分'}
+      <div style="margin-top:8px">${LVN.map((n, i) => `<span class="chip lv-${n}" style="margin-right:6px">${n} ${m.lv[i]}</span>`).join('')}</div></div>
+    <div class="box"><h2>各觀念答對率</h2>${bars(m.goals.slice().sort((a, b) => pct(a.c, a.n) - pct(b.c, b.n)).map(g => Object.assign({ label: g.name }, g)), x => `${x.c}／${x.n}`)}</div>
+    <div class="box"><h2>各小節答對率</h2>${bars((m.secs || []).map(x => Object.assign({ label: `${x.no} ${x.name}` }, x)), x => `${x.c}／${x.n}`)}</div>
+    <div class="box"><h2>最常錯的題目</h2>${m.miss.map(q => `<div style="margin-bottom:8px">${hbar(`${q.qid}（${q.src}）`, pct(q.c, q.n), colorFor(pct(q.c, q.n)), `${q.c}／${q.n}`)}<div class="small" style="color:#5E6E80">${fmt(q.stem)}…</div></div>`).join('') || '資料還不夠。'}</div>
+    <div class="box"><h2>需要關心的學生</h2>${m.watch.map(w => `${esc(w.name)}（${w.score} 分）`).join('、') || '目前沒有'}</div></div>`;
+  return run('產生 PDF 中…', () => savePdf(html, `國七二段_模擬卷報告_${m.L}卷.pdf`)).catch(() => { });
 }
 
 function exportXlsx() {

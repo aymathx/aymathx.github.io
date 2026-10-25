@@ -20,9 +20,10 @@ function show(name) {
 function paintBrand(screen) {
   const c = CFG || {};
   $('#loginLogo').hidden = !c.logo;
+  $('#s-login .brand').classList.toggle('nologo', !c.logo);
   $('#loginEyebrow').textContent = (c.brand ? c.brandName + '｜' : '') + (c.term || '115年上學期');
   $('#siteTitle').textContent = c.site || '國七。二段練習';
-  document.title = c.site || '國七。二段練習';
+  document.title = (c.term || '115年上學期') + '｜國七。二段';
   const parts = [];
   if (c.logo) parts.push(`<img src="${BRAND_LOGO}" alt="AY MATH 標誌">`);
   if (c.brand) parts.push(`<span class="bn">${esc(c.brandName)}</span>`);
@@ -47,9 +48,13 @@ async function boot() {
       if (e.server) logoutLocal(e.message); else { showLoginErr(e.message); show('login'); return; }
     }
   }
-  try { CFG = (await api('config')).config; } catch (e) { showLoginErr(e.message); }
+  CFG = store.get('cfg', null);              // 先用上次存的設定馬上顯示登入頁，不用等伺服器
   renderLogin();
   show('login');
+  try {
+    CFG = (await api('config')).config; store.set('cfg', CFG);
+    if (!$('#s-login').hidden) { renderLogin(); paintBrand('login'); }
+  } catch (e) { if (!CFG) showLoginErr(e.message); }
 }
 
 function logoutLocal(msg) {
@@ -91,20 +96,21 @@ $('#guestGo').onclick = async () => {
 async function afterLogin(r) {
   TOKEN = r.token; USER = r.user; CFG = r.config;
   store.set('token', TOKEN); store.set('user', USER);
-  await run('載入中…', loadHome);
+  if (r.home) setHome(r.home); else await run('載入中…', loadHome);
   show('home');
 }
 $('#logout').onclick = async () => {
   logoutLocal();
-  try { CFG = (await api('config')).config; } catch (e) { /* 沿用舊設定 */ }
   renderLogin(); show('login');
+  try { CFG = (await api('config')).config; store.set('cfg', CFG); renderLogin(); paintBrand('login'); } catch (e) { /* 沿用舊設定 */ }
 };
 
 /* ---------- 選小節 ---------- */
-async function loadHome() {
-  HOME = await api('home', { token: TOKEN });
-  CFG = HOME.config; USER = HOME.user;
+async function loadHome() { setHome(await api('home', { token: TOKEN })); }
+function setHome(h) {
+  HOME = h; CFG = HOME.config; USER = HOME.user;
   HOME.offset = HOME.now - Date.now();
+  store.set('cfg', CFG);
   renderHome();
 }
 const leftOf = (deadline, offset) => Math.max(0, Math.round((deadline - (Date.now() + (offset || 0))) / 1000));
@@ -134,15 +140,25 @@ function renderHome() {
     <span class="L">${esc(p.L)}</span><span class="lw small">${esc(p.word)}</span>
     <span class="meter">${[1, 2, 3, 4, 5].map(k => `<i class="${k <= p.lv ? 'on' : ''}"></i>`).join('')}</span></button>`).join('');
   $('#histPanel').hidden = g;
-  $('#hist').innerHTML = HOME.history.length ? HOME.history.map(h => {
+  renderHist();
+}
+
+/** 我的測驗報告：依小節篩選（全部、2-1～2-4、模擬卷） */
+let histSel = '全部';
+function renderHist() {
+  const tabs = ['全部'].concat(HOME.units.map(u => u.no), ['模擬卷']);
+  $('#histTabs').innerHTML = tabs.map(t => `<button type="button" data-ht="${esc(t)}" aria-pressed="${t === histSel}">${esc(t)}</button>`).join('');
+  const list = HOME.history.filter(h => histSel === '全部' || (histSel === '模擬卷' ? h.type === '模擬' : h.type !== '模擬' && h.scope === histSel));
+  $('#hist').innerHTML = list.length ? list.map(h => {
     const label = h.type === '模擬' ? `模擬${h.scope}卷` : h.scope;
     const ok = h.status === '完成';
     return `<div class="h">
       <div><b>${esc(label)}</b>　<span class="mono small muted">${dt(h.start)}</span><br><span class="small ${ok ? '' : 'x'}">${ok ? h.score + ' 分・' + h.level : '逾時，沒有報告'}</span></div>
       ${ok ? `<button class="btn ghost sm" data-pdf="${h.aid}">${ICON.down}PDF</button>` : ''}
     </div>`;
-  }).join('') : '<p class="muted small" style="padding:8px 0">完成第一次測驗後，報告會列在這裡。</p>';
+  }).join('') : `<p class="muted small" style="padding:8px 0">${HOME.history.length ? '這個範圍還沒有報告。' : '完成第一次測驗後，報告會列在這裡。'}</p>`;
 }
+$('#histTabs').addEventListener('click', e => { const b = e.target.closest('[data-ht]'); if (b) { histSel = b.dataset.ht; renderHist(); } });
 
 $('#units').addEventListener('click', e => { const b = e.target.closest('[data-start]'); if (b) startQuiz(b.dataset.start); });
 $('#miniMocks').addEventListener('click', e => { const b = e.target.closest('[data-mock]'); if (b) { mockSel = +b.dataset.mock; renderMocks(); show('mock'); } });
@@ -225,10 +241,20 @@ function fillArea(q, vals, idPrefix) {
   if (single) {
     h = `<div class="fill"><label for="${idPrefix}0">你的答案</label><input class="bk wide" id="${idPrefix}0" data-b="0" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(vals[0] || '')}" placeholder="在這裡輸入"><div class="bkpv" data-pv="0"></div></div>`;
   } else {
-    h = '<div class="aline">' + parts.map((p, i) => {
-      const seg = p ? `<span>${fmt(p)}</span>` : '';
-      if (i === parts.length - 1) return seg;
-      return `${seg}<input class="bk" id="${idPrefix}${i}" data-b="${i}" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(vals[i] || '')}" aria-label="第 ${i + 1} 格">`;
+    // 每一格一列（像選擇題選項一樣直排）：前面是小題代號（⑴、①…），後面是單位
+    const n = parts.length - 1, lab = [], unit = [];
+    parts.forEach((p, i) => {
+      if (i === 0) { lab[0] = p.replace(/^\s*答\s*[：:]\s*/, ''); return; }
+      if (i === n) { unit[i - 1] = p; return; }
+      const m = p.search(/[①-⑳⑴-⒇]/);
+      const s = m >= 0 ? m : Math.max(p.lastIndexOf('，'), p.lastIndexOf('、'), p.lastIndexOf('；'), p.lastIndexOf('　'), p.lastIndexOf(' '));
+      unit[i - 1] = s >= 0 ? p.slice(0, s) : p;
+      lab[i] = s >= 0 ? p.slice(m >= 0 ? s : s + 1) : '';
+    });
+    const clean = t => String(t || '').replace(/^[\s　，、；]+|[\s　，、；。]+$/g, '');
+    h = '<div class="aline"><span class="lbl">你的答案</span>' + Array.from({ length: n }, (_, i) => {
+      const l = clean(lab[i]), u = clean(unit[i]);
+      return `<div class="bkrow">${l ? `<span class="bkl">${fmt(l)}</span>` : ''}<input class="bk" id="${idPrefix}${i}" data-b="${i}" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(vals[i] || '')}" aria-label="第 ${i + 1} 格">${u ? `<span class="bku">${fmt(u)}</span>` : ''}</div>`;
     }).join('') + '</div><div class="bkpv" data-pv="all"></div>';
   }
   return h;
