@@ -36,15 +36,32 @@ async function load() {
   const term = (ROLE === 'teacher' ? D.config && D.config.term : D.term) || '115年上學期';
   document.title = `${term}｜國七。二段 ( ${ROLE === 'teacher' ? '系統管理者' : '學習狀況'} )`;
   show('main');
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (h && okView(h)) view = h;
+  history.replaceState({ v: view, prev: null }, '', '#' + view);
   render();
 }
+
+/* ---------- 換頁與瀏覽器「上一頁」 ---------- */
+const MY_VIEWS = ROLE === 'teacher' ? ['overview', 'students', 'student', 'stusec', 'sections', 'section', 'mocks', 'mock', 'export', 'settings', 'bank'] : ['dir', 'dstu', 'dstusec'];
+const okView = v => MY_VIEWS.indexOf(v.split(':')[0]) >= 0;
+function go(v) {
+  history.pushState({ v, prev: view }, '', '#' + v);
+  view = v; render(); scrollTo({ top: 0 });
+}
+window.addEventListener('popstate', e => {
+  if (!D) return;
+  const v = e.state && e.state.v ? e.state.v : decodeURIComponent(location.hash.slice(1));
+  view = v && okView(v) ? v : (ROLE === 'teacher' ? 'overview' : 'dir');
+  render(); scrollTo({ top: 0 });
+});
 
 /* ---------- 版面 ---------- */
 const TABS = [['overview', '總覽'], ['students', '學生'], ['sections', '小節'], ['mocks', '模擬卷'], ['export', '匯出與權限'], ['settings', '網站設定'], ['bank', '題庫與名單']];
 function render() {
   const [base, ...args] = view.split(':');
   if (ROLE === 'teacher') {
-    const cur = { student: 'students', section: 'sections', mock: 'mocks' }[base] || base;
+    const cur = { student: 'students', stusec: 'students', section: 'sections', mock: 'mocks' }[base] || base;
     $('#tnav').innerHTML = TABS.map(([k, l]) => `<button data-tv="${k}" aria-current="${cur === k}">${l}</button>`).join('');
   }
   $('#tBody').innerHTML = VIEWS[base](...args);
@@ -54,7 +71,10 @@ function render() {
 document.addEventListener('click', e => {
   if (e.target.closest('.ck')) return;                  // 勾選格不要觸發整列的連結
   const v = e.target.closest('[data-tv]');
-  if (v) { view = v.dataset.tv; render(); scrollTo({ top: 0 }); }
+  if (!v) return;
+  const to = v.dataset.tv;
+  if (v.classList.contains('back') && history.state && history.state.prev === to) history.back();
+  else go(to);
 });
 
 function donut(lv, unit) {
@@ -74,21 +94,21 @@ const nv = v => v === null || v === undefined ? '—' : v;
 const fTabs = key => `<div class="hist-tabs" role="group" aria-label="依範圍篩選">${['全部'].concat(D.units.map(u => u.no), ['模擬卷']).map(t => `<button type="button" data-hk="${key}" data-ht="${esc(t)}" aria-pressed="${FSEL[key] === t}">${esc(t)}</button>`).join('')}</div>`;
 const fAtts = (list, key) => list.filter(a => FSEL[key] === '全部' || (FSEL[key] === '模擬卷' ? a.type === '模擬' : a.type !== '模擬' && a.scope === FSEL[key]));
 
-/** 學生的四個小節卡片：點一下展開這一節的分析，再點一下收起 */
-const secCards = (s, sel, base) => `<div class="cards4">${D.units.map((u, i) => {
-  const on = sel === u.no;
-  return `<button class="card${on ? ' on' : ''}" data-tv="${base}:${s.id}${on ? '' : ':' + u.no}" aria-pressed="${on}"><span class="small muted">${u.no} ${esc(u.name)}</span>${s.cnt ? `<b>${s.cnt[i]} 次</b>` : ''}${s.best ? `<span class="small">${s.best[i] === null ? '還沒完成' : '最高 ' + s.best[i] + ' 分'}</span>` : ''}<span class="small" style="color:var(--primary);font-weight:700">${on ? '收起' : ROLE === 'teacher' ? '看觀念分析與錯題' : '看觀念分析'}</span></button>`;
-}).join('')}</div>`;
+/** 學生的四個小節卡片：點了進入這一節的分析頁（看完按上一頁回來） */
+const secCards = (s, base) => `<div class="cards4">${D.units.map((u, i) => `<button class="card" data-tv="${base}:${s.id}:${u.no}"><span class="small muted">${u.no} ${esc(u.name)}</span>${s.cnt ? `<b>${s.cnt[i]} 次</b>` : ''}${s.best ? `<span class="small">${s.best[i] === null ? '還沒完成' : '最高 ' + s.best[i] + ' 分'}</span>` : ''}<span class="small" style="color:var(--primary);font-weight:700">${ROLE === 'teacher' ? '看觀念分析與錯題' : '看觀念分析'} ›</span></button>`).join('')}</div>`;
 
 /** 一位學生在某一小節的分析：各觀念答對率、等第分布；老師另外看得到答錯過的題目 */
-function secAnalysis(s, no, back) {
+function secPage(id, no, base) {
+  const s = D.students.find(x => x.id === id);
+  if (!s) return '<p class="muted">找不到這位學生。</p>';
   const i = D.units.findIndex(u => u.no === no), x = s.bySec && s.bySec[i];
-  if (!x) return '';
+  const head = `<button class="back" data-tv="${base}:${s.id}">${ICON.back}${esc(s.name)}</button>
+    <div class="row between"><h3 style="font-size:20px">${esc(unitName(no))}</h3><span class="small muted">${esc(s.name)} <span class="mono">${esc(s.id)}</span> 的觀念分析</span></div>`;
+  if (!x) return head + '<p class="muted">沒有資料。</p>';
   const goals = x.goals.slice().sort((a, b) => pct(a.c, a.n) - pct(b.c, b.n));
   const wrong = ROLE === 'teacher' ? x.wrong || [] : null;
   const sub = t => `<div class="small muted" style="font-weight:700">${t}</div>`;
-  return `<div class="panel" style="display:grid;gap:14px">
-    <div class="row between"><h3>${esc(unitName(no))}　<span class="small muted">${esc(s.name)} 的觀念分析</span></h3><button class="btn ghost sm" data-tv="${back}">收起</button></div>
+  return `${head}<div class="panel" style="display:grid;gap:14px">
     <div class="cols">
       <div>${sub('各觀念答對率')}<div style="margin-top:6px">${goals.map(g => hbar(g.name, pct(g.c, g.n), colorFor(pct(g.c, g.n)), `${g.c}／${g.n}`)).join('') || '<p class="muted">這一節還沒有完成的練習。</p>'}</div></div>
       <div>${sub('等第分布（這一節完成的練習）')}<div style="margin-top:8px">${donut(x.lv, '次')}</div></div>
@@ -113,6 +133,8 @@ function groupBody(s, kind) {
 }
 
 const VIEWS = {
+  stusec: (id, no) => secPage(id, no, 'student'),
+  dstusec: (id, no) => secPage(id, no, 'dstu'),
   overview: () => {
     const o = D.overview;
     const recent = D.attempts.slice().sort((a, b) => b.start - a.start).slice(0, 8);
@@ -133,15 +155,14 @@ const VIEWS = {
     ${D.students.map(s => `<tr class="link" data-tv="student:${s.id}"><td class="mono">${s.id}</td><td>${esc(s.name)}</td><td>${sum(s.cnt) || '<span class="x">0</span>'}</td><td>${s.mock || 0}</td><td>${s.avg === null ? '—' : s.avg}</td><td>${dshort(s.last)}</td><td>${esc(s.weak.slice(0, 2).join('、')) || '—'}</td></tr>`).join('') || '<tr><td colspan="7" class="muted">名單是空的，請到「題庫與名單」貼上名單。</td></tr>'}
     </tbody></table></div>`,
 
-  student: (id, sec) => {
+  student: id => {
     const s = D.students.find(x => x.id === id);
     if (!s) return '<p class="muted">找不到這位學生。</p>';
     const atts = D.attempts.filter(a => a.uid === id).sort((a, b) => b.start - a.start);
     const goalBars = D.goals.filter(g => s.goals[g.code]).map(g => { const v = s.goals[g.code]; return [g, pct(v.c, v.n), v]; }).sort((a, b) => a[1] - b[1]);
     return `<button class="back" data-tv="students">${ICON.back}學生列表</button>
     <div class="row between"><h3 style="font-size:20px">${esc(s.name)} <span class="muted small mono">${esc(s.id)}</span></h3><button class="btn ghost sm" data-spdf="${s.id}">${ICON.down}匯出這位學生的報告</button></div>
-    ${secCards(s, sec, 'student')}
-    ${sec ? secAnalysis(s, sec, 'student:' + id) : ''}
+    ${secCards(s, 'stusec')}
     <div class="cols">
       <div class="panel"><h3>最近幾次分數</h3>${trendBars(s.trend)}</div>
       <div class="panel"><h3>需加強的觀念</h3><div class="weak" style="margin-top:10px">${s.weak.map(w => `<span class="chip t-難">✕ ${esc(w)}</span>`).join('') || '<span class="muted">目前沒有</span>'}</div></div>
@@ -243,14 +264,14 @@ const VIEWS = {
     ${D.students.map(s => `<tr${link ? ` class="link" data-tv="dstu:${s.id}"` : ''}>${rep ? `<td class="ck"><input type="checkbox" data-dsel="${esc(s.id)}" aria-label="勾選 ${esc(s.name)}"${DSEL.has(s.id) ? ' checked' : ''}></td>` : ''}<td class="mono">${esc(s.id)}</td><td>${esc(s.name)}</td>${cols.map(c => `<td>${c[1](s)}</td>`).join('')}${link ? '<td><span class="small" style="color:var(--primary);font-weight:700">查看</span></td>' : ''}</tr>`).join('')}
     </tbody></table></div>`;
   },
-  dstu: (id, sec) => {
+  dstu: id => {
     const s = D.students.find(x => x.id === id);
     if (!s) return '<p class="muted">找不到這位學生。</p>';
     const has = k => D.fields.indexOf(k) >= 0;
     const atts = D.attempts.filter(a => a.uid === id).sort((a, b) => b.start - a.start);
     return `<button class="back" data-tv="dir">${ICON.back}學生列表</button>
     <div class="row between"><h3 style="font-size:20px">${esc(s.name)} <span class="muted small mono">${esc(s.id)}</span></h3>${has('學習報告') ? `<button class="btn ghost sm" data-spdf="${s.id}">${ICON.down}學習報告 PDF</button>` : ''}</div>
-    ${s.bySec ? secCards(s, sec, 'dstu') + (sec ? secAnalysis(s, sec, 'dstu:' + id) : '') : ''}
+    ${s.bySec ? secCards(s, 'dstusec') : ''}
     ${has('學習報告') ? `<div class="panel" style="display:grid;gap:4px"><h3>每次測驗的報告</h3>${fTabs('att')}${attList(fAtts(atts, 'att'), 'data-apdf')}</div>` : ''}`;
   }
 };
