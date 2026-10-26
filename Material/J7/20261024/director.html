@@ -15,9 +15,11 @@
 <div class="app">
   <section class="screen" id="s-login" hidden>
     <form class="panel field login-t" id="loginForm" novalidate>
-      <h2 style="font-size:20px">學生學習動態</h2>
-      <label for="pass">登入碼</label>
-      <input id="pass" autocomplete="off" autocapitalize="characters" placeholder="例：123456789">
+      <h2 style="font-size:20px; text-align: center;">下載學生學習動態</h2>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <label for="pass" style="font-size: 18px; white-space: nowrap; margin: 0;">登入碼</label>
+        <input id="pass" style="flex: 1;" autocomplete="off" autocapitalize="characters" placeholder="例：123456789">
+      </div>
       <div class="err-box" id="loginErr" hidden></div>
       <button class="btn wide" type="submit">進入</button>
     </form>
