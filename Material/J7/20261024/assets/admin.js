@@ -144,8 +144,8 @@ const VIEWS = {
       <div class="kpi"><b>${o.weekTimeouts}</b><span>本週逾時次數</span></div>
       <div class="kpi"><b>${o.never}<small style="font-size:14px;color:var(--muted)">／${o.students}</small></b><span>還沒練習的人</span></div></div>
     <div class="cols">
-      <div class="panel"><h3>各小節平均分數</h3><div style="margin-top:8px">${D.unitStats.map(s => hbar(`${s.no} ${s.name}`, s.avg || 0, colorFor(s.avg || 0), s.avg === null ? '—' : s.avg + ' 分')).join('')}</div><p class="small muted" style="margin-top:6px">只算完成的小節練習。</p></div>
-      <div class="panel"><h3>全班最弱的 3 個觀念</h3><div style="margin-top:8px">${o.weakest.map(w => hbar(`${w.name}（${w.sec}）`, pct(w.c, w.n), colorFor(pct(w.c, w.n)))).join('') || '<p class="muted">資料還不夠。</p>'}</div><p class="small muted" style="margin-top:6px">百分比＝全班在這個觀念的答對率。</p></div>
+      <div class="panel"><h3>各小節平均分數</h3><div style="margin-top:8px">${D.unitStats.map(s => hbar(`${s.no} ${s.name}`, s.avg || 0, colorFor(s.avg || 0), s.avg === null ? '—' : s.avg + ' 分')).join('')}</div></div>
+      <div class="panel"><h3>全班最弱的 3 個觀念</h3><div style="margin-top:8px">${o.weakest.map(w => hbar(`${w.name}（${w.sec}）`, pct(w.c, w.n), colorFor(pct(w.c, w.n)))).join('') || '<p class="muted">資料還不夠。</p>'}</div></div>
     </div>
     <div class="panel" style="display:grid;gap:4px"><h3>最近的測驗</h3>${recent.length ? `<div class="hist">${recent.map(a => `<div class="h"><div><b>${esc(a.name)}</b> <span class="mono small muted">${esc(a.uid)}</span>　${esc(scopeLabel(a))}　<span class="mono small muted">${dt(a.start)}</span></div><span class="small ${a.status === '逾時' ? 'x' : ''}">${a.status === '逾時' ? '逾時' : a.score + ' 分'}</span></div>`).join('')}</div>` : '<p class="muted small">還沒有學生作答。</p>'}</div>`;
   },
@@ -171,7 +171,7 @@ const VIEWS = {
     <div class="panel" style="display:grid;gap:4px"><h3>測驗紀錄</h3>${fTabs('att')}${attList(fAtts(atts, 'att'), 'data-apdf')}</div>`;
   },
 
-  sections: () => `<p class="small muted">點一個小節，看全班在哪些觀念比較弱。</p>
+  sections: () => `
     <div class="cards4">${D.unitStats.map(s => `<button class="card" data-tv="section:${s.no}"><b>${s.no}</b><span>${esc(s.name)}</span><span class="small muted">${s.tries} 人次・平均 ${s.avg === null ? '—' : s.avg + ' 分'}</span></button>`).join('')}</div>`,
 
   section: no => {
@@ -182,8 +182,8 @@ const VIEWS = {
     ${groupBody(s, 'unit')}`;
   },
 
-  mocks: () => `<p class="small muted">點一份模擬卷，看全班的分析報告。</p>
-    <div class="tbl"><table><thead><tr><th>卷別</th><th>來源（學生看不到）</th><th>難度</th><th>作答人次</th><th>平均分數</th><th>分析報告</th></tr></thead><tbody>
+  mocks: () => `
+    <div class="tbl"><table><thead><tr><th>卷別</th><th>來源</th><th>難度</th><th>作答人次</th><th>平均分數</th><th>分析報告</th></tr></thead><tbody>
     ${D.mocks.map(m => `<tr class="link" data-tv="mock:${esc(m.L)}"><td><b>${esc(m.name)}</b></td><td>${esc(m.src)}</td><td>${esc(m.word)}</td><td>${m.tries}</td><td>${m.avg === null ? '—' : m.avg}</td><td><span class="small" style="color:var(--primary);font-weight:700">查看</span></td></tr>`).join('') || '<tr><td colspan="6" class="muted">還沒有匯入模擬卷。</td></tr>'}
     </tbody></table></div>
     <div class="panel" style="display:grid;gap:4px"><h3>模擬卷作答紀錄</h3>${attList(D.attempts.filter(a => a.type === '模擬').sort((a, b) => b.start - a.start).slice(0, 30).map(a => Object.assign({}, a, { scope: a.scope })), 'data-apdf')}</div>`,
@@ -200,15 +200,13 @@ const VIEWS = {
 
   export: () => `<div class="cols">
       <div class="panel" style="display:grid;gap:10px"><h3>個別學生報告</h3><select id="exStu" aria-label="選擇學生">${D.students.map(s => `<option value="${s.id}">${s.id} ${esc(s.name)}</option>`).join('')}</select><div class="row"><button class="btn sm" id="exStuBtn">${ICON.down}匯出 PDF</button></div></div>
-      <div class="panel" style="display:grid;gap:10px"><h3>全體學生報告</h3><p class="small muted">PDF 每人一頁，含練習次數、分數、需加強的觀念；Excel 含每次測驗明細。</p><div class="row"><button class="btn sm" id="exAllPdf">${ICON.down}匯出 PDF</button><button class="btn ghost sm" id="exAllXlsx">匯出 Excel</button></div></div>
+      <div class="panel" style="display:grid;gap:10px"><h3>全體學生報告</h3><div class="row"><button class="btn sm" id="exAllPdf">${ICON.down}匯出 PDF</button><button class="btn ghost sm" id="exAllXlsx">匯出 Excel</button></div></div>
       <div class="panel" style="display:grid;gap:10px"><h3>小節報告</h3><select id="exSec" aria-label="選擇小節">${D.unitStats.map(s => `<option value="${s.no}">${s.no} ${esc(s.name)}</option>`).join('')}</select><div class="row"><button class="btn sm" id="exSecBtn">${ICON.down}匯出 PDF</button></div></div>
       <div class="panel" style="display:grid;gap:10px">
         <div class="row between"><h3>補習班主任權限</h3><button class="sw" role="switch" aria-checked="${D.config.dir}" data-set="dir" aria-label="開放主任檢視"></button></div>
-        <p class="small muted">主任用存取碼登入「學習動態」網頁，只能看、不能改，看不到題目和答案。</p>
-        <div>存取碼　<span class="code">${esc(D.dcode)}</span></div>
+        <div>登入碼　<span class="code">${esc(D.dcode)}</span></div>
         <div class="small">網址　<span class="mono">${esc(location.href.replace(/teacher\.html.*$/, 'director.html'))}</span>　<button class="btn ghost sm" id="copyDir">複製</button></div>
         <div class="checks">${['練習次數', '最近練習', '平均分數', '學習報告', '需加強', '觀念分析'].map(k => `<label><input type="checkbox" data-field="${k}"${D.dfields.indexOf(k) >= 0 ? ' checked' : ''}> ${{ 學習報告: '下載學習報告', 需加強: '需加強的觀念', 觀念分析: '個別學生各小節觀念分析' }[k] || k}</label>`).join('')}<label class="muted"><input type="checkbox" disabled> 題目與答案（不開放）</label></div>
-        <p class="small muted">存取碼要改的話，到試算表「設定」改「主任存取碼」。</p>
       </div>
     </div>`,
 
@@ -227,7 +225,7 @@ const VIEWS = {
         <span class="small muted">${onOff(c.brand, '顯示中', '隱藏中')}：學校學生使用時關閉，只給補習班使用時再打開。</span>
         <div class="pv"><span style="font-weight:900;letter-spacing:.06em;color:var(--primary)">${esc(c.brandName)}</span></div></div>
     </div>
-    <p class="small muted">切換後立即生效（學生重新整理網頁就會看到）。作答時間、重複題上限、老師密碼請在試算表「設定」修改。</p>`;
+    `;
   },
 
   bank: () => {
