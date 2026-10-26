@@ -200,7 +200,7 @@ const VIEWS = {
 
   export: () => `<div class="cols">
       <div class="panel" style="display:grid;gap:10px"><h3>個別學生報告</h3><select id="exStu" aria-label="選擇學生">${D.students.map(s => `<option value="${s.id}">${s.id} ${esc(s.name)}</option>`).join('')}</select><div class="row"><button class="btn sm" id="exStuBtn">${ICON.down}匯出 PDF</button></div></div>
-      <div class="panel" style="display:grid;gap:10px"><h3>全體學生報告</h3><div class="row"><button class="btn sm" id="exAllPdf">${ICON.down}匯出 PDF</button><button class="btn ghost sm" id="exAllXlsx">匯出 Excel</button></div></div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start"><h3 style="margin:0">全體學生報告</h3><div class="row"><button class="btn sm" id="exAllPdf">${ICON.down}匯出 PDF</button><button class="btn ghost sm" id="exAllXlsx">匯出 Excel</button></div></div>
       <div class="panel" style="display:grid;gap:10px"><h3>小節報告</h3><select id="exSec" aria-label="選擇小節">${D.unitStats.map(s => `<option value="${s.no}">${s.no} ${esc(s.name)}</option>`).join('')}</select><div class="row"><button class="btn sm" id="exSecBtn">${ICON.down}匯出 PDF</button></div></div>
       <div class="panel" style="display:grid;gap:10px">
         <div class="row between"><h3>補習班主任權限</h3><button class="sw" role="switch" aria-checked="${D.config.dir}" data-set="dir" aria-label="開放主任檢視"></button></div>
