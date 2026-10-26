@@ -150,8 +150,8 @@ const VIEWS = {
     <div class="panel" style="display:grid;gap:4px"><h3>最近的測驗</h3>${recent.length ? `<div class="hist">${recent.map(a => `<div class="h"><div><b>${esc(a.name)}</b> <span class="mono small muted">${esc(a.uid)}</span>　${esc(scopeLabel(a))}　<span class="mono small muted">${dt(a.start)}</span></div><span class="small ${a.status === '逾時' ? 'x' : ''}">${a.status === '逾時' ? '逾時' : a.score + ' 分'}</span></div>`).join('')}</div>` : '<p class="muted small">還沒有學生作答。</p>'}</div>`;
   },
 
-  students: () => `<p class="small muted">點一位學生，看他的詳細表現。</p>
-    <div class="tbl"><table><thead><tr><th>座號</th><th>姓名</th><th>練習次數</th><th>模擬卷</th><th>平均分數</th><th>最近練習</th><th>需加強</th></tr></thead><tbody>
+  students: () => `
+    <div class="tbl"><table><thead><tr><th>學號</th><th>姓名</th><th>練習次數</th><th>模擬卷</th><th>平均分數</th><th>最近練習</th><th>需加強</th></tr></thead><tbody>
     ${D.students.map(s => `<tr class="link" data-tv="student:${s.id}"><td class="mono">${s.id}</td><td>${esc(s.name)}</td><td>${sum(s.cnt) || '<span class="x">0</span>'}</td><td>${s.mock || 0}</td><td>${s.avg === null ? '—' : s.avg}</td><td>${dshort(s.last)}</td><td>${esc(s.weak.slice(0, 2).join('、')) || '—'}</td></tr>`).join('') || '<tr><td colspan="7" class="muted">名單是空的，請到「題庫與名單」貼上名單。</td></tr>'}
     </tbody></table></div>`,
 
