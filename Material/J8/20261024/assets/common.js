@@ -224,6 +224,7 @@ const loadImg = src => new Promise((ok, bad) => { const im = new Image(); im.onl
 function wmLogo(cv, im) {
   const ctx = cv.getContext('2d'), w = cv.width * 0.58, h = w * im.naturalHeight / im.naturalWidth;
   ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);                 // html2canvas 畫完沒還原放大倍率，先歸零才會畫在正中間
   ctx.globalAlpha = 0.07;
   ctx.drawImage(im, (cv.width - w) / 2, (cv.height - h) / 2, w, h);
   ctx.restore();
