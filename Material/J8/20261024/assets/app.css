@@ -377,3 +377,68 @@ img.fig { cursor: zoom-in }
 #rvList { background-repeat: repeat }
 #pdfStage .pf .pn { float: left }
 .cin { height: 38px; border: 1px solid var(--line-strong); border-radius: 8px; padding: 0 10px; font: 15px var(--f-mono); min-width: 0; flex: 1; max-width: 280px }
+
+/* 2026-10-27 學習診斷報告 v3（PDF 兩頁；報告頁共用） */
+.rp-tag { display: inline-block; font-size: 11px; font-weight: 700; border-radius: 5px; padding: 0 6px; margin-right: 3px; white-space: nowrap }
+.rp-tag.t-ok { background: var(--ok-bg); color: var(--ok) } .rp-tag.t-warn { background: var(--warn-bg); color: var(--warn) } .rp-tag.t-bad { background: var(--bad-bg); color: var(--bad) }
+.rp-tag.t-exam { background: var(--exam-bg); color: var(--exam) } .rp-tag.t-gray { background: #EEF2F6; color: var(--muted) }
+.rp-sec { display: flex; align-items: baseline; gap: 8px; border-left: 4px solid var(--primary); padding-left: 8px; margin: 0 0 10px; font-size: 16px; font-weight: 900; letter-spacing: .06em }
+.rp-sec small { font-size: 11.5px; color: var(--muted); font-weight: 500; letter-spacing: 0 }
+.rp-doc { font-size: 14px; font-weight: 700; color: var(--muted); margin-left: 8px; letter-spacing: .02em }
+.rp-who { color: var(--ink); font-size: 14px }
+.rp-top { display: grid; grid-template-columns: auto 1fr 210px; gap: 6px 16px; align-items: center }
+.rp-cmp { border-left: 1px solid var(--line); padding-left: 12px; font-size: 12px; color: var(--muted); display: grid; gap: 2px } .rp-cmp b { color: var(--ink) }
+.rp-scale { grid-column: 1 / -1; margin-top: 24px }
+.rp-scale .mk { position: relative; height: 0 }
+.rp-scale .mk b { position: absolute; top: -26px; transform: translateX(-50%); font-size: 11px; color: var(--bad); white-space: nowrap; line-height: 1.2 }
+.rp-scale .mk b::after { content: "▼"; display: block; text-align: center }
+.rp-scale .band { display: grid; grid-template-columns: 50fr 20fr 20fr 10fr; height: 9px; border-radius: 5px; overflow: hidden }
+.rp-scale .band i:nth-child(1) { background: #E9A99C } .rp-scale .band i:nth-child(2) { background: #EDC98A } .rp-scale .band i:nth-child(3) { background: #B8AEE3 } .rp-scale .band i:nth-child(4) { background: #97CDAE }
+.rp-scale .lab { display: grid; grid-template-columns: 50fr 20fr 20fr 10fr; font-size: 11px; color: var(--muted); margin-top: 2px }
+.rp-scale .lab span { border-left: 1px solid var(--line-strong); padding-left: 4px; white-space: nowrap; overflow: hidden } .rp-scale .lab span:first-child { border-left: 0; padding-left: 0 }
+.rp-sumbox { background: #F4F8FD; border-color: #CFE0F4 }
+.rp-row { display: grid; grid-template-columns: 1fr 1.25fr; gap: 10px } .rp-row.one { grid-template-columns: 1fr } .rp-row.wide { grid-template-columns: 1.55fr 1fr } .rp-row.about { grid-template-columns: 1fr 140px }
+.cols.one { grid-template-columns: 1fr }
+.rp-dist { display: flex; height: 18px; border-radius: 5px; overflow: hidden; font-size: 11px; color: #FFF; font-weight: 700; margin: 4px 0 2px }
+.rp-dist i { display: flex; align-items: center; justify-content: center; font-style: normal }
+.rp-distlab { display: flex; font-size: 11px; color: var(--muted) } .rp-distlab span { white-space: nowrap; overflow: hidden }
+.rp-p { margin-top: 4px; font-size: 13px }
+.rp-note { margin-top: 4px; font-size: 11px; color: var(--muted) }
+.rp-units { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px }
+.rp-units .u { border: 1px solid var(--line); border-radius: 8px; padding: 5px 7px; font-size: 11.5px; line-height: 1.45 }
+.rp-units .no { display: flex; justify-content: space-between; align-items: center; gap: 4px; font-weight: 900; font-size: 13.5px; white-space: nowrap } .rp-units .no .rp-tag { margin: 0 }
+.rp-units .bar { height: 5px; border-radius: 3px; background: #EDF1F6; margin: 3px 0 1px } .rp-units .bar i { display: block; height: 100%; border-radius: 3px; background: var(--primary) }
+.rp-units .idle { color: var(--muted); background: var(--surface-2) }
+.rp-trend { width: 100%; height: auto; display: block }
+.rp-diag, .rp-items { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 0 }
+.rp-diag th, .rp-items th { text-align: left; font-weight: 700; color: var(--muted); font-size: 11px; border-bottom: 1px solid var(--line); padding: 3px 6px; white-space: nowrap }
+.rp-diag td, .rp-items td { border-bottom: 1px solid #EEF2F6; padding: 5px 6px; vertical-align: top }
+.rp-diag .ic { width: 18px; font-weight: 900; text-align: center } .rp-diag .nm { font-weight: 700 } .rp-diag .tip { color: var(--muted); font-size: 11.5px }
+.rp-items td { white-space: nowrap; vertical-align: middle } .rp-items td:nth-child(3) { white-space: normal } .rp-items .rs { text-align: center; font-weight: 900 } .rp-items tr.right td { color: var(--muted) }
+.rp-next { margin: 2px 0 0; padding-left: 1.4em } .rp-next li { margin: 2px 0 }
+.rp-parent { margin-top: 4px; font-size: 12px; color: var(--muted) }
+.rp-fix { display: flex; flex-wrap: wrap; gap: 4px 16px } .rp-fix span::before { content: "□"; margin-right: 3px; font-size: 15px }
+.rp-lines div { border-bottom: 1px solid var(--line-strong); height: 26px }
+.rp-sign { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 12.5px; color: var(--muted); margin-top: 10px } .rp-sign i { display: inline-block; width: 120px; border-bottom: 1px solid #9AA8B8; margin-left: 4px }
+.rp-about { margin: 0; padding-left: 1.2em; font-size: 12px; color: #3B4A5C } .rp-about li { margin: 1px 0 }
+.rp-qrbox { display: grid; justify-items: center; align-content: center; text-align: center; font-size: 11px; color: var(--muted); line-height: 1.4 }
+.rp-qrbox img { width: 96px; height: 96px; display: block; margin-bottom: 4px; image-rendering: pixelated } .rp-qrbox small { font-size: 10px }
+#pdfStage .ph .rp-doc { font-size: 14px }
+#pdfStage h2 small { font-size: 11.5px; color: #5E6E80; font-weight: 500; margin-left: 6px }
+#pdfStage .rp-row > .box { margin-bottom: 12px }
+@media (max-width: 600px) { .screen .rp-units { grid-template-columns: repeat(3, minmax(0, 1fr)) } }
+
+/* 報告 PDF 排得和預覽一樣緊湊（兩頁）：savePdf 看到 .rp-sec 就在 #pdfStage 加上 rp-compact */
+#pdfStage.rp-compact { font-size: 12.5px; line-height: 1.55 }
+#pdfStage.rp-compact .ph { margin-bottom: 8px; padding-bottom: 6px } #pdfStage.rp-compact .ph h1 { font-size: 20px }
+#pdfStage.rp-compact .box { padding: 8px 11px; margin-bottom: 8px; border-radius: 9px }
+#pdfStage.rp-compact h2 { font-size: 14px; margin: 0 0 5px }
+#pdfStage.rp-compact .big { font-size: 42px }
+#pdfStage.rp-compact .hb { padding: 2px 0; font-size: 12px }
+#pdfStage.rp-compact .rp-row { gap: 8px } #pdfStage.rp-compact .rp-row > .box { margin-bottom: 8px }
+#pdfStage.rp-compact .rp-diag, #pdfStage.rp-compact .rp-items { font-size: 11.5px }
+#pdfStage.rp-compact .rp-diag td { padding: 4px 5px } #pdfStage.rp-compact .rp-diag .tip { font-size: 11px }
+#pdfStage.rp-compact .rp-items td { padding: 3px 5px }
+#pdfStage.rp-compact .rp-units .u { font-size: 11px; padding: 4px 6px }
+#pdfStage.rp-compact .rp-lines div { height: 24px }
+.rp-tiers .hb, #pdfStage .rp-tiers .hb { grid-template-columns: 3em 1fr 3.4em }

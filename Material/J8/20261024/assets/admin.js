@@ -233,7 +233,9 @@ const VIEWS = {
       <div class="setrow"><b>允許訪客試用</b><button class="sw" role="switch" aria-checked="${c.guest}" data-set="guest" aria-label="允許訪客試用"></button>
         <span class="small muted">${onOff(c.guest, '開放中', '關閉中')}：${c.guest ? '登入頁有「訪客試用」，給試聽生用；不記名、不能下載 PDF、不算全班統計。' : '一定要輸入班級座號姓名才能測驗。'}</span></div>
       <div class="setrow"><b>學生 PDF 附題目</b><div class="seg" role="group" aria-label="學生 PDF 附題目">${['不附', '只附錯題', '全部'].map(k => `<button type="button" data-pdfq="${k}" aria-pressed="${c.pdfQ === k}">${k}</button>`).join('')}</div>
-        <span class="small muted" style="grid-column:1 / 3">${{ 不附: '不附：PDF 只列錯題清單（題號、學習目標、你的答案、正解），完整題目和解析在網站上看。', 只附錯題: '只附錯題：PDF 印出答錯的題目和解析。', 全部: '全部：PDF 印出這次每一題的題目和解析。' }[c.pdfQ] || ''}每份 PDF 都有學號姓名浮水印和「請勿轉傳」警語。</span></div>
+        <span class="small muted" style="grid-column:1 / 3">${{ 不附: '不附：PDF 只列錯題清單（題號、學習目標、你的答案、正解），完整題目和解析在網站上看。', 只附錯題: '只附錯題：PDF 印出答錯的題目和解析。', 全部: '全部：PDF 印出這次每一題的題目和解析。' }[c.pdfQ] || ''}每份 PDF 都有 LOGO 浮水印，頁尾印學號姓名和報告編號。</span></div>
+      <div class="setrow"><b>報告顯示全班位置</b><button class="sw" role="switch" aria-checked="${c.cls}" data-set="cls" aria-label="報告顯示全班位置"></button>
+        <span class="small muted">${onOff(c.cls, '顯示中', '隱藏中')}：學生報告列出這一節各等第的人數和全班平均（不排名；練過的人少於 3 人時不顯示）。</span></div>
       <div class="setrow"><b>顯示題目出處</b><button class="sw" role="switch" aria-checked="${c.src}" data-set="src" aria-label="顯示題目出處"></button>
         <span class="small muted">${onOff(c.src, '顯示中', '隱藏中')}：${c.src ? '學生會看到【學校名】或【會考年度】。' : '學生看不到出處和「會考」標籤，系統照樣記錄。'}</span></div>
       <div class="setrow"><b>顯示品牌 LOGO</b><button class="sw" role="switch" aria-checked="${c.logo}" data-set="logo" aria-label="顯示品牌 LOGO"></button>
@@ -320,7 +322,7 @@ $('#tBody').addEventListener('click', async e => {
     try {
       const r = await run('儲存中…', () => api('tSet', { token: TOKEN, key: k, value: val }));
       D.config = r.config; D.dfields = r.dfields; render();
-      toast({ lock: val ? '已鎖定名單：只有名單上的學生能登入' : '已開放加入：新同學第一次登入自動加入名單', guest: val ? '已開放訪客試用' : '已關閉訪客試用', src: val ? '已顯示題目出處' : '已隱藏題目出處', logo: val ? '已顯示品牌 LOGO' : '已隱藏品牌 LOGO', brand: val ? '已顯示品牌名稱' : '已隱藏品牌名稱', dir: val ? '已開放主任檢視' : '已關閉主任檢視' }[k]);
+      toast({ lock: val ? '已鎖定名單：只有名單上的學生能登入' : '已開放加入：新同學第一次登入自動加入名單', guest: val ? '已開放訪客試用' : '已關閉訪客試用', cls: val ? '報告會顯示全班位置' : '報告不顯示全班位置', src: val ? '已顯示題目出處' : '已隱藏題目出處', logo: val ? '已顯示品牌 LOGO' : '已隱藏品牌 LOGO', brand: val ? '已顯示品牌名稱' : '已隱藏品牌名稱', dir: val ? '已開放主任檢視' : '已關閉主任檢視' }[k]);
     } catch (err) { /* 已提示 */ }
     return;
   }
@@ -356,7 +358,7 @@ async function attemptPdf(aid) {
     await run('產生 PDF 中…', async () => {
       const r = (await api(ROLE === 'teacher' ? 'tReport' : 'dReport', { token: TOKEN, aid })).report;
       if (ROLE !== 'teacher') r.items = [];             // 主任只看分數與觀念分析，不給題目、正解、解析
-      await savePdf(reportPdfHtml(r, D.config || {}, '全部'), reportFileName(r));
+      await savePdf(reportPdfHtml(r, D.config || {}, '全部'), reportFileName(r), { logo: !!(D.config && D.config.logo), note: `${r.uid} ${r.name}｜報告編號 ${r.aid}` });
     });
   } catch (e) { /* 已提示 */ }
 }

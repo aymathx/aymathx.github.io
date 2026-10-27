@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
-<link rel="stylesheet" href="assets/app.css?v=8">
+<link rel="stylesheet" href="assets/app.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -30,7 +30,7 @@
         <input id="code" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="老師給的通行碼">
       </div>
       <div class="field">
-        <label for="who">學號＋姓名（中間不用空格）</label>
+        <label for="who">班級座號＋姓名（中間不用空格）</label>
         <input id="who" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例：80101陳大田">
         <div class="parse" id="parse" aria-live="polite"></div>
       </div>
@@ -39,7 +39,7 @@
       <button class="btn ghost wide" type="button" id="guestGo" hidden>訪客試用（不記名）</button>
     </form>
     <div class="err-box" id="loginErr" hidden></div>
-    <p class="legal">本站題目取自各校定期評量與國中教育會考，屬依法令舉行之考試試題，依著作權法第 9 條第 1 項第 5 款不得為著作權之標的；<br>解析由本站自行編寫。僅供本班學生練習使用，請勿轉載或公開。若對內容有疑義，請洽任課老師，我們會儘速處理或移除。</p>
+    <p class="legal">本站題目取自各校定期評量與國中教育會考，屬依法令舉行之考試試題，依著作權法第 9 條第 1 項第 5 款不得為著作權之標的；解析由本站自行編寫。僅供本班學生練習使用，請勿轉載或公開。若對內容有疑義，請洽任課老師，我們會儘速處理或移除。</p>
   </section>
 
   <!-- 選小節 -->
@@ -56,7 +56,7 @@
       <div class="hist-tabs" id="histTabs" role="group" aria-label="依範圍篩選報告"></div>
       <div class="hist" id="hist"></div>
     </div>
-    <p class="legal">本站題目取自各校定期評量與國中教育會考，屬依法令舉行之考試試題，依著作權法第 9 條第 1 項第 5 款不得為著作權之標的；<br>解析由本站自行編寫。僅供本班學生練習使用，請勿轉載或公開。若對內容有疑義，請洽任課老師，我們會儘速處理或移除。</p>
+    <p class="legal">本站題目取自各校定期評量與國中教育會考，屬依法令舉行之考試試題，依著作權法第 9 條第 1 項第 5 款不得為著作權之標的；解析由本站自行編寫。僅供本班學生練習使用，請勿轉載或公開。若對內容有疑義，請洽任課老師，我們會儘速處理或移除。</p>
   </section>
 
   <!-- 小節測驗 -->
@@ -84,17 +84,24 @@
       <div class="num" id="rScore"></div>
       <span class="level" id="rLevel"></span>
       <div class="small" id="rMeta"></div>
+      <div id="rScale" style="grid-column:1 / -1"></div>
     </div>
-    <p style="font-size:16px;font-weight:700;text-align:center" id="rLine"></p>
+    <div class="panel rp-sumbox" id="rSumPanel" hidden><h2>老師看這次</h2><p class="rp-sum" id="rSum" style="margin-top:6px"></p></div>
+    <div class="cols" id="rRow">
+      <div class="panel"><h2>各難度答對</h2><div id="rTiers" style="margin-top:6px"></div><p class="rp-note">易題要全對，基礎才算穩。</p></div>
+      <div class="panel" id="rClsPanel"><h2>在全班的位置</h2><div id="rCls"></div></div>
+    </div>
     <div class="panel secbars" id="rSecs" hidden></div>
     <div class="panel" id="rGoalPanel">
       <div class="row between" style="margin-bottom:4px"><h2>學習目標</h2><span class="small muted">● 掌握　▲ 不穩　✕ 需加強</span></div>
       <div id="rGoals"></div>
       <p class="small muted" style="margin-top:8px">右邊數字＝這次這個目標答對幾題／考了幾題。燈號只看這一次：全對＝掌握，全錯＝需加強，其餘＝不穩。</p>
     </div>
+    <div class="panel" id="rProgPanel" hidden><h2>段考準備度 <span class="small muted">整個二段範圍，到目前為止</span></h2><div id="rProg" style="margin-top:8px"></div></div>
     <div class="panel" id="rNextPanel" hidden>
       <h2>下一步</h2>
-      <ul class="next" id="rNext"></ul>
+      <ol class="rp-next" id="rNext"></ol>
+      <p class="rp-parent" id="rParent"></p>
       <div id="rTrend" style="margin-top:12px" hidden></div>
     </div>
     <div class="panel" style="display:grid;gap:6px">
@@ -142,7 +149,7 @@
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script src="assets/config.js?v=1"></script>
-<script src="assets/common.js?v=7"></script>
-<script src="assets/app.js?v=8"></script>
+<script src="assets/common.js?v=8"></script>
+<script src="assets/app.js?v=9"></script>
 </body>
 </html>
