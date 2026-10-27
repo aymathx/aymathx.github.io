@@ -325,9 +325,8 @@ $('#next').onclick = () => {
   const N = Q.questions.length;
   if (Q.cur < N - 1) { goQ(Q.cur + 1); return; }
   const miss = N - answeredN(Q);
-  if (!miss) return submitQuiz();
-  $('#confirmBox').innerHTML = `<div class="confirm"><b>還有 ${miss} 題沒作答，確定交卷？</b><div class="row"><button class="btn ghost" id="backQ">回去作答</button><button class="btn" id="sureQ">確定交卷</button></div></div>`;
-  $('#backQ').onclick = () => goQ(Q.answers.findIndex(a => !filled(a)));
+  $('#confirmBox').innerHTML = `<div class="confirm"><b>${miss ? `還有 ${miss} 題沒作答，確定交卷？` : '已全部作答，確定交卷？'}</b><div class="row"><button class="btn ghost" id="backQ">回去作答</button><button class="btn" id="sureQ">確定交卷</button></div></div>`;
+  $('#backQ').onclick = () => { if (miss) goQ(Q.answers.findIndex(a => !filled(a))); else $('#confirmBox').innerHTML = ''; };
   $('#sureQ').onclick = submitQuiz;
 };
 
@@ -477,8 +476,7 @@ $('#mkeys').addEventListener('mousedown', e => e.preventDefault());
 $('#mkeys').addEventListener('click', e => { const k = e.target.closest('[data-k]'); if (k && mLast) insertKey(mLast, k.dataset.k); });
 $('#msubmit').onclick = () => {
   const miss = M.questions.length - answeredN(M);
-  if (!miss) return submitMock();
-  $('#mconfirm').innerHTML = `<div class="confirm"><b>還有 ${miss} 題沒作答，確定交卷？</b><div class="row"><button class="btn ghost" id="mback">回去作答</button><button class="btn" id="msure">確定交卷</button></div></div>`;
+  $('#mconfirm').innerHTML = `<div class="confirm"><b>${miss ? `還有 ${miss} 題沒作答，確定交卷？` : '已全部作答，確定交卷？'}</b><div class="row"><button class="btn ghost" id="mback">回去作答</button><button class="btn" id="msure">確定交卷</button></div></div>`;
   $('#mback').onclick = () => { $('#mconfirm').innerHTML = ''; const i = M.answers.findIndex(a => !filled(a)); const el = $('#mq' + i); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
   $('#msure').onclick = submitMock;
 };
