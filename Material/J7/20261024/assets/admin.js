@@ -138,7 +138,8 @@ const VIEWS = {
   overview: () => {
     const o = D.overview;
     const recent = D.attempts.slice().sort((a, b) => b.start - a.start).slice(0, 8);
-    return `<div class="kpis">
+    const nNew = D.students.filter(s => s.isNew).length;
+    return `${nNew ? `<div class="panel row between"><span><b>${nNew}</b> 位新同學第一次登入，已自動加入名單。</span><button class="btn ghost sm" data-tv="students">到學生頁確認</button></div>` : ''}<div class="kpis">
       <div class="kpi"><b>${o.weekTries}</b><span>近 7 天測驗人次</span></div>
       <div class="kpi"><b>${o.avg === null ? '—' : o.avg}</b><span>小節練習平均分數</span></div>
       <div class="kpi"><b>${o.weekTimeouts}</b><span>近 7 天逾時次數</span></div>
@@ -150,10 +151,20 @@ const VIEWS = {
     <div class="panel" style="display:grid;gap:4px"><h3>最近的測驗</h3>${recent.length ? `<div class="hist">${recent.map(a => `<div class="h"><div><b>${esc(a.name)}</b> <span class="mono small muted">${esc(a.uid)}</span>　${esc(scopeLabel(a))}　<span class="mono small muted">${dt(a.start)}</span></div><span class="small ${a.status === '逾時' ? 'x' : ''}">${a.status === '逾時' ? '逾時' : a.score + ' 分'}</span></div>`).join('')}</div>` : '<p class="muted small">還沒有學生作答。</p>'}</div>`;
   },
 
-  students: () => `
-    <div class="tbl"><table><thead><tr><th>學號</th><th>姓名</th><th>練習次數</th><th>模擬卷</th><th>平均分數</th><th>最近練習</th><th>需加強</th></tr></thead><tbody>
-    ${D.students.map(s => `<tr class="link" data-tv="student:${s.id}"><td class="mono">${s.id}</td><td>${esc(s.name)}</td><td>${sum(s.cnt) || '<span class="x">0</span>'}</td><td>${s.mock || 0}</td><td>${s.avg === null ? '—' : s.avg}</td><td>${dshort(s.last)}</td><td>${esc(s.weak.slice(0, 2).join('、')) || '—'}</td></tr>`).join('') || '<tr><td colspan="7" class="muted">名單是空的，請到「題庫與名單」貼上名單。</td></tr>'}
-    </tbody></table></div>`,
+  students: () => {
+    const nNew = D.students.filter(s => s.isNew).length, n = D.students.filter(s => DSEL.has(s.id)).length;
+    const opts = D.students.map(s => `<option value="${esc(s.id)}">${esc(s.id)} ${esc(s.name)}</option>`).join('');
+    return `${nNew ? `<div class="panel row between"><span><b>${nNew}</b> 位新同學自動加入名單（標「新加入」）。名字打錯的用下面的「合併」，亂打的假名勾選後刪除。</span><button class="btn ghost sm" id="ackAll">全部確認</button></div>` : ''}
+    <div class="tbl"><table><thead><tr><th class="ck"><input type="checkbox" id="dirAll" aria-label="全選"${n && n === D.students.length ? ' checked' : ''}></th><th>學號</th><th>姓名</th><th>練習次數</th><th>模擬卷</th><th>平均分數</th><th>最近練習</th><th>需加強</th></tr></thead><tbody>
+    ${D.students.map(s => `<tr class="link" data-tv="student:${esc(s.id)}"><td class="ck"><input type="checkbox" data-dsel="${esc(s.id)}" aria-label="勾選 ${esc(s.name)}"${DSEL.has(s.id) ? ' checked' : ''}></td><td class="mono">${esc(s.id)}</td><td>${esc(s.name)}${s.isNew ? ' <span class="chip t-易">新加入</span>' : ''}${s.aka && s.aka.length ? `<div class="small muted">別名 ${esc(s.aka.join('、'))}</div>` : ''}</td><td>${sum(s.cnt) || '<span class="x">0</span>'}</td><td>${s.mock || 0}</td><td>${s.avg === null ? '—' : s.avg}</td><td>${dshort(s.last)}</td><td>${esc(s.weak.slice(0, 2).join('、')) || '—'}</td></tr>`).join('') || '<tr><td colspan="8" class="muted">名單是空的。學生第一次登入會自動加入，也可以到「題庫與名單」貼上名單。</td></tr>'}
+    </tbody></table></div>
+    ${D.students.length ? `<div class="cols">
+      <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>合併學生</h3><p class="small muted">同一個人用不同名字登入（例如打錯字）：把錯的那筆併到正確的人。作答紀錄會搬過去，以後用錯的名字登入也會對到正確的人。</p>
+        <div class="row" style="flex-wrap:wrap"><select id="mgFrom" aria-label="要併掉的那筆">${opts}</select><span class="small">併到</span><select id="mgTo" aria-label="正確的學生">${opts}</select><button class="btn sm" id="mgGo">合併</button></div></div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>刪除學生</h3><p class="small muted">在上面的表格勾選（例如亂打的假名）。會連同作答紀錄一起刪除，不能復原。</p>
+        <div class="row"><button class="btn ghost sm" id="stuDel"${n ? '' : ' disabled'}>刪除勾選的學生（${n} 人）</button></div></div>
+    </div>` : ''}`;
+  },
 
   student: id => {
     const s = D.students.find(x => x.id === id);
@@ -214,8 +225,15 @@ const VIEWS = {
     const c = D.config;
     const onOff = (on, a, b) => on ? `<span class="state" style="color:var(--ok)">${a}</span>` : `<span class="state muted">${b}</span>`;
     return `<div class="panel">
-      <div class="setrow"><b>測驗登入</b><button class="sw" role="switch" aria-checked="${!c.open}" data-set="open" aria-label="鎖定登入"></button>
-        <span class="small muted">${c.open ? '<span class="state" style="color:var(--warn)">開放中</span>：不用輸入姓名就能直接測驗，作答記為「訪客」。' : '<span class="state" style="color:var(--ok)">鎖定中</span>：要輸入名單內的班級座號姓名才能測驗。'}</span></div>
+      <div class="setrow"><b>班級通行碼</b><span class="code">${esc(D.code || '不需要')}</span>
+        <span class="small muted" style="grid-column:1 / 3">學生登入時要輸入（不分大小寫）。換了以後，所有學生都要用新通行碼重新登入。</span>
+        <div class="row" style="grid-column:1 / 3"><input id="codeIn" class="cin" maxlength="20" autocomplete="off" placeholder="新的通行碼（英文或數字 3～20 個）" aria-label="新的通行碼"><button class="btn sm" id="codeSave">更換通行碼</button></div></div>
+      <div class="setrow"><b>鎖定名單</b><button class="sw" role="switch" aria-checked="${c.lock}" data-set="lock" aria-label="鎖定名單"></button>
+        <span class="small muted">${c.lock ? '<span class="state" style="color:var(--ok)">鎖定中</span>：只有名單上的學生能登入。' : '<span class="state" style="color:var(--warn)">開放加入</span>：新同學第一次登入時自動加入名單，到「學生」頁確認。'}</span></div>
+      <div class="setrow"><b>允許訪客試用</b><button class="sw" role="switch" aria-checked="${c.guest}" data-set="guest" aria-label="允許訪客試用"></button>
+        <span class="small muted">${onOff(c.guest, '開放中', '關閉中')}：${c.guest ? '登入頁有「訪客試用」，給試聽生用；不記名、不能下載 PDF、不算全班統計。' : '一定要輸入班級座號姓名才能測驗。'}</span></div>
+      <div class="setrow"><b>學生 PDF 附題目</b><div class="seg" role="group" aria-label="學生 PDF 附題目">${['不附', '只附錯題', '全部'].map(k => `<button type="button" data-pdfq="${k}" aria-pressed="${c.pdfQ === k}">${k}</button>`).join('')}</div>
+        <span class="small muted" style="grid-column:1 / 3">${{ 不附: '不附：PDF 只列錯題清單（題號、學習目標、你的答案、正解），完整題目和解析在網站上看。', 只附錯題: '只附錯題：PDF 印出答錯的題目和解析。', 全部: '全部：PDF 印出這次每一題的題目和解析。' }[c.pdfQ] || ''}每份 PDF 都有學號姓名浮水印和「請勿轉傳」警語。</span></div>
       <div class="setrow"><b>顯示題目出處</b><button class="sw" role="switch" aria-checked="${c.src}" data-set="src" aria-label="顯示題目出處"></button>
         <span class="small muted">${onOff(c.src, '顯示中', '隱藏中')}：${c.src ? '學生會看到【學校名】或【會考年度】。' : '學生看不到出處和「會考」標籤，系統照樣記錄。'}</span></div>
       <div class="setrow"><b>顯示品牌 LOGO</b><button class="sw" role="switch" aria-checked="${c.logo}" data-set="logo" aria-label="顯示品牌 LOGO"></button>
@@ -234,7 +252,7 @@ const VIEWS = {
     <div class="cols">
       <div class="panel" style="display:grid;gap:10px"><h3>匯入題庫</h3><p class="small muted">選擇 Claude 產生的 <span class="mono">bank.json</span>。會整份取代試算表的「題庫」「學習目標」「模擬卷」；學生的作答紀錄不受影響。</p>
         <input type="file" id="bankFile" accept=".json,application/json"><div class="row"><button class="btn sm" id="bankGo">匯入</button></div></div>
-      <div class="panel" style="display:grid;gap:10px"><h3>學生名單</h3><p class="small muted">一行一位，例如 <span class="mono">70101陳大田</span>。目前 ${D.students.length} 人。</p>
+      <div class="panel" style="display:grid;gap:10px"><h3>學生名單</h3><p class="small muted">一行一位，例如 <span class="mono">70101陳大田</span>。目前 ${D.students.length} 人。同一個班級座號、不同姓名（不同學校）會自動編成 <span class="mono">70101-2</span>；學生第一次登入也會自動加入（網站設定可以鎖定名單）。</p>
         <textarea id="rosterTxt" rows="8" style="width:100%;border:1px solid var(--line-strong);border-radius:10px;padding:10px;font:15px/1.6 var(--f-mono)" placeholder="70101陳大田&#10;70102林小美"></textarea>
         <div class="row"><button class="btn sm" data-roster="append">加入名單</button><button class="btn ghost sm" data-roster="replace">整份取代</button></div></div>
     </div>
@@ -289,14 +307,20 @@ $('#tBody').addEventListener('click', async e => {
   }
   const mp = t.closest('[data-mockpdf]');
   if (mp) return mockPdf(mp.dataset.mockpdf);
+  if (t.id === 'ackAll') return ackAll();
+  if (t.id === 'mgGo') return mergeStu();
+  if (t.id === 'stuDel') return delStu();
+  if (t.id === 'codeSave') return saveCode();
+  const pq = t.closest('[data-pdfq]');
+  if (pq) return setPdfQ(pq.dataset.pdfq);
   const sw = t.closest('[data-set]');
   if (sw) {
     const k = sw.dataset.set;
-    const val = k === 'open' ? !D.config.open : !D.config[k];
+    const val = !D.config[k];
     try {
       const r = await run('儲存中…', () => api('tSet', { token: TOKEN, key: k, value: val }));
       D.config = r.config; D.dfields = r.dfields; render();
-      toast({ open: val ? '已開放：學生不用輸入姓名' : '已鎖定：要輸入名單內姓名', src: val ? '已顯示題目出處' : '已隱藏題目出處', logo: val ? '已顯示品牌 LOGO' : '已隱藏品牌 LOGO', brand: val ? '已顯示品牌名稱' : '已隱藏品牌名稱', dir: val ? '已開放主任檢視' : '已關閉主任檢視' }[k]);
+      toast({ lock: val ? '已鎖定名單：只有名單上的學生能登入' : '已開放加入：新同學第一次登入自動加入名單', guest: val ? '已開放訪客試用' : '已關閉訪客試用', src: val ? '已顯示題目出處' : '已隱藏題目出處', logo: val ? '已顯示品牌 LOGO' : '已隱藏品牌 LOGO', brand: val ? '已顯示品牌名稱' : '已隱藏品牌名稱', dir: val ? '已開放主任檢視' : '已關閉主任檢視' }[k]);
     } catch (err) { /* 已提示 */ }
     return;
   }
@@ -332,7 +356,7 @@ async function attemptPdf(aid) {
     await run('產生 PDF 中…', async () => {
       const r = (await api(ROLE === 'teacher' ? 'tReport' : 'dReport', { token: TOKEN, aid })).report;
       if (ROLE !== 'teacher') r.items = [];             // 主任只看分數與觀念分析，不給題目、正解、解析
-      await savePdf(reportPdfHtml(r, D.config || {}), reportFileName(r));
+      await savePdf(reportPdfHtml(r, D.config || {}, '全部'), reportFileName(r));
     });
   } catch (e) { /* 已提示 */ }
 }
@@ -416,7 +440,7 @@ async function importBank() {
 async function importRoster(mode) {
   const text = $('#rosterTxt').value.trim();
   if (!text) return toast('請先貼上名單');
-  if (mode === 'replace' && !confirm('確定要用這份名單整份取代目前的名單？（作答紀錄不會刪除）')) return;
+  if (mode === 'replace' && !confirm('確定要用這份名單整份取代目前的名單？\n不在新名單裡的學生（包括自動加入的）會移出名單；作答紀錄不會刪除。')) return;
   try {
     const r = await run('更新名單中…', () => api('tRoster', { token: TOKEN, text, mode }));
     toast(`名單共 ${r.count} 人` + (r.bad.length ? `，${r.bad.length} 行格式不對沒加入` : ''), 5000);
@@ -433,6 +457,40 @@ async function clearRecords(mode) {
     toast(`已清除 ${r.removed} 筆測驗紀錄`, 4000);
     await load(); view = 'bank'; render();
   } catch (e) { /* 已提示 */ }
+}
+
+/* ---------- 名單整理與網站設定 ---------- */
+async function saveCode() {
+  const v = $('#codeIn').value.replace(/\s+/g, '').toUpperCase();
+  if (!v) return toast('請先輸入新的通行碼');
+  if (!confirm(`通行碼要改成「${v}」？\n改了以後，所有學生都要用新通行碼重新登入。`)) return;
+  try {
+    const r = await run('儲存中…', () => api('tSet', { token: TOKEN, key: 'code', value: v }));
+    D.config = r.config; D.code = r.code; render();
+    toast(`通行碼已改成 ${r.code}`, 4000);
+  } catch (e) { /* 已提示 */ }
+}
+async function setPdfQ(v) {
+  try {
+    const r = await run('儲存中…', () => api('tSet', { token: TOKEN, key: 'pdfQ', value: v }));
+    D.config = r.config; render(); toast('學生 PDF 附題目：' + v);
+  } catch (e) { /* 已提示 */ }
+}
+async function ackAll() {
+  try { const r = await run('更新名單中…', () => api('tAck', { token: TOKEN, ids: 'all' })); toast(`已確認 ${r.acked} 位新同學`); await load(); } catch (e) { /* 已提示 */ }
+}
+async function mergeStu() {
+  const from = $('#mgFrom').value, to = $('#mgTo').value;
+  if (!from || from === to) return toast('請選兩位不同的學生');
+  const nm = id => { const s = D.students.find(x => x.id === id); return s ? `${s.id} ${s.name}` : id; };
+  if (!confirm(`把「${nm(from)}」併到「${nm(to)}」？\n「${nm(from)}」的作答紀錄會搬過去，並移出名單。`)) return;
+  try { const r = await run('合併中…', () => api('tMerge', { token: TOKEN, from, to })); DSEL.clear(); toast(`已合併，搬了 ${r.moved} 次測驗紀錄`, 4000); await load(); } catch (e) { /* 已提示 */ }
+}
+async function delStu() {
+  const list = D.students.filter(s => DSEL.has(s.id));
+  if (!list.length) return toast('請先勾選學生');
+  if (!confirm(`刪除這 ${list.length} 位學生？\n${list.slice(0, 10).map(s => s.id + ' ' + s.name).join('、')}${list.length > 10 ? '…' : ''}\n會連同作答紀錄一起刪除，不能復原。`)) return;
+  try { const r = await run('刪除中…', () => api('tDelStu', { token: TOKEN, ids: list.map(s => s.id) })); DSEL.clear(); toast(`已刪除 ${r.students} 位學生、${r.removed} 次測驗紀錄`, 4000); await load(); } catch (e) { /* 已提示 */ }
 }
 
 boot();

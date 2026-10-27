@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>115年上學期｜國七。二段</title>
-<meta name="robots" content="noindex">
+<meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/ay-logo-blue.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
-<link rel="stylesheet" href="assets/app.css?v=7">
+<link rel="stylesheet" href="assets/app.css?v=8">
 </head>
 <body>
 <div class="app">
@@ -23,17 +23,23 @@
       <h1 id="siteTitle">國七。二段練習</h1>
       <p>範圍：2-1 因數與倍數～2-4 指數律</p>
     </div>
-    <form class="panel field" id="loginForm" novalidate hidden>
-      <label for="who">請輸入班級座號姓名（中間不用空格）</label>
-      <input id="who" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例：70101陳大田">
-      <div class="parse" id="parse" aria-live="polite"></div>
+    <form class="panel field" id="loginForm" novalidate>
+      <h2 style="text-align:center">Practice Makes Perfect！！</h2>
+      <div class="field" id="codeBox">
+        <label for="code">通行碼</label>
+        <input id="code" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="老師給的通行碼">
+      </div>
+      <div class="field">
+        <label for="who">班級座號＋姓名（中間不用空格）</label>
+        <input id="who" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例：70101陳大田">
+        <div class="parse" id="parse" aria-live="polite"></div>
+      </div>
+      <p class="small muted">請輸入自己真實的班級座號和姓名。資料只用於本班的學習紀錄和老師輔導。</p>
       <button class="btn wide" type="submit">登入練習<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <button class="btn ghost wide" type="button" id="guestGo" hidden>訪客試用（不記名）</button>
     </form>
-    <div class="panel openbox" id="openBox" hidden>
-      <h2>Practice Makes Perfect！！</h2>
-      <button class="btn" id="guestGo">開始練習<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </div>
     <div class="err-box" id="loginErr" hidden></div>
+    <p class="legal">本站題目取自各校定期評量與國中教育會考，屬依法令舉行之考試試題，依著作權法第 9 條第 1 項第 5 款不得為著作權之標的；解析由本站自行編寫。僅供本班學生練習使用，請勿轉載或公開。若對內容有疑義，請洽任課老師，我們會儘速處理或移除。</p>
   </section>
 
   <!-- 選小節 -->
@@ -46,10 +52,11 @@
       <div class="mocks" id="miniMocks"></div>
     </div>
     <div class="panel" id="histPanel" style="display:grid;gap:4px">
-      <div class="row between"><h2>我的測驗報告</h2><span class="small muted">每次完成都可以下載 PDF</span></div>
+      <div class="row between"><h2>我的測驗報告</h2><span class="small muted">點「查看」看錯題與解析，也可以下載 PDF</span></div>
       <div class="hist-tabs" id="histTabs" role="group" aria-label="依範圍篩選報告"></div>
       <div class="hist" id="hist"></div>
     </div>
+    <p class="legal">本站題目取自各校定期評量與國中教育會考，屬依法令舉行之考試試題，依著作權法第 9 條第 1 項第 5 款不得為著作權之標的；解析由本站自行編寫。僅供本班學生練習使用，請勿轉載或公開。若對內容有疑義，請洽任課老師，我們會儘速處理或移除。</p>
   </section>
 
   <!-- 小節測驗 -->
@@ -84,6 +91,11 @@
       <div class="row between" style="margin-bottom:4px"><h2>學習目標</h2><span class="small muted">● 掌握　▲ 不穩　✕ 需加強</span></div>
       <div id="rGoals"></div>
       <p class="small muted" style="margin-top:8px">右邊數字＝這次這個目標答對幾題／考了幾題。燈號只看這一次：全對＝掌握，全錯＝需加強，其餘＝不穩。</p>
+    </div>
+    <div class="panel" id="rNextPanel" hidden>
+      <h2>下一步</h2>
+      <ul class="next" id="rNext"></ul>
+      <div id="rTrend" style="margin-top:12px" hidden></div>
     </div>
     <div class="panel" style="display:grid;gap:6px">
       <div class="row between"><h2>題目回顧與解析</h2><div class="seg" id="rvSeg"><button aria-pressed="true" data-rv="wrong">只看錯題</button><button aria-pressed="false" data-rv="all" id="rvAll">全部 10 題</button></div></div>
@@ -130,7 +142,7 @@
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script src="assets/config.js?v=1"></script>
-<script src="assets/common.js?v=6"></script>
-<script src="assets/app.js?v=7"></script>
+<script src="assets/common.js?v=7"></script>
+<script src="assets/app.js?v=8"></script>
 </body>
 </html>
