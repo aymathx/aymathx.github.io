@@ -139,9 +139,9 @@ const VIEWS = {
     const o = D.overview;
     const recent = D.attempts.slice().sort((a, b) => b.start - a.start).slice(0, 8);
     return `<div class="kpis">
-      <div class="kpi"><b>${o.weekTries}</b><span>本週練習人次</span></div>
+      <div class="kpi"><b>${o.weekTries}</b><span>近 7 天測驗人次</span></div>
       <div class="kpi"><b>${o.avg === null ? '—' : o.avg}</b><span>小節練習平均分數</span></div>
-      <div class="kpi"><b>${o.weekTimeouts}</b><span>本週逾時次數</span></div>
+      <div class="kpi"><b>${o.weekTimeouts}</b><span>近 7 天逾時次數</span></div>
       <div class="kpi"><b>${o.never}<small style="font-size:14px;color:var(--muted)">／${o.students}</small></b><span>還沒練習的人</span></div></div>
     <div class="cols">
       <div class="panel"><h3>各小節平均分數</h3><div style="margin-top:8px">${D.unitStats.map(s => hbar(`${s.no} ${s.name}`, s.avg || 0, colorFor(s.avg || 0), s.avg === null ? '—' : s.avg + ' 分')).join('')}</div></div>
@@ -229,7 +229,7 @@ const VIEWS = {
   },
 
   bank: () => {
-    const rows = Object.keys(D.bank).sort().map(k => { const b = D.bank[k]; return `<tr><td><b>${esc(/^2-/.test(k) ? unitName(k) : k)}</b></td><td>${b['易']}</td><td>${b['中']}</td><td>${b['難']}</td><td>${b['會考']}</td><td>${b.all}</td><td>${b.ex}／${b.all}</td></tr>`; }).join('');
+    const rows = Object.keys(D.bank).sort().map(k => { const b = D.bank[k]; return `<tr><td><b>${esc(D.units.some(u => u.no === k) ? unitName(k) : k)}</b></td><td>${b['易']}</td><td>${b['中']}</td><td>${b['難']}</td><td>${b['會考']}</td><td>${b.all}</td><td>${b.ex}／${b.all}</td></tr>`; }).join('');
     return `<div class="tbl"><table><thead><tr><th>範圍</th><th>易</th><th>中</th><th>難</th><th>會考</th><th>合計</th><th>有解析</th></tr></thead><tbody>${rows || '<tr><td colspan="7" class="muted">還沒有匯入題庫。</td></tr>'}</tbody></table></div>
     <div class="cols">
       <div class="panel" style="display:grid;gap:10px"><h3>匯入題庫</h3><p class="small muted">選擇 Claude 產生的 <span class="mono">bank.json</span>。會整份取代試算表的「題庫」「學習目標」「模擬卷」；學生的作答紀錄不受影響。</p>
@@ -258,7 +258,7 @@ const VIEWS = {
     const rep = has('學習報告'), link = rep || has('觀念分析');
     const n = D.students.filter(s => DSEL.has(s.id)).length;
     return `<div class="dirbar">${fTabs('list')}${rep ? `<button class="btn sm" id="dirPdf"${n ? '' : ' disabled'}>${ICON.down}下載勾選學生的學習報告（${n} 人）</button>` : ''}</div>
-    <div class="tbl"><table><thead><tr>${rep ? `<th class="ck"><input type="checkbox" id="dirAll" aria-label="全選"${n && n === D.students.length ? ' checked' : ''}></th>` : ''}<th>座號</th><th>姓名</th>${cols.map(c => `<th>${c[0]}</th>`).join('')}${link ? '<th>詳細</th>' : ''}</tr></thead><tbody>
+    <div class="tbl"><table><thead><tr>${rep ? `<th class="ck"><input type="checkbox" id="dirAll" aria-label="全選"${n && n === D.students.length ? ' checked' : ''}></th>` : ''}<th>學號</th><th>姓名</th>${cols.map(c => `<th>${c[0]}</th>`).join('')}${link ? '<th>詳細</th>' : ''}</tr></thead><tbody>
     ${D.students.map(s => `<tr${link ? ` class="link" data-tv="dstu:${s.id}"` : ''}>${rep ? `<td class="ck"><input type="checkbox" data-dsel="${esc(s.id)}" aria-label="勾選 ${esc(s.name)}"${DSEL.has(s.id) ? ' checked' : ''}></td>` : ''}<td class="mono">${esc(s.id)}</td><td>${esc(s.name)}</td>${cols.map(c => `<td>${c[1](s)}</td>`).join('')}${link ? '<td><span class="small" style="color:var(--primary);font-weight:700">查看</span></td>' : ''}</tr>`).join('')}
     </tbody></table></div>`;
   },
@@ -327,6 +327,7 @@ async function attemptPdf(aid) {
   try {
     await run('產生 PDF 中…', async () => {
       const r = (await api(ROLE === 'teacher' ? 'tReport' : 'dReport', { token: TOKEN, aid })).report;
+      if (ROLE !== 'teacher') r.items = [];             // 主任只看分數與觀念分析，不給題目、正解、解析
       await savePdf(reportPdfHtml(r, D.config || {}), reportFileName(r));
     });
   } catch (e) { /* 已提示 */ }
@@ -369,7 +370,7 @@ function sectionPdf(no) {
     <div class="box"><h2>各觀念答對率</h2>${s.goals.slice().sort((a, b) => pct(a.c, a.n) - pct(b.c, b.n)).map(g => hbar(g.name, pct(g.c, g.n), colorFor(pct(g.c, g.n)), `${g.c}／${g.n}`)).join('') || '資料還不夠。'}</div>
     <div class="box"><h2>最常錯的題目</h2>${s.miss.map(m => `<div style="margin-bottom:8px">${hbar(`${m.qid}（${m.src}）`, pct(m.c, m.n), colorFor(pct(m.c, m.n)), `${m.c}／${m.n}`)}<div class="small" style="color:#5E6E80">${fmt(m.stem)}…</div></div>`).join('') || '資料還不夠。'}</div>
     <div class="box"><h2>需要關心的學生</h2>${s.watch.map(w => `${esc(w.name)}（${w.score} 分）`).join('、') || '目前沒有'}</div>
-    <div class="box"><h2>學生最高分</h2><table><thead><tr><th>座號</th><th>姓名</th><th>練習次數</th><th>最高分</th></tr></thead><tbody>${D.students.map(st => { const i = D.units.findIndex(u => u.no === no); return `<tr><td>${esc(st.id)}</td><td>${esc(st.name)}</td><td>${st.cnt[i]}</td><td>${st.best[i] === null ? '—' : st.best[i]}</td></tr>`; }).join('')}</tbody></table></div></div>`;
+    <div class="box"><h2>學生最高分</h2><table><thead><tr><th>學號</th><th>姓名</th><th>練習次數</th><th>最高分</th></tr></thead><tbody>${D.students.map(st => { const i = D.units.findIndex(u => u.no === no); return `<tr><td>${esc(st.id)}</td><td>${esc(st.name)}</td><td>${st.cnt[i]}</td><td>${st.best[i] === null ? '—' : st.best[i]}</td></tr>`; }).join('')}</tbody></table></div></div>`;
   return run('產生 PDF 中…', () => savePdf(html, `國八二段_小節報告_${no}.pdf`)).catch(() => { });
 }
 
@@ -387,9 +388,9 @@ function mockPdf(L) {
 }
 
 function exportXlsx() {
-  const head = ['座號', '姓名'].concat(D.units.map(u => u.no + ' 次數'), D.units.map(u => u.no + ' 最高'), ['模擬卷次數', '小節平均', '最近練習', '需加強']);
+  const head = ['學號', '姓名'].concat(D.units.map(u => u.no + ' 次數'), D.units.map(u => u.no + ' 最高'), ['模擬卷次數', '小節平均', '最近練習', '需加強']);
   const stu = [head].concat(D.students.map(s => [s.id, s.name].concat(s.cnt, s.best.map(v => v === null ? '' : v), [s.mock || 0, s.avg === null ? '' : s.avg, s.last ? dt(s.last, true) : '', s.weak.join('、')])));
-  const att = [['時間', '座號', '姓名', '類型', '範圍', '分數', '答對', '題數', '狀態', '等第', '用時(秒)']].concat(
+  const att = [['時間', '學號', '姓名', '類型', '範圍', '分數', '答對', '題數', '狀態', '等第', '用時(秒)']].concat(
     D.attempts.slice().sort((a, b) => a.start - b.start).map(a => [dt(a.start, true), a.uid, a.name, a.type, scopeLabel(a), a.score === null ? '' : a.score, a.nRight, a.n, a.status, a.level, a.used]));
   return run('產生 Excel 中…', () => saveXlsx([['學生總表', stu], ['測驗明細', att]], `國八二段_全體學生_${dshort(Date.now()).replace('/', '')}.xlsx`)).catch(() => { });
 }
