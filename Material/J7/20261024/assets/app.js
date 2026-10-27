@@ -60,6 +60,7 @@ async function boot() {
 function logoutLocal(msg) {
   TOKEN = null; USER = null; HOME = null;
   store.del('token'); store.del('user'); store.del('cur');
+  $('#who').value = ''; $('#parse').innerHTML = '';   // 共用電腦：登出後不留上一位的姓名
   if (msg) showLoginErr(msg);
 }
 
@@ -72,8 +73,10 @@ function renderLogin() {
   $('#openBox').hidden = !open;
   showParse();
 }
+/** 姓名欄：全形數字轉半形（部分輸入法會打出全形）、拿掉空白 */
+const whoText = () => $('#who').value.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\s+/g, '');
 function showParse() {
-  const v = $('#who').value.replace(/\s+/g, '');
+  const v = whoText();
   if (!v) { $('#parse').innerHTML = ''; return false; }
   const m = v.match(/^(\d{3})(\d{2})(\S+)$/);
   $('#parse').innerHTML = m ? `<span class="ok">✓ ${m[1]} 班 ${m[2]} 號　${esc(m[3])}</span>` : '<span class="err">請輸入 5 碼班級座號，接著打姓名，例如 70101陳大田。</span>';
@@ -85,7 +88,7 @@ $('#loginForm').addEventListener('submit', async e => {
   if (!showParse()) return;
   showLoginErr('');
   try {
-    const r = await run('登入中…', () => api('login', { who: $('#who').value }));
+    const r = await run('登入中…', () => api('login', { who: whoText() }));
     afterLogin(r);
   } catch (err) { showLoginErr(err.message); }
 });
@@ -276,7 +279,7 @@ function renderQ() {
   }
   const src = CFG.src && q.src ? `<span class="src">【${esc(q.src)}】</span>` : '';
   $('#qcard').innerHTML = `<div class="qhead"><span class="qno">第 ${Q.cur + 1} 題</span>${tierChip(q.tier, CFG.src)}${src}</div>
-    <div class="stem">${fmt(q.stem)}</div>${q.fig ? `<img class="fig" src="assets/fig/${esc(q.fig)}" alt="題目附圖">` : ''}${body}`;
+    <div class="stem">${fmt(q.stem)}</div>${q.fig ? `<img class="fig" src="assets/fig/${esc(q.fig)}" alt="題目附圖"><div class="figtip">點圖可放大</div>` : ''}${body}`;
   $('#prev').disabled = Q.cur === 0;
   $('#nextLabel').textContent = Q.cur === N - 1 ? '完成交卷' : '下一題';
   $('#confirmBox').innerHTML = '';
@@ -445,7 +448,7 @@ function renderMockPaper() {
       const body = q.type === 'mc'
         ? `<div class="opts">${q.opts.map((o, j) => `<button class="opt" data-q="${i}" data-o="${j}" aria-pressed="${M.answers[i] === j}"><b>${LETTERS.charAt(j)}</b><span>${fmt(o)}</span>${ICON.check}</button>`).join('')}</div>`
         : `<div data-fq="${i}">${fillArea(q, M.answers[i], 'm' + i + '_')}</div>`;
-      return `<div class="mq rv" id="mq${i}"><div class="stem"><span class="qno">${no}.</span>${fmt(q.stem)}</div>${q.fig ? `<img class="fig" src="assets/fig/${esc(q.fig)}" alt="題目附圖">` : ''}${body}</div>`;
+      return `<div class="mq rv" id="mq${i}"><div class="stem"><span class="qno">${no}.</span>${fmt(q.stem)}</div>${q.fig ? `<img class="fig" src="assets/fig/${esc(q.fig)}" alt="題目附圖"><div class="figtip">點圖可放大</div>` : ''}${body}</div>`;
     }).join('')}</div>`).join('');
   $('#mkeys').innerHTML = KEYS.map(k => `<button type="button" data-k="${k}" aria-label="輸入 ${k}">${k}</button>`).join('');
   paintMockPos();
@@ -492,5 +495,19 @@ async function submitMock() {
   renderReport(); show('report');
   loadHome().catch(() => { });
 }
+
+/* ---------- 附圖：點了放大（手機上小字看不清楚時用） ---------- */
+document.addEventListener('click', e => {
+  const im = e.target.closest('img.fig');
+  if (!im || im.closest('#pdfStage')) return;
+  const ov = document.createElement('div');
+  ov.className = 'zoomov';
+  ov.innerHTML = `<span>點一下關閉</span><img src="${im.src}" alt="放大的題目附圖">`;
+  const w = im.naturalWidth || im.width;
+  const fit = innerWidth - 24;                       // 小圖放大到最多兩倍；大圖最多到螢幕寬的 1.8 倍，再大可以手指放大
+  ov.querySelector('img').style.width = (w < fit ? Math.min(w * 2, fit) : Math.min(w, Math.round(innerWidth * 1.8))) + 'px';
+  ov.onclick = () => ov.remove();
+  document.body.appendChild(ov);
+});
 
 boot();

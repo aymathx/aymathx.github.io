@@ -346,3 +346,14 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100% }
 #pdfStage .rv { padding: 10px 0; page-break-inside: avoid }
 #pdfStage .expl { font-size: 13px }
 #pdfStage .pb { page-break-before: always }
+
+/* 2026-10-27：附圖點了放大、PDF 觀念名稱換行、回顧選項不從中間斷開 */
+img.fig { cursor: zoom-in }
+.figtip { font-size: 12px; color: var(--muted); text-align: center; margin-top: 4px }
+.zoomov { position: fixed; inset: 0; z-index: 60; background: rgba(12, 22, 36, .88); overflow: auto; cursor: zoom-out; padding: 44px 12px 20px }
+.zoomov img { display: block; max-width: none; height: auto; margin: 0 auto; background: #FFF; border-radius: 6px; padding: 6px }
+.zoomov span { position: fixed; top: 12px; right: 16px; color: #FFF; font-size: 13px; opacity: .85 }
+.rv .op { display: inline-block; max-width: 100% }
+#pdfStage .hb { grid-template-columns: minmax(0, 15em) 1fr 3.6em }
+#pdfStage .hb .lb { white-space: normal; overflow: visible; line-height: 1.35 }
+#pdfStage .secbars .hb { grid-template-columns: minmax(0, 15em) 1fr 4.6em }

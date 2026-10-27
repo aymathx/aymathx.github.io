@@ -242,17 +242,25 @@ const ICON = {
 };
 const ST_ICON = { '需加強': '✕', '不穩': '▲', '掌握': '●' };
 
+/** 多格填充的小題代號：照作答格式（⑴⑵…或①②…），對不上格數才用 ①②… */
+function blankLabels(it, n) {
+  const m = String(it.aline || '').match(/[①-⑳⑴-⒇]/g);
+  return m && m.length === n ? m : Array.from('①②③④⑤⑥⑦⑧⑨⑩').slice(0, n);
+}
+
 function yourText(it) {
   const y = it.yours;
   if (y === null || y === undefined || y === '' || (Array.isArray(y) && y.every(v => !v))) return '未作答';
   if (it.type === 'mc') return typeof y === 'number' ? `(${LETTERS.charAt(y)})` : `(${esc(y)})`;
   const arr = Array.isArray(y) ? y : [y];
-  return arr.map((v, i) => (arr.length > 1 ? '①②③④⑤⑥'.charAt(i) + ' ' : '') + (v ? fmtTyped(v) : '—')).join('　');
+  const lb = blankLabels(it, arr.length);
+  return arr.map((v, i) => (arr.length > 1 ? lb[i] + ' ' : '') + (v ? fmtTyped(v) : '—')).join('　');
 }
 function rightText(it) {
   if (it.type === 'mc') { const k = LETTERS.indexOf(it.correct); return `(${it.correct}) ${it.opts && it.opts[k] !== undefined ? fmt(it.opts[k]) : ''}`; }
   const arr = it.correct || [];
-  return arr.map((v, i) => (arr.length > 1 ? '①②③④⑤⑥'.charAt(i) + ' ' : '') + fmt(v)).join('　');
+  const lb = blankLabels(it, arr.length);
+  return arr.map((v, i) => (arr.length > 1 ? lb[i] + ' ' : '') + fmt(v)).join('　');
 }
 
 function alineText(aline) {
@@ -263,7 +271,7 @@ function alineText(aline) {
 function reviewItem(it, no, showSrc) {
   if (it.missing) return `<div class="rv"><b>第 ${no} 題</b> <span class="muted">（題目已從題庫移除）</span></div>`;
   const src = showSrc && it.src ? `<span class="src">【${esc(it.src)}】</span>` : '';
-  const opts = it.type === 'mc' ? `<div class="small muted">${it.opts.map((o, j) => `(${LETTERS.charAt(j)}) ${fmt(o)}`).join('　')}</div>` : '';
+  const opts = it.type === 'mc' ? `<div class="small muted">${it.opts.map((o, j) => `<span class="op">(${LETTERS.charAt(j)}) ${fmt(o)}</span>`).join('　')}</div>` : '';
   const aline = it.type === 'fill' && it.aline && it.aline !== '{U}' ? `<div class="small muted">${alineText(it.aline)}</div>` : '';
   const pts = it.pts ? `<span class="small muted">${it.pts} 分</span>` : '';
   return `<div class="rv">
@@ -295,8 +303,8 @@ function reportPdfHtml(r, brand) {
     <div style="font-weight:700;margin-top:4px">${esc(r.line)}</div></div></div>`;
   const secs = r.secs ? `<div class="box"><h2>各小節答對率</h2><div class="secbars">${r.secs.map(s => hbar(`${s.no} ${s.name}`, pct(s.c, s.n), colorFor(pct(s.c, s.n)), `${s.c}／${s.n}`)).join('')}</div></div>` : '';
   const goals = r.goals && r.goals.length ? `<div class="box"><h2>學習目標</h2>${r.goals.map(goalRow).join('')}<p class="small" style="color:#5E6E80;margin-top:6px">右邊數字＝這次這個目標答對幾題／考了幾題；燈號會再加上最近 3 次一起判斷。</p></div>` : '';
-  const items = r.items.map((it, i) => reviewItem(it, i + 1, r.src)).join('');
-  return `<div class="pg">${head}${score}${secs}${goals}<div class="box"><h2>題目回顧與解析</h2>${items}</div></div>`;
+  const items = (r.items || []).map((it, i) => reviewItem(it, i + 1, r.src)).join('');   // 主任版沒有題目
+  return `<div class="pg">${head}${score}${secs}${goals}${items ? `<div class="box"><h2>題目回顧與解析</h2>${items}</div>` : ''}</div>`;
 }
 
 function reportFileName(r) {
