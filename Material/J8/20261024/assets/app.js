@@ -1,7 +1,7 @@
 /* 國八。二段練習 — 學生端 */
 'use strict';
 
-let CFG = null;                         // 後端公開設定（開放登入、出處、品牌…）
+let CFG = null;                         // 後端公開設定（要不要通行碼、訪客試用、出處、品牌…）
 let TOKEN = store.get('token', null);
 let USER = store.get('user', null);
 let HOME = null;                        // 首頁資料
@@ -68,11 +68,14 @@ function showLoginErr(msg) { const b = $('#loginErr'); b.textContent = msg || ''
 
 /* ---------- 登入 ---------- */
 function renderLogin() {
-  const open = !!(CFG && CFG.open);
-  $('#loginForm').hidden = open;
-  $('#openBox').hidden = !open;
+  const c = CFG || {};
+  $('#codeBox').hidden = c.needCode === false;            // 還沒讀到設定時先顯示
+  $('#guestGo').hidden = !c.guest;
+  if (!$('#code').value) $('#code').value = store.get('code', '');
   showParse();
 }
+/** 通行碼：全形轉半形、去空白、轉大寫（上次登入成功的會記在這台裝置） */
+const codeText = () => $('#code').value.replace(/[！-～]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\s+/g, '').toUpperCase();
 /** 姓名欄：全形數字轉半形（部分輸入法會打出全形）、拿掉空白 */
 const whoText = () => $('#who').value.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/\s+/g, '');
 function showParse() {
@@ -86,19 +89,22 @@ $('#who').addEventListener('input', showParse);
 $('#loginForm').addEventListener('submit', async e => {
   e.preventDefault();
   if (!showParse()) return;
+  if (!$('#codeBox').hidden && !codeText()) return showLoginErr('請輸入老師給的通行碼。');
   showLoginErr('');
   try {
-    const r = await run('登入中…', () => api('login', { who: whoText() }));
-    afterLogin(r);
+    const r = await run('登入中…', () => api('login', { who: whoText(), code: codeText() }));
+    await afterLogin(r);
+    if (r.joined) toast('已加入班級名單，以後用同樣的班級座號姓名登入。', 4500);
   } catch (err) { showLoginErr(err.message); }
 });
 $('#guestGo').onclick = async () => {
+  if (!$('#codeBox').hidden && !codeText()) return showLoginErr('請輸入老師給的通行碼。');
   showLoginErr('');
-  try { afterLogin(await run('準備中…', () => api('guest'))); } catch (err) { showLoginErr(err.message); }
+  try { await afterLogin(await run('準備中…', () => api('guest', { code: codeText() }))); } catch (err) { showLoginErr(err.message); }
 };
 async function afterLogin(r) {
   TOKEN = r.token; USER = r.user; CFG = r.config;
-  store.set('token', TOKEN); store.set('user', USER);
+  store.set('token', TOKEN); store.set('user', USER); store.set('code', codeText());
   if (r.home) setHome(r.home); else await run('載入中…', loadHome);
   show('home');
 }
@@ -121,7 +127,7 @@ const leftOf = (deadline, offset) => Math.max(0, Math.round((deadline - (Date.no
 function renderHome() {
   const u = HOME.user, g = !!u.guest;
   $('#whoName').textContent = g ? '訪客' : u.name;
-  $('#whoClass').textContent = g ? '開放練習，不保存個人報告' : u.id;
+  $('#whoClass').textContent = g ? '訪客試用，不保存個人報告' : u.id;
   $('#logout').innerHTML = ICON.out + (g ? '離開' : '登出');
   $('#qminTxt').textContent = HOME.st.qmin;
   $('#mminTxt').textContent = HOME.st.mmin;
@@ -157,7 +163,7 @@ function renderHist() {
     const ok = h.status === '完成';
     return `<div class="h">
       <div><b>${esc(label)}</b>　<span class="mono small muted">${dt(h.start)}</span><br><span class="small ${ok ? '' : 'x'}">${ok ? h.score + ' 分・' + h.level : '逾時，沒有報告'}</span></div>
-      ${ok ? `<button class="btn ghost sm" data-pdf="${h.aid}">${ICON.down}PDF</button>` : ''}
+      ${ok ? `<div class="row" style="gap:6px;flex-wrap:nowrap"><button class="btn ghost sm" data-view="${h.aid}">查看</button><button class="btn ghost sm" data-pdf="${h.aid}">${ICON.down}PDF</button></div>` : ''}
     </div>`;
   }).join('') : `<p class="muted small" style="padding:8px 0">${HOME.history.length ? '這個範圍還沒有報告。' : '完成第一次測驗後，報告會列在這裡。'}</p>`;
 }
@@ -166,12 +172,18 @@ $('#histTabs').addEventListener('click', e => { const b = e.target.closest('[dat
 $('#units').addEventListener('click', e => { const b = e.target.closest('[data-start]'); if (b) startQuiz(b.dataset.start); });
 $('#miniMocks').addEventListener('click', e => { const b = e.target.closest('[data-mock]'); if (b) { mockSel = +b.dataset.mock; renderMocks(); show('mock'); } });
 $('#hist').addEventListener('click', async e => {
+  const v = e.target.closest('[data-view]');
+  if (v) {                                   // 線上看舊的報告（錯題與解析）
+    try { REPORT = (await run('讀取報告中…', () => api('report', { token: TOKEN, aid: v.dataset.view }))).report; } catch (err) { return; }
+    rvMode = 'wrong'; renderReport(); show('report');
+    return;
+  }
   const b = e.target.closest('[data-pdf]');
   if (!b) return;
   try {
     await run('產生 PDF 中…', async () => {
       const r = (await api('report', { token: TOKEN, aid: b.dataset.pdf })).report;
-      await savePdf(reportPdfHtml(r, CFG), reportFileName(r));
+      await savePdf(reportPdfHtml(r, CFG), reportFileName(r), pdfOpt(r));
     });
   } catch (err) { /* run 已提示 */ }
 });
@@ -367,17 +379,24 @@ function renderReport() {
   $('#rLevel').textContent = r.level; $('#rLevel').className = 'level lv-' + r.level;
   $('#rMeta').innerHTML = `${esc(r.title)}<br>用時 <span class="mono">${mmss(r.used)}</span>・答對 ${r.nRight}／${r.n}<br>平均每題 <span class="mono">${r.avgSec}</span> 秒${r.type === '練習' ? `・快速作答 <span class="mono">${r.fast}</span> 題` : ''}`;
   $('#rLine').textContent = r.line;
+  $('#rNextPanel').hidden = !(r.next && r.next.length);
+  $('#rNext').innerHTML = (r.next || []).map(x => `<li>${esc(x)}</li>`).join('');
+  const tr = trendHtml(r.trend, r.start);
+  $('#rTrend').hidden = !tr;
+  $('#rTrend').innerHTML = tr ? `<h2>近幾次分數</h2>${tr}` : '';
   $('#rSecs').hidden = !r.secs;
   if (r.secs) $('#rSecs').innerHTML = `<h2 style="margin-bottom:6px">各小節答對率</h2>${r.secs.map(s => hbar(`${s.no} ${s.name}`, pct(s.c, s.n), colorFor(pct(s.c, s.n)), `${s.c}／${s.n}`)).join('')}`;
   $('#rGoalPanel').hidden = !r.goals.length || r.type === '模擬';
   $('#rGoals').innerHTML = r.goals.map(goalRow).join('');
   $('#rvAll').textContent = `全部 ${r.n} 題`;
+  $$('#rvSeg button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.rv === rvMode)));
   renderReview();
   $('#again').innerHTML = ICON.redo + (r.type === '模擬' ? '再寫一次這份' : '再練 10 題');
   $('#dl').hidden = !!guest;
 }
 function renderReview() {
   const r = REPORT;
+  $('#rvList').style.backgroundImage = wmBg((r.uid.indexOf('G-') === 0 ? '訪客試用' : r.uid + ' ' + r.name) + '　' + dshort(Date.now()));
   const items = r.items.map((it, i) => ({ it, i })).filter(({ it }) => rvMode === 'all' || !it.right);
   $('#rvList').innerHTML = items.map(({ it, i }) => reviewItem(it, i + 1, r.src)).join('') || '<p class="muted" style="padding:8px 0">全對，沒有錯題。</p>';
 }
@@ -387,9 +406,13 @@ $('#rvSeg').addEventListener('click', e => {
   $$('#rvSeg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
   renderReview();
 });
+/** 學生下載的 PDF：每頁學號姓名浮水印、頁尾警語 */
+function pdfOpt(r) {
+  return { wm: `${r.uid} ${r.name}　${dt(Date.now(), true)}`, note: '僅供本班學生個人練習，請勿轉傳或公開' };
+}
 $('#again').onclick = () => { if (REPORT.type === '模擬') startMock(REPORT.scope); else startQuiz(REPORT.scope); };
 $('#dl').onclick = async () => {
-  try { await run('產生 PDF 中…', () => savePdf(reportPdfHtml(REPORT, CFG), reportFileName(REPORT))); } catch (e) { /* run 已提示 */ }
+  try { await run('產生 PDF 中…', () => savePdf(reportPdfHtml(REPORT, CFG), reportFileName(REPORT), pdfOpt(REPORT))); } catch (e) { /* run 已提示 */ }
 };
 $('#toHome').onclick = () => { renderHome(); show('home'); };
 

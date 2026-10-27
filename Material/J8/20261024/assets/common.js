@@ -218,8 +218,24 @@ function pdfPaginate(st, blocks) {
   return pages;
 }
 
-/** 把一段 HTML 排成 A4 PDF 下載 */
-async function savePdf(html, filename) {
+/** 浮水印：PDF 每頁畫在轉好的圖上（canvas 畫得出中文）；網頁上用背景圖 */
+function wmDraw(cv, text) {
+  const ctx = cv.getContext('2d'), fs = Math.round(cv.width / 30);
+  ctx.save();
+  ctx.globalAlpha = 0.08; ctx.fillStyle = '#1D3B66'; ctx.textAlign = 'center';
+  ctx.font = `700 ${fs}px "Noto Sans TC", sans-serif`;
+  ctx.translate(cv.width / 2, cv.height / 2); ctx.rotate(-Math.PI / 8);
+  const dx = fs * (text.length + 6), dy = fs * 5;
+  for (let y = -cv.height, row = 0; y <= cv.height; y += dy, row++) {
+    for (let x = -cv.width - (row % 2) * dx / 2; x <= cv.width; x += dx) ctx.fillText(text, x, y);
+  }
+  ctx.restore();
+}
+const wmBg = text => `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="160"><text x="150" y="88" text-anchor="middle" transform="rotate(-18 150 80)" font-family="Noto Sans TC, sans-serif" font-size="14" font-weight="700" fill="#1D3B66" fill-opacity="0.08">${esc(text)}</text></svg>`)}")`;
+
+/** 把一段 HTML 排成 A4 PDF 下載；opt.wm＝每頁浮水印文字，opt.note＝頁尾左邊的警語 */
+async function savePdf(html, filename, opt) {
+  opt = opt || {};
   await Promise.all([lib('h2c'), lib('jspdf')]);
   if (document.fonts && document.fonts.ready) await document.fonts.ready;
   let st = $('#pdfStage');
@@ -232,7 +248,7 @@ async function savePdf(html, filename) {
     src.remove();
     pages.forEach((p, i) => {
       p.classList.add('fixed');
-      p.insertAdjacentHTML('beforeend', `<div class="pf">${i + 1}／${pages.length}</div>`);
+      p.insertAdjacentHTML('beforeend', `<div class="pf">${opt.note ? `<span class="pn">${esc(opt.note)}</span>` : ''}${i + 1}／${pages.length}</div>`);
       p.hidden = true;
     });
     const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
@@ -242,6 +258,7 @@ async function savePdf(html, filename) {
         scale: 2, useCORS: true, backgroundColor: '#FFFFFF', logging: false, scrollX: 0, scrollY: 0,
         onclone: doc => { doc.getElementById('pdfStage').style.opacity = '1'; }
       });
+      if (opt.wm) wmDraw(cv, opt.wm);
       if (i) pdf.addPage();
       pdf.addImage(cv.toDataURL('image/jpeg', 0.9), 'JPEG', 10, 10, 190, 275);
     }
@@ -317,8 +334,20 @@ const hbar = (label, p, cls, val) => `<div class="hb"><span class="lb" title="${
 const colorFor = p => p >= 80 ? 'c-ok' : p >= 65 ? 'c-st' : p >= 50 ? 'c-warn' : 'c-bad';
 const pct = (c, n) => n ? Math.round(c / n * 100) : 0;
 
-/** 一次測驗的 PDF 內容 */
-function reportPdfHtml(r, brand) {
+/** 錯題清單的答案：選擇題只寫代號，不印選項內容 */
+const ansBrief = (it, which) => it.type !== 'mc' ? (which === 'yours' ? yourText(it) : rightText(it))
+  : which === 'right' ? `(${esc(it.correct)})`
+  : it.yours === null || it.yours === undefined || it.yours === '' ? '未作答' : `(${typeof it.yours === 'number' ? LETTERS.charAt(it.yours) : esc(it.yours)})`;
+
+/** 近幾次分數（同一個範圍）；少於 2 次就不畫 */
+function trendHtml(list, cur) {
+  if (!list || list.length < 2) return '';
+  return `<div class="trend2">${list.map(t => `<div${t.start === cur ? ' class="cur"' : ''}><b>${t.score}</b><i class="${colorFor(t.score)}" style="height:${Math.max(t.score, 4) * 0.56}px"></i><span>${dshort(t.start)}</span></div>`).join('')}</div>`;
+}
+
+/** 一次測驗的 PDF 內容。qmode＝要不要印題目：不附（只列錯題清單）／只附錯題／全部（老師端）；沒給就照網站設定 */
+function reportPdfHtml(r, brand, qmode) {
+  qmode = qmode || brand.pdfQ || '不附';
   const head = `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(brand.term || '')} ${r.type === '模擬' ? '段考模擬' : '小節練習'}</div><h1>${esc(brand.site || '國八。二段練習')}</h1></div>
     <div class="r">${brand.logo ? `<img src="${BRAND_LOGO}" alt="">` : ''}${brand.brand ? `<b style="color:#1D63B8;letter-spacing:.08em">${esc(brand.brandName)}</b><br>` : ''}${esc(r.uid && r.uid.indexOf('G-') !== 0 ? r.uid + ' ' + r.name : '訪客')}<br>${dt(r.start, true)}</div></div>`;
   const score = `<div class="box" style="display:flex;gap:20px;align-items:center">
@@ -328,8 +357,17 @@ function reportPdfHtml(r, brand) {
     <div style="font-weight:700;margin-top:4px">${esc(r.line)}</div></div></div>`;
   const secs = r.secs ? `<div class="box"><h2>各小節答對率</h2><div class="secbars">${r.secs.map(s => hbar(`${s.no} ${s.name}`, pct(s.c, s.n), colorFor(pct(s.c, s.n)), `${s.c}／${s.n}`)).join('')}</div></div>` : '';
   const goals = r.goals && r.goals.length ? `<div class="box"><h2>學習目標</h2>${r.goals.map(goalRow).join('')}<p class="small" style="color:#5E6E80;margin-top:6px">右邊數字＝這次這個目標答對幾題／考了幾題；燈號只看這一次：全對＝掌握，全錯＝需加強，其餘＝不穩。</p></div>` : '';
-  const items = (r.items || []).map((it, i) => reviewItem(it, i + 1, r.src)).join('');   // 主任版沒有題目
-  return `<div class="pg">${head}${score}${secs}${goals}${items ? `<div class="box"><h2>題目回顧與解析</h2>${items}</div>` : ''}</div>`;
+  const next = r.next && r.next.length ? `<div class="box"><h2>下一步</h2><ul class="next">${r.next.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>` : '';
+  const tr = trendHtml(r.trend, r.start);
+  const trend = tr ? `<div class="box"><h2>近幾次分數（${esc(r.type === '模擬' ? '模擬' + r.scope + '卷' : r.scope)}）</h2>${tr}</div>` : '';
+  const all = r.items || [];                                           // 主任版沒有題目
+  const wrong = all.map((it, i) => ({ it, no: i + 1 })).filter(x => !x.it.right && !x.it.missing);
+  let qs = '';
+  if (qmode === '全部' && all.length) qs = `<div class="box"><h2>題目回顧與解析</h2>${all.map((it, i) => reviewItem(it, i + 1, r.src)).join('')}</div>`;
+  else if (qmode === '只附錯題' && wrong.length) qs = `<div class="box"><h2>錯題與解析</h2>${wrong.map(x => reviewItem(x.it, x.no, r.src)).join('')}</div>`;
+  else if (wrong.length) qs = `<div class="box"><h2>錯題清單（完整題目和解析請上網站查看）</h2><table><thead><tr><th>題號</th><th>學習目標</th><th>難度</th><th>你的答案</th><th>正解</th></tr></thead><tbody>${wrong.map(x => `<tr><td>第 ${x.no} 題</td><td>${esc(x.it.goal || '—')}</td><td>${x.it.tier === '會考' && !r.src ? '—' : esc(x.it.tier)}</td><td>${ansBrief(x.it, 'yours')}</td><td>${ansBrief(x.it, 'right')}</td></tr>`).join('')}</tbody></table></div>`;
+  else if (all.length) qs = '<div class="box"><h2>錯題</h2><p>這次全對，沒有錯題。</p></div>';
+  return `<div class="pg">${head}${score}${secs}${goals}${next}${trend}${qs}</div>`;
 }
 
 function reportFileName(r) {

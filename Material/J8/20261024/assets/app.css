@@ -364,3 +364,16 @@ img.fig { cursor: zoom-in }
 #pdfStage .hb { grid-template-columns: minmax(0, 15em) 1fr 3.6em }
 #pdfStage .hb .lb { white-space: normal; overflow: visible; line-height: 1.35 }
 #pdfStage .secbars .hb { grid-template-columns: minmax(0, 15em) 1fr 4.6em }
+
+/* 2026-10-27 防護方案：著作權聲明、下一步、分數走勢、錯題浮水印、PDF 頁尾警語、通行碼輸入 */
+.legal { font-size: 12px; line-height: 1.7; color: var(--muted); text-align: center }
+.next { margin: 6px 0 0; padding-left: 1.3em; display: grid; gap: 4px }
+.trend2 { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-top: 8px }
+.trend2 div { display: grid; justify-items: center; gap: 3px; min-width: 40px }
+.trend2 b { font: 600 13px var(--f-mono) }
+.trend2 i { width: 26px; border-radius: 4px 4px 0 0; opacity: .5 }
+.trend2 .cur i { opacity: 1 }
+.trend2 span { font-size: 11px; color: var(--muted) }
+#rvList { background-repeat: repeat }
+#pdfStage .pf .pn { float: left }
+.cin { height: 38px; border: 1px solid var(--line-strong); border-radius: 8px; padding: 0 10px; font: 15px var(--f-mono); min-width: 0; flex: 1; max-width: 280px }
