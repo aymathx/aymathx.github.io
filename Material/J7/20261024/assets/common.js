@@ -302,7 +302,7 @@ function reportPdfHtml(r, brand) {
     <div class="small">用時 ${mmss(r.used)}・答對 ${r.nRight}／${r.n}・平均每題 ${r.avgSec} 秒${r.type === '練習' ? '・快速作答 ' + r.fast + ' 題' : ''}</div>
     <div style="font-weight:700;margin-top:4px">${esc(r.line)}</div></div></div>`;
   const secs = r.secs ? `<div class="box"><h2>各小節答對率</h2><div class="secbars">${r.secs.map(s => hbar(`${s.no} ${s.name}`, pct(s.c, s.n), colorFor(pct(s.c, s.n)), `${s.c}／${s.n}`)).join('')}</div></div>` : '';
-  const goals = r.goals && r.goals.length ? `<div class="box"><h2>學習目標</h2>${r.goals.map(goalRow).join('')}<p class="small" style="color:#5E6E80;margin-top:6px">右邊數字＝這次這個目標答對幾題／考了幾題；燈號會再加上最近 3 次一起判斷。</p></div>` : '';
+  const goals = r.goals && r.goals.length ? `<div class="box"><h2>學習目標</h2>${r.goals.map(goalRow).join('')}<p class="small" style="color:#5E6E80;margin-top:6px">右邊數字＝這次這個目標答對幾題／考了幾題；燈號只看這一次：全對＝掌握，全錯＝需加強，其餘＝不穩。</p></div>` : '';
   const items = (r.items || []).map((it, i) => reviewItem(it, i + 1, r.src)).join('');   // 主任版沒有題目
   return `<div class="pg">${head}${score}${secs}${goals}${items ? `<div class="box"><h2>題目回顧與解析</h2>${items}</div>` : ''}</div>`;
 }

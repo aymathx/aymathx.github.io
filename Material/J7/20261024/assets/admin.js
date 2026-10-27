@@ -85,7 +85,7 @@ function donut(lv, unit) {
     <div class="legend2">${lv.map((v, i) => `<span><i class="c-${LVC[i]}"></i>${LVN[i]}　<span class="mono">${v}</span></span>`).join('')}</div></div>`;
 }
 const trendBars = list => list.length ? `<div class="trend">${list.map(t => `<div title="${esc(scopeLabel(t))} ${dt(t.start)}"><span>${t.score === null ? '逾時' : t.score}</span><i class="${t.score === null ? 'c-bad' : colorFor(t.score)}" style="height:${Math.max(t.score || 0, 6) * 0.8}px"></i><em>${esc(t.type === '模擬' ? t.scope + '卷' : t.scope)}</em></div>`).join('')}</div>` : '<p class="muted" style="margin-top:8px">還沒有紀錄。</p>';
-const attList = (list, pdfAttr) => list.length ? `<div class="hist">${list.map(a => `<div class="h"><div><b>${esc(scopeLabel(a))}</b>　<span class="mono small muted">${dt(a.start)}</span>　<span class="small ${a.status === '逾時' ? 'x' : ''}">${a.status === '逾時' ? '逾時' : a.score + ' 分・' + a.level}</span></div>${a.status === '完成' ? `<button class="btn ghost sm" ${pdfAttr}="${a.aid}">${ICON.down}PDF</button>` : ''}</div>`).join('')}</div>` : '<p class="muted small">沒有紀錄。</p>';
+const attList = (list, pdfAttr, who) => list.length ? `<div class="hist">${list.map(a => `<div class="h"><div>${who ? `<b>${esc(a.name)}</b> <span class="mono small muted">${esc(a.uid)}</span>　` : ''}<b>${esc(scopeLabel(a))}</b>　<span class="mono small muted">${dt(a.start)}</span>　<span class="small ${a.status === '逾時' ? 'x' : ''}">${a.status === '逾時' ? '逾時' : a.score + ' 分・' + a.level}</span></div>${a.status === '完成' ? `<button class="btn ghost sm" ${pdfAttr}="${a.aid}">${ICON.down}PDF</button>` : ''}</div>`).join('')}</div>` : '<p class="muted small">沒有紀錄。</p>';
 
 /* ---------- 篩選鈕、學生各小節分析 ---------- */
 const FSEL = { list: '全部', att: '全部' };            // 主任學生列表、測驗紀錄的篩選
@@ -186,7 +186,7 @@ const VIEWS = {
     <div class="tbl"><table><thead><tr><th>卷別</th><th>來源</th><th>難度</th><th>作答人次</th><th>平均分數</th><th>分析報告</th></tr></thead><tbody>
     ${D.mocks.map(m => `<tr class="link" data-tv="mock:${esc(m.L)}"><td><b>${esc(m.name)}</b></td><td>${esc(m.src)}</td><td>${esc(m.word)}</td><td>${m.tries}</td><td>${m.avg === null ? '—' : m.avg}</td><td><span class="small" style="color:var(--primary);font-weight:700">查看</span></td></tr>`).join('') || '<tr><td colspan="6" class="muted">還沒有匯入模擬卷。</td></tr>'}
     </tbody></table></div>
-    <div class="panel" style="display:grid;gap:4px"><h3>模擬卷作答紀錄</h3>${attList(D.attempts.filter(a => a.type === '模擬').sort((a, b) => b.start - a.start).slice(0, 30).map(a => Object.assign({}, a, { scope: a.scope })), 'data-apdf')}</div>`,
+    <div class="panel" style="display:grid;gap:4px"><h3>模擬卷作答紀錄</h3>${attList(D.attempts.filter(a => a.type === '模擬').sort((a, b) => b.start - a.start).slice(0, 30).map(a => Object.assign({}, a, { scope: a.scope })), 'data-apdf', true)}</div>`,
 
   mock: L => {
     const m = D.mocks.find(x => x.L === L);
@@ -195,7 +195,7 @@ const VIEWS = {
     <div class="row between"><h3 style="font-size:20px">${esc(m.name)} <span class="small muted">${esc(m.word)}・${esc(m.src)}</span></h3><button class="btn ghost sm" data-mockpdf="${esc(m.L)}">${ICON.down}匯出這份模擬卷的報告</button></div>
     <p class="small muted">${m.tries} 人次（其中逾時 ${m.timeouts}）・平均 ${m.avg === null ? '—' : m.avg + ' 分'}</p>
     ${groupBody(m, 'mock')}
-    <div class="panel" style="display:grid;gap:4px"><h3>這份模擬卷的作答紀錄</h3>${attList(D.attempts.filter(a => a.type === '模擬' && a.scope === m.L).sort((a, b) => b.start - a.start), 'data-apdf')}</div>`;
+    <div class="panel" style="display:grid;gap:4px"><h3>這份模擬卷的作答紀錄</h3>${attList(D.attempts.filter(a => a.type === '模擬' && a.scope === m.L).sort((a, b) => b.start - a.start), 'data-apdf', true)}</div>`;
   },
 
   export: () => `<div class="cols">
@@ -205,7 +205,7 @@ const VIEWS = {
       <div class="panel" style="display:grid;gap:10px">
         <div class="row between"><h3>補習班主任權限</h3><button class="sw" role="switch" aria-checked="${D.config.dir}" data-set="dir" aria-label="開放主任檢視"></button></div>
         <div>登入碼　<span class="code">${esc(D.dcode)}</span></div>
-        <div class="small">網址　<span class="mono">${esc(location.href.replace(/teacher\.html.*$/, 'director.html'))}</span>　<button class="btn ghost sm" id="copyDir">複製</button></div>
+        <div class="small">網址　<span class="mono" style="overflow-wrap:anywhere">${esc(location.href.replace(/teacher\.html.*$/, 'director.html'))}</span>　<button class="btn ghost sm" id="copyDir">複製</button></div>
         <div class="checks">${['練習次數', '最近練習', '平均分數', '學習報告', '需加強', '觀念分析'].map(k => `<label><input type="checkbox" data-field="${k}"${D.dfields.indexOf(k) >= 0 ? ' checked' : ''}> ${{ 學習報告: '下載學習報告', 需加強: '需加強的觀念', 觀念分析: '個別學生各小節觀念分析' }[k] || k}</label>`).join('')}<label class="muted"><input type="checkbox" disabled> 題目與答案（不開放）</label></div>
       </div>
     </div>`,
@@ -237,7 +237,9 @@ const VIEWS = {
       <div class="panel" style="display:grid;gap:10px"><h3>學生名單</h3><p class="small muted">一行一位，例如 <span class="mono">70101陳大田</span>。目前 ${D.students.length} 人。</p>
         <textarea id="rosterTxt" rows="8" style="width:100%;border:1px solid var(--line-strong);border-radius:10px;padding:10px;font:15px/1.6 var(--f-mono)" placeholder="70101陳大田&#10;70102林小美"></textarea>
         <div class="row"><button class="btn sm" data-roster="append">加入名單</button><button class="btn ghost sm" data-roster="replace">整份取代</button></div></div>
-    </div>`;
+    </div>
+    <div class="panel" style="display:grid;gap:10px"><h3>清除作答紀錄</h3><p class="small muted">上線前清掉測試資料用。會刪除試算表「測驗紀錄」「逐題紀錄」「逐題統計」裡的資料，刪了不能復原；名單、題庫、設定不受影響。</p>
+      <div class="row"><button class="btn ghost sm" data-clear="guest">只清訪客紀錄</button><button class="btn ghost sm" data-clear="all">清除全部作答紀錄</button></div></div>`;
   },
 
   /* ---- 主任 ---- */
@@ -310,6 +312,8 @@ $('#tBody').addEventListener('click', async e => {
   if (t.id === 'exSecBtn') return sectionPdf($('#exSec').value);
   if (t.id === 'copyDir') { try { await navigator.clipboard.writeText(location.href.replace(/teacher\.html.*$/, 'director.html')); toast('已複製主任網址'); } catch (err) { toast('不能自動複製，請手動選取網址'); } return; }
   if (t.id === 'bankGo') return importBank();
+  const cl = t.closest('[data-clear]');
+  if (cl) return clearRecords(cl.dataset.clear);
   const ro = t.closest('[data-roster]');
   if (ro) return importRoster(ro.dataset.roster);
 });
@@ -416,6 +420,17 @@ async function importRoster(mode) {
   try {
     const r = await run('更新名單中…', () => api('tRoster', { token: TOKEN, text, mode }));
     toast(`名單共 ${r.count} 人` + (r.bad.length ? `，${r.bad.length} 行格式不對沒加入` : ''), 5000);
+    await load(); view = 'bank'; render();
+  } catch (e) { /* 已提示 */ }
+}
+
+async function clearRecords(mode) {
+  if (mode === 'all') {
+    if ((prompt('會刪除所有學生與訪客的作答紀錄，不能復原。\n確定要清除，請輸入「清除」：') || '').trim() !== '清除') return toast('沒有清除');
+  } else if (!confirm('確定要清除所有訪客的作答紀錄？（不能復原）')) return;
+  try {
+    const r = await run('清除中…', () => api('tClear', { token: TOKEN, mode }));
+    toast(`已清除 ${r.removed} 筆測驗紀錄`, 4000);
     await load(); view = 'bank'; render();
   } catch (e) { /* 已提示 */ }
 }

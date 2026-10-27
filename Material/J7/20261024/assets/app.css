@@ -329,6 +329,8 @@ select { height: 40px; border: 1px solid var(--line-strong); background: var(--s
 /* iPhone Safari 會自動放大寬區塊裡的字，量出來的高度比實際畫出來的大，造成「放得下卻換頁」→ 關掉自動放大 */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100% }
 #pdfStage { -webkit-text-size-adjust: none; text-size-adjust: none; position: fixed; left: 0; top: 0; z-index: -1; opacity: 0; pointer-events: none; width: 760px; background: #FFF; color: #1B2838; font: 14px/1.7 var(--f-body) }
+/* Chrome 會把「：「」這類連續標點擠成半形，html2canvas 卻照全形字形畫 → PDF 疊字；PDF 排版區關掉擠壓 */
+#pdfStage, #pdfStage * { text-spacing-trim: space-all }
 #pdfStage .pdfpage { position: relative; width: 760px; background: #FFF; display: flow-root }
 #pdfStage .pdfpage.fixed { height: 1100px; overflow: hidden }
 #pdfStage .pdfpage[hidden] { display: none }
