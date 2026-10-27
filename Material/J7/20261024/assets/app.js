@@ -37,13 +37,16 @@ function stopTimer() { clearInterval(tick); tick = null; }
 
 /* ---------- 啟動 ---------- */
 async function boot() {
+  const qr = location.hash.match(/^#r=(A\w+)$/);           // 掃報告上的 QR code 進來：登入後直接打開那一份
+  if (qr) { store.set('pendR', qr[1]); history.replaceState(null, '', location.pathname); }
   if (TOKEN) {
     try {
       await loadHome();
       const cur = store.get('cur', null);
       if (cur && cur.kind === 'q') return startQuiz(cur.unit, true);
       if (cur && cur.kind === 'm') return startMock(cur.L, true);
-      return show('home');
+      show('home');
+      return openPending();
     } catch (e) {
       if (e.server) logoutLocal(e.message); else { showLoginErr(e.message); show('login'); return; }
     }
@@ -107,6 +110,7 @@ async function afterLogin(r) {
   store.set('token', TOKEN); store.set('user', USER); store.set('code', codeText());
   if (r.home) setHome(r.home); else await run('載入中…', loadHome);
   show('home');
+  openPending();
 }
 $('#logout').onclick = async () => {
   logoutLocal();
@@ -173,11 +177,7 @@ $('#units').addEventListener('click', e => { const b = e.target.closest('[data-s
 $('#miniMocks').addEventListener('click', e => { const b = e.target.closest('[data-mock]'); if (b) { mockSel = +b.dataset.mock; renderMocks(); show('mock'); } });
 $('#hist').addEventListener('click', async e => {
   const v = e.target.closest('[data-view]');
-  if (v) {                                   // 線上看舊的報告（錯題與解析）
-    try { REPORT = (await run('讀取報告中…', () => api('report', { token: TOKEN, aid: v.dataset.view }))).report; } catch (err) { return; }
-    rvMode = 'wrong'; renderReport(); show('report');
-    return;
-  }
+  if (v) return openReport(v.dataset.view);   // 線上看舊的報告（錯題與解析）
   const b = e.target.closest('[data-pdf]');
   if (!b) return;
   try {
@@ -187,6 +187,19 @@ $('#hist').addEventListener('click', async e => {
     });
   } catch (err) { /* run 已提示 */ }
 });
+
+/** 打開一份舊報告（報告列表的「查看」、QR code） */
+async function openReport(aid) {
+  try { REPORT = (await run('讀取報告中…', () => api('report', { token: TOKEN, aid }))).report; } catch (err) { return; }
+  rvMode = 'wrong'; renderReport(); show('report');
+}
+/** 掃 QR code 進來、登入後：打開那一份報告（訪客沒有報告） */
+function openPending() {
+  const aid = store.get('pendR', null);
+  if (!aid || !HOME || HOME.user.guest) return;
+  store.del('pendR');
+  return openReport(aid);
+}
 
 /* ---------- 小節測驗 ---------- */
 async function startQuiz(unit, silent) {
@@ -378,12 +391,21 @@ function renderReport() {
   $('#rScore').innerHTML = `${r.score}<small>／100</small>`;
   $('#rLevel').textContent = r.level; $('#rLevel').className = 'level lv-' + r.level;
   $('#rMeta').innerHTML = `${esc(r.title)}<br>用時 <span class="mono">${mmss(r.used)}</span>・答對 ${r.nRight}／${r.n}<br>平均每題 <span class="mono">${r.avgSec}</span> 秒${r.type === '練習' ? `・快速作答 <span class="mono">${r.fast}</span> 題` : ''}`;
-  $('#rLine').textContent = r.line;
+  $('#rScale').innerHTML = rpScale(r.score);
+  $('#rSumPanel').hidden = !r.summary;
+  $('#rSum').innerHTML = rich(r.summary || '');
+  $('#rTiers').innerHTML = rpTiers(r);
+  const cls = rpClass(r);
+  $('#rClsPanel').hidden = !cls;
+  $('#rRow').classList.toggle('one', !cls);
+  $('#rCls').innerHTML = cls;
+  $('#rProgPanel').hidden = !r.prog;
+  $('#rProg').innerHTML = rpProg(r);
   $('#rNextPanel').hidden = !(r.next && r.next.length);
-  $('#rNext').innerHTML = (r.next || []).map(x => `<li>${esc(x)}</li>`).join('');
-  const tr = trendHtml(r.trend, r.start);
-  $('#rTrend').hidden = !tr;
-  $('#rTrend').innerHTML = tr ? `<h2>近幾次分數</h2>${tr}` : '';
+  $('#rNext').innerHTML = (r.next || []).map(x => `<li>${rich(x)}</li>`).join('');
+  $('#rParent').textContent = r.parent ? '給家長：' + r.parent : '';
+  $('#rTrend').hidden = !r.trend || r.trend.length < 2;
+  $('#rTrend').innerHTML = `<h2 style="margin-bottom:4px">分數走勢</h2>${rpTrend(r)}`;
   $('#rSecs').hidden = !r.secs;
   if (r.secs) $('#rSecs').innerHTML = `<h2 style="margin-bottom:6px">各小節答對率</h2>${r.secs.map(s => hbar(`${s.no} ${s.name}`, pct(s.c, s.n), colorFor(pct(s.c, s.n)), `${s.c}／${s.n}`)).join('')}`;
   $('#rGoalPanel').hidden = !r.goals.length || r.type === '模擬';
@@ -406,9 +428,9 @@ $('#rvSeg').addEventListener('click', e => {
   $$('#rvSeg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
   renderReview();
 });
-/** 學生下載的 PDF：每頁學號姓名浮水印、頁尾警語 */
+/** 學生下載的 PDF：每頁中央淡色 LOGO（有開品牌 LOGO 時），頁尾學號姓名、報告編號、警語 */
 function pdfOpt(r) {
-  return { wm: `${r.uid} ${r.name}　${dt(Date.now(), true)}`, note: '僅供本班學生個人練習，請勿轉傳或公開' };
+  return { logo: !!(CFG && CFG.logo), note: `${r.uid && r.uid.indexOf('G-') !== 0 ? r.uid + ' ' + r.name + '｜' : ''}報告編號 ${r.aid}｜僅供本班學生個人練習，請勿轉傳或公開` };
 }
 $('#again').onclick = () => { if (REPORT.type === '模擬') startMock(REPORT.scope); else startQuiz(REPORT.scope); };
 $('#dl').onclick = async () => {
