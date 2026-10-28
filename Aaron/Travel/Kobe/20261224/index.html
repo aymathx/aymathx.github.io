@@ -238,6 +238,59 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 .ev.now .ev-time { color: var(--blue); }
 .now-badge { display: inline-block; background: var(--blue); color: #fff; font-family: var(--num); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 999px; letter-spacing: .08em; }
 .add-ev { margin: 0 0 0 74px; }
+/* ---------- 2026-10-28：晴雨切換（3C）、摘要（4A）、精簡（5C）、憑證（2C） ---------- */
+.rain-toggle button small { font-size: 11px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+.tl-bar { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+.sum-line { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; text-align: left; background: var(--card); border: 1px solid var(--card-bd); border-radius: 12px; padding: 8px 10px 8px 12px; font-size: 13px; color: var(--ink-2); white-space: nowrap; overflow: hidden; }
+.sum-line b { font-family: var(--num); color: var(--ink); }
+.sum-line .wn, .sum-line .wn b { color: var(--red); }
+.sum-line .chev { margin-left: auto; font-size: 17px; color: var(--muted); }
+.seg.sm { flex: none; }
+.seg.sm button { padding: 4px 10px; min-height: 32px; font-size: 12.5px; }
+.ev-type .rain-tag { font-family: var(--sans); letter-spacing: 0; color: #0369A1; }
+.pf-tag { font-family: var(--sans); font-size: 11px; font-weight: 800; letter-spacing: 0; color: var(--blue); background: var(--blue-soft); border-radius: 999px; padding: 1px 8px; cursor: pointer; white-space: nowrap; }
+.ev-was { font-size: 12px; color: #94A3B8; margin-top: 2px; }
+.det-was { margin-top: 8px; font-size: 13px; color: #0369A1; }
+.ev.one { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; padding: 9px 10px; background: var(--card); border: 1px solid var(--card-bd); border-radius: 10px; }
+.ev.one .tm { flex: none; min-width: 40px; font-family: var(--num); font-weight: 700; font-size: 13.5px; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ev.one .dt { flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--tc, var(--blue)); }
+.ev.one .ck { flex: none; width: 16px; height: 16px; border-radius: 50%; background: #CBD5E1; color: #fff; font-size: 10px; font-weight: 800; display: grid; place-items: center; }
+.ev.one .tt { flex: 1; min-width: 0; font-weight: 700; font-size: 14.5px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev.one .fl { flex: none; font-size: 12.5px; }
+.ev.one .fl.wn { color: var(--red); font-weight: 800; }
+.ev.one .chev { flex: none; color: #94A3B8; font-size: 16px; }
+.ev.one.past { background: transparent; border-style: dashed; opacity: .6; padding-top: 6px; padding-bottom: 6px; }
+.ev.one.past .tt { font-weight: 500; font-size: 13.5px; }
+.ev.one.now { box-shadow: 0 0 0 2px var(--blue); }
+.sum-big { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center; font-size: 12px; color: var(--muted); }
+.sum-big span { background: var(--bg); border-radius: 12px; padding: 8px 4px; }
+.sum-big b { display: block; font-family: var(--num); font-size: 22px; color: var(--navy); }
+.sum-big .wn b { color: var(--red); }
+.sum-h { font-weight: 800; font-size: 13px; color: var(--blue); margin: 16px 0 2px; }
+.sum-done summary { font-size: 13px; color: var(--muted); padding: 8px 0; cursor: pointer; }
+.sum-warn { display: flex; gap: 10px; width: 100%; text-align: left; padding: 9px 0; border-top: 1px dashed var(--line); }
+.sum-warn .tm { flex: none; min-width: 40px; font-family: var(--num); font-weight: 700; color: var(--ink-2); }
+.sum-warn .grow { flex: 1; min-width: 0; }
+.sum-warn b { display: block; }
+.sum-warn .w { display: block; font-size: 13px; color: var(--red); margin-top: 2px; }
+.pf-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.pf-th { width: 72px; height: 72px; border-radius: 10px; overflow: hidden; border: 1px solid var(--card-bd); background: var(--bg); display: grid; place-items: center; }
+.pf-th img { width: 100%; height: 100%; object-fit: cover; }
+.pf-th.add { border: 1.5px dashed var(--blue-2, var(--blue)); color: var(--blue); font-size: 22px; font-weight: 700; line-height: 1; align-content: center; }
+.pf-th.add small { display: block; font-size: 11px; margin-top: 3px; }
+.pf-name { font-size: 22px; font-weight: 800; line-height: 1.35; margin-top: 12px; color: #111; }
+.pf-when { font-size: 14px; color: #475569; margin-top: 2px; }
+.pf-conf { margin: 12px 0 2px; padding: 8px 12px; border-radius: 12px; background: #F1F5F9; text-align: center; font-family: var(--num); font-size: clamp(28px, 9vw, 40px); font-weight: 800; letter-spacing: .06em; color: #111; word-break: break-all; }
+.pf-img { margin-top: 10px; border-radius: 12px; background: #fff; }
+.pf-nav { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 10px; font-family: var(--num); font-weight: 700; color: #475569; }
+.pf-nav button { width: 52px; height: 44px; border-radius: 12px; background: #E2E8F0; color: #1E293B; font-size: 26px; line-height: 1; }
+.pf-nav button:disabled { opacity: .3; }
+.pf-day { font-family: var(--num); font-size: 12.5px; font-weight: 800; color: var(--blue); margin: 14px 0 0; }
+.pf-n { flex: none; font-size: 13px; font-weight: 700; color: var(--blue); }
+.pack-prog { display: flex; align-items: center; gap: 12px; padding: 2px 0 12px; font-size: 14px; color: var(--ink-2); }
+.pack-prog b { font-family: var(--num); font-size: 18px; color: var(--navy); }
+.ring { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--blue) calc(var(--p) * 1%), var(--chip) 0); }
+.ring span { width: 34px; height: 34px; border-radius: 50%; background: var(--card); display: grid; place-items: center; font-family: var(--num); font-size: 11px; font-weight: 800; color: var(--blue); }
 .day-note { margin-top: 14px; }
 .day-map .map-frame { height: 240px; margin-top: 0; }
 /* 舊版「現在」浮動按鈕 */
@@ -265,6 +318,22 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 .tot-big { text-align: center; font-family: var(--serif); font-size: 30px; font-weight: 700; color: var(--navy); line-height: 1.25; font-variant-numeric: tabular-nums; }
 .tot-sub { text-align: center; font-size: 12.5px; color: var(--muted); }
 .tot-sub span { white-space: nowrap; }
+/* 誰的（1C）：合計列＋分開明細 */
+.own-line { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; margin-top: 10px; padding: 8px 12px; border-radius: 12px; background: var(--bg); border: 1px solid var(--card-bd); font-size: 12.5px; color: var(--ink-2); }
+.own-line .grow { flex: 1; min-width: 0; }
+.own-line span span { white-space: nowrap; }
+.own-line b { font-family: var(--num); }
+.own-line .go { flex: none; color: var(--blue); font-weight: 700; }
+.chip-lbl { font-size: 11.5px; font-weight: 700; color: var(--muted); margin: 0 2px 4px; }
+.own-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.own-head b { font-family: var(--serif); font-size: 16px; color: var(--navy); }
+.own-head span { font-family: var(--num); font-weight: 800; text-align: right; }
+.own-head small { display: block; font-weight: 600; font-size: 11.5px; color: var(--muted); }
+.own-sub { display: flex; justify-content: space-between; margin: 12px 0 2px; font-size: 12.5px; font-weight: 800; color: var(--blue); }
+.own-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 8px 0; border-top: 1px dashed var(--line); }
+.own-row .d { font-family: var(--num); font-size: 12px; color: var(--muted); flex: none; }
+.own-row .grow { flex: 1; min-width: 0; }
+.own-row b { font-family: var(--num); white-space: nowrap; }
 .budget { display: block; width: 100%; text-align: left; margin-top: 12px; }
 .budget-txt { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
 .budget-txt .go { color: var(--blue); font-weight: 700; }
@@ -475,6 +544,8 @@ html.dark .ev-dot { border-color: #475569; }
 html.dark .ev.now .ev-dot { background: #2563EB; border-color: #2563EB; box-shadow: 0 0 0 4px #1E3A5F; }
 html.dark .wx-h .p { color: var(--blue); }
 html.dark .ev-type .ok { color: #4ADE80; }
+html.dark .ev-type .rain-tag, html.dark .det-was { color: #7DD3FC; }
+html.dark .ev.one .ck { background: #475569; }
 html.dark .cat-tabs button, html.dark .gallery figure, html.dark .progress { background: #334155; }
 html.dark .st-已購, html.dark .st-已訂 { background: #14532D; color: #86EFAC; }
 html.dark .st-現場買 { background: #1E3A5F; color: #93C5FD; }
@@ -582,7 +653,7 @@ html.dark .fullcard .btn-ghost { background: #fff; }
    資料（公開）：2026-10-20 神戶新行程
    訂位代號、姓名、座位、電話等私人資料不放這裡，只存在手機（localStorage／IndexedDB）
    ========================================================= */
-const DATA_VER = 2;
+const DATA_VER = 3;
 const DATA_LABEL = '神戶新行程 2026-10-20';
 const TRIP_START = '2026-12-24';
 const TRIP_END = '2026-12-27';
@@ -635,7 +706,7 @@ const TRIP_DEFAULT = {
       id: 'd1', date: '2026-12-24', loc: 'kobe', theme: 'night', bg: '',
       city: '台北 → 神戶', title: '出發・抵達神戶',
       branches: { A: '21:00 船', B: '22:00 船（備案）' },
-      note: '19:30 落地後要在 20:40 前辦好船票手續才趕得上 21:00 船（入境＋行李抓 45–75 分，下機排隊也要算進去），來不及就切到 B 案 22:00 船。\nB 案約 23:00 到飯店（櫃台受理到 23:00）、約 23:20 到仔牛屋（L.O. 24:00，只剩約 40 分）：訂位時講清楚；也可以先請飯店同意晚餐後（約 00:30）再入住，計程車直接去仔牛屋。\n若只能搭 0:00 末班（神戶 0:31 到；沒有 Port Liner，船站也沒有計程車招呼站），仔牛屋趕不上，直接吃一蘭（營業到翌 4:00）。\n航班延誤就到 KIX T1 1F 櫃台改搭下一班（櫃台 6:00–0:15）。風浪大時高速船會停航，冬天通常前一天 14:00 左右公告。',
+      note: '19:30 落地後要在 20:40 前辦好船票手續才趕得上 21:00 船（入境＋行李抓 45–75 分，下機排隊也要算進去），來不及就切到 B 案 22:00 船。\nB 案約 23:00 到飯店（櫃台受理到 23:00）：先打電話跟飯店說可能壓線。\n晚餐不吃仔牛屋了：check-in 後買 7-11 回房間吃、早點休息；Aaron 再去一蘭（營業到翌 4:00）。\n若只能搭 0:00 末班（神戶 0:31 到；沒有 Port Liner，船站也沒有計程車招呼站），一樣先回飯店；一蘭營業到翌 4:00，還來得及。\n航班延誤就到 KIX T1 1F 櫃台改搭下一班（櫃台 6:00–0:15）。風浪大時高速船會停航，冬天通常前一天 14:00 左右公告。',
       events: [
         { id: 'd1e1', time: '08:00', label: '早上', type: 'WORK', title: '上班（北大高中）', sub: '行李今天要帶到學校' },
         { id: 'd1e2', time: '12:00', label: '中午', icon: 'taxi', type: 'TRANSPORT', title: '機場接送：北大高中 → 桃園機場 T1', sub: '下班直接出發｜約 30 km，中午抓 35–45 分', res: 'transfer' },
@@ -647,17 +718,17 @@ const TRIP_DEFAULT = {
         { id: 'd1a3', time: '21:00', end: '21:31', branch: 'A', icon: 'boat', type: 'TRANSPORT', title: '神戸-関空ベイ・シャトル → 神戸空港', sub: '約 31 分｜現行時刻表，12 月前再確認', url: 'https://www.kobe-access.jp/', map: '神戸空港 海上アクセスターミナル' },
         { id: 'd1a4', time: '21:35', branch: 'A', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 飯店', sub: '約 20 分｜約 ¥3,000–4,000（預估）', map: '神戸空港 タクシー乗り場', warn: '船站沒有計程車招呼站：走 5–6 分或搭免費接駁到機場航廈 1F 搭車', desc: '深夜計程車可能少：先預約計程車（例：神戸MK）或請飯店安排；叫車 App 在船站常被拒載。' },
         { id: 'd1a5', time: '22:00', branch: 'A', est: true, type: 'LODGING', title: '飯店 check-in', sub: '櫃台受理到 23:00', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel' },
-        { id: 'd1a6', time: '22:30', branch: 'A', est: true, type: 'FOOD', title: '仔牛屋 神戸三宮店', sub: '神戸牛燒肉・全室包廂｜L.O. 24:00｜飯店搭計程車約 10 分', phone: '078-222-1529', hours: '17:00–25:00（L.O. 24:00）・週日休', addr: '神戸市中央区中山手通1-25-6 ラ・ドルレイ神戸三宮 3F', url: 'https://www.koushiya.jp/sannomiya.html', map: '仔牛屋 神戸三宮店', res: 'koushiya', warn: '尚未預訂：平安夜＋全室包廂，盡快訂；告知可能 22:30–23:30 才到＋玉ねぎ完全NG', desc: '官網、ヒトサラ、ぐるなび都能網路預約，也可以打電話。\n套餐約 ¥16,800 起，平均 ¥7,000–9,000。' },
-        { id: 'd1a7', time: '23:50', branch: 'A', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 先搭計程車回飯店休息｜離仔牛屋走路約 5 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店', desc: '神戶沒有 24 小時的一蘭。平安夜可能人多，官網說客滿時 L.O. 前也可能不能入店。' },
-        { id: 'd1a8', time: '00:30', branch: 'A', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分（走路約 25 分）', map: HOTEL.map },
+        { id: 'd1a6', time: '22:15', branch: 'A', est: true, type: 'FOOD', title: '7-Eleven 買晚餐', sub: '買回房間吃、早點休息｜離飯店最近的店，點地圖找', map: 'セブン-イレブン メリケンパーク 付近', desc: '最近的 7-11 在哪裡還沒確認：按 Google Maps 會搜飯店附近的 7-11。\n也可以請計程車在來飯店的路上先停 7-11。' },
+        { id: 'd1a7', time: '22:45', branch: 'A', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 在飯店休息｜飯店搭計程車約 10 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店', desc: '神戶沒有 24 小時的一蘭。平安夜可能人多，官網說客滿時 L.O. 前也可能不能入店。' },
+        { id: 'd1a8', time: '23:45', branch: 'A', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分（走路約 25 分）', map: HOTEL.map },
         { id: 'd1b1', time: '21:30', branch: 'B', est: true, icon: 'boat', type: 'TRANSPORT', title: '買高速船票（21:40 前辦好）', sub: 'T1 1F A 出入口旁櫃台（6:00–0:15）｜大人單程 ¥1,880', res: 'boat-in', map: '関西空港 ベイ・シャトル チケットカウンター', desc: '至少開船前 20 分辦好手續；現場票看空位，網路預約者優先。之後只剩 0:00 末班。' },
         { id: 'd1b2', time: '21:50', branch: 'B', est: true, icon: 'boat', type: 'TRANSPORT', title: '12 番のりば 接駁巴士 → 船站', sub: '免費，約 6–7 分' },
         { id: 'd1b3', time: '22:00', end: '22:31', branch: 'B', icon: 'boat', type: 'TRANSPORT', title: '神戸-関空ベイ・シャトル → 神戸空港', sub: '約 31 分｜現行時刻表，12 月前再確認｜之後只剩 0:00 末班', url: 'https://www.kobe-access.jp/', map: '神戸空港 海上アクセスターミナル' },
         { id: 'd1b4', time: '22:40', branch: 'B', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 飯店', sub: '約 20 分｜約 ¥3,600–4,800（預估，22:00 後夜間加成）', map: '神戸空港 タクシー乗り場', warn: '船站沒有計程車招呼站：走 5–6 分或搭免費接駁到機場航廈 1F 搭車', desc: '深夜計程車可能少：先預約計程車（例：神戸MK）或請飯店安排；叫車 App 在船站常被拒載。' },
-        { id: 'd1b5', time: '23:00', branch: 'B', est: true, type: 'LODGING', title: '飯店 check-in（壓線）', sub: '櫃台受理到 23:00：先打電話說晚到，或請飯店同意晚餐後再入住、計程車直接去仔牛屋', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel' },
-        { id: 'd1b6', time: '23:20', branch: 'B', est: true, type: 'FOOD', title: '仔牛屋 神戸三宮店', sub: '神戸牛燒肉・全室包廂｜L.O. 24:00', phone: '078-222-1529', hours: '17:00–25:00（L.O. 24:00）・週日休', addr: '神戸市中央区中山手通1-25-6 ラ・ドルレイ神戸三宮 3F', url: 'https://www.koushiya.jp/sannomiya.html', map: '仔牛屋 神戸三宮店', res: 'koushiya', warn: '離 L.O. 24:00 只剩約 40 分：訂位時講清楚可能晚到，請店家保留到約 23:30；玉ねぎ完全NG' },
-        { id: 'd1b7', time: '00:30', branch: 'B', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 先搭計程車回飯店休息｜離仔牛屋走路約 5 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店' },
-        { id: 'd1b8', time: '01:10', branch: 'B', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分', map: HOTEL.map }
+        { id: 'd1b5', time: '23:00', branch: 'B', est: true, type: 'LODGING', title: '飯店 check-in（壓線）', sub: '櫃台受理到 23:00：先打電話說可能壓線', phone: HOTEL.phone, addr: HOTEL.addr, map: HOTEL.map, url: HOTEL.url, res: 'hotel' },
+        { id: 'd1b6', time: '23:15', branch: 'B', est: true, type: 'FOOD', title: '7-Eleven 買晚餐', sub: '買回房間吃、早點休息｜離飯店最近的店，點地圖找', map: 'セブン-イレブン メリケンパーク 付近', desc: '最近的 7-11 在哪裡還沒確認：按 Google Maps 會搜飯店附近的 7-11。\n也可以請計程車在來飯店的路上先停 7-11。' },
+        { id: 'd1b7', time: '23:45', branch: 'B', est: true, type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: 'Yvonne 在飯店休息｜飯店搭計程車約 10 分', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店' },
+        { id: 'd1b8', time: '00:45', branch: 'B', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分', map: HOTEL.map }
       ]
     },
     {
@@ -669,7 +740,7 @@ const TRIP_DEFAULT = {
         { id: 'd2e1', time: '08:30', label: '早上', type: 'FOOD', title: '飯店早餐', sub: '3F ALL FLAGS 自助餐｜7:00–11:00（L.O. 10:30）', map: HOTEL.map },
         { id: 'd2e2', time: '10:00', label: '時間未定', icon: 'train', type: 'TRANSPORT', title: '前往 USJ', sub: 'JR 三ノ宮／元町 → 大阪 → 西九条 → ユニバーサルシティ｜約 52 分 ¥660（門到門抓 70–75 分）', map: 'ユニバーサルシティ駅', desc: '比較便宜的走法：阪神 神戸三宮／元町 → 阪神なんば線 → 西九条 → JR ゆめ咲線，約 45 分 ¥500。' },
         { id: 'd2e3', time: '11:30', label: '抵達後', type: 'SIGHT', title: 'USJ 聖誕巡禮', sub: 'ユニバーサル・ホリデー・ワンダーズ（11/13–1/17）｜冬季限定餐點、Greeting', url: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders', map: 'ユニバーサル・スタジオ・ジャパン', res: 'usj', desc: '工具 → USJ 聖誕 有完整亮點清單與演出場次備忘。' },
-        { id: 'd2e4', time: '17:30', label: '傍晚', type: 'SIGHT', title: '夜間秀：ライト・アップ・ザ・ナイト', sub: 'グラマシーパーク（紐約區）｜聖誕歌、舞蹈、雪、煙火｜2025 年約 17:30、19:30 兩場', url: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders/light-up-the-night', warn: '2026 場次未公布 → 公布後填進「工具 → USJ 聖誕」', desc: '同區還有「ジョイ・オブ・ライツ」（約 10 分，睽違 9 年復活）。\n兩場秀可買「特別鑑賞エリア」¥1,700 起，不用卡位。\n霍格華茲城堡投影「ホグワーツ・マジカル・ナイト〜ウインター・マジック〜」也在晚上。' },
+        { id: 'd2e4', time: '17:30', label: '傍晚', type: 'SIGHT', title: '夜間秀：ライト・アップ・ザ・ナイト', sub: 'グラマシーパーク（紐約區）｜聖誕歌、舞蹈、雪、煙火｜2025 年約 17:30、19:30 兩場', url: 'https://www.usj.co.jp/web/ja/jp/events/christmas-2026/universal-holiday-wonders/light-up-the-night', warn: '2026 場次未公布 → 公布後填進「工具 → USJ 聖誕」', rainNote: '下雨時戶外表演可能中止或縮短，以 USJ 官方 App 公告為準。', desc: '同區還有「ジョイ・オブ・ライツ」（約 10 分，睽違 9 年復活）。\n兩場秀可買「特別鑑賞エリア」¥1,700 起，不用卡位。\n霍格華茲城堡投影「ホグワーツ・マジカル・ナイト〜ウインター・マジック〜」也在晚上。' },
         { id: 'd2e5', time: '18:30', est: true, type: 'FOOD', title: 'USJ 晚餐', sub: '候選：Parkside Grill（緊鄰夜間秀場地）、Finnegan\'s、Lombard\'s Landing、Studio Stars（聖誕餐盤）', res: 'usj-dinner', warn: '點餐注意玉ねぎ／タロイモ', desc: '「レストラン優先案內」預計入園日前 1 個月 11:00 開放（12/25 → 11/25 11:00），屬非官方資訊，以官方 App 為準。' },
         { id: 'd2e6', time: '20:30', est: true, icon: 'train', type: 'TRANSPORT', title: '離開 USJ → 神戶', sub: '約 70–75 分到飯店' },
         { id: 'd2e7', time: '21:45', est: true, type: 'LODGING', title: '回飯店' },
@@ -687,9 +758,12 @@ const TRIP_DEFAULT = {
         { id: 'd3a1', time: '11:00', branch: 'A', type: 'RAMEN', title: 'みなと軒 三宮高架下店（Aaron 儀式）', sub: '11:00 開店｜Yvonne 可在飯店多休息再到ナガサワ會合，或先逛ナガサワ（走路約 5 分）', phone: '078-391-3288', hours: '11:00–24:00・無休', addr: '神戸市中央区北長狭通1丁目31-35 1F（阪急神戸三宮駅 西口）', map: 'みなと軒 三宮高架下店', warn: '只收現金或 PayPay，不能刷卡', desc: '豚骨拉麵，吧台 11 席。舊的東門店（營業到早上）已顯示休業。' },
         { id: 'd3e3', time: '11:30', est: true, type: 'SHOP', title: 'ナガサワ文具センター 本店＋三宮輕逛', sub: 'ジュンク堂書店三宮店 3F（三宮センター街）｜北星「大人の鉛筆」', phone: '078-321-4500', hours: '10:00–21:00', addr: '神戸市中央区三宮町1丁目6-18 ジュンク堂書店三宮店 3F', url: 'https://kobe-nagasawa.co.jp/store/main/', map: 'ナガサワ文具センター 本店', desc: '官網只確認有北星「大人の色鉛筆」；「大人の鉛筆」本身很可能有，想確保就先打電話問。' },
         { id: 'd3e4', time: '14:00', end: '15:30', est: true, type: 'CAFE', title: '幸せのパンケーキ 神戸店', sub: '舒芙蕾鬆餅（Yvonne 下午茶）｜每份約 20 分以上', phone: '078-392-8888', hours: '週末 10:00–20:30（L.O. 19:40，待確認）', addr: '神戸市中央区三宮町1-6-1 パレックスビル 2F 東', url: 'https://hitosara.com/0011100316/', map: '幸せのパンケーキ 神戸店', res: 'pancake', warn: '未預約：週六接近聖誕，預期要排隊；11:30 在ナガサワ時先繞過去看隊伍（同一條街），14:30 還沒入座就放棄，免得錯過黃昏摩天輪', desc: '可用ヒトサラ或電話預約；週末是否接受預約未確認。營業狀態與時間出發前再確認。' },
-        { id: 'd3e5', time: '15:45', est: true, icon: 'train', type: 'TRANSPORT', title: '三宮 → 神戸ハーバーランド', sub: 'JR 三ノ宮 → 神戸 約 4 分，再走約 8 分', map: 'umie MOSAIC' },
-        { id: 'd3e6', time: '16:30', est: true, type: 'SIGHT', title: '黃昏：モザイク大観覧車', sub: '日落約 16:54｜一圈約 10 分 ¥800（導覽書資料，待確認）｜看神戶港、港塔、六甲山', hours: '10:00–22:00（依季節，待確認）', map: 'モザイク大観覧車', warn: '週六傍晚可能排隊；強風或打雷會停駛', desc: '晚上還有 LED 點燈的神戸ポートタワー。\n錯過黃昏也沒關係：石田屋之後（約 20:10）再來搭，看夜景（營業到 22:00）。' },
-        { id: 'd3e7', time: '17:30', est: true, icon: 'train', type: 'TRANSPORT', title: '→ 石田屋（三宮）', sub: 'JR 神戸 → 三ノ宮 約 4 分，或計程車' },
+        { id: 'd3e5', time: '15:45', est: true, icon: 'train', type: 'TRANSPORT', title: '三宮 → 神戸ハーバーランド', sub: 'JR 三ノ宮 → 神戸 約 4 分，再走約 8 分', map: 'umie MOSAIC',
+          rain: { title: '三宮 → 神戸ポートタワー', sub: '下雨建議搭計程車約 10 分｜或 JR 三ノ宮 → 元町 約 2 分，再走約 15 分', map: '神戸ポートタワー' } },
+        { id: 'd3e6', time: '16:30', est: true, type: 'SIGHT', title: '黃昏：モザイク大観覧車', sub: '日落約 16:54｜一圈約 10 分 ¥800（導覽書資料，待確認）｜看神戶港、港塔、六甲山', hours: '10:00–22:00（依季節，待確認）', map: 'モザイク大観覧車', warn: '週六傍晚可能排隊；強風或打雷會停駛', desc: '晚上還有 LED 點燈的神戸ポートタワー。\n錯過黃昏也沒關係：石田屋之後（約 20:10）再來搭，看夜景（營業到 22:00）。',
+          rain: { type: 'SIGHT', title: '神戸ポートタワー 展望樓層（雨備）', sub: '室內看港景和黃昏｜大人 ¥1,000（加屋上デッキ ¥1,200）', hours: '9:00–23:00（最後入場 22:30）', addr: '神戸市中央区波止場町5-5', map: '神戸ポートタワー', url: 'https://www.kobe-port-tower.com/', warn: '要買日時指定票，賣完就沒有當日券：預報下雨就先上官網買', desc: '2024 年整修後重新開放，就在飯店旁邊。\n屋上デッキ是戶外，下雨只上展望樓層就好。\n不想上塔也可以去 umie（ハーバーランド）室內逛街，從港塔走路約 15 分。\n營業時間、票價是 2024 年重開後的資料，出發前看官網。' } },
+        { id: 'd3e7', time: '17:30', est: true, icon: 'train', type: 'TRANSPORT', title: '→ 石田屋（三宮）', sub: 'JR 神戸 → 三ノ宮 約 4 分，或計程車',
+          rain: { sub: '下雨建議搭計程車約 10 分｜或 JR 元町 → 三ノ宮 約 2 分' } },
         { id: 'd3e8', time: '18:00', end: '20:00', booked: true, type: 'FOOD', title: '焼肉しゃぶしゃぶ 石田屋。北野坂店', sub: '已預約（樂天ぐるなび）｜桌位 120 分制｜當天點餐結帳', phone: '050-5484-3236', hours: '週六晚 17:00–21:30（L.O. 21:00）・週一休', addr: '神戸市中央区北長狭通1-20-13 北野坂壱番館 3F', url: 'https://r.gnavi.co.jp/c192807/', map: '焼肉しゃぶしゃぶ 石田屋。北野坂店', res: 'ishidaya', warn: '訂位時沒選套餐：點餐時說玉ねぎ／タロイモNG', desc: '神戶牛壽喜燒、涮涮鍋、燒肉；壽喜燒記得要生蛋液（Yvonne）。\n阪急神戸三宮駅 東口走路 1 分。變更預約直接聯絡店家。\n不要走錯成石田屋本店或 Hanare。' },
         { id: 'd3b1', time: '20:10', branch: 'B', est: true, type: 'RAMEN', title: 'みなと軒 三宮高架下店（Aaron 儀式）', sub: '營業到 24:00｜離石田屋走路幾分鐘｜Yvonne 先搭計程車回飯店等', phone: '078-391-3288', hours: '11:00–24:00・無休', addr: '神戸市中央区北長狭通1丁目31-35 1F（阪急神戸三宮駅 西口）', map: 'みなと軒 三宮高架下店', warn: '只收現金或 PayPay，不能刷卡' },
         { id: 'd3e9', time: '20:30', est: true, icon: 'taxi', type: 'TRANSPORT', title: '回飯店', sub: '計程車約 10 分（走路約 25 分）', map: HOTEL.map }
@@ -706,7 +780,8 @@ const TRIP_DEFAULT = {
         { id: 'd4e3', time: '10:00', type: 'RAMEN', title: '一蘭 三宮店（Aaron 儀式）', sub: '10:00 開店｜建議：Yvonne 可先去広重排隊，或兩人逛三宮後再一起排', hours: '10:00–翌 4:00（L.O. 3:45）', addr: '神戸市中央区北長狭通1-9-9 第1岸ビル 1F・B1', url: 'https://en.ichiran.com/shop/kinki/sannomiya/', map: '一蘭 三宮店' },
         { id: 'd4e3b', time: '10:30', est: true, type: 'SHOP', title: '神戶三宮輕逛', sub: '三宮センター街一帶｜排広重時可以輪流逛', map: '三宮センター街' },
         { id: 'd4e4', time: '11:00', est: true, type: 'FOOD', title: '神戸牛丼 広重（午餐）', sub: '11:00 開店｜吧台約 10 席', phone: '078-222-6611', hours: '週日 11:00–15:00（賣完即止）・週三休', addr: '神戸市中央区中山手通1-22-21 前川ビル 1F', map: '神戸牛丼 広重', warn: '常排 1.5–3 小時、賣完就關，開店前就要排；12:15 還沒入座就放棄（改便利店或別家），才趕得上 15:30 船', desc: '只賣神戶牛丼（並・大＋溫泉蛋等），價格各文章差很多，以現場為準。' },
-        { id: 'd4e5', time: '12:20', type: 'SIGHT', title: '旧居留地・南京町 聖誕洋房散步', sub: '只走看拍照、不吃｜約 1.2 km、45–60 分', map: '旧居留地 十五番館', desc: '建議路線：三宮センター街 → 神戸市立博物館 → 旧居留地十五番館 → 仲町通・明石町筋（煤氣燈、石造建築）→ 大丸神戸店迴廊 → 南京町 長安門 → 南京町広場 → 西安門 → 元町。\n週日中午南京町很擠，從長安門到広場快速穿過即可。\n時間不夠就先砍這段。' },
+        { id: 'd4e5', time: '12:20', type: 'SIGHT', title: '旧居留地・南京町 聖誕洋房散步', sub: '只走看拍照、不吃｜約 1.2 km、45–60 分', map: '旧居留地 十五番館', desc: '建議路線：三宮センター街 → 神戸市立博物館 → 旧居留地十五番館 → 仲町通・明石町筋（煤氣燈、石造建築）→ 大丸神戸店迴廊 → 南京町 長安門 → 南京町広場 → 西安門 → 元町。\n週日中午南京町很擠，從長安門到広場快速穿過即可。\n時間不夠就先砍這段。',
+          rain: { type: 'SHOP', title: '大丸神戸店＋元町商店街（雨備）', sub: '有拱廊、不淋雨｜南京町只穿過｜約 45 分', hours: '大丸 10:00–20:00（待確認）', addr: '神戸市中央区明石町40', map: '大丸神戸店', desc: '建議路線：大丸神戸店（1F 迴廊、聖誕裝飾）→ 南京町 長安門快速穿過 → 元町商店街（有屋頂）往西走 → 再去 LIMA COFFEE（栄町通）。\n時間不夠就先砍這段。' } },
         { id: 'd4e6', time: '13:15', end: '13:55', est: true, type: 'CAFE', title: 'LIMA COFFEE 神戸本店（下午茶）', sub: 'みなと元町駅 2 分｜17 席', phone: '078-335-6308', hours: '9:00–18:00・週三休（2023 資料，待確認）', addr: '神戸市中央区栄町通3-2-6 1F', map: 'LIMA COFFEE 神戸本店', warn: '2026 年中曾暫停營業（7/1 重開），出發前看 IG（limacoffee）或打電話確認', desc: '備選：にしむら珈琲店 元町店（元町通2-6-3，9:00–22:00，92 席）；イスズベーカリー 元町店（元町通1-11-18，只能外帶）。\n筆記寫的「イスズベーカリー元町本店」不存在：元町的是元町店，本店在三宮側。\n有網站還寫 LIMA 舊地址（元町通3-8-1），以栄町通為準。' },
         { id: 'd4e7', time: '14:05', est: true, type: 'LODGING', title: '回飯店取行李', sub: '從 LIMA COFFEE 走路約 10 分｜最晚 14:05', map: HOTEL.map },
         { id: 'd4e8', time: '14:20', est: true, icon: 'taxi', type: 'TRANSPORT', title: '計程車 → 神戸空港', sub: '約 20 分｜15:10 前要辦好手續｜跟司機說「海上アクセスターミナル（ベイ・シャトル乗り場）」', map: '神戸空港 海上アクセスターミナル', warn: '錯過 15:30 船：下一班 17:00（T1 約 17:40），只剩約 3 小時 15 分' },
@@ -720,7 +795,7 @@ const TRIP_DEFAULT = {
 
 /* 儀式：Aaron 的拉麵、Yvonne 的下午茶 */
 const RITUALS = {
-  ramen1: { icon: '🍜', label: '一蘭 12/24', sub: '三宮店｜深夜，Yvonne 先回飯店', who: 'Aaron' },
+  ramen1: { icon: '🍜', label: '一蘭 12/24', sub: '三宮店｜check-in 後，Yvonne 在飯店休息', who: 'Aaron' },
   ramen2: { icon: '🍜', label: '第一旭 12/25', sub: '三宮本店｜USJ 回來後', who: 'Aaron' },
   ramen3: { icon: '🍜', label: 'みなと軒 12/26', sub: '三宮高架下店｜11:00 或晚餐後', who: 'Aaron' },
   ramen4: { icon: '🍜', label: '一蘭 12/27', sub: '三宮店｜10:00 開店', who: 'Aaron' },
@@ -750,7 +825,6 @@ const RESERVATIONS = [
   { id: 'flight-out', icon: 'flight', name: '去程 AirAsia AK 176', when: '12/24（四）TPE T1 15:40 → KIX T1 19:30', status: '已購', how: '托運 20kg＋手提 7kg（每人）', url: 'https://www.airasia.com/' },
   { id: 'boat-in', icon: 'boat', name: '高速船 KIX → 神戸空港', when: '12/24（四）21:00（B 案 22:00）', status: '現場買', how: '¥1,880／人；網路預約 90 天前開放、1 小時前截止；現場票看空位', url: 'https://www.kobe-access.jp/' },
   { id: 'hotel', icon: 'hotel', name: '神戸メリケンパークオリエンタルホテル', when: '12/24–12/27 3 晚｜標準雙人房・西景｜含早餐', status: '已訂', how: '到店付款｜12/22 前免費取消', phone: HOTEL.phone, url: HOTEL.url },
-  { id: 'koushiya', icon: 'food', name: '仔牛屋 神戸三宮店', when: '12/24（四）約 22:30（B 案約 23:20）', status: '未訂', how: '官網／ヒトサラ／ぐるなび／電話｜告知可能晚到＋玉ねぎNG', phone: '078-222-1529', url: 'https://www.koushiya.jp/sannomiya.html' },
   { id: 'usj', icon: 'ticket', name: 'USJ 1 デイ・スタジオ・パス ×2', when: '12/25（五）', status: '待查', how: '日別變動價，越早買越便宜', url: 'https://store.usj.co.jp/ja/jp/c/ticket' },
   { id: 'usj-dinner', icon: 'food', name: 'USJ 晚餐（レストラン優先案內）', when: '12/25（五）', status: '待查', how: '預計 11/25 11:00 開放（非官方資訊），以官方 App 為準' },
   { id: 'pancake', icon: 'cafe', name: '幸せのパンケーキ 神戸店', when: '12/26（六）14:00', status: '未訂', how: 'ヒトサラ或電話（週末是否接受預約未確認）', phone: '078-392-8888', url: 'https://hitosara.com/0011100316/' },
@@ -763,13 +837,12 @@ const RES_STATUSES = ['未訂', '已訂', '已購', '現場買', '不需預約',
 /* 行前待辦（日期為建議期限） */
 const TODOS = [
   { id: 't-usj-ticket', due: '2026-10-31', text: '買 USJ 12/25 入場券 ×2（日別變動價，越早越便宜）' },
-  { id: 't-koushiya', due: '2026-11-15', text: '訂仔牛屋 神戸三宮店 12/24 約 22:30（平安夜包廂；告知可能 23:20 才到＋玉ねぎNG）' },
   { id: 't-transfer', due: '2026-11-24', text: '預約機場接送：12/24 中午 北大高中 → 桃園 T1' },
   { id: 't-usj-dinner', due: '2026-11-25', text: 'USJ 晚餐「優先案內」（預計 11/25 11:00 開放）' },
   { id: 't-usj-view', due: '2026-11-30', text: '考慮買夜間秀「特別鑑賞エリア」¥1,700 起' },
   { id: 't-pancake', due: '2026-11-30', text: '問幸せのパンケーキ 12/26 能否預約（ヒトサラ／電話）' },
   { id: 't-boat', due: '2026-11-30', text: '網路預約 12/27 15:30 回程高速船（保 4 小時緩衝）；12/24 去程照計畫現場買，或也預約' },
-  { id: 't-hotel-call', due: '2026-12-10', text: '打給飯店：12/24 可能 22:00–23:00 才到（或晚餐後再入住）＋12/27 退房後寄放行李' },
+  { id: 't-hotel-call', due: '2026-12-10', text: '打給飯店：12/24 可能 22:00–23:00 才到＋12/27 退房後寄放行李' },
   { id: 't-joy', due: '2026-12-14', text: '想在「ジョイ・オブ・ライツ」投影訊息？抽選投稿 12/14 截止' },
   { id: 't-hours', due: '2026-12-15', text: '再確認第一旭 三宮本店營業時間（9/4 起變更）' },
   { id: 't-nagasawa', due: '2026-12-15', text: '打給ナガサワ本店問有沒有北星「大人の鉛筆」' },
@@ -800,7 +873,7 @@ const EMERGENCY = [
 const TAXI = [
   { ja: 'すみません、神戸メリケンパークオリエンタルホテルまでお願いします。ありがとうございます。', sub: '〒650-0042 神戸市中央区波止場町5-6（メリケンパーク）', zh: '請載我們到神戶美利堅公園東方酒店，謝謝。' },
   { ja: 'すみません、神戸空港の海上アクセスターミナルまでお願いします。ありがとうございます。', sub: '関空行きの高速船（ベイ・シャトル）に乗ります。', zh: '請載我們到神戶機場的高速船碼頭（往關西機場），謝謝。' },
-  { ja: 'すみません、仔牛屋 神戸三宮店までお願いします。ありがとうございます。', sub: '中山手通1-25-6 ラ・ドルレイ神戸三宮 3階', zh: '請載我們到仔牛屋 神戸三宮店，謝謝。' },
+  { ja: 'すみません、ホテルに行く途中で、セブン-イレブンに寄ってもらえますか。ありがとうございます。', sub: '神戸メリケンパークオリエンタルホテルの近くで大丈夫です', zh: '請問去飯店的路上可以先停一下 7-11 嗎？謝謝。' },
   { ja: 'すみません、一蘭 三宮店までお願いします。ありがとうございます。', sub: '北長狭通1-9-9 第1岸ビル', zh: '請載我們到一蘭 三宮店，謝謝。' },
   { ja: 'すみません、神戸ラーメン第一旭 三宮本店までお願いします。ありがとうございます。', sub: '琴ノ緒町4-1-394（JR高架下）', zh: '請載我們到第一旭 三宮本店，謝謝。' },
   { ja: 'すみません、焼肉しゃぶしゃぶ 石田屋。北野坂店までお願いします。ありがとうございます。', sub: '北長狭通1-20-13 北野坂壱番館 3階', zh: '請載我們到石田屋 北野坂店，謝謝。' },
@@ -1573,8 +1646,12 @@ function checkSec(name, title) {
   const list = getList(name);
   const ed = listEdit === name;
   const txt = t => `<span class="grow"><div class="ttl">${esc(t.text)}</div>${t.sub ? `<div class="small muted">${esc(t.sub)}</div>` : ''}</span>`;
-  return `<div class="sec-row"><div class="sec-title">${title} ${list.filter(t => done[t.id]).length}/${list.length}</div>${leToggle(name)}</div>
-    <div class="card">${list.map(t => ed
+  const n = list.filter(t => done[t.id]).length;
+  const pct = list.length ? Math.round(n / list.length * 100) : 0;
+  /* 打包進度（2026-10-28 附帶）：進度圈＋已打包幾件 */
+  const prog = name === 'pack' && list.length && !ed ? `<div class="pack-prog"><span class="ring" style="--p:${pct}"><span>${pct}%</span></span><span>已打包 <b>${n}</b> / ${list.length} 件</span></div>` : '';
+  return `<div class="sec-row"><div class="sec-title">${title} ${n}/${list.length}</div>${leToggle(name)}</div>
+    <div class="card">${prog}${list.map(t => ed
       ? `<div class="le-row">${txt(t)}${leTools(name, t.id)}</div>`
       : `<button class="list-row ${done[t.id] ? 'done' : ''}" data-chk="${esc(t.id)}" style="width:100%;text-align:left"><span class="chk ${done[t.id] ? 'on' : ''}">${done[t.id] ? '✓' : ''}</span>${txt(t)}</button>`).join('') || '<div class="empty">還沒有項目</div>'}
     ${ed ? leAdd(name) : ''}</div>`;
@@ -1619,6 +1696,8 @@ function renderDay(day) {
   const hotelLine = isFirst ? HOTEL.firstNight : isLast ? HOTEL.lastDay : HOTEL.midStay;
   const sun = sunTimes(day.date, loc.lat, loc.lon);
   const nLights = getList('light').filter(l => (l.dates || []).includes(day.date)).length;
+  const rain = rainOn(day);
+  const sm = daySummary(day, br);
   const dv = $('#dayView');
   dv.innerHTML = `
     <div class="day-wrap">
@@ -1645,20 +1724,31 @@ function renderDay(day) {
     ${day.branches ? `<div class="branch-toggle" id="branchSeg">
       <button data-b="A" class="${br === 'A' ? 'on' : ''}">A ${esc(day.branches.A)}</button>
       <button data-b="B" class="${br === 'B' ? 'on' : ''}">B ${esc(day.branches.B)}</button></div>` : ''}
+    ${hasRain(day) ? `<div class="branch-toggle rain-toggle">
+      <button data-rain="0" class="${rain ? '' : 'on'}">☀️ 晴天行程</button>
+      <button data-rain="1" class="${rain ? 'on' : ''}">☔ 雨天行程<small id="rainPct"></small></button></div>` : ''}
+    <div class="tl-bar">
+      <button class="sum-line" data-act="summary"><span>📍 <b>${sm.n}</b> 站</span>${sm.res.length ? `<span>🎫 預約 <b>${sm.ok}/${sm.res.length}</b></span>` : ''}${sm.warns.length ? `<span class="wn">⚠ <b>${sm.warns.length}</b></span>` : ''}<span class="chev">›</span></button>
+      <div class="seg sm"><button data-cv="0" class="${ui.compact ? '' : 'on'}">詳細</button><button data-cv="1" class="${ui.compact ? 'on' : ''}">精簡</button></div>
+    </div>
     <div class="timeline ${ui.editing ? 'editing' : ''}" id="timeline">${renderTimelineHtml(day, br)}</div>
     <div class="add-ev"><button class="btn btn-ghost btn-sm" data-act="add-ev">＋ 新增行程</button></div>
     ${dayMapHtml(day)}
     ${day.note ? `<div class="card day-note"><div class="card-title">備註</div>${noteHtml(day.note)}</div>` : ''}`;
   applyHeroImage(day);
   dv.onclick = async e => {
-    const a = e.target.closest('[data-act],[data-ev],[data-b]');
+    const a = e.target.closest('[data-act],[data-ev],[data-b],[data-rain],[data-cv],[data-proof]');
     if (!a) return;
     if (a.dataset.act === 'ev-edit') { e.stopPropagation(); return openEventEditor(day, findEvent(day, a.dataset.id)); }
     if (a.dataset.act === 'ev-del') { e.stopPropagation(); return deleteEvent(day, a.dataset.id); }
+    if (a.dataset.proof) return showProofs([a.dataset.proof], a.dataset.proof);
     if (a.dataset.ev) return openEventDetail(day, a.dataset.ev);
     if (a.dataset.b) { ui.branch[day.id] = a.dataset.b; saveUi(); return renderDay(day); }
+    if (a.dataset.rain) { ui.rain = Object.assign({}, ui.rain, { [day.id]: a.dataset.rain === '1' }); saveUi(); return renderDay(day); }
+    if (a.dataset.cv) { ui.compact = a.dataset.cv === '1'; saveUi(); return renderDay(day); }
     const act = a.dataset.act;
-    if (act === 'edit-day') openDayEditor(day);
+    if (act === 'summary') openDaySummary(day, br);
+    else if (act === 'edit-day') openDayEditor(day);
     else if (act === 'del-day') deleteDay(day);
     else if (act === 'toggle-edit') { ui.editing = !ui.editing; saveUi(); renderDay(day); toast(ui.editing ? '編輯模式：每個行程下方可直接編輯／刪除' : '已關閉編輯模式'); }
     else if (act === 'hotel') openHotel();
@@ -1763,22 +1853,69 @@ function eventsFor(day, br) {
     .sort((a, b) => toMin(a.time) - toMin(b.time));
 }
 
+/* 雨天備案（3C）：雨天模式下有 rain 的行程換成雨備內容（A/B 照舊），有 rainNote 的只加提醒 */
+const hasRain = day => day.events.some(e => e.rain || e.rainNote);
+const rainOn = day => !!(ui.rain || {})[day.id] && hasRain(day);
+const viewEv = (day, e) => e && e.rain && rainOn(day) ? Object.assign({}, e, e.rain, { id: e.id, wasTitle: e.title }) : e;
+
+/* 每日摘要（4A）：站數、這天行程連到的預約搞定幾筆、紅字注意幾個；跟著 A/B、晴雨切換 */
+const RES_OK = s => !['未訂', '待查'].includes(s);
+function daySummary(day, br) {
+  const evs = eventsFor(day, br).map(e => viewEv(day, e));
+  const resList = getList('res');
+  const local = store.get(K.res, {});
+  const res = [...new Set(evs.map(e => e.res).filter(Boolean))].map(id => resList.find(r => r.id === id)).filter(Boolean)
+    .map(r => ({ r, s: RES_STATUSES.includes((local[r.id] || {}).status) ? local[r.id].status : r.status }));
+  return { n: evs.length, res, ok: res.filter(x => RES_OK(x.s)).length, warns: evs.filter(e => e.warn) };
+}
+function openDaySummary(day, br) {
+  const sm = daySummary(day, br);
+  const todo = sm.res.filter(x => !RES_OK(x.s));
+  const done = sm.res.filter(x => RES_OK(x.s));
+  const resRow = ({ r, s }) => `<button class="res-row" data-res="${esc(r.id)}"><span class="ico">${ic(r.icon || 'ticket')}</span><span class="grow"><div class="res-name">${esc(r.name)}</div><div class="res-when">${esc(r.when || '')}</div></span><span class="st-pill st-${esc(s)}">${esc(s)}</span></button>`;
+  openSheet(`${dateLabel(day.date)}${br ? ` ${br} 案` : ''}${rainOn(day) ? '・雨天' : ''} 摘要`, `
+    <div class="sum-big"><span><b>${sm.n}</b>站</span><span><b>${sm.ok}/${sm.res.length}</b>預約搞定</span><span class="${sm.warns.length ? 'wn' : ''}"><b>${sm.warns.length}</b>注意</span></div>
+    ${sm.res.length ? `<div class="sum-h">${todo.length ? `還沒搞定的預約（${todo.length}）` : '預約都搞定了 ✓'}</div>${todo.map(resRow).join('')}
+      ${done.length ? `<details class="sum-done"><summary>已搞定 ${done.length} 筆</summary>${done.map(resRow).join('')}</details>` : ''}` : ''}
+    ${sm.warns.length ? `<div class="sum-h">注意事項</div>${sm.warns.map(e => `<button class="sum-warn" data-ev="${esc(e.id)}"><span class="tm">${esc(e.label || e.time)}</span><span class="grow"><b>${esc(e.title)}</b><span class="w">⚠️ ${esc(e.warn)}</span></span></button>`).join('')}` : ''}
+    <div class="small muted" style="margin-top:12px">「搞定」＝已訂、已購、現場買、不需預約。點預約可以改狀態，點注意事項看行程。</div>`, (body, entry) => {
+    body.onclick = e => {
+      const r = e.target.closest('[data-res]');
+      const w = e.target.closest('[data-ev]');
+      if (!r && !w) return;
+      closeSheet(entry);
+      if (r) openResDetail(r.dataset.res); else openEventDetail(day, w.dataset.ev);
+    };
+  });
+}
+
+/* 精簡（5C）：手動切「精簡」整天一行一筆；旅途中已經過去的行程自動縮成灰色一行。編輯模式一律顯示完整卡片 */
 function renderTimelineHtml(day, br) {
-  const evs = eventsFor(day, br);
+  const evs = eventsFor(day, br).map(e => viewEv(day, e));
   if (!evs.length) return '<div class="empty">這天還沒有行程</div>';
   const n = jstTripNow();
   let nowIdx = -1;
   if (n.date === day.date) evs.forEach((e, i) => { if (toMin(e.time) <= n.min) nowIdx = i; });
+  const rain = rainOn(day);
+  const local = store.get(K.res, {});
   return evs.map((e, i) => {
     const t = TYPES[e.type] || TYPES.SIGHT;
     const cls = nowIdx < 0 ? '' : i < nowIdx ? 'past' : i === nowIdx ? 'now' : '';
+    const pf = e.res ? proofCount(e.res, local) : 0;
+    const rainTag = e.wasTitle ? '☔ 雨備' : rain && e.rainNote ? '☔ 雨天注意' : '';
+    if (!ui.editing && (ui.compact || cls === 'past')) {
+      return `<div class="ev one type-${esc(e.type)} ${cls}" role="button" tabindex="0" data-ev="${esc(e.id)}">
+        <span class="tm">${esc(e.label || e.time)}</span>${cls === 'past' ? '<span class="ck">✓</span>' : '<span class="dt"></span>'}
+        <span class="tt">${esc(e.title)}</span>${rainTag ? '<span class="fl">☔</span>' : ''}${e.warn && cls !== 'past' ? '<span class="fl wn">⚠</span>' : ''}${pf ? `<span class="pf-tag" data-proof="${esc(e.res)}">🎫 ${pf}</span>` : ''}${cls === 'now' ? '<span class="now-badge">NOW</span>' : ''}<span class="chev">›</span></div>`;
+    }
     return `<div class="ev type-${esc(e.type)} ${cls}" role="button" tabindex="0" data-ev="${esc(e.id)}">
       <div class="ev-time">${esc(e.label || e.time)}${e.end ? `<small>–${esc(e.end)}</small>` : ''}${e.est ? '<small>約</small>' : ''}</div>
       <div class="ev-rail"><span class="ev-dot"></span></div>
       <div class="ev-body">
         <div class="ev-title">${esc(e.title)}</div>
-        <div class="ev-type">${ic(e.icon || t.icon)} ${esc(t.en)}${e.booked ? ' <span class="ok">✓ 已訂</span>' : ''}${e.warn ? ` <span class="wn">⚠ ${esc(shortWarn(e.warn))}</span>` : ''}${cls === 'now' ? ' <span class="now-badge">NOW</span>' : ''}</div>
+        <div class="ev-type">${ic(e.icon || t.icon)} ${esc(t.en)}${e.booked ? ' <span class="ok">✓ 已訂</span>' : ''}${rainTag ? ` <span class="rain-tag">${rainTag}</span>` : ''}${e.warn ? ` <span class="wn">⚠ ${esc(shortWarn(e.warn))}</span>` : ''}${pf ? ` <span class="pf-tag" data-proof="${esc(e.res)}">🎫 憑證 ${pf}</span>` : ''}${cls === 'now' ? ' <span class="now-badge">NOW</span>' : ''}</div>
         ${e.sub ? `<div class="ev-sub">${esc(e.sub)}</div>` : ''}
+        ${e.wasTitle ? `<div class="ev-was">原：${esc(e.wasTitle)}</div>` : ''}
         <div class="ev-tools"><button class="btn btn-sm btn-ghost" data-act="ev-edit" data-id="${esc(e.id)}">${ic('edit')} 編輯</button><button class="btn btn-sm btn-danger" data-act="ev-del" data-id="${esc(e.id)}">${ic('trash')} 刪除</button></div>
       </div></div>`;
   }).join('');
@@ -1869,6 +2006,9 @@ async function renderWeather(day, force = false) {
     summary = `<div class="wx-day"><b>${Math.round(c.temperature_2m)}°</b><span>現在${WX_TEXT(c.weather_code)}・今天 ${Math.round(j.daily.temperature_2m_max[0])}°/${Math.round(j.daily.temperature_2m_min[0])}°</span><small>目前天氣・${stamp}</small></div>`;
   }
   el.innerHTML = `<div class="wx-hours">${hours.map(x => `<div class="wx-h"><div>${x.h}</div>${wxSvg(x.c)}<div class="t">${Math.round(x.temp)}°</div><div class="p">${x.p >= 30 ? x.p + '%' : ''}</div></div>`).join('')}</div>${summary}`;
+  /* 晴雨切換旁顯示當天降雨機率（16 天內才有） */
+  const rp = $('#rainPct');
+  if (rp && inRange) rp.textContent = `降雨 ${j.daily.precipitation_probability_max[0] ?? '—'}%`;
 }
 
 /* ---------- 行程詳情與編輯 ---------- */
@@ -1897,8 +2037,10 @@ async function deleteDay(day) {
 }
 
 function openEventDetail(day, id) {
-  const e = findEvent(day, id);
-  if (!e) return;
+  const raw = findEvent(day, id);
+  if (!raw) return;
+  const e = viewEv(day, raw);
+  const pf = e.res ? proofCount(e.res) : 0;
   const t = TYPES[e.type] || TYPES.SIGHT;
   const resLocal = e.res ? (store.get(K.res, {})[e.res] || {}) : {};
   const isFood = ['FOOD', 'CAFE', 'RAMEN'].includes(e.type);
@@ -1915,7 +2057,10 @@ function openEventDetail(day, id) {
       ${e.branch && day.branches ? `<span class="tag tag-draft">${esc(e.branch)} 案</span>` : ''}<span>${ic(e.icon || t.icon)} ${esc(t.en)}</span></div>
     <div class="det-title">${esc(e.title)}</div>
     ${e.sub ? `<div class="det-sub">${esc(e.sub)}</div>` : ''}
+    ${e.wasTitle ? `<div class="det-was">☔ 雨天備案，原本是「${esc(e.wasTitle)}」；切回晴天行程就會換回來。</div>` : ''}
     ${e.warn ? `<div class="warn">⚠️ ${esc(e.warn)}</div>` : ''}
+    ${rainOn(day) && e.rainNote ? `<div class="warn">☔ ${esc(e.rainNote)}</div>` : ''}
+    ${pf ? `<button class="btn btn-primary btn-block" data-act="proof" style="margin-top:10px">🎫 出示憑證（${pf} 張）</button>` : ''}
     ${rows.length ? `<div class="det-rows">${rows.join('')}</div>` : ''}
     ${e.desc ? `<div class="det-desc">${esc(e.desc)}</div>` : ''}
     <div class="btn-row">
@@ -1931,7 +2076,8 @@ function openEventDetail(day, id) {
       const a = ev.target.closest('[data-act]');
       if (!a) return;
       if (a.dataset.act === 'redline') openRedLine();
-      else if (a.dataset.act === 'edit') { closeSheet(entry); openEventEditor(day, e); }
+      else if (a.dataset.act === 'proof') showProofs([e.res], e.res);
+      else if (a.dataset.act === 'edit') { closeSheet(entry); openEventEditor(day, raw); }
       else if (a.dataset.act === 'del') { if (await deleteEvent(day, e.id)) closeSheet(entry); }
     };
   });
@@ -2115,11 +2261,12 @@ async function refreshRate(force = false) {
 /* 記帳分類（設計稿 5C：多了「住宿」）；顏色跟行程類型一致 */
 const EXP_CATS = ['餐飲', '交通', '購物', '門票', '住宿', '其他'];
 const CAT_COLORS = { 餐飲: '#2563EB', 交通: '#EF4444', 購物: '#F97316', 門票: '#14B8A6', 住宿: '#EAB308', 其他: '#94A3B8' };
-const PAYERS = ['Aaron', 'Yvonne', '共同'];
+/* 「誰的」：原則上都是 Aaron 先付，這裡只記東西是誰的、誰負責買（例：Yvonne 幫朋友代購），不算誰欠誰；欄位名沿用 payer */
+const PAYERS = ['共同', 'Aaron', 'Yvonne'];
 let expDate = '';   /* 這次開 APP 選的記帳日期；沒選過就是今天 */
 
-/* 付款人、幣別、分類記住上一次的選擇 */
-const expPref = () => Object.assign({ payer: 'Aaron', cur: 'JPY', cat: '餐飲' }, ui.exp);
+/* 誰的、幣別、分類記住上一次的選擇 */
+const expPref = () => Object.assign({ payer: '共同', cur: 'JPY', cat: '餐飲' }, ui.exp);
 const setExpPref = patch => { ui.exp = Object.assign(expPref(), patch); saveUi(); };
 const expCat = e => EXP_CATS.includes(e.cat) ? e.cat : '其他';
 const dateLabel = d => `${md(d)}（${wd(d)}）`;
@@ -2146,7 +2293,7 @@ function renderWallet() {
   const pend = exps.filter(e => e.pending).length;
   const expRow = e => `<div class="exp-row ${e.pending ? 'pending' : ''}" data-exp="${esc(e.id)}" role="button" tabindex="0">
       <div class="grow"><div class="nm">${esc(e.name)}${e.pending ? '<span class="pend-tag">待確認</span>' : ''}</div>
-        <div class="small muted">${esc([e.payer || '共同', expCat(e), e.pay, e.note].filter(Boolean).join('・'))}</div>
+        <div class="small muted">${esc([e.payer || '共同', e.for && '幫' + e.for + '買', expCat(e), e.pay, e.note].filter(Boolean).join('・'))}</div>
         ${e.items ? `<div class="its">${esc(e.items)}</div>` : ''}</div>
       <div class="amt">${e.cur === 'TWD' ? twd(e.amt) : yen(e.amt)}<small>${e.cur === 'TWD' ? '≈ ' + yen(e.amt / r.rate) : '≈ ' + twd(e.amt * r.rate)}</small></div>
       <button class="x-btn" data-del="${esc(e.id)}" aria-label="刪除">✕</button></div>`;
@@ -2166,7 +2313,8 @@ function renderWallet() {
     <div class="card">
       <div class="tot-lbl">總支出</div>
       <div class="tot-big">${yen(totalJ)}</div>
-      <div class="tot-sub"><span>≈ ${twd(totalJ * r.rate)}</span>${PAYERS.filter(p => byPayer[p]).map(p => `・<span>${p} ${yen(byPayer[p])}</span>`).join('')}</div>
+      <div class="tot-sub"><span>≈ ${twd(totalJ * r.rate)}</span></div>
+      ${totalJ ? `<button class="own-line" data-w="owners"><span class="grow">${PAYERS.filter(p => byPayer[p]).map(p => `<span>${p} <b>${yen(byPayer[p])}</b></span>`).join('・')}</span><span class="go">分開看 ›</span></button>` : ''}
       <button class="budget" data-w="budget">
         <div class="budget-txt">${budget
           ? `<span>預算 ${yen(budget)}</span>${pct > 100 ? `<span class="over">超支 ${yen(totalJ - budget)}</span>` : `<span>已花 ${pct}%・剩 ${yen(budget - totalJ)}</span>`}`
@@ -2179,6 +2327,7 @@ function renderWallet() {
           <label class="sel-chip">📅<select id="expDateSel" aria-label="日期">${dates.map(d => `<option value="${esc(d)}" ${d === expDate ? 'selected' : ''}>${dateLabel(d)}</option>`).join('')}</select></label>
           <label class="sel-chip"><select id="expCatSel" aria-label="分類">${EXP_CATS.map(c => `<option ${c === pf.cat ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
         </div>
+        <div class="chip-lbl">這筆是誰的（誰負責買）</div>
         <div class="chip-row">
           ${PAYERS.map(p => `<button type="button" class="chip ${p === pf.payer ? 'on' : ''}" data-payer="${p}">${p}</button>`).join('')}
           <span class="gap"></span>
@@ -2201,7 +2350,7 @@ function renderWallet() {
     <details class="card ai-card">
       <summary>🧾 收據 AI 整理匯入<span class="chev">›</span></summary>
       <div class="ai-warn">拍照前先遮住卡號、會員編號、QR Code。AI 可能看錯小字，入帳前請對照原收據。</div>
-      <ol class="small" style="margin:10px 0 0 18px;color:var(--ink-2)"><li>按「複製提示詞」，連同收據照片傳給 Claude 或 ChatGPT（可以一次好幾張）。</li><li>把 AI 回覆的表格整段貼到下面，按「匯入」。</li><li>同一張收據、同一分類會合併成一筆；付款人用上面選的。</li></ol>
+      <ol class="small" style="margin:10px 0 0 18px;color:var(--ink-2)"><li>按「複製提示詞」，連同收據照片傳給 Claude 或 ChatGPT（可以一次好幾張）。</li><li>把 AI 回覆的表格整段貼到下面，按「匯入」。</li><li>同一張收據、同一分類會合併成一筆；「誰的」用上面選的。</li></ol>
       <button class="btn btn-block" data-w="prompt" style="margin-top:10px">📋 複製收據整理提示詞</button>
       <textarea id="aiPaste" class="ai-paste" placeholder="| 日期 | 店名 | 品項 | 數量 | 含稅金額 | 付款方式 | 分類 | 備註 |"></textarea>
       <button class="btn btn-primary btn-block" data-w="ai-import" style="margin-top:8px">⬆︎ 匯入表格到記帳</button>
@@ -2272,6 +2421,7 @@ function renderWallet() {
     if (!w) return;
     const act = w.dataset.w;
     if (act === 'budget') openBudget();
+    else if (act === 'owners') openOwners();
     else if (act === 'export') exportExpCsv();
     else if (act === 'prompt') { await copyText(RECEIPT_PROMPT); toast('已複製提示詞，傳給 AI 時記得附上收據照片'); }
     else if (act === 'ai-import') { if (await importReceipt($('#aiPaste').value)) renderWallet(); }
@@ -2351,7 +2501,8 @@ function openExpEditor(id) {
       <label class="field"><span>幣別</span>${sel('cur', [['JPY', '¥ 日幣'], ['TWD', 'NT$ 台幣']], e.cur || 'JPY')}</label></div>
     <div class="row2"><label class="field"><span>日期</span>${sel('date', expDates(e.date).map(d => [d, dateLabel(d)]), e.date)}</label>
       <label class="field"><span>分類</span>${sel('cat', EXP_CATS.map(c => [c, c]), expCat(e))}</label></div>
-    <label class="field"><span>付款人</span>${sel('payer', PAYERS.map(p => [p, p]), e.payer || '共同')}</label>
+    <div class="row2"><label class="field"><span>誰的（誰負責買）</span>${sel('payer', PAYERS.map(p => [p, p]), e.payer || '共同')}</label>
+      <label class="field"><span>幫誰代購（可空）</span><input name="for" value="${esc(e.for || '')}" placeholder="例：小美"></label></div>
     <label class="field"><span>明細（可空）</span><textarea name="items" placeholder="例：飯糰、綠茶">${esc(e.items || '')}</textarea></label>
     <label class="field"><span>備註（可空）</span><input name="note" value="${esc(e.note || '')}" placeholder="例：免稅"></label>
     <div class="btn-row"><button type="button" class="btn btn-danger" data-a="del">刪除</button><button class="btn btn-primary">${e.pending ? '確認入帳' : '儲存'}</button></div></form>`, (body, entry) => {
@@ -2364,7 +2515,7 @@ function openExpEditor(id) {
       const x = list.find(y => y.id === id);
       if (!x) return closeSheet(entry);
       Object.assign(x, { name: String(fd.get('name')).trim(), amt, cur: fd.get('cur'), date: fd.get('date'), cat: fd.get('cat'), payer: fd.get('payer') });
-      for (const k of ['items', 'note']) { const val = String(fd.get(k)).trim(); if (val) x[k] = val; else delete x[k]; }
+      for (const k of ['items', 'note', 'for']) { const val = String(fd.get(k)).trim(); if (val) x[k] = val; else delete x[k]; }
       delete x.pending;
       store.set(K.exp, list);
       closeSheet(entry);
@@ -2380,14 +2531,41 @@ function openExpEditor(id) {
   });
 }
 
+/* 分開明細（1C，2026-10-28 改成記「誰的」）：共同只列合計；Aaron、Yvonne 逐筆列，有填「幫誰代購」的依對象分組 */
+function openOwners() {
+  const r = getRate();
+  const exps = store.get(K.exp, []);
+  const toJpy = e => e.cur === 'TWD' ? e.amt / r.rate : e.amt;
+  const sum = arr => arr.reduce((s, e) => s + toJpy(e), 0);
+  const row = e => `<button class="own-row" data-exp="${esc(e.id)}"><span class="d">${md(e.date)}</span><span class="grow">${esc(e.name)}</span><b>${e.cur === 'TWD' ? twd(e.amt) : yen(e.amt)}</b></button>`;
+  const group = p => {
+    const mine = exps.filter(e => (e.payer || '共同') === p).sort((a, b) => a.date.localeCompare(b.date) || a.ts - b.ts);
+    if (!mine.length) return '';
+    const head = `<div class="own-head"><b>${p === '共同' ? '共同' : p + ' 的'}</b><span>${mine.length} 筆・${yen(sum(mine))}<small>≈ ${twd(sum(mine) * r.rate)}</small></span></div>`;
+    if (p === '共同') return `<div class="card">${head}<div class="small muted">逐筆在記帳頁的明細。</div></div>`;
+    const fors = [...new Set(mine.map(e => e.for || ''))].sort();
+    return `<div class="card">${head}${fors.map(f => {
+      const arr = mine.filter(e => (e.for || '') === f);
+      return (fors.length > 1 || f ? `<div class="own-sub"><span>${f ? '幫 ' + esc(f) + ' 買' : '自己的'}</span><span>${yen(sum(arr))}</span></div>` : '') + arr.map(row).join('');
+    }).join('')}</div>`;
+  };
+  openSheet('分開明細', `<div class="small muted" style="margin-bottom:10px">原則上都是 Aaron 先付；這裡只分東西是誰的、誰負責買，不算誰欠誰。點一筆可以改「誰的」和「幫誰代購」。</div>
+    ${PAYERS.map(group).join('') || '<div class="empty">還沒有記帳</div>'}`, (body, entry) => {
+    body.onclick = e => {
+      const b = e.target.closest('[data-exp]');
+      if (b) { closeSheet(entry); openExpEditor(b.dataset.exp); }
+    };
+  });
+}
+
 function exportExpCsv() {
   const list = store.get(K.exp, []);
   if (!list.length) return toast('沒有資料');
   const rt = getRate().rate;
-  const rows = [['日期', '項目', '明細', '分類', '金額', '幣別', '付款人', '付款方式', '備註', '約合 JPY', '約合 TWD', '待確認']].concat(
+  const rows = [['日期', '項目', '明細', '分類', '金額', '幣別', '誰的', '幫誰代購', '付款方式', '備註', '約合 JPY', '約合 TWD', '待確認']].concat(
     [...list].sort((a, b) => a.date.localeCompare(b.date) || a.ts - b.ts).map(x => {
       const j = x.cur === 'TWD' ? x.amt / rt : x.amt;
-      return [x.date, x.name, x.items || '', expCat(x), x.amt, x.cur, x.payer || '', x.pay || '', x.note || '', Math.round(j), Math.round(j * rt), x.pending ? '是' : ''];
+      return [x.date, x.name, x.items || '', expCat(x), x.amt, x.cur, x.payer || '共同', x.for || '', x.pay || '', x.note || '', Math.round(j), Math.round(j * rt), x.pending ? '是' : ''];
     }));
   const csv = '﻿' + rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
   download(`kobe-xmas-expenses-${nowAt(8).date}.csv`, csv, 'text/csv');
@@ -2472,7 +2650,7 @@ async function importReceipt(text) {
   if (!recs.length) { toast('表格裡沒有可以匯入的資料'); return false; }
   const pend = recs.filter(r => r.pending).length;
   const sum = recs.reduce((s, r) => s + r.amt, 0);
-  const msg = `匯入 ${recs.length} 筆，合計 ${yen(sum)}（同一張收據、同一分類合併成一筆）。\n付款人記為「${pf.payer}」，之後可以點那一筆修改。` +
+  const msg = `匯入 ${recs.length} 筆，合計 ${yen(sum)}（同一張收據、同一分類合併成一筆）。\n「誰的」記為「${pf.payer}」，之後可以點那一筆修改。` +
     (pend ? `\n其中 ${pend} 筆有「待確認」，會用黃底標示：對照原收據點一下補上。` : '');
   if (!(await askConfirm(msg, '匯入', false))) return false;
   store.set(K.exp, store.get(K.exp, []).concat(recs));
@@ -2492,6 +2670,9 @@ function ritProgress() {
 function renderTools() {
   const v = $('#view-tools');
   const rp = ritProgress();
+  const local = store.get(K.res, {});
+  const pfRes = getList('res').filter(r => proofCount(r.id, local) > 0);
+  const pfN = pfRes.reduce((s, r) => s + proofCount(r.id, local), 0);
   const tiles = [
     ['redline', 'block', '過敏紅線卡', '全螢幕日文卡：玉ねぎ／タロイモ完全NG＋兩人飲食喜好', 'hot'],
     ['med', 'med', '緊急醫療卡', '血型、常用藥、保險、緊急聯絡人＋「請叫救護車」', 'sky'],
@@ -2501,6 +2682,7 @@ function renderTools() {
     ['phrase', 'chat', '指差し会話', '點一下放大給店員看'],
     ['taxi', 'taxi', '交通卡片', '給司機看的目的地＋付款日語'],
     ['maps', 'map', '離線地圖截圖', '先存截圖，沒網路也能看'],
+    ['proofs', 'ticket', '憑證夾', pfN ? `${pfRes.length} 筆預約・${pfN} 張，依日期排好` : '訂位確認、電子票截圖，依日期排好'],
     ['transit', 'boat', '交通速查', '高速船、Port Liner、USJ 路線']
   ];
   v.innerHTML = `<div class="sec-title">TOOLS</div><div class="tiles">${tiles.map(([k, icon, nm, ds, cls = '']) =>
@@ -2508,7 +2690,7 @@ function renderTools() {
   v.onclick = e => {
     const t = e.target.closest('[data-t]');
     if (!t) return;
-    ({ redline: openRedLine, med: openMedical, rituals: openRituals, usj: openUsj, sun: openSunLights, phrase: openPhrases, taxi: openTaxi, maps: openMapShots, transit: openTransit })[t.dataset.t]();
+    ({ redline: openRedLine, med: openMedical, rituals: openRituals, usj: openUsj, sun: openSunLights, phrase: openPhrases, taxi: openTaxi, maps: openMapShots, proofs: openProofFolder, transit: openTransit })[t.dataset.t]();
   };
 }
 
@@ -3052,7 +3234,94 @@ function pinCardHtml() {
   </div>`;
 }
 
-/* 預約小視窗：狀態、確認號（可改、可複製）、私人備註，改了就存在手機 */
+/* 預約憑證照片（2C）：照片存 IndexedDB「proof:預約id」，張數記在 ox26.res，行程卡不用等 IndexedDB 就知道要不要掛 🎫 */
+const proofCount = (id, local = store.get(K.res, {})) => +((local[id] || {}).proofs || 0);
+async function getProofs(id) {
+  const v = await idb.get('proof:' + id).catch(() => null);
+  return Array.isArray(v) ? v : [];
+}
+async function setProofs(id, arr) {
+  if (arr.length) await idb.set('proof:' + id, arr); else await idb.del('proof:' + id).catch(() => {});
+  const all = store.get(K.res, {});
+  all[id] = Object.assign(all[id] || {}, { proofs: arr.length });
+  if (!arr.length) delete all[id].proofs;
+  store.set(K.res, all);
+}
+/* 全螢幕出示：ids 這幾筆預約的照片依序接起來，左右滑或按 ‹ › 換張；關掉時有改過就呼叫 onChange */
+async function showProofs(ids, startId, startPid, onChange) {
+  const resList = getList('res');
+  const local = store.get(K.res, {});
+  const packs = await Promise.all(ids.map(getProofs));
+  let items = ids.flatMap((id, k) => packs[k].map(p => ({ id, p })));
+  if (!items.length) return toast('還沒有憑證照片');
+  let cur = Math.max(0, items.findIndex(x => x.id === startId && (!startPid || x.p.pid === startPid)));
+  let changed = false;
+  const card = openFullCard(() => {
+    const it = items[cur];
+    const r = resList.find(x => x.id === it.id) || { name: '預約' };
+    const conf = (local[it.id] || {}).conf;
+    return `<span class="fc-badge blue">🎫 預約憑證</span>
+      <div class="pf-name">${esc(r.name)}</div>${r.when ? `<div class="pf-when">${esc(r.when)}</div>` : ''}
+      ${typeof conf === 'string' && conf ? `<div class="pf-conf">${esc(conf)}</div>` : ''}
+      <img class="fc-img pf-img" src="${imgSrc(it.p.dataUrl)}" alt="">
+      ${items.length > 1 ? `<div class="pf-nav"><button data-pf="prev" ${cur ? '' : 'disabled'} aria-label="上一張">‹</button><span>${cur + 1} / ${items.length}</span><button data-pf="next" ${cur < items.length - 1 ? '' : 'disabled'} aria-label="下一張">›</button></div>` : ''}
+      <button class="btn btn-danger btn-block" data-pf="del" style="margin-top:14px">刪除這張</button>
+      <p class="fc-zh">螢幕會保持亮著；給店員看前可以把亮度調高。</p>`;
+  });
+  const done = () => { if (changed) { refreshBehind(); if (onChange) onChange(); } };
+  const go = d => { const n = cur + d; if (n >= 0 && n < items.length) { cur = n; card.redraw(); } };
+  let x0 = null;
+  card.el.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+  card.el.addEventListener('touchend', e => {
+    if (x0 == null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    x0 = null;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  });
+  card.el.addEventListener('click', async e => {
+    if (e.target.closest('.fc-close')) return done();
+    const b = e.target.closest('[data-pf]');
+    if (!b) return;
+    if (b.dataset.pf !== 'del') return go(b.dataset.pf === 'next' ? 1 : -1);
+    if (!(await askConfirm('刪除這張憑證照片？', '刪除'))) return;
+    const it = items[cur];
+    await setProofs(it.id, (await getProofs(it.id)).filter(p => p.pid !== it.p.pid));
+    items = items.filter(x => x !== it);
+    changed = true;
+    toast('已刪除');
+    if (!items.length) { card.close(); return done(); }
+    cur = Math.min(cur, items.length - 1);
+    card.redraw();
+  });
+}
+
+/* 憑證夾（2C）：有照片的預約依日期排好，可以從頭一張一張出示 */
+function openProofFolder() {
+  const local = store.get(K.res, {});
+  const year = TRIP_START.slice(0, 4);
+  const isoOf = r => { const m = /^(\d{1,2})\/(\d{1,2})/.exec(r.when || ''); return m ? `${year}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}` : '9999'; };
+  const list = getList('res').filter(r => proofCount(r.id, local) > 0).sort((a, b) => isoOf(a).localeCompare(isoOf(b)));
+  const ids = list.map(r => r.id);
+  const total = list.reduce((s, r) => s + proofCount(r.id, local), 0);
+  let last = '';
+  openSheet('憑證夾', list.length ? `<button class="btn btn-primary btn-block" data-pf-all>⛶ 從頭依序出示（${total} 張）</button>
+    <div style="margin-top:6px">${list.map(r => {
+      const d = isoOf(r);
+      const h = d !== last ? `<div class="pf-day">${d === '9999' ? '其他' : dateLabel(d)}</div>` : '';
+      last = d;
+      return h + `<button class="res-row" data-pf-res="${esc(r.id)}"><span class="ico">${ic(r.icon || 'ticket')}</span><span class="grow"><div class="res-name">${esc(r.name)}</div><div class="res-when">${esc(r.when || '')}</div></span><span class="pf-n">${proofCount(r.id, local)} 張 ›</span></button>`;
+    }).join('')}</div>`
+    : '<div class="empty">還沒有憑證照片。<br>到「資訊 → 預約」點一筆，就能加訂位確認或電子票的截圖。</div>', (body, entry) => {
+    const again = () => { closeSheet(entry); openProofFolder(); };
+    body.onclick = e => {
+      if (e.target.closest('[data-pf-all]')) return showProofs(ids, ids[0], null, again);
+      const b = e.target.closest('[data-pf-res]');
+      if (b) showProofs(ids, b.dataset.pfRes, null, again);
+    };
+  });
+}
+
+/* 預約小視窗：狀態、確認號（可改、可複製）、憑證照片、私人備註，改了就存在手機 */
 function openResDetail(id) {
   const r = getList('res').find(x => x.id === id);
   if (!r) return;
@@ -3063,6 +3332,7 @@ function openResDetail(id) {
     ${r.how ? `<div class="small" style="margin-top:6px;color:var(--ink-2)">${esc(r.how)}</div>` : ''}
     <label class="field" style="margin-top:14px"><span>狀態</span><select id="rdStatus">${RES_STATUSES.map(s => `<option ${s === status ? 'selected' : ''}>${s}</option>`).join('')}</select></label>
     <div class="field"><span>確認號／訂位代號</span><div class="conf-row" style="margin:0"><input id="rdConf" value="${esc(typeof loc.conf === 'string' ? loc.conf : '')}" placeholder="還沒有填" autocomplete="off" autocapitalize="characters"><button type="button" class="btn btn-sm" data-a="copy">複製</button></div></div>
+    <div class="field"><span>🎫 憑證照片（訂位確認、電子票截圖）</span><div class="pf-thumbs" id="rdProofs"></div></div>
     <label class="field"><span>私人備註（座位、訂位人…）</span><textarea id="rdNote" placeholder="只存在這支手機">${esc(typeof loc.note === 'string' ? loc.note : '')}</textarea></label>
     <div class="small muted">🔒 只存在這支手機，改了就自動存。</div>
     ${r.url || r.phone ? `<div class="btn-row">${r.url ? `<a class="btn btn-ghost" href="${esc(r.url)}" target="_blank" rel="noopener">${ic('link')} 預約頁</a>` : ''}${r.phone ? `<a class="btn btn-ghost" href="${telHref(r.phone)}">${ic('phone')} ${esc(r.phone)}</a>` : ''}</div>` : ''}`, body => {
@@ -3070,10 +3340,29 @@ function openResDetail(id) {
     $('#rdStatus', body).onchange = e => { save({ status: e.target.value }); refreshBehind(); toast('已更新狀態'); };
     $('#rdConf', body).oninput = e => save({ conf: e.target.value.trim() });
     $('#rdNote', body).oninput = e => save({ note: e.target.value });
-    body.onclick = e => {
-      if (!e.target.closest('[data-a=copy]')) return;
-      const val = $('#rdConf', body).value.trim();
-      if (val) copyText(val); else toast('還沒有填確認號');
+    const drawProofs = async () => {
+      const arr = await getProofs(id);
+      $('#rdProofs', body).innerHTML = arr.map(p => `<button type="button" class="pf-th" data-pid="${esc(p.pid)}"><img src="${imgSrc(p.dataUrl)}" alt="憑證"></button>`).join('') +
+        '<button type="button" class="pf-th add" data-a="addproof">＋<small>加照片</small></button>';
+    };
+    drawProofs();
+    body.onclick = async e => {
+      if (e.target.closest('[data-a=copy]')) {
+        const val = $('#rdConf', body).value.trim();
+        return val ? copyText(val) : toast('還沒有填確認號');
+      }
+      if (e.target.closest('[data-a=addproof]')) {
+        const files = await pickFile('image/*', true);
+        if (!files.length) return;
+        const arr = await getProofs(id);
+        for (const f of files) arr.push({ pid: uid('p'), dataUrl: await readImage(f, 1800, 'image/jpeg', 0.85), name: f.name, ts: Date.now() });
+        await setProofs(id, arr);
+        drawProofs();
+        refreshBehind();
+        return toast(`已存 ${files.length} 張憑證`);
+      }
+      const th = e.target.closest('[data-pid]');
+      if (th) showProofs([id], id, th.dataset.pid, drawProofs);
     };
   });
 }

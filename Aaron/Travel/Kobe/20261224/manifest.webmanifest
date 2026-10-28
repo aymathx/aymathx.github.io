@@ -1,12 +1,12 @@
 {
-  "name": "Kobe。X'max",
-  "short_name": "Kobe。X'max",
+  "name": "神戸聖誕之旅",
+  "short_name": "神戸聖誕",
   "description": "2026/12/24–12/27 神戶聖誕節行程 APP",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#F5F8FD",
-  "theme_color": "#F5F8FD",
+  "background_color": "#EFF6FF",
+  "theme_color": "#EFF6FF",
   "lang": "zh-TW",
   "icons": [
     { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
