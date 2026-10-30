@@ -84,8 +84,8 @@ const whoText = () => $('#who').value.replace(/[０-９]/g, c => String.fromChar
 function showParse() {
   const v = whoText();
   if (!v) { $('#parse').innerHTML = ''; return false; }
-  const m = v.match(/^(\d{3})(\d{2})(\S+)$/);
-  $('#parse').innerHTML = m ? `<span class="ok">✓ ${m[1]} 班 ${m[2]} 號　${esc(m[3])}</span>` : '<span class="err">請輸入 5 碼班級座號，接著打姓名，例如 70101陳大田。</span>';
+  const m = v.match(/^(\d{6})(\S+)$/);
+  $('#parse').innerHTML = m ? `<span class="ok">✓ 學號 ${m[1]}　${esc(m[2])}</span>` : '<span class="err">請輸入 6 碼學號，接著打姓名，例如 180002陳大田。</span>';
   return !!m;
 }
 $('#who').addEventListener('input', showParse);
@@ -97,7 +97,8 @@ $('#loginForm').addEventListener('submit', async e => {
   try {
     const r = await run('登入中…', () => api('login', { who: whoText(), code: codeText() }));
     await afterLogin(r);
-    if (r.joined) toast('已加入班級名單，以後用同樣的班級座號姓名登入。', 4500);
+    if (r.moved) toast('已接上你以前用班級座號登入的作答紀錄，以後都用學號登入。', 4500);
+    else if (r.joined) toast('已加入名單，以後用同樣的學號姓名登入。', 4500);
   } catch (err) { showLoginErr(err.message); }
 });
 $('#guestGo').onclick = async () => {

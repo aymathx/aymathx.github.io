@@ -231,7 +231,7 @@ const VIEWS = {
       <div class="setrow"><b>鎖定名單</b><button class="sw" role="switch" aria-checked="${c.lock}" data-set="lock" aria-label="鎖定名單"></button>
         <span class="small muted">${c.lock ? '<span class="state" style="color:var(--ok)">鎖定中</span>：只有名單上的學生能登入。' : '<span class="state" style="color:var(--warn)">開放加入</span>：新同學第一次登入時自動加入名單，到「學生」頁確認。'}</span></div>
       <div class="setrow"><b>允許訪客試用</b><button class="sw" role="switch" aria-checked="${c.guest}" data-set="guest" aria-label="允許訪客試用"></button>
-        <span class="small muted">${onOff(c.guest, '開放中', '關閉中')}：${c.guest ? '登入頁有「訪客試用」，給試聽生用；不記名、不能下載 PDF、不算全班統計。' : '一定要輸入班級座號姓名才能測驗。'}</span></div>
+        <span class="small muted">${onOff(c.guest, '開放中', '關閉中')}：${c.guest ? '登入頁有「訪客試用」，給試聽生用；不記名、不能下載 PDF、不算全班統計。' : '一定要輸入學號姓名才能測驗。'}</span></div>
       <div class="setrow"><b>學生 PDF 附題目</b><div class="seg" role="group" aria-label="學生 PDF 附題目">${['不附', '只附錯題', '全部'].map(k => `<button type="button" data-pdfq="${k}" aria-pressed="${c.pdfQ === k}">${k}</button>`).join('')}</div>
         <span class="small muted" style="grid-column:1 / 3">${{ 不附: '不附：PDF 只列錯題清單（題號、學習目標、你的答案、正解），完整題目和解析在網站上看。', 只附錯題: '只附錯題：PDF 印出答錯的題目和解析。', 全部: '全部：PDF 印出這次每一題的題目和解析。' }[c.pdfQ] || ''}每份 PDF 都有 LOGO 浮水印，頁尾印學號姓名和報告編號。</span></div>
       <div class="setrow"><b>報告顯示全班位置</b><button class="sw" role="switch" aria-checked="${c.cls}" data-set="cls" aria-label="報告顯示全班位置"></button>
@@ -254,8 +254,8 @@ const VIEWS = {
     <div class="cols">
       <div class="panel" style="display:grid;gap:10px"><h3>匯入題庫</h3><p class="small muted">選擇 Claude 產生的 <span class="mono">bank.json</span>。會整份取代試算表的「題庫」「學習目標」「模擬卷」；學生的作答紀錄不受影響。</p>
         <input type="file" id="bankFile" accept=".json,application/json"><div class="row"><button class="btn sm" id="bankGo">匯入</button></div></div>
-      <div class="panel" style="display:grid;gap:10px"><h3>學生名單</h3><p class="small muted">一行一位，例如 <span class="mono">70101陳大田</span>。目前 ${D.students.length} 人。同一個班級座號、不同姓名（不同學校）會自動編成 <span class="mono">70101-2</span>；學生第一次登入也會自動加入（網站設定可以鎖定名單）。</p>
-        <textarea id="rosterTxt" rows="8" style="width:100%;border:1px solid var(--line-strong);border-radius:10px;padding:10px;font:15px/1.6 var(--f-mono)" placeholder="70101陳大田&#10;70102林小美"></textarea>
+      <div class="panel" style="display:grid;gap:10px"><h3>學生名單</h3><p class="small muted">一行一位，例如 <span class="mono">180002陳大田</span>。目前 ${D.students.length} 人。同一個學號、不同姓名會自動編成 <span class="mono">180002-2</span>；學生第一次登入也會自動加入（網站設定可以鎖定名單）。</p>
+        <textarea id="rosterTxt" rows="8" style="width:100%;border:1px solid var(--line-strong);border-radius:10px;padding:10px;font:15px/1.6 var(--f-mono)" placeholder="180002陳大田&#10;180003林小美"></textarea>
         <div class="row"><button class="btn sm" data-roster="append">加入名單</button><button class="btn ghost sm" data-roster="replace">整份取代</button></div></div>
     </div>
     <div class="panel" style="display:grid;gap:10px"><h3>清除作答紀錄</h3><p class="small muted">上線前清掉測試資料用。會刪除試算表「測驗紀錄」「逐題紀錄」「逐題統計」裡的資料，刪了不能復原；名單、題庫、設定不受影響。</p>
