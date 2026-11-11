@@ -1,4 +1,4 @@
-/* 國七。二段練習（正式版樣式，2026-10-24）
+/* 線上檢測（正式版樣式，2026-10-24；段考分類 2026-11）
    Layout: phone-first single column; white cards on a pale blue-grey page.
    Color: one light theme by choice (dark mode felt too heavy). Royal blue from the AY logo for actions, brand orange only for small accents. */
 :root {
@@ -263,6 +263,7 @@ tr.link:hover td { background: var(--primary-soft) }
 .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #FFF; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); transition: left .15s }
 .sw[aria-checked="true"] { background: var(--primary) }
 .sw[aria-checked="true"]::after { left: 25px }
+.sw:disabled { opacity: .45; cursor: not-allowed }
 .state { font-weight: 700; font-size: 13px }
 .checks { display: grid; gap: 6px; font-size: 14px }
 .checks label { display: flex; gap: 8px; align-items: center }
@@ -442,3 +443,19 @@ img.fig { cursor: zoom-in }
 #pdfStage.rp-compact .rp-units .u { font-size: 11px; padding: 4px 6px }
 #pdfStage.rp-compact .rp-lines div { height: 24px }
 .rp-tiers .hb, #pdfStage .rp-tiers .hb { grid-template-columns: 3em 1fr 3.4em }
+
+/* 段考分類：上學期、下學期各一列，每列三個按鈕 */
+.terms { display: grid; gap: 8px; padding: 14px }
+.tr { display: grid; grid-template-columns: 52px repeat(3, minmax(0, 1fr)); gap: 8px; align-items: stretch }
+.tr .lab { align-self: center; font-size: 13px; font-weight: 700; color: var(--muted) }
+.term { border: 1px solid var(--line-strong); background: var(--surface); border-radius: 10px; min-height: 56px; padding: 6px 2px; display: grid; place-content: center; justify-items: center; line-height: 1.3; box-shadow: var(--shadow-sm) }
+.term b { font-size: 15px }
+.term span { font: 500 12px var(--f-mono); color: var(--muted); white-space: nowrap }
+.term:hover { border-color: var(--primary) }
+.term[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--primary-ink) }
+.term[aria-pressed="true"] span { color: var(--primary-ink) }
+.curterm { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px }
+.curterm h2 { font-size: 18px }
+.termbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px }
+.termbar select { height: 38px; border: 1.5px solid var(--line-strong); border-radius: 10px; background: var(--surface); padding: 0 10px; font-weight: 700; max-width: 100% }
+.termops { display: flex; flex-wrap: wrap; gap: 6px }
