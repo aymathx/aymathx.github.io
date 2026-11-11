@@ -1,4 +1,4 @@
-/* 國七。二段練習 — 老師端（teacher.html）與補習班主任唯讀檢視（director.html） */
+/* 線上檢測 — 老師端（teacher.html）與補習班主任唯讀檢視（director.html） */
 'use strict';
 
 const ROLE = document.body.dataset.role;              // teacher | director
@@ -7,6 +7,10 @@ let TOKEN = store.get(TK, null);
 let D = null;                                          // tAll／dAll 回傳的資料
 let view = ROLE === 'teacher' ? 'overview' : 'dir';
 const LVN = ['精熟', '穩定', '待加強', '需補強'], LVC = ['ok', 'st', 'warn', 'bad'];
+const TERM_KEY = ROLE === 'teacher' ? 't.term' : 'd.term';
+CUR_TERM = store.get(TERM_KEY, null);
+const filePre = () => GRADE_NAME + (D.config.termShort || '');
+{ const h = $('#loginForm h2'); if (h && GRADE_NAME) h.textContent = GRADE_NAME + '－' + h.textContent; }
 
 function show(name) { $$('.screen').forEach(s => { s.hidden = s.id !== 's-' + name; }); scrollTo({ top: 0 }); }
 const unitName = no => { const u = (D.units || []).find(x => x.no === no); return u ? `${u.no} ${u.name}` : no; };
@@ -32,9 +36,11 @@ $('#reload').onclick = () => load().catch(() => { });
 
 async function load() {
   D = await run('讀取資料中…', () => api(ROLE === 'teacher' ? 'tAll' : 'dAll', { token: TOKEN }));
+  CUR_TERM = D.cur; store.set(TERM_KEY, CUR_TERM);
+  renderTermBar();
   if (ROLE === 'teacher') $('#tSub').textContent = `名單 ${D.students.length} 人・題庫 ${Object.keys(D.bank).reduce((t, k) => t + D.bank[k].all, 0)} 題・資料時間 ${dt(Date.now())}`;
-  const term = (ROLE === 'teacher' ? D.config && D.config.term : D.term) || '115年上學期';
-  document.title = `${term}｜國七。二段 ( ${ROLE === 'teacher' ? '系統管理者' : '學習狀況'} )`;
+  const term = (ROLE === 'teacher' ? D.config && D.config.term : D.term) || '115學年度';
+  document.title = `${term}｜${(D.config && D.config.site) || SITE_NAME} ( ${ROLE === 'teacher' ? '系統管理者' : '學習狀況'} )`;
   show('main');
   const h = decodeURIComponent(location.hash.slice(1));
   if (h && okView(h)) view = h;
@@ -42,8 +48,23 @@ async function load() {
   render();
 }
 
+/* ---------- 段考切換 ---------- */
+const termUsable = t => !!t.book || t.code === D.main;
+function renderTermBar() {
+  const list = ROLE === 'teacher' ? D.termsAdmin.filter(termUsable) : ((D.config && D.config.terms) || []).filter(t => t.ready);   // 開放或關閉只管學生，主任照樣看得到資料
+  $('#termBar').hidden = list.length < 2;
+  $('#termBar').innerHTML = `<label for="termSel"><b>目前查看</b></label><select id="termSel">${list.map(t => `<option value="${t.code}"${t.code === D.cur ? ' selected' : ''}>${esc(t.name)}</option>`).join('')}</select><span class="small muted">切換後，下面各頁都只看這一段的資料</span>`;
+}
+async function switchTerm(code, to) {
+  const v = to || (ROLE === 'teacher' ? 'overview' : 'dir');
+  CUR_TERM = code; view = v;
+  history.replaceState({ v, prev: null }, '', '#' + v);
+  await load();
+}
+document.addEventListener('change', e => { if (e.target.id === 'termSel') switchTerm(e.target.value).catch(() => { }); });
+
 /* ---------- 換頁與瀏覽器「上一頁」 ---------- */
-const MY_VIEWS = ROLE === 'teacher' ? ['overview', 'students', 'student', 'stusec', 'sections', 'section', 'mocks', 'mock', 'export', 'settings', 'bank'] : ['dir', 'dstu', 'dstusec'];
+const MY_VIEWS = ROLE === 'teacher' ? ['overview', 'students', 'student', 'stusec', 'sections', 'section', 'mocks', 'mock', 'export', 'settings', 'bank', 'terms'] : ['dir', 'dstu', 'dstusec'];
 const okView = v => MY_VIEWS.indexOf(v.split(':')[0]) >= 0;
 function go(v) {
   history.pushState({ v, prev: view }, '', '#' + v);
@@ -57,7 +78,8 @@ window.addEventListener('popstate', e => {
 });
 
 /* ---------- 版面 ---------- */
-const TABS = [['overview', '總覽'], ['students', '學生'], ['sections', '小節'], ['mocks', '模擬卷'], ['export', '匯出與權限'], ['settings', '網站設定'], ['bank', '題庫與名單']];
+const TERMS_TAB = GRADE_NAME === '國九' ? '五分類設定' : '六分類設定';
+const TABS =[['overview', '總覽'], ['students', '學生'], ['sections', '小節'], ['mocks', '模擬卷'], ['export', '匯出與權限'], ['settings', '網站設定'], ['bank', '題庫與名單'], ['terms', TERMS_TAB]];
 function render() {
   const [base, ...args] = view.split(':');
   if (ROLE === 'teacher') {
@@ -248,17 +270,37 @@ const VIEWS = {
     `;
   },
 
+  terms: () => {
+    const open = D.termsAdmin.filter(t => t.status === '開放');
+    const def = open.find(t => t.def) || open[0];         // 預設那段被關閉時，學生看到第一個開放的
+    const rows = D.termsAdmin.map(t => {
+      const can = termUsable(t), on = t.status === '開放';
+      return `<tr><td><b>${esc(t.name)}</b>${t === def ? ' <span style="color:var(--accent);font-weight:700">★</span>' : ''}</td>
+        <td><div class="row" style="gap:8px;flex-wrap:nowrap"><button class="sw" role="switch" aria-checked="${on}" data-term-open="${t.code}" aria-label="開放${esc(t.name)}"${t.count && can ? '' : ' disabled'}></button><span class="state${on ? '' : ' muted'}"${on ? ' style="color:var(--ok)"' : ''}>${on ? '開放中' : t.count && can ? '關閉中' : '沒有題庫'}</span></div></td>
+        <td class="mono">${esc(t.range) || '—'}</td>
+        <td class="mono">${t.count ? t.count + ' 題' : '—'}</td>
+        <td><div class="termops">${can ? `<button class="btn ghost sm" data-term-go="${t.code}">查看與匯入題庫</button>` : `<button class="btn ghost sm" data-term-new="${t.code}">建立試算表</button>`}
+          ${on && t !== def ? `<button class="btn ghost sm" data-term-def="${t.code}">設成預設</button>` : ''}
+          ${t.book ? `<a class="btn ghost sm" href="https://docs.google.com/spreadsheets/d/${esc(t.book)}" target="_blank" rel="noopener">開試算表</a>` : ''}</div></td></tr>`;
+    }).join('');
+    return `<div class="panel" style="display:grid;gap:10px"><h3>${TERMS_TAB}</h3>
+      <p class="state" style="${open.length ? 'color:var(--ok)' : 'color:var(--warn)'}">${open.length ? `目前開放 ${open.length} 個：${open.map(t => esc(t.short)).join('、')}` : '目前全部關閉：學生登入後看不到任何段考'}</p>
+      <p class="small muted">按開關馬上生效，可以全部開放，也可以全部關閉。學生只看得到開放的段考；關閉的段考從學生畫面消失，正在作答的人還可以交卷，紀錄都會留著，老師端和主任端照樣看得到資料。</p>
+      <p class="small muted">每一段的題庫和作答紀錄各存一本試算表，名單和設定共用。新的一段：建立試算表、匯入題庫、再打開開關。標 ★ 的是學生登入後預設看到的那一段。</p>
+      <div class="tbl"><table><thead><tr><th>段考</th><th>開放</th><th>範圍</th><th>題庫</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  },
+
   bank: () => {
     const rows = Object.keys(D.bank).sort().map(k => { const b = D.bank[k]; return `<tr><td><b>${esc(D.units.some(u => u.no === k) ? unitName(k) : k)}</b></td><td>${b['易']}</td><td>${b['中']}</td><td>${b['難']}</td><td>${b['會考']}</td><td>${b.all}</td><td>${b.ex}／${b.all}</td></tr>`; }).join('');
     return `<div class="tbl"><table><thead><tr><th>範圍</th><th>易</th><th>中</th><th>難</th><th>會考</th><th>合計</th><th>有解析</th></tr></thead><tbody>${rows || '<tr><td colspan="7" class="muted">還沒有匯入題庫。</td></tr>'}</tbody></table></div>
     <div class="cols">
-      <div class="panel" style="display:grid;gap:10px"><h3>匯入題庫</h3><p class="small muted">選擇 Claude 產生的 <span class="mono">bank.json</span>。會整份取代試算表的「題庫」「學習目標」「模擬卷」；學生的作答紀錄不受影響。</p>
+      <div class="panel" style="display:grid;gap:10px"><h3>匯入題庫：${esc(D.config.termName)}</h3><p class="small muted">選擇 Claude 產生的 <span class="mono">bank.json</span>。會整份取代這一段的「題庫」「學習目標」「模擬卷」；學生的作答紀錄不受影響。上面可以切換段考，匯錯段會被擋下來。</p>
         <input type="file" id="bankFile" accept=".json,application/json"><div class="row"><button class="btn sm" id="bankGo">匯入</button></div></div>
       <div class="panel" style="display:grid;gap:10px"><h3>學生名單</h3><p class="small muted">一行一位，例如 <span class="mono">180002陳大田</span>。目前 ${D.students.length} 人。同一個學號、不同姓名會自動編成 <span class="mono">180002-2</span>；學生第一次登入也會自動加入（網站設定可以鎖定名單）。</p>
         <textarea id="rosterTxt" rows="8" style="width:100%;border:1px solid var(--line-strong);border-radius:10px;padding:10px;font:15px/1.6 var(--f-mono)" placeholder="180002陳大田&#10;180003林小美"></textarea>
         <div class="row"><button class="btn sm" data-roster="append">加入名單</button><button class="btn ghost sm" data-roster="replace">整份取代</button></div></div>
     </div>
-    <div class="panel" style="display:grid;gap:10px"><h3>清除作答紀錄</h3><p class="small muted">上線前清掉測試資料用。會刪除試算表「測驗紀錄」「逐題紀錄」「逐題統計」裡的資料，刪了不能復原；名單、題庫、設定不受影響。</p>
+    <div class="panel" style="display:grid;gap:10px"><h3>清除作答紀錄：${esc(D.config.termName)}</h3><p class="small muted">上線前清掉測試資料用。會刪除這一段試算表「測驗紀錄」「逐題紀錄」「逐題統計」裡的資料，刪了不能復原；名單、題庫、設定和其他段不受影響。</p>
       <div class="row"><button class="btn ghost sm" data-clear="guest">只清訪客紀錄</button><button class="btn ghost sm" data-clear="all">清除全部作答紀錄</button></div></div>`;
   },
 
@@ -305,7 +347,7 @@ $('#tBody').addEventListener('click', async e => {
     const list = D.students.filter(x => DSEL.has(x.id));
     if (!list.length) return;
     return run(`產生 PDF 中（${list.length} 人）…`, () => savePdf(`<div>${list.map((x, k) => `<div class="${k ? 'pb' : ''}">${studentPage(x.id)}</div>`).join('')}</div>`,
-      `國七二段_學習報告_${list.length === 1 ? list[0].id + list[0].name : '勾選' + list.length + '人'}_${dshort(Date.now()).replace('/', '')}.pdf`)).catch(() => { });
+      `${filePre()}_學習報告_${list.length === 1 ? list[0].id + list[0].name : '勾選' + list.length + '人'}_${dshort(Date.now()).replace('/', '')}.pdf`)).catch(() => { });
   }
   const mp = t.closest('[data-mockpdf]');
   if (mp) return mockPdf(mp.dataset.mockpdf);
@@ -329,11 +371,11 @@ $('#tBody').addEventListener('click', async e => {
   const ap = t.closest('[data-apdf]');
   if (ap) return attemptPdf(ap.dataset.apdf);
   const sp = t.closest('[data-spdf]');
-  if (sp) return run('產生 PDF 中…', () => savePdf(`<div>${studentPage(sp.dataset.spdf)}</div>`, `國七二段_學習報告_${sp.dataset.spdf}${D.students.find(s => s.id === sp.dataset.spdf).name}.pdf`)).catch(() => { });
+  if (sp) return run('產生 PDF 中…', () => savePdf(`<div>${studentPage(sp.dataset.spdf)}</div>`, `${filePre()}_學習報告_${sp.dataset.spdf}${D.students.find(s => s.id === sp.dataset.spdf).name}.pdf`)).catch(() => { });
   const sc = t.closest('[data-secpdf]');
   if (sc) return sectionPdf(sc.dataset.secpdf);
-  if (t.id === 'exStuBtn') { const id = $('#exStu').value; return run('產生 PDF 中…', () => savePdf(`<div>${studentPage(id)}</div>`, `國七二段_學習報告_${id}${D.students.find(s => s.id === id).name}.pdf`)).catch(() => { }); }
-  if (t.id === 'exAllPdf') return run('產生 PDF 中（人數多會比較久）…', () => savePdf(`<div>${D.students.map((s, i) => `<div class="${i ? 'pb' : ''}">${studentPage(s.id)}</div>`).join('')}</div>`, `國七二段_全體學生報告_${dshort(Date.now()).replace('/', '')}.pdf`)).catch(() => { });
+  if (t.id === 'exStuBtn') { const id = $('#exStu').value; return run('產生 PDF 中…', () => savePdf(`<div>${studentPage(id)}</div>`, `${filePre()}_學習報告_${id}${D.students.find(s => s.id === id).name}.pdf`)).catch(() => { }); }
+  if (t.id === 'exAllPdf') return run('產生 PDF 中（人數多會比較久）…', () => savePdf(`<div>${D.students.map((s, i) => `<div class="${i ? 'pb' : ''}">${studentPage(s.id)}</div>`).join('')}</div>`, `${filePre()}_全體學生報告_${dshort(Date.now()).replace('/', '')}.pdf`)).catch(() => { });
   if (t.id === 'exAllXlsx') return exportXlsx();
   if (t.id === 'exSecBtn') return sectionPdf($('#exSec').value);
   if (t.id === 'copyDir') { try { await navigator.clipboard.writeText(location.href.replace(/teacher\.html.*$/, 'director.html')); toast('已複製主任網址'); } catch (err) { toast('不能自動複製，請手動選取網址'); } return; }
@@ -366,7 +408,7 @@ async function attemptPdf(aid) {
 /* ---------- PDF 內容 ---------- */
 function pdfHead(title, right) {
   const c = D.config || {};
-  return `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(c.term || '')} ${esc(title)}</div><h1>${esc(c.site || '國七。二段練習')}</h1></div>
+  return `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(c.term || '')}｜${esc(c.termName || '')} ${esc(title)}</div><h1>${esc(c.site || SITE_NAME)}</h1></div>
     <div class="r">${c.logo ? `<img src="${BRAND_LOGO}" alt="">` : ''}${c.brand ? `<b style="color:#1D63B8;letter-spacing:.08em">${esc(c.brandName)}</b><br>` : ''}${right}<br>製表 ${dt(Date.now(), true)}</div></div>`;
 }
 
@@ -401,7 +443,7 @@ function sectionPdf(no) {
     <div class="box"><h2>最常錯的題目</h2>${s.miss.map(m => `<div style="margin-bottom:8px">${hbar(`${m.qid}（${m.src}）`, pct(m.c, m.n), colorFor(pct(m.c, m.n)), `${m.c}／${m.n}`)}<div class="small" style="color:#5E6E80">${fmt(m.stem)}…</div></div>`).join('') || '資料還不夠。'}</div>
     <div class="box"><h2>需要關心的學生</h2>${s.watch.map(w => `${esc(w.name)}（${w.score} 分）`).join('、') || '目前沒有'}</div>
     <div class="box"><h2>學生最高分</h2><table><thead><tr><th>學號</th><th>姓名</th><th>練習次數</th><th>最高分</th></tr></thead><tbody>${D.students.map(st => { const i = D.units.findIndex(u => u.no === no); return `<tr><td>${esc(st.id)}</td><td>${esc(st.name)}</td><td>${st.cnt[i]}</td><td>${st.best[i] === null ? '—' : st.best[i]}</td></tr>`; }).join('')}</tbody></table></div></div>`;
-  return run('產生 PDF 中…', () => savePdf(html, `國七二段_小節報告_${no}.pdf`)).catch(() => { });
+  return run('產生 PDF 中…', () => savePdf(html, `${filePre()}_小節報告_${no}.pdf`)).catch(() => { });
 }
 
 function mockPdf(L) {
@@ -414,7 +456,7 @@ function mockPdf(L) {
     <div class="box"><h2>各小節答對率</h2>${bars((m.secs || []).map(x => Object.assign({ label: `${x.no} ${x.name}` }, x)), x => `${x.c}／${x.n}`)}</div>
     <div class="box"><h2>最常錯的題目</h2>${m.miss.map(q => `<div style="margin-bottom:8px">${hbar(`${q.qid}（${q.src}）`, pct(q.c, q.n), colorFor(pct(q.c, q.n)), `${q.c}／${q.n}`)}<div class="small" style="color:#5E6E80">${fmt(q.stem)}…</div></div>`).join('') || '資料還不夠。'}</div>
     <div class="box"><h2>需要關心的學生</h2>${m.watch.map(w => `${esc(w.name)}（${w.score} 分）`).join('、') || '目前沒有'}</div></div>`;
-  return run('產生 PDF 中…', () => savePdf(html, `國七二段_模擬卷報告_${m.L}卷.pdf`)).catch(() => { });
+  return run('產生 PDF 中…', () => savePdf(html, `${filePre()}_模擬卷報告_${m.L}卷.pdf`)).catch(() => { });
 }
 
 function exportXlsx() {
@@ -422,7 +464,7 @@ function exportXlsx() {
   const stu = [head].concat(D.students.map(s => [s.id, s.name].concat(s.cnt, s.best.map(v => v === null ? '' : v), [s.mock || 0, s.avg === null ? '' : s.avg, s.last ? dt(s.last, true) : '', s.weak.join('、')])));
   const att = [['時間', '學號', '姓名', '類型', '範圍', '分數', '答對', '題數', '狀態', '等第', '用時(秒)']].concat(
     D.attempts.slice().sort((a, b) => a.start - b.start).map(a => [dt(a.start, true), a.uid, a.name, a.type, scopeLabel(a), a.score === null ? '' : a.score, a.nRight, a.n, a.status, a.level, a.used]));
-  return run('產生 Excel 中…', () => saveXlsx([['學生總表', stu], ['測驗明細', att]], `國七二段_全體學生_${dshort(Date.now()).replace('/', '')}.xlsx`)).catch(() => { });
+  return run('產生 Excel 中…', () => saveXlsx([['學生總表', stu], ['測驗明細', att]], `${filePre()}_全體學生_${dshort(Date.now()).replace('/', '')}.xlsx`)).catch(() => { });
 }
 
 /* ---------- 匯入 ---------- */
@@ -496,3 +538,26 @@ async function delStu() {
 }
 
 boot();
+
+/* ---------- 段考分類的操作 ---------- */
+async function termAct(job, done) {
+  try { await run('處理中…', job); toast(done); await load(); view = 'terms'; render(); } catch (e) { await load().catch(() => { }); view = 'terms'; render(); }
+}
+async function termOpen(code, on) {
+  try {
+    D.termsAdmin = (await run('儲存中…', () => api('tTerm', { token: TOKEN, code, patch: { status: on ? '開放' : '關閉' } }))).terms;
+    render();
+    const n = D.termsAdmin.filter(t => t.status === '開放').length;
+    toast(`已${on ? '開放' : '關閉'}${D.termsAdmin.find(t => t.code === code).name}，${n ? `目前開放 ${n} 個` : '目前全部關閉'}`);
+  } catch (e) { /* run 已提示 */ }
+}
+document.addEventListener('click', e => {
+  const o = e.target.closest('[data-term-open]');
+  if (o) return termOpen(o.dataset.termOpen, o.getAttribute('aria-checked') !== 'true');
+  const n = e.target.closest('[data-term-new]');
+  if (n) return termAct(() => api('tTermNew', { token: TOKEN, code: n.dataset.termNew }), '試算表建立好了，接著匯入題庫');
+  const d = e.target.closest('[data-term-def]');
+  if (d) return termAct(() => api('tTerm', { token: TOKEN, code: d.dataset.termDef, patch: { def: true } }), '已設成學生預設看到的那一段');
+  const g = e.target.closest('[data-term-go]');
+  if (g) return switchTerm(g.dataset.termGo, 'bank').catch(() => { });
+});

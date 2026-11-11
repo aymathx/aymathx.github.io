@@ -1,4 +1,4 @@
-/* 國七。二段練習 — 學生端、老師端共用的工具（API、數學排版、PDF、提示） */
+/* 線上檢測 — 學生端、老師端共用的工具（API、數學排版、PDF、提示） */
 'use strict';
 
 const $ = s => document.querySelector(s);
@@ -7,17 +7,21 @@ const esc = s => String(s === null || s === undefined ? '' : s).replace(/[&<>"]/
 const mmss = s => { s = Math.max(0, Math.round(s)); return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; };
 const LETTERS = 'ABCD';
 const BRAND_LOGO = 'assets/ay-logo-blue.png?v=2';
+const AY = window.AY_CONFIG || {};
+const GRADE_NAME = AY.grade || '';
+const SITE_NAME = GRADE_NAME + '。線上檢測';
 
 /* ---------- 本機儲存（無痕模式等情況可能不能用，一律包 try） ---------- */
 const store = {
-  get(k, d) { try { const v = localStorage.getItem('g7.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem('g7.' + k, JSON.stringify(v)); } catch (e) { /* 不能存就算了 */ } },
-  del(k) { try { localStorage.removeItem('g7.' + k); } catch (e) { /* 同上 */ } }
+  get(k, d) { try { const v = localStorage.getItem(AY.store + '.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(AY.store + '.' + k, JSON.stringify(v)); } catch (e) { /* 不能存就算了 */ } },
+  del(k) { try { localStorage.removeItem(AY.store + '.' + k); } catch (e) { /* 同上 */ } }
 };
 
 /* ---------- 後端 ---------- */
 const LOCAL = /^(127\.0\.0\.1|localhost)$/.test(location.hostname);
-const API_URL = LOCAL ? '/api' : ((window.G7_CONFIG && window.G7_CONFIG.api) || '');
+const API_URL = LOCAL ? '/api' : (AY.api || '');
+let CUR_TERM = null;                                   // 目前這一段（每個請求都帶上；有測驗編號時後端看編號）
 
 async function api(a, data) {
   if (!API_URL || API_URL.indexOf('https://script.google.com/') !== 0 && !LOCAL) {
@@ -28,7 +32,7 @@ async function api(a, data) {
     res = await fetch(API_URL, {
       method: 'POST', redirect: 'follow',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(Object.assign({ a }, data || {}))
+      body: JSON.stringify(Object.assign({ a }, CUR_TERM ? { term: CUR_TERM } : {}, data || {}))
     });
   } catch (e) {
     throw new Error('網路連線失敗，請確認網路後再試一次。');
@@ -61,20 +65,35 @@ async function run(msg, fn) {
 }
 
 /* ---------- 數學排版 ----------
-   題目記號：^{..} 上標、a／b 分數、3又1／4 帶分數、{U} 填答格、‹..› 底線、‾{AB} 線段上橫線、«..» 原樣文字 */
-// 分子、分母：一串數字字母，或一組括號；後面可帶次方
-const ATOM = '(?:\\([^()]*\\)|[0-9A-Za-zα-ω甲乙丙丁戊□△○☆？?.]+)(?:\\^\\{[^{}]*\\})?';
+   題目記號：^{..} 上標、√{..} 根號、a／b 分數、{..}／{..} 複雜分數、3又1／4 帶分數、{U} 填答格、‹..› 底線、‾{AB} 線段上橫線、«..» 原樣文字 */
+// 分子、分母：一串數字字母、一組括號，或已排好的根號（佔位字元，前面可帶係數）；後面可帶次方
+const ATOM = '(?:\\([^()]*\\)|[0-9]*\\d+|[0-9A-Za-zα-ω甲乙丙丁戊□△○☆？?.]+)(?:\\^\\{[^{}]*\\})?';
 const FRAC_RE = new RegExp('(' + ATOM + ')／(' + ATOM + ')', 'g');
 const sup = s => s.replace(/\^\{([^{}]*)\}/g, '<sup>$1</sup>').replace(/_\{([^{}]*)\}/g, '<sub>$1</sub>');
+/** 根號、分數、上下標（h 已跳脫）。排好的根號、分數先換成佔位字元，最後再換回，避免被後面的規則拆壞 */
+function mathCore(h) {
+  const box = [];
+  const hold = x => '' + (box.push(x) - 1) + '';
+  let i;
+  while ((i = h.indexOf('√{')) >= 0) {
+    let d = 0, j = i + 1;
+    for (; j < h.length; j++) { if (h[j] === '{') d++; else if (h[j] === '}' && --d === 0) break; }
+    if (j >= h.length) break;
+    const inner = mathCore(h.slice(i + 2, j));
+    const tall = inner.indexOf('class="frac"') >= 0;
+    h = h.slice(0, i) + hold(`<span class="rt${tall ? ' tall' : ''}"><span class="rs">√</span><span class="rd">${inner}</span></span>`) + h.slice(j + 1);
+  }
+  h = h.replace(/\{((?:[^{}]|\{[^{}]*\})+)\}／\{((?:[^{}]|\{[^{}]*\})+)\}/g, (m, a, b) => hold(`<span class="frac"><span>${sup(a)}</span><span>${sup(b)}</span></span>`))
+    .replace(FRAC_RE, (m, a, b) => hold(`<span class="frac"><span>${sup(a)}</span><span>${sup(b)}</span></span>`));
+  h = sup(sup(h));
+  while (/\d+/.test(h)) h = h.replace(/(\d+)/g, (m, n) => box[n]);
+  return h;
+}
 function fmt(s, opt) {
   opt = opt || {};
   let k = 0;
   const nb = (String(s).match(/\{U\}/g) || []).length;
-  let h = esc(s)
-    .replace(/«([^»]*)»/g, '$1')
-    .replace(/\{((?:[^{}]|\{[^{}]*\})+)\}／\{((?:[^{}]|\{[^{}]*\})+)\}/g, (m, a, b) => `<span class="frac"><span>${sup(a)}</span><span>${sup(b)}</span></span>`)
-    .replace(FRAC_RE, (m, a, b) => `<span class="frac"><span>${sup(a)}</span><span>${sup(b)}</span></span>`);
-  h = sup(sup(h))
+  let h = mathCore(esc(s).replace(/«([^»]*)»/g, '$1'))
     .replace(/(\d)又(?=<span class="frac">)/g, '$1')
     .replace(/‹([^›]*)›/g, '<u>$1</u>')
     .replace(/‾\{([^{}]*)\}/g, '<span style="text-decoration:overline">$1</span>')
@@ -84,7 +103,17 @@ function fmt(s, opt) {
 }
 /** 學生打的答案（2^3×3^2、-3/4）轉成排版預覽 */
 function fmtTyped(s) {
-  const t = String(s || '').replace(/\^\(([^)]*)\)/g, '^{$1}').replace(/\^([0-9a-z]+)/gi, '^{$1}').replace(/\//g, '／').replace(/-/g, '－');
+  let t = String(s || '').replace(/\^\(([^)]*)\)/g, '^{$1}').replace(/\^([0-9a-z]+)/gi, '^{$1}');
+  // 根號：√15、√x、√(…) → √{…}
+  t = t.replace(/√([0-9.]+|[a-z])/gi, '√{$1}');
+  let i;
+  while ((i = t.indexOf('√(')) >= 0) {
+    let d = 0, j = i + 1;
+    for (; j < t.length; j++) { if (t[j] === '(') d++; else if (t[j] === ')' && --d === 0) break; }
+    if (j >= t.length) break;
+    t = t.slice(0, i) + '√{' + t.slice(i + 2, j) + '}' + t.slice(j + 1);
+  }
+  t = t.replace(/\//g, '／').replace(/-/g, '－');
   return fmt(t);
 }
 const tierChip = (tier, showSrc) => tier === '會考' ? (showSrc ? '<span class="chip t-會考">會考</span>' : '') : `<span class="chip t-${tier}">${tier}</span>`;
@@ -411,7 +440,7 @@ function reportPdfHtml(r, brand, qmode) {
   qmode = qmode || brand.pdfQ || '不附';
   const items = r.items || [];
   const who = r.uid && r.uid.indexOf('G-') !== 0 ? r.uid + '　' + r.name : '訪客';
-  const head = `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(brand.term || '')}</div><h1>${esc(brand.site || '國七。二段練習')}<span class="rp-doc">學習診斷報告</span></h1></div>
+  const head = `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(brand.term || '')}${r.termName ? '｜' + esc(r.termName) : ''}</div><h1>${esc(brand.site || SITE_NAME)}<span class="rp-doc">學習診斷報告</span></h1></div>
     <div class="r">${brand.logo ? `<img src="${BRAND_LOGO}" alt="">` : ''}${brand.brand ? `<b style="color:#1D63B8;letter-spacing:.08em">${esc(brand.brandName)}</b><br>` : ''}<b class="rp-who">${esc(who)}</b><br>${dt(r.start, true)}</div></div>`;
   const sec = (t, s) => `<div class="rp-sec">${t}<small>${s}</small></div>`;
   const box = (h, body, cls) => `<div class="box${cls ? ' ' + cls : ''}">${h ? `<h2>${h}</h2>` : ''}${body}</div>`;
@@ -420,12 +449,12 @@ function reportPdfHtml(r, brand, qmode) {
   const top = `<div class="box rp-top"><div class="big">${r.score}<small style="font-size:15px;color:#5E6E80">／100</small></div>
     <div><div style="font-size:16px;font-weight:700">${esc(r.title)}　<span class="level lv-${r.level}" style="font-size:13px">${r.level}</span></div><div class="small" style="color:#5E6E80">答對 ${r.nRight}／${r.n}・用時 ${mmss(r.used)}（限時 ${r.limit} 分鐘）</div></div>${cmp}${rpScale(r.score)}</div>`;
   const cls = rpClass(r);
-  const p1 = [head, sec('成績與診斷', '這一次的表現，和整個二段範圍準備到哪裡'), top,
+  const p1 = [head, sec('成績與診斷', '這一次的表現，和整個段考範圍準備到哪裡'), top,
     r.summary ? box('老師看這次', `<p class="rp-sum">${rich(r.summary)}</p>`, 'rp-sumbox') : '',
     `<div class="rp-row${cls ? '' : ' one'}">${box('各難度答對', rpTiers(r) + '<p class="rp-note">易題要全對，基礎才算穩。</p>')}${cls ? box(`在全班的位置 <small>${mk ? '寫過這份' : '這一節練過'}的 ${r.cls.n} 位同學，各取最近一次</small>`, cls) : ''}</div>`,
     r.secs ? box('各小節答對率', `<div class="secbars">${r.secs.map(s => hbar(`${s.no} ${s.name}`, pct(s.c, s.n), colorFor(pct(s.c, s.n)), `${s.c}／${s.n}`)).join('')}</div>`) : '',
     r.goals && r.goals.length ? box(`觀念診斷 <small>依學習目標整理${items.length ? '；完整題目和解析請上網站「我的測驗報告」→「查看」' : ''}</small>`, rpDiag(r)) : '',
-    `<div class="rp-row wide">${box('段考準備度 <small>整個二段範圍，到目前為止</small>', rpProg(r))}${box(`${esc(mk ? '模擬' + r.scope + '卷' : r.scope)} 分數走勢`, rpTrend(r))}</div>`].join('');
+    `<div class="rp-row wide">${box('段考準備度 <small>整個段考範圍，到目前為止</small>', rpProg(r))}${box(`${esc(mk ? '模擬' + r.scope + '卷' : r.scope)} 分數走勢`, rpTrend(r))}</div>`].join('');
   if (!items.length) return `<div><div class="pg">${p1}</div></div>`;
   const wrong = items.map((it, i) => it.right || it.missing ? 0 : i + 1).filter(Boolean);
   const qs = qmode === '全部' ? items.map((it, i) => reviewItem(it, i + 1, r.src)).join('')
@@ -443,5 +472,5 @@ function reportPdfHtml(r, brand, qmode) {
 function reportFileName(r) {
   const d = new Date(r.start);
   const who = r.uid && r.uid.indexOf('G-') !== 0 ? r.uid + r.name : '訪客';
-  return `國七二段_${r.type === '模擬' ? '模擬' + r.scope + '卷' : r.scope}_${who}_${pad2(d.getMonth() + 1)}${pad2(d.getDate())}-${pad2(d.getHours())}${pad2(d.getMinutes())}.pdf`;
+  return `${GRADE_NAME}${r.termShort || ''}_${r.type === '模擬' ? '模擬' + r.scope + '卷' : r.scope}_${who}_${pad2(d.getMonth() + 1)}${pad2(d.getDate())}-${pad2(d.getHours())}${pad2(d.getMinutes())}.pdf`;
 }

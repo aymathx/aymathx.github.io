@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>115年上學期｜國七。二段</title>
+<title>線上檢測</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/ay-logo-blue.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
-<link rel="stylesheet" href="assets/app.css?v=9">
+<link rel="stylesheet" href="assets/app.css?v=12">
 </head>
 <body>
 <div class="app">
@@ -19,9 +19,8 @@
   <section class="screen" id="s-login" hidden>
     <div class="brand">
       <img id="loginLogo" src="assets/ay-logo-blue.png?v=2" alt="AY MATH 標誌" hidden>
-      <span class="eyebrow" id="loginEyebrow">115年上學期</span>
-      <h1 id="siteTitle">國七。二段練習</h1>
-      <p>範圍：2-1 因數與倍數～2-4 指數律</p>
+      <span class="eyebrow" id="loginEyebrow">115學年度</span>
+      <h1 id="siteTitle">線上檢測</h1>
     </div>
     <form class="panel field" id="loginForm" novalidate>
       <h2 style="text-align:center">Practice Makes Perfect！！</h2>
@@ -45,7 +44,9 @@
   <!-- 選小節 -->
   <section class="screen" id="s-home" hidden>
     <div class="who"><div><b id="whoName"></b> <span class="muted small" id="whoClass"></span></div><button class="btn ghost sm" id="logout"></button></div>
-    <p class="rule">每次 <b class="mono">10</b> 題・限時 <b class="mono" id="qminTxt">25</b> 分鐘，每次重新抽題</p>
+    <div class="panel terms" id="terms" role="group" aria-label="選擇段考"></div>
+    <div class="curterm"><h2 id="curName"></h2><span class="small muted" id="curRange"></span></div>
+    <p class="rule" id="ruleLine">每次 <b class="mono">10</b> 題・限時 <b class="mono" id="qminTxt">25</b> 分鐘，每次重新抽題</p>
     <div class="units" id="units"></div>
     <div class="panel" style="display:grid;gap:12px" id="mockPanel">
       <div class="row between"><h2>段考模擬卷</h2><span class="small muted">測驗時間，<span id="mminTxt">45</span> 分鐘</span></div>
@@ -97,7 +98,7 @@
       <div id="rGoals"></div>
       <p class="small muted" style="margin-top:8px">右邊數字＝這次這個目標答對幾題／考了幾題。燈號只看這一次：全對＝掌握，全錯＝需加強，其餘＝不穩。</p>
     </div>
-    <div class="panel" id="rProgPanel" hidden><h2>段考準備度 <span class="small muted">整個二段範圍，到目前為止</span></h2><div id="rProg" style="margin-top:8px"></div></div>
+    <div class="panel" id="rProgPanel" hidden><h2>段考準備度 <span class="small muted">整個段考範圍，到目前為止</span></h2><div id="rProg" style="margin-top:8px"></div></div>
     <div class="panel" id="rNextPanel" hidden>
       <h2>下一步</h2>
       <ol class="rp-next" id="rNext"></ol>
@@ -148,8 +149,8 @@
 </div>
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script src="assets/config.js?v=1"></script>
-<script src="assets/common.js?v=8"></script>
-<script src="assets/app.js?v=10"></script>
+<script src="assets/config.js?v=2"></script>
+<script src="assets/common.js?v=9"></script>
+<script src="assets/app.js?v=13"></script>
 </body>
 </html>

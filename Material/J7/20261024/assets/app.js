@@ -1,4 +1,4 @@
-/* 國七。二段練習 — 學生端 */
+/* 線上檢測 — 學生端 */
 'use strict';
 
 let CFG = null;                         // 後端公開設定（要不要通行碼、訪客試用、出處、品牌…）
@@ -21,14 +21,14 @@ function paintBrand(screen) {
   const c = CFG || {};
   $('#loginLogo').hidden = !c.logo;
   $('#s-login .brand').classList.toggle('nologo', !c.logo);
-  $('#loginEyebrow').textContent = (c.brand ? c.brandName + '｜' : '') + (c.term || '115年上學期');
-  $('#siteTitle').textContent = c.site || '國七。二段練習';
-  document.title = (c.term || '115年上學期') + '｜國七。二段';
+  $('#loginEyebrow').textContent = (c.brand ? c.brandName + '｜' : '') + (c.term || '115學年度');
+  $('#siteTitle').textContent = c.site || SITE_NAME;
+  document.title = (c.term || '115學年度') + '｜' + (c.site || SITE_NAME);
   const parts = [];
   if (c.logo) parts.push(`<img src="${BRAND_LOGO}" alt="AY MATH 標誌">`);
   if (c.brand) parts.push(`<span class="bn">${esc(c.brandName)}</span>`);
   if (parts.length) parts.push('<span class="sep"></span>');
-  parts.push(`<span class="ttl">${esc(c.site || '國七。二段練習')}</span>`);
+  parts.push(`<span class="ttl">${esc(c.site || SITE_NAME)}</span>`);
   $('#appbar').innerHTML = parts.join('');
   $('#appbar').hidden = screen === 'login';
 }
@@ -39,10 +39,12 @@ function stopTimer() { clearInterval(tick); tick = null; }
 async function boot() {
   const qr = location.hash.match(/^#r=(A\w+)$/);           // 掃報告上的 QR code 進來：登入後直接打開那一份
   if (qr) { store.set('pendR', qr[1]); history.replaceState(null, '', location.pathname); }
+  CUR_TERM = store.get('term', null);
   if (TOKEN) {
     try {
+      const cur = store.get('cur', null);                  // 作答到一半：回到那一段
+      if (cur && cur.term) CUR_TERM = cur.term;
       await loadHome();
-      const cur = store.get('cur', null);
       if (cur && cur.kind === 'q') return startQuiz(cur.unit, true);
       if (cur && cur.kind === 'm') return startMock(cur.L, true);
       show('home');
@@ -123,6 +125,7 @@ $('#logout').onclick = async () => {
 async function loadHome() { setHome(await api('home', { token: TOKEN })); }
 function setHome(h) {
   HOME = h; CFG = HOME.config; USER = HOME.user;
+  CUR_TERM = CFG.cur; store.set('term', CUR_TERM);
   HOME.offset = HOME.now - Date.now();
   store.set('cfg', CFG);
   renderHome();
@@ -136,7 +139,11 @@ function renderHome() {
   $('#logout').innerHTML = ICON.out + (g ? '離開' : '登出');
   $('#qminTxt').textContent = HOME.st.qmin;
   $('#mminTxt').textContent = HOME.st.mmin;
-  $('#units').innerHTML = HOME.units.map(x => {
+  renderTerms();
+  const none = !(CFG.terms || []).some(t => t.status === '開放');
+  if (none) { $('#curName').textContent = '目前沒有開放的段考'; $('#curRange').textContent = ''; }
+  $('#ruleLine').hidden = none;
+  $('#units').innerHTML = none ? '<div class="panel muted">老師開放後就可以開始練習，請等老師通知。</div>' : HOME.units.map(x => {
     const act = x.active && leftOf(x.active.deadline, HOME.offset) > 0;
     const btn = !x.ready ? '<button class="btn" disabled>題庫準備中</button>'
       : `<button class="btn" data-start="${x.no}">${act ? '繼續作答' : '開始測驗'}${ICON.go}</button>`;
@@ -153,11 +160,35 @@ function renderHome() {
   $('#miniMocks').innerHTML = papers.map((p, i) => `<button class="mock" data-mock="${i}" aria-label="${esc(p.name)}">
     <span class="L">${esc(p.L)}</span><span class="lw small">${esc(p.word)}</span>
     <span class="meter">${[1, 2, 3, 4, 5].map(k => `<i class="${k <= p.lv ? 'on' : ''}"></i>`).join('')}</span></button>`).join('');
-  $('#histPanel').hidden = g;
+  $('#histPanel').hidden = g || none;
   renderHist();
 }
 
-/** 我的測驗報告：依小節篩選（全部、2-1～2-4、模擬卷） */
+/** 段考分類：只顯示開放的段考；只開一段時不用選，整排收起來 */
+function renderTerms() {
+  const list = (CFG.terms || []).filter(t => t.status === '開放');
+  const row = (lab, codes) => {
+    const items = codes.map(c => list.find(t => t.code === c)).filter(Boolean);
+    if (!items.length) return '';
+    return `<div class="tr"><span class="lab">${lab}</span>${items.map(t => {
+      const nth = (t.name.match(/第.次/) || [t.short])[0];
+      return `<button class="term" type="button" data-term="${t.code}" aria-pressed="${t.code === CFG.cur}"><b>${esc(nth)}</b><span>${esc(t.range)}</span></button>`;
+    }).join('')}</div>`;
+  };
+  $('#terms').hidden = list.length < 2;
+  $('#terms').innerHTML = row('上學期', ['T11', 'T12', 'T13']) + row('下學期', ['T21', 'T22', 'T23']);
+  $('#curName').textContent = CFG.termName || '';
+  $('#curRange').textContent = CFG.range ? '範圍 ' + CFG.range : '';
+}
+$('#terms').addEventListener('click', async e => {
+  const b = e.target.closest('[data-term]');
+  if (!b || b.dataset.term === CFG.cur) return;
+  const back = CUR_TERM;
+  CUR_TERM = b.dataset.term; histSel = '全部';
+  try { await run('載入中…', loadHome); } catch (err) { CUR_TERM = back; }
+});
+
+/** 我的測驗報告：依小節篩選（全部、各小節、模擬卷） */
 let histSel = '全部';
 function renderHist() {
   const tabs = ['全部'].concat(HOME.units.map(u => u.no), ['模擬卷']);
@@ -192,6 +223,9 @@ $('#hist').addEventListener('click', async e => {
 /** 打開一份舊報告（報告列表的「查看」、QR code） */
 async function openReport(aid) {
   try { REPORT = (await run('讀取報告中…', () => api('report', { token: TOKEN, aid }))).report; } catch (err) { return; }
+  // 掃別段報告的 QR code 進來：切到那一段，「再測一次」才接得上
+  const t = (aid.match(/T\d\d$/) || ['T12'])[0];
+  if (t !== CUR_TERM) { CUR_TERM = t; try { await loadHome(); } catch (err) { /* 沿用目前這一段 */ } }
   rvMode = 'wrong'; renderReport(); show('report');
 }
 /** 掃 QR code 進來、登入後：打開那一份報告（訪客沒有報告） */
@@ -206,7 +240,7 @@ function openPending() {
 async function startQuiz(unit, silent) {
   let r;
   try { r = await run(silent ? '回到作答中…' : '抽題中…', () => api('start', { token: TOKEN, unit })); } catch (e) {
-    store.del('cur'); if (HOME) show('home'); return;
+    store.del('cur'); if (HOME) { show('home'); loadHome().catch(() => { }); } return;   // 可能剛被老師關閉：首頁跟著更新
   }
   const saved = store.get('att.' + r.aid, null);
   const n = r.questions.length;
@@ -216,7 +250,7 @@ async function startQuiz(unit, silent) {
     times: saved && saved.times && saved.times.length === n ? saved.times : Array(n).fill(0),
     cur: 0, enter: Date.now(), done: false
   };
-  store.set('cur', { kind: 'q', unit });
+  store.set('cur', { kind: 'q', unit, term: CUR_TERM });
   const un = (CFG.units || []).find(x => x.no === unit);
   $('#qSec').textContent = un ? `${un.no} ${un.name}` : unit;
   show('quiz');
@@ -257,9 +291,9 @@ function paintNav() {
   $('#nav10').innerHTML = Q.questions.map((x, i) => `<button class="qn${filled(Q.answers[i]) ? ' done' : ''}${i === Q.cur ? ' cur' : ''}" data-i="${i}" aria-label="第 ${i + 1} 題">${i + 1}</button>`).join('');
 }
 
-const KEYS = ['－', '／', '^', '×', '、', '又', '(', ')'];
-function keypad() { return `<div class="keys">${KEYS.map(k => `<button type="button" data-k="${k}" aria-label="輸入 ${k}">${k}</button>`).join('')}</div>`; }
-const HINT = '分數打 ／（例：－3／4），帶分數打「又」（例：3又1／4），次方打 ^（例：2^3）。';
+const KEYS = () => (CFG && CFG.keys && CFG.keys.length) ? CFG.keys : ['－', '／', '^', '(', ')', '×', '、'];
+function keypad() { return `<div class="keys">${KEYS().map(k => `<button type="button" data-k="${k}" aria-label="輸入 ${k}">${k}</button>`).join('')}</div>`; }
+const HINT = () => (CFG && CFG.hint) || '分數打 ／（例：－3／4），次方打 ^（例：x^2）。';
 
 /** 填充題的作答區：作答格式「答：⑴{U}單位　⑵{U}公尺」中的 {U} 換成輸入框 */
 function fillArea(q, vals, idPrefix) {
@@ -301,7 +335,7 @@ function renderQ() {
   if (q.type === 'mc') {
     body = `<div class="opts">${q.opts.map((o, i) => `<button class="opt" data-o="${i}" aria-pressed="${Q.answers[Q.cur] === i}"><b>${LETTERS.charAt(i)}</b><span>${fmt(o)}</span>${ICON.check}</button>`).join('')}</div>`;
   } else {
-    body = fillArea(q, Q.answers[Q.cur], 'f') + keypad() + `<p class="hint">${q.set ? '答案不只一個，用「、」隔開。' : ''}${HINT}</p>`;
+    body = fillArea(q, Q.answers[Q.cur], 'f') + keypad() + `<p class="hint">${q.set ? '答案不只一個，用「、」隔開。' : ''}${HINT()}</p>`;
   }
   const src = CFG.src && q.src ? `<span class="src">【${esc(q.src)}】</span>` : '';
   $('#qcard').innerHTML = `<div class="qhead"><span class="qno">第 ${Q.cur + 1} 題</span>${tierChip(q.tier, CFG.src)}${src}</div>
@@ -451,7 +485,7 @@ function renderMocks() {
   const m = papers[mockSel];
   const act = m.active && leftOf(m.active.deadline, HOME.offset) > 0;
   $('#paper').innerHTML = `<h3>${esc(m.name)}</h3>
-    <div class="hd"><span>範圍 <b>2-1～2-4</b></span><span>時間 <b>${HOME.st.mmin} 分鐘</b></span><span>滿分 <b>100 分</b></span><span>難度 <b>${esc(m.word)}</b></span></div>
+    <div class="hd"><span>範圍 <b>${esc(CFG.range || '')}</b></span><span>時間 <b>${HOME.st.mmin} 分鐘</b></span><span>滿分 <b>100 分</b></span><span>難度 <b>${esc(m.word)}</b></span></div>
     ${m.times ? `<p class="small muted" style="text-align:center">已寫過 ${m.times} 次，最高 ${m.best} 分</p>` : ''}
     <div><button class="btn wide" data-mstart="${esc(m.L)}">${act ? '繼續作答（剩 ' + mmss(leftOf(m.active.deadline, HOME.offset)) + '）' : '開始作答'}${ICON.go}</button></div>
     <p class="small muted" style="text-align:center">按下開始就計時，中途離開時間照樣會走。</p>`;
@@ -464,7 +498,7 @@ $('#mockBack').onclick = () => show('home');
 async function startMock(L, silent) {
   let r;
   try { r = await run(silent ? '回到作答中…' : '準備試卷中…', () => api('mockStart', { token: TOKEN, paper: L })); } catch (e) {
-    store.del('cur'); if (HOME) show('home'); return;
+    store.del('cur'); if (HOME) { show('home'); loadHome().catch(() => { }); } return;   // 可能剛被老師關閉：首頁跟著更新
   }
   const saved = store.get('att.' + r.aid, null);
   const n = r.questions.length;
@@ -472,7 +506,7 @@ async function startMock(L, silent) {
     aid: r.aid, L, deadline: r.deadline, offset: r.now - Date.now(), questions: r.questions, paper: r.paper,
     answers: saved && saved.answers && saved.answers.length === n ? saved.answers : Array(n).fill(null), times: [], done: false
   };
-  store.set('cur', { kind: 'm', L });
+  store.set('cur', { kind: 'm', L, term: CUR_TERM });
   $('#mqName').textContent = r.paper.name;
   renderMockPaper();
   show('mquiz');
@@ -485,7 +519,7 @@ function renderMockPaper() {
   M.questions.forEach((q, i) => { idx[q.qid] = i; });
   let no = 0;
   $('#mpaper').innerHTML = `<div class="paper" style="padding:16px 18px"><h3>${esc(M.paper.name)}</h3>
-    <div class="hd"><span>範圍 <b>2-1～2-4</b></span><span>時間 <b>${HOME.st.mmin} 分鐘</b></span><span>滿分 <b>100 分</b></span></div></div>` +
+    <div class="hd"><span>範圍 <b>${esc(CFG.range || '')}</b></span><span>時間 <b>${HOME.st.mmin} 分鐘</b></span><span>滿分 <b>100 分</b></span></div></div>` +
     M.paper.parts.map(pt => `<div class="panel mpart"><h3>${esc(pt.title)}</h3>${pt.qids.map(id => {
       const i = idx[id], q = M.questions[i];
       if (!q) return '';
@@ -495,7 +529,7 @@ function renderMockPaper() {
         : `<div data-fq="${i}">${fillArea(q, M.answers[i], 'm' + i + '_')}</div>`;
       return `<div class="mq rv" id="mq${i}"><div class="stem"><span class="qno">${no}.</span>${fmt(q.stem)}</div>${q.fig ? `<img class="fig" src="assets/fig/${esc(q.fig)}" alt="題目附圖"><div class="figtip">點圖可放大</div>` : ''}${body}</div>`;
     }).join('')}</div>`).join('');
-  $('#mkeys').innerHTML = KEYS.map(k => `<button type="button" data-k="${k}" aria-label="輸入 ${k}">${k}</button>`).join('');
+  $('#mkeys').innerHTML = KEYS().map(k => `<button type="button" data-k="${k}" aria-label="輸入 ${k}">${k}</button>`).join('');
   paintMockPos();
 }
 function paintMockPos() { $('#mpos').textContent = `已答 ${answeredN(M)} / ${M.questions.length}`; }
