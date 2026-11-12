@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>分解術式 — 因式分解｜互動式單頁題庫</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    /* 鎖定完整單一視窗，嚴禁上下或左右捲動 */
+    html, body {
+      width: 100vw;
+      height: 100dvh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #ffffff;
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    /* 數學變數與代數式專用字體（教科書斜體風格） */
+    .math-expr {
+      font-family: 'Times New Roman', 'Noto Serif TC', Georgia, serif;
+      letter-spacing: 0.02em;
+    }
+    .math-var {
+      font-family: 'Times New Roman', Georgia, serif;
+      font-style: italic;
+      font-weight: 600;
+      padding: 0 1px;
+    }
+    .math-num {
+      font-family: 'Times New Roman', Georgia, serif;
+      font-weight: 600;
+    }
+    .math-op {
+      font-family: 'Times New Roman', Georgia, serif;
+      padding: 0 0.18em;
+      font-weight: 600;
+    }
+    .math-sup {
+      font-family: 'Times New Roman', Georgia, serif;
+      font-size: 0.68em;
+      vertical-align: super;
+      line-height: 0;
+      margin-left: 1px;
+      font-weight: 700;
+    }
+
+    /* 手寫區背景樣式切換 */
+    .bg-pure-white {
+      background-color: #ffffff;
+      background-image: none;
+    }
+    .bg-dot-grid {
+      background-color: #ffffff;
+      background-image: radial-gradient(#cbd5e1 1.25px, transparent 1.25px);
+      background-size: 24px 24px;
+    }
+    .bg-square-grid {
+      background-color: #ffffff;
+      background-size: 28px 28px;
+      background-image:
+        linear-gradient(to right, #f1f5f9 1px, transparent 1px),
+        linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
+    }
+
+    /* 填空底線互動效果 */
+    .blank-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 9rem;
+      border-bottom: 3px solid #1e293b;
+      padding: 0 0.5rem 2px 0.5rem;
+      margin: 0 0.2rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      color: #dc2626;
+      font-weight: 700;
+      line-height: 1.1;
+      vertical-align: baseline;
+    }
+    .blank-slot:hover {
+      background-color: #fef2f2;
+      border-bottom-color: #dc2626;
+    }
+
+    /* 隱藏橫向快速選題列捲軸但保留滑動能力 */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* 透明度棋盤格預覽背景 */
+    .checkerboard-bg {
+      background-color: #ffffff;
+      background-image:
+        linear-gradient(45deg, #cbd5e1 25%, transparent 25%),
+        linear-gradient(-45deg, #cbd5e1 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #cbd5e1 75%),
+        linear-gradient(-45deg, transparent 75%, #cbd5e1 75%);
+      background-size: 8px 8px;
+      background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+    }
+  </style>
+</head>
+<body class="w-screen h-dvh overflow-hidden flex flex-col bg-white text-slate-900">
+
+  <!-- ==================== 頂部導覽與快速選題列（已移除頂部清除按鈕） ==================== -->
+  <header class="shrink-0 bg-slate-900 text-white border-b border-slate-800 px-2.5 sm:px-3 py-1.5 flex items-center justify-between gap-2 z-30">
+    <!-- 左側：選題總覽按鈕與目前分類 -->
+    <div class="flex items-center gap-2 min-w-0 shrink-0">
+      <button id="openModalBtn" class="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm shadow-sm transition shrink-0 cursor-pointer" title="打開全題庫選單">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <span>選題總覽</span>
+        <span id="pageCounterBadge" class="bg-indigo-800 text-indigo-100 text-[11px] sm:text-xs px-1.5 py-0.5 rounded font-mono">1 / 28</span>
+      </button>
+
+      <div class="hidden lg:flex items-center gap-2 truncate">
+        <span class="font-bold tracking-wide text-sm xl:text-base text-amber-300 shrink-0">分解術式 — 因式分解</span>
+        <span class="text-slate-500">|</span>
+        <span id="currentCategoryBadge" class="text-xs xl:text-sm text-slate-200 font-medium truncate">單元 0：觀念導入</span>
+      </div>
+    </div>
+
+    <!-- 中間：快速題號膠囊列（可左右滑動點選任一題直接跳轉） -->
+    <div id="quickJumpBar" class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 px-1 min-w-0 max-w-2xl" style="touch-action: pan-x;">
+      <!-- 由 JS 動態生成 28 個題號快速按鈕 -->
+    </div>
+
+    <!-- 右側：答案切換與上下題按鈕 -->
+    <div class="flex items-center gap-1.5 shrink-0">
+      <button id="toggleHintBtn" class="flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition cursor-pointer" title="顯示或隱藏本題解析提示">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+        </svg>
+        <span id="toggleHintText" class="hidden md:inline">顯示解答</span>
+      </button>
+
+      <div class="flex items-center bg-slate-800 rounded-lg p-0.5 border border-slate-700">
+        <button id="prevBtn" class="px-2 sm:px-2.5 py-1 rounded-md hover:bg-slate-700 disabled:opacity-35 disabled:pointer-events-none text-xs sm:text-sm font-medium flex items-center gap-1 transition cursor-pointer" title="上一題 (鍵盤左鍵)">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 19l-7-7 7-7"/></svg>
+          <span class="hidden sm:inline">上一題</span>
+        </button>
+        <button id="nextBtn" class="px-2 sm:px-2.5 py-1 rounded-md hover:bg-slate-700 disabled:opacity-35 disabled:pointer-events-none text-xs sm:text-sm font-medium flex items-center gap-1 transition cursor-pointer" title="下一題 (鍵盤右鍵)">
+          <span class="hidden sm:inline">下一題</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 全區域手寫工作區（包含上方題目區 ＋ 下方超大留白區，皆可直接書寫） ==================== -->
+  <main id="writingAreaWrapper" class="relative flex-1 w-full flex flex-col bg-pure-white overflow-hidden">
+    <!-- 上方：題目呈現區（版面緊湊、字體放大，位於透明畫布下方，可直接書寫劃記） -->
+    <section id="questionSection" class="relative shrink-0 w-full bg-slate-50/85 border-b-2 border-slate-300 px-2 sm:px-5 py-1.5 sm:py-2.5 shadow-xs z-0 pointer-events-none select-none">
+      <div id="questionContainer" class="w-full max-w-[98vw] mx-auto">
+        <!-- 由 JS 動態渲染當前題目內容 -->
+      </div>
+    </section>
+
+    <!-- 下方：超大留白計算區背景與提示水印 -->
+    <div class="relative flex-1 w-full pointer-events-none select-none z-0">
+      <div class="absolute top-2 left-4 right-4 flex flex-wrap items-center gap-2 text-slate-300 text-lg sm:text-2xl font-medium leading-tight">
+        <span>✍️ 全區域手寫(保留筆跡)</span>
+        <span id="stepHintBanner" class="hidden bg-amber-50 border border-amber-300 text-amber-900 px-3 py-1 rounded-lg text-lg sm:text-2xl shadow-sm font-normal leading-tight"></span>
+      </div>
+    </div>
+
+    <!-- 全區域透明手寫畫布層（完整覆蓋「題目區」與「下方留白區」） -->
+    <canvas id="writingCanvas" class="absolute inset-0 w-full h-full block cursor-crosshair z-10"></canvas>
+    <!-- 動態筆觸預覽畫布層（確保半透明螢光筆與圈選刪除路徑平滑預覽） -->
+    <canvas id="draftCanvas" class="absolute inset-0 w-full h-full block pointer-events-none z-10"></canvas>
+
+    <!-- 右下角懸浮手寫工具列（可收合，層級高於畫布） -->
+    <div id="ToolbarWrapper" class="absolute bottom-3 right-3 z-30 flex items-end sm:items-center gap-1.5 max-w-[96vw]">
+      <!-- 展開的手寫工具面板 -->
+      <div id="drawingToolbar" class="flex flex-wrap items-center gap-1.5 bg-white/95 backdrop-blur border border-slate-300 shadow-lg rounded-2xl px-2.5 py-2">
+        <!-- 畫筆顏色（黑、紅、藍、黃、紫、橘 共 6 色） -->
+        <div class="flex items-center gap-1.5 pr-2 border-r border-slate-200" title="選擇筆色（每個顏色皆可獨立記憶透明度）">
+          <button data-color="#1e293b" data-name="黑" class="color-btn relative w-6 h-6 rounded-full bg-[#1e293b] ring-2 ring-offset-1 ring-indigo-500 transition transform hover:scale-110 cursor-pointer" title="黑筆"></button>
+          <button data-color="#ef4444" data-name="紅" class="color-btn relative w-6 h-6 rounded-full bg-[#ef4444] transition transform hover:scale-110 cursor-pointer" title="紅筆"></button>
+          <button data-color="#2563eb" data-name="藍" class="color-btn relative w-6 h-6 rounded-full bg-[#2563eb] transition transform hover:scale-110 cursor-pointer" title="藍筆"></button>
+          <button data-color="#eab308" data-name="黃" class="color-btn relative w-6 h-6 rounded-full bg-[#eab308] transition transform hover:scale-110 cursor-pointer" title="黃筆"></button>
+          <button data-color="#9333ea" data-name="紫" class="color-btn relative w-6 h-6 rounded-full bg-[#9333ea] transition transform hover:scale-110 cursor-pointer" title="紫筆"></button>
+          <button data-color="#f97316" data-name="橘" class="color-btn relative w-6 h-6 rounded-full bg-[#f97316] transition transform hover:scale-110 cursor-pointer" title="橘筆"></button>
+        </div>
+
+        <!-- 當前顏色專屬透明度調整滑桿與預覽 -->
+        <div class="flex items-center gap-1.5 pr-2 border-r border-slate-200" title="調整目前所選顏色的透明度 (10% ~ 100%)">
+          <div class="w-5 h-5 rounded-full checkerboard-bg p-0.5 border border-slate-300 shrink-0 flex items-center justify-center" title="當前顏色透明度預覽">
+            <span id="opacityPreviewDot" class="w-full h-full rounded-full block" style="background-color: #1e293b; opacity: 1;"></span>
+          </div>
+          <span id="activeColorLabel" class="text-[11px] font-bold text-slate-600 shrink-0">黑</span>
+          <input id="opacitySlider" type="range" min="10" max="100" step="5" value="100" class="w-16 sm:w-20 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+          <span id="opacityValueText" class="text-[11px] font-mono font-semibold text-slate-700 w-8 text-right shrink-0">100%</span>
+        </div>
+
+        <!-- 筆畫粗細（細、中、粗、特粗） -->
+        <div class="flex items-center gap-1 pr-1.5 border-r border-slate-200">
+          <button data-size="2.2" class="size-btn px-2 py-1 text-xs rounded-md bg-indigo-50 text-indigo-700 font-bold cursor-pointer">細</button>
+          <button data-size="4" class="size-btn px-2 py-1 text-xs rounded-md text-slate-600 hover:bg-slate-100 font-medium cursor-pointer">中</button>
+          <button data-size="7" class="size-btn px-2 py-1 text-xs rounded-md text-slate-600 hover:bg-slate-100 font-medium cursor-pointer">粗</button>
+          <button data-size="12" class="size-btn px-2 py-1 text-xs rounded-md text-slate-600 hover:bg-slate-100 font-medium cursor-pointer">特粗</button>
+        </div>
+
+        <!-- 橡皮擦 -->
+        <button id="eraserBtn" class="px-2 py-1 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-1 transition cursor-pointer" title="橡皮擦（擦除局部筆跡）">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+          <span class="hidden sm:inline">橡皮擦</span>
+        </button>
+
+        <!-- 圈選物件刪除（套索刪除整條筆跡物件） -->
+        <button id="lassoDeleteBtn" class="px-2 py-1 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-1 transition cursor-pointer" title="圈選刪除（畫圈或劃過即可整條刪除筆跡物件）">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke-dasharray="3 2" d="M12 4c4.97 0 9 3.134 9 7s-4.03 7-9 7c-1.62 0-3.14-.333-4.455-.916L4 19l1.35-3.15C4.49 14.71 4 13.4 4 12c0-3.866 3.582-8 8-8z"/>
+          </svg>
+          <span>圈選刪除</span>
+        </button>
+
+        <!-- 復原上一筆 -->
+        <button id="undoBtn" class="px-2 py-1 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-100 flex items-center gap-1 transition cursor-pointer" title="復原上一步（包含畫筆、橡皮擦與圈選刪除）">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+          </svg>
+          <span class="hidden sm:inline">復原</span>
+        </button>
+
+        <!-- 清除本頁手寫 -->
+        <button id="clearCanvasBtn" class="px-2.5 py-1 rounded-lg text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 flex items-center gap-1 transition cursor-pointer" title="清除本頁手寫筆跡">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+          <span>清除本頁</span>
+        </button>
+
+        <!-- 留白背景格線切換 -->
+        <button id="gridToggleBtn" class="px-2 py-1 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 border-l border-slate-200 pl-2 transition cursor-pointer" title="切換純白 / 點陣 / 方格背景">
+          背景：純白
+        </button>
+      </div>
+
+      <!-- 收合/展開工具列按鈕 -->
+      <button id="collapseToolbarBtn" class="bg-slate-800 hover:bg-slate-700 text-white p-2.5 rounded-xl shadow-md transition cursor-pointer shrink-0" title="收合/展開畫筆工具列">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+        </svg>
+      </button>
+    </div>
+  </main>
+
+  <!-- ==================== 選題總覽彈出視窗 (Modal) ==================== -->
+  <div id="questionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-5xl max-h-[88dvh] flex flex-col overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-amber-300">分解術式 — 因式分解｜全題庫快速選題</h2>
+        </div>
+        <button id="closeModalBtn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body: 分類題目網格 -->
+      <div id="modalGridContainer" class="p-5 overflow-y-auto space-y-5 bg-slate-50" style="touch-action: pan-y;">
+        <!-- 由 JS 依單元分類動態生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 題庫資料與互動邏輯 ==================== -->
+  <script>
+    /**
+     * 完整 28 頁題庫資料
+     */
+    const PAGES_DATA = [
+      // ==================== 第一頁講義：觀念導入 & 如何判斷因式 ====================
+      {
+        id: 1,
+        shortLabel: '觀念1',
+        groupTitle: '【觀念導入】整數 vs 多項式',
+        category: '分解術式 — 因式分解 ｜ 觀念對照（一）',
+        type: 'concept-table-1',
+        answerText: '若 A ＝ B × C，則 A 為 B、C 的倍式；B、C 為 A 的因式',
+        stepHint: '對照記憶：七年級整數討論「因數與倍數」；八年級多項式討論「因式與倍式」（不考慮常數倍差異）。'
+      },
+      {
+        id: 2,
+        shortLabel: '觀念2',
+        groupTitle: '【觀念導入】整數 vs 多項式',
+        category: '分解術式 — 因式分解 ｜ 觀念對照（二）',
+        type: 'concept-table-2',
+        blank1Answer: '標準分解式',
+        blank2Answer: '的乘積',
+        stepHint: '因式分解就是將一個二次多項式「拆解寫成兩個一次式的乘積」，與展開互為逆運算！'
+      },
+      {
+        id: 3,
+        shortLabel: '判斷A1',
+        groupTitle: '【HOW？如何判斷因式】A、觀察法 ／ B、直接除',
+        category: 'HOW？ 如何判斷因式 ＞ A、觀察法（第 1 題）',
+        type: 'mcq',
+        questionHtml: `由 <span class="math-expr"><span class="math-num">4</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">8</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">3</span><span class="math-op">=</span>(<span class="math-num">2</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">1</span>)(<span class="math-num">2</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">3</span>)</span> 可知下列哪些是 <span class="math-expr"><span class="math-num">4</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">8</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">3</span></span> 的因式？`,
+        options: [
+          { key: 'A', html: `<span class="math-expr"><span class="math-num">2</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">1</span></span>` },
+          { key: 'B', html: `<span class="math-expr"><span class="math-num">2</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">3</span></span>` },
+          { key: 'C', html: `<span class="math-expr"><span class="math-num">4</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">8</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">3</span></span>` },
+          { key: 'D', html: `<span class="math-expr"><span class="math-num">6</span></span>` }
+        ],
+        answerText: '(A)、(B)、(C)',
+        stepHint: '提示：(2x＋1)、(2x＋3) 以及它們相乘的本身 (4x²＋8x＋3) 都是因式（非零常數倍亦為因式，但單獨常數 6 為零次多項式，通常指一次與二次因式 (A)(B)(C)）。'
+      },
+      {
+        id: 4,
+        shortLabel: '判斷A2',
+        groupTitle: '【HOW？如何判斷因式】A、觀察法 ／ B、直接除',
+        category: 'HOW？ 如何判斷因式 ＞ A、觀察法（第 2 題）',
+        type: 'mcq',
+        questionHtml: `已知 <span class="math-expr"><span class="math-num">3</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">10</span><span class="math-op">=</span>(<span class="math-num">3</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">5</span>)(<span class="math-var">x</span><span class="math-op">−</span><span class="math-num">2</span>)</span>，則下列敘述何者正確？`,
+        options: [
+          { key: 'A', html: `<span class="math-expr"><span class="math-num">3</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">10</span></span> 為 <span class="math-expr"><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">2</span></span> 的倍式` },
+          { key: 'B', html: `<span class="math-expr"><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">2</span></span> 為 <span class="math-expr"><span class="math-num">3</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">10</span></span> 的倍式` },
+          { key: 'C', html: `<span class="math-expr"><span class="math-num">3</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">5</span></span> 為 <span class="math-expr"><span class="math-num">3</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">10</span></span> 的倍式` },
+          { key: 'D', html: `<span class="math-expr"><span class="math-num">3</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">10</span></span> 為 <span class="math-expr"><span class="math-num">3</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">5</span></span> 的因式` }
+        ],
+        answerText: '(A)',
+        stepHint: '解析：二次式 3x²−x−10 是 (3x＋5) 與 (x−2) 的「倍式」；而 (3x＋5) 與 (x−2) 是 3x²−x−10 的「因式」。故選 (A)。'
+      },
+      {
+        id: 5,
+        shortLabel: '判斷B1',
+        groupTitle: '【HOW？如何判斷因式】A、觀察法 ／ B、直接除',
+        category: 'HOW？ 如何判斷因式 ＞ B、直接除 — 整除就是因式（第 1 題）',
+        type: 'qa-blank',
+        questionHtml: `判別 <span class="math-expr"><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">6</span></span> 是不是 <span class="math-expr"><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">4</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">12</span></span> 的因式？`,
+        answerText: '是',
+        stepHint: '提示：在下方用直式除法計算 (x² − 4x − 12) ÷ (x − 6)，得商式為 (x ＋ 2)、餘式為 0（整除），因此是因式！'
+      },
+      {
+        id: 6,
+        shortLabel: '判斷B2',
+        groupTitle: '【HOW？如何判斷因式】A、觀察法 ／ B、直接除',
+        category: 'HOW？ 如何判斷因式 ＞ B、直接除 — 整除就是因式（第 2 題）',
+        type: 'qa-blank',
+        questionHtml: `判別 <span class="math-expr"><span class="math-num">2</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">7</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">3</span></span> 是不是 <span class="math-expr"><span class="math-num">2</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">1</span></span> 的倍式？`,
+        answerText: '是',
+        stepHint: '提示：在下方用直式除法計算 (2x² − 7x ＋ 3) ÷ (2x − 1)，得商式為 (x − 3)、餘式為 0（整除），因此是倍式！'
+      },
+
+      // ==================== 第二頁講義：1、提公因式（音節）(1)~(6)（修正5：全部加上 = ________。） ====================
+      {
+        id: 7,
+        shortLabel: '(1)',
+        groupTitle: '【1、提公因式】找尋 項 與 項 的公因式 — 音節',
+        category: 'HOW？ 如何因式分解 ＞ 1、提公因式（找尋 項 與 項 的公因式）— 音節',
+        type: 'factor-problem',
+        qNum: '(1)',
+        formulaHtml: `<span class="math-num">2</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">6</span><span class="math-var">x</span>`,
+        hasBlankLine: true,
+        answerText: '2x(x − 3)',
+        stepHint: '步驟：觀察兩項 2x² 與 −6x 的公因式為 2x，提出 2x 得 2x(x − 3)。'
+      },
+      {
+        id: 8,
+        shortLabel: '(2)',
+        groupTitle: '【1、提公因式】找尋 項 與 項 的公因式 — 音節',
+        category: 'HOW？ 如何因式分解 ＞ 1、提公因式（找尋 項 與 項 的公因式）— 音節',
+        type: 'factor-problem',
+        qNum: '(2)',
+        formulaHtml: `<span class="math-num">3</span>(<span class="math-var">x</span><span class="math-op">+</span><span class="math-num">2</span>)(<span class="math-var">x</span><span class="math-op">−</span><span class="math-num">5</span>)<span class="math-op">+</span><span class="math-num">6</span>(<span class="math-var">x</span><span class="math-op">+</span><span class="math-num">2</span>)(<span class="math-var">x</span><span class="math-op">+</span><span class="math-num">7</span>)`,
+        hasBlankLine: true,
+        answerText: '9(x + 2)(x + 3)',
+        stepHint: '步驟：提出公因式 3(x＋2) → 3(x＋2)[(x−5)＋2(x＋7)] ＝ 3(x＋2)(3x＋9) ＝ 9(x＋2)(x＋3)。'
+      },
+      {
+        id: 9,
+        shortLabel: '(3)',
+        groupTitle: '【1、提公因式】找尋 項 與 項 的公因式 — 音節',
+        category: 'HOW？ 如何因式分解 ＞ 1、提公因式（找尋 項 與 項 的公因式）— 音節',
+        type: 'factor-problem',
+        qNum: '(3)',
+        formulaHtml: `<span class="math-num">7</span>(<span class="math-var">x</span><span class="math-op">−</span><span class="math-num">1</span>)<span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">21</span>(<span class="math-var">x</span><span class="math-op">−</span><span class="math-num">1</span>)`,
+        hasBlankLine: true,
+        answerText: '7(x − 1)(x + 2)',
+        stepHint: '步驟：提出公因式 7(x−1) → 7(x−1)[(x−1)＋3] ＝ 7(x−1)(x＋2)。'
+      },
+      {
+        id: 10,
+        shortLabel: '(4)',
+        groupTitle: '【1、提公因式】找尋 項 與 項 的公因式 — 音節',
+        category: 'HOW？ 如何因式分解 ＞ 1、提公因式（找尋 項 與 項 的公因式）— 音節',
+        type: 'factor-problem',
+        qNum: '(4)',
+        formulaHtml: `<span class="math-num">4</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">8</span><span class="math-var">x</span><span class="math-sup">2</span>`,
+        hasBlankLine: true,
+        answerText: '4x(1 − 2x) 或 −4x(2x − 1)',
+        stepHint: '步驟：兩項公因式為 4x，提出後得 4x(1 − 2x) 或提出負號寫成 −4x(2x − 1)。'
+      },
+      {
+        id: 11,
+        shortLabel: '(5)',
+        groupTitle: '【1、提公因式】找尋 項 與 項 的公因式 — 音節',
+        category: 'HOW？ 如何因式分解 ＞ 1、提公因式（找尋 項 與 項 的公因式）— 音節',
+        type: 'factor-problem',
+        qNum: '(5)',
+        formulaHtml: `<span class="math-num">4</span><span class="math-var">x</span>(<span class="math-var">x</span><span class="math-op">+</span><span class="math-num">6</span>)<span class="math-op">+</span><span class="math-num">2</span><span class="math-var">x</span>(<span class="math-num">2</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">3</span>)`,
+        hasBlankLine: true,
+        answerText: '2x(4x + 9)',
+        stepHint: '步驟：提出公因式 2x → 2x[2(x＋6)＋(2x−3)] ＝ 2x(2x＋12＋2x−3) ＝ 2x(4x＋9)。'
+      },
+      {
+        id: 12,
+        shortLabel: '(6)',
+        groupTitle: '【1、提公因式】找尋 項 與 項 的公因式 — 音節',
+        category: 'HOW？ 如何因式分解 ＞ 1、提公因式（找尋 項 與 項 的公因式）— 音節',
+        type: 'factor-problem',
+        qNum: '(6)',
+        formulaHtml: `<span class="math-var">x</span>(<span class="math-var">x</span><span class="math-op">+</span><span class="math-num">3</span>)<span class="math-op">+</span><span class="math-var">x</span>(<span class="math-var">x</span><span class="math-op">−</span><span class="math-num">2</span>)`,
+        hasBlankLine: true,
+        answerText: 'x(2x + 1)',
+        stepHint: '步驟：提出公因式 x → x[(x＋3)＋(x−2)] ＝ x(2x＋1)。'
+      },
+
+      // ==================== 第二頁下半：2、提公因式（變化題：觀察係數，提出負號）(7)~(10)（修正5：全部加上 = ________。） ====================
+      {
+        id: 13,
+        shortLabel: '(7)',
+        groupTitle: '【2、提公因式 — 變化題】觀察係數，提出負號',
+        category: 'HOW？ 如何因式分解 ＞ 2、提公因式 — 變化題：觀察係數，提出負號',
+        type: 'factor-problem',
+        qNum: '(7)',
+        formulaHtml: `(<span class="math-var">x</span><span class="math-op">−</span><span class="math-num">2</span>)(<span class="math-num">4</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">5</span>)<span class="math-op">+</span>(<span class="math-num">2</span><span class="math-op">−</span><span class="math-var">x</span>)(<span class="math-num">2</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">4</span>)`,
+        hasBlankLine: true,
+        answerText: '(x − 2)(2x − 1)',
+        stepHint: '步驟：因為 (2−x) ＝ −(x−2)，原式可改寫為 (x−2)(4x−5) − (x−2)(2x−4) ＝ (x−2)[(4x−5)−(2x−4)] ＝ (x−2)(2x−1)。'
+      },
+      {
+        id: 14,
+        shortLabel: '(8)',
+        groupTitle: '【2、提公因式 — 變化題】觀察係數，提出負號',
+        category: 'HOW？ 如何因式分解 ＞ 2、提公因式 — 變化題：觀察係數，提出負號',
+        type: 'factor-problem',
+        qNum: '(8)',
+        formulaHtml: `(<span class="math-num">2</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">1</span>)<span class="math-sup">2</span><span class="math-op">+</span>(<span class="math-num">1</span><span class="math-op">−</span><span class="math-num">2</span><span class="math-var">x</span>)(<span class="math-var">x</span><span class="math-op">+</span><span class="math-num">1</span>)`,
+        hasBlankLine: true,
+        answerText: '(2x − 1)(x − 2)',
+        stepHint: '步驟：將 (1−2x) 變號為 −(2x−1)，原式 ＝ (2x−1)² − (2x−1)(x＋1) ＝ (2x−1)[(2x−1)−(x＋1)] ＝ (2x−1)(x−2)。'
+      },
+      {
+        id: 15,
+        shortLabel: '(9)',
+        groupTitle: '【2、提公因式 — 變化題】觀察係數，提出負號',
+        category: 'HOW？ 如何因式分解 ＞ 2、提公因式 — 變化題：觀察係數，提出負號',
+        type: 'factor-problem',
+        qNum: '(9)',
+        formulaHtml: `(<span class="math-num">7</span><span class="math-op">−</span><span class="math-num">3</span><span class="math-var">x</span>)(<span class="math-var">x</span><span class="math-op">−</span><span class="math-num">2</span>)<span class="math-op">−</span>(<span class="math-num">2</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">7</span>)(<span class="math-num">3</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">7</span>)`,
+        hasBlankLine: true,
+        answerText: '(7 − 3x)(3x + 5) 或 −(3x − 7)(3x + 5)',
+        stepHint: '步驟：因為 −(3x−7) ＝ ＋(7−3x)，原式 ＝ (7−3x)(x−2) ＋ (2x＋7)(7−3x) ＝ (7−3x)[(x−2)＋(2x＋7)] ＝ (7−3x)(3x＋5)。'
+      },
+      {
+        id: 16,
+        shortLabel: '(10)',
+        groupTitle: '【2、提公因式 — 變化題】觀察係數，提出負號',
+        category: 'HOW？ 如何因式分解 ＞ 2、提公因式 — 變化題：觀察係數，提出負號',
+        type: 'factor-problem',
+        qNum: '(10)',
+        formulaHtml: `(<span class="math-num">7</span><span class="math-op">−</span><span class="math-var">x</span>)<span class="math-sup">2</span><span class="math-op">−</span>(<span class="math-num">2</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">5</span>)(<span class="math-var">x</span><span class="math-op">−</span><span class="math-num">7</span>)`,
+        hasBlankLine: true,
+        answerText: '(7 − x)(x + 12) 或 −(x − 7)(x + 12)',
+        stepHint: '步驟：因為 (7−x)² ＝ (x−7)²，提出公因式 (x−7) 得 (x−7)[(x−7)−(2x＋5)] ＝ (x−7)(−x−12) ＝ −(x−7)(x＋12) ＝ (7−x)(x＋12)。'
+      },
+
+      // ==================== 第三頁講義：3、乘法公式 — 平方差 (11)~(14) ====================
+      {
+        id: 17,
+        shortLabel: '(11)',
+        groupTitle: '【3、乘法公式】平方差 a² − b² ＝ (a＋b)(a−b)',
+        category: 'HOW？ 如何因式分解 ＞ 3、乘法公式 — 平方差',
+        type: 'factor-problem',
+        qNum: '(11)',
+        formulaHtml: `<span class="math-num">16</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">9</span>`,
+        hasBlankLine: true,
+        answerText: '(4x + 3)(4x − 3)',
+        stepHint: '平方差公式：16x² − 9 ＝ (4x)² − 3² ＝ (4x ＋ 3)(4x − 3)。'
+      },
+      {
+        id: 18,
+        shortLabel: '(12)',
+        groupTitle: '【3、乘法公式】平方差 a² − b² ＝ (a＋b)(a−b)',
+        category: 'HOW？ 如何因式分解 ＞ 3、乘法公式 — 平方差',
+        type: 'factor-problem',
+        qNum: '(12)',
+        formulaHtml: `<span class="math-num">4</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">1</span>`,
+        hasBlankLine: true,
+        answerText: '(2x + 1)(2x − 1)',
+        stepHint: '平方差公式：4x² − 1 ＝ (2x)² − 1² ＝ (2x ＋ 1)(2x − 1)。'
+      },
+      {
+        id: 19,
+        shortLabel: '(13)',
+        groupTitle: '【3、乘法公式】平方差 a² − b² ＝ (a＋b)(a−b)',
+        category: 'HOW？ 如何因式分解 ＞ 3、乘法公式 — 平方差',
+        type: 'factor-problem',
+        qNum: '(13)',
+        formulaHtml: `<span class="math-num">36</span><span class="math-op">−</span><span class="math-num">25</span><span class="math-var">x</span><span class="math-sup">2</span>`,
+        hasBlankLine: true,
+        answerText: '(6 + 5x)(6 − 5x)',
+        stepHint: '平方差公式：36 − 25x² ＝ 6² − (5x)² ＝ (6 ＋ 5x)(6 − 5x)。'
+      },
+      {
+        id: 20,
+        shortLabel: '(14)',
+        groupTitle: '【3、乘法公式】平方差 a² − b² ＝ (a＋b)(a−b)',
+        category: 'HOW？ 如何因式分解 ＞ 3、乘法公式 — 平方差',
+        type: 'factor-problem',
+        qNum: '(14)',
+        formulaHtml: `<span class="math-num">64</span><span class="math-op">−</span><span class="math-num">121</span><span class="math-var">y</span><span class="math-sup">2</span>`,
+        hasBlankLine: true,
+        answerText: '(8 + 11y)(8 − 11y)',
+        stepHint: '平方差公式：64 − 121y² ＝ 8² − (11y)² ＝ (8 ＋ 11y)(8 − 11y)。'
+      },
+
+      // ==================== 第三頁講義：4、乘法公式 — 和的平方 (15)~(18) ====================
+      {
+        id: 21,
+        shortLabel: '(15)',
+        groupTitle: '【4、乘法公式】和的平方 a² ＋ 2ab ＋ b² ＝ (a＋b)²',
+        category: 'HOW？ 如何因式分解 ＞ 4、乘法公式 — 和的平方',
+        type: 'factor-problem',
+        qNum: '(15)',
+        formulaHtml: `<span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">12</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">36</span>`,
+        hasBlankLine: true,
+        answerText: '(x + 6)²',
+        stepHint: '和的平方公式：x² ＋ 2·x·6 ＋ 6² ＝ (x ＋ 6)²。'
+      },
+      {
+        id: 22,
+        shortLabel: '(16)',
+        groupTitle: '【4、乘法公式】和的平方 a² ＋ 2ab ＋ b² ＝ (a＋b)²',
+        category: 'HOW？ 如何因式分解 ＞ 4、乘法公式 — 和的平方',
+        type: 'factor-problem',
+        qNum: '(16)',
+        formulaHtml: `<span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">18</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">81</span>`,
+        hasBlankLine: true,
+        answerText: '(x + 9)²',
+        stepHint: '和的平方公式：x² ＋ 2·x·9 ＋ 9² ＝ (x ＋ 9)²。'
+      },
+      {
+        id: 23,
+        shortLabel: '(17)',
+        groupTitle: '【4、乘法公式】和的平方 a² ＋ 2ab ＋ b² ＝ (a＋b)²',
+        category: 'HOW？ 如何因式分解 ＞ 4、乘法公式 — 和的平方',
+        type: 'factor-problem',
+        qNum: '(17)',
+        formulaHtml: `<span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">14</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">49</span>`,
+        hasBlankLine: true,
+        answerText: '(x + 7)²',
+        stepHint: '和的平方公式：x² ＋ 2·x·7 ＋ 7² ＝ (x ＋ 7)²。'
+      },
+      {
+        id: 24,
+        shortLabel: '(18)',
+        groupTitle: '【4、乘法公式】和的平方 a² ＋ 2ab ＋ b² ＝ (a＋b)²',
+        category: 'HOW？ 如何因式分解 ＞ 4、乘法公式 — 和的平方',
+        type: 'factor-problem',
+        qNum: '(18)',
+        formulaHtml: `<span class="math-num">4</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">12</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">9</span>`,
+        hasBlankLine: true,
+        answerText: '(2x + 3)²',
+        stepHint: '和的平方公式：(2x)² ＋ 2·(2x)·3 ＋ 3² ＝ (2x ＋ 3)²。'
+      },
+
+      // ==================== 第三頁講義：5、乘法公式 — 差的平方 (19)~(22) ====================
+      {
+        id: 25,
+        shortLabel: '(19)',
+        groupTitle: '【5、乘法公式】差的平方 a² − 2ab ＋ b² ＝ (a−b)²',
+        category: 'HOW？ 如何因式分解 ＞ 5、乘法公式 — 差的平方',
+        type: 'factor-problem',
+        qNum: '(19)',
+        formulaHtml: `<span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">6</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">9</span>`,
+        hasBlankLine: true,
+        answerText: '(x − 3)²',
+        stepHint: '差的平方公式：x² − 2·x·3 ＋ 3² ＝ (x − 3)²。'
+      },
+      {
+        id: 26,
+        shortLabel: '(20)',
+        groupTitle: '【5、乘法公式】差的平方 a² − 2ab ＋ b² ＝ (a−b)²',
+        category: 'HOW？ 如何因式分解 ＞ 5、乘法公式 — 差的平方',
+        type: 'factor-problem',
+        qNum: '(20)',
+        formulaHtml: `<span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">10</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">25</span>`,
+        hasBlankLine: true,
+        answerText: '(x − 5)²',
+        stepHint: '差的平方公式：x² − 2·x·5 ＋ 5² ＝ (x − 5)²。'
+      },
+      {
+        id: 27,
+        shortLabel: '(21)',
+        groupTitle: '【5、乘法公式】差的平方 a² − 2ab ＋ b² ＝ (a−b)²',
+        category: 'HOW？ 如何因式分解 ＞ 5、乘法公式 — 差的平方',
+        type: 'factor-problem',
+        qNum: '(21)',
+        formulaHtml: `<span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">8</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">16</span>`,
+        hasBlankLine: true,
+        answerText: '(x − 4)²',
+        stepHint: '差的平方公式：x² − 2·x·4 ＋ 4² ＝ (x − 4)²。'
+      },
+      {
+        id: 28,
+        shortLabel: '(22)',
+        groupTitle: '【5、乘法公式】差的平方 a² − 2ab ＋ b² ＝ (a−b)²',
+        category: 'HOW？ 如何因式分解 ＞ 5、乘法公式 — 差的平方',
+        type: 'factor-problem',
+        qNum: '(22)',
+        formulaHtml: `<span class="math-num">4</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">−</span><span class="math-num">4</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">1</span>`,
+        hasBlankLine: true,
+        answerText: '(2x − 1)²',
+        stepHint: '差的平方公式：(2x)² − 2·(2x)·1 ＋ 1² ＝ (2x − 1)²。'
+      }
+    ];
+
+    // ==================== 狀態管理 ====================
+    let currentPageIndex = 0;
+    const revealedState = {};       // 記錄每頁是否顯示解答
+    const selectedMcqOptions = {};  // 記錄選擇題已勾選的選項 Set
+    const pageDrawingHistory = {};  // 記錄每一頁的畫布筆跡陣列: { pageId: [stroke, ...] }
+    const pageUndoStack = {};       // 記錄每一頁的操作歷史快照（支援復原圈選刪除與清除）
+
+    // 畫筆設定狀態（6 色：黑、紅、藍、黃、紫、橘，且每個顏色各自記錄獨立透明度）
+    let currentPenColor = '#1e293b';
+    let currentPenName = '黑';
+    const colorOpacities = {
+      '#1e293b': 1.0, // 黑
+      '#ef4444': 1.0, // 紅
+      '#2563eb': 1.0, // 藍
+      '#eab308': 1.0, // 黃
+      '#9333ea': 1.0, // 紫
+      '#f97316': 1.0  // 橘
+    };
+    let currentPenSize = 2.2;
+    let isEraserMode = false;
+    let isLassoMode = false;
+    let isDrawing = false;
+    let currentStroke = null;
+    let pointerDownClientPos = null;
+    let gridModeIndex = 0; // 0: 純白, 1: 點陣, 2: 方格
+    const GRID_MODES = [
+      { className: 'bg-pure-white', label: '背景：純白' },
+      { className: 'bg-dot-grid', label: '背景：點陣' },
+      { className: 'bg-square-grid', label: '背景：方格' }
+    ];
+
+    // DOM 元素參照
+    const questionContainer = document.getElementById('questionContainer');
+    const currentCategoryBadge = document.getElementById('currentCategoryBadge');
+    const pageCounterBadge = document.getElementById('pageCounterBadge');
+    const quickJumpBar = document.getElementById('quickJumpBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const toggleHintBtn = document.getElementById('toggleHintBtn');
+    const toggleHintText = document.getElementById('toggleHintText');
+    const stepHintBanner = document.getElementById('stepHintBanner');
+    const writingAreaWrapper = document.getElementById('writingAreaWrapper');
+    const canvas = document.getElementById('writingCanvas');
+    const ctx = canvas.getContext('2d');
+    const draftCanvas = document.getElementById('draftCanvas');
+    const draftCtx = draftCanvas.getContext('2d');
+
+    // ==================== 渲染頂部快速題號列與選題總覽 Modal ====================
+    function renderNavigationUI() {
+      // 1. 頂部橫向題號列
+      quickJumpBar.innerHTML = '';
+      PAGES_DATA.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        const isActive = idx === currentPageIndex;
+        btn.className = `px-2 py-1 rounded text-xs font-semibold shrink-0 transition cursor-pointer ${
+          isActive
+            ? 'bg-amber-400 text-slate-950 shadow-xs font-bold'
+            : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white'
+        }`;
+        btn.textContent = item.shortLabel;
+        btn.onclick = () => goToPage(idx);
+        quickJumpBar.appendChild(btn);
+
+        if (isActive) {
+          btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      });
+
+      // 2. 更新頁碼與分類徽章
+      const page = PAGES_DATA[currentPageIndex];
+      pageCounterBadge.textContent = `${currentPageIndex + 1} / ${PAGES_DATA.length}`;
+      currentCategoryBadge.textContent = page.category;
+      prevBtn.disabled = currentPageIndex === 0;
+      nextBtn.disabled = currentPageIndex === PAGES_DATA.length - 1;
+
+      // 3. 更新顯示答案按鈕狀態
+      const isRevealed = !!revealedState[page.id];
+      toggleHintText.textContent = isRevealed ? '隱藏解答' : '顯示解答';
+      if (isRevealed && page.stepHint) {
+        stepHintBanner.textContent = `💡 ${page.stepHint}`;
+        stepHintBanner.classList.remove('hidden');
+      } else {
+        stepHintBanner.classList.add('hidden');
+      }
+    }
+
+    // 建構全題庫 Modal 內容
+    function buildModalGrid() {
+      const container = document.getElementById('modalGridContainer');
+      container.innerHTML = '';
+
+      // 依照 groupTitle 分組
+      const groups = [];
+      const groupMap = new Map();
+      PAGES_DATA.forEach((item, index) => {
+        if (!groupMap.has(item.groupTitle)) {
+          const g = { title: item.groupTitle, items: [] };
+          groupMap.set(item.groupTitle, g);
+          groups.push(g);
+        }
+        groupMap.get(item.groupTitle).items.push({ ...item, index });
+      });
+
+      groups.forEach(group => {
+        const block = document.createElement('div');
+        block.className = 'bg-white p-4 rounded-xl border border-slate-200 shadow-xs';
+
+        const header = document.createElement('h3');
+        header.className = 'text-sm sm:text-base font-bold text-slate-800 mb-3 pb-1.5 border-b border-slate-100 flex items-center justify-between';
+        header.innerHTML = `<span>${group.title}</span><span class="text-xs font-normal text-slate-400">共 ${group.items.length} 頁</span>`;
+        block.appendChild(header);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5';
+
+        group.items.forEach(entry => {
+          const hasStrokes = (pageDrawingHistory[entry.id] && pageDrawingHistory[entry.id].length > 0);
+          const isCurrent = entry.index === currentPageIndex;
+          const card = document.createElement('button');
+          card.className = `text-left p-2.5 rounded-xl border transition flex flex-col justify-between gap-1 cursor-pointer ${
+            isCurrent
+              ? 'border-indigo-600 bg-indigo-50/80 ring-2 ring-indigo-500/30'
+              : 'border-slate-200 hover:border-indigo-400 hover:bg-slate-50'
+          }`;
+
+          let previewHtml = '';
+          if (entry.type === 'factor-problem') {
+            previewHtml = `<span class="math-expr text-sm sm:text-base text-slate-800">${entry.formulaHtml} = ____</span>`;
+          } else if (entry.type === 'concept-table-1') {
+            previewHtml = `<span class="text-xs text-slate-600">整數 (公)因數 vs 多項式 (公)因式</span>`;
+          } else if (entry.type === 'concept-table-2') {
+            previewHtml = `<span class="text-xs text-slate-600">因數分解 vs 因式分解定義</span>`;
+          } else {
+            previewHtml = `<span class="text-xs text-slate-700 line-clamp-1">${entry.questionHtml}</span>`;
+          }
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between w-full">
+              <span class="text-xs font-bold px-2 py-0.5 rounded ${isCurrent ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-700'}">${entry.shortLabel}</span>
+              ${hasStrokes ? '<span class="text-[11px] text-emerald-600 font-medium">✍️ 已書寫</span>' : ''}
+            </div>
+            <div class="mt-1 truncate">${previewHtml}</div>
+          `;
+          card.onclick = () => {
+            goToPage(entry.index);
+            closeQuestionModal();
+          };
+          grid.appendChild(card);
+        });
+
+        block.appendChild(grid);
+        container.appendChild(block);
+      });
+    }
+
+    // ==================== 渲染當前題目區塊 ====================
+    function renderCurrentQuestion() {
+      const page = PAGES_DATA[currentPageIndex];
+      const isRevealed = !!revealedState[page.id];
+
+      // 類型 1：觀念對照（一）整數 vs 多項式
+      if (page.type === 'concept-table-1') {
+        questionContainer.innerHTML = `
+          <div class="grid grid-cols-2 gap-2 sm:gap-4 border-2 border-slate-800 rounded-xl overflow-hidden bg-white shadow-xs">
+            <!-- 左欄：整數 -->
+            <div class="p-2 sm:p-3 border-r-2 border-slate-800">
+              <div class="text-center font-bold text-2xl sm:text-4xl pb-1 mb-1.5 border-b-2 border-slate-800 tracking-widest leading-tight">
+                <span class="text-lg sm:text-2xl font-normal">整</span>數
+              </div>
+              <div class="space-y-1 text-xl sm:text-3xl text-slate-800 leading-tight">
+                <p class="font-semibold text-indigo-900">★ 七年級：(公)因數、(公)倍數</p>
+                <p>已知 <span class="math-var">a</span>、<span class="math-var">b</span>、<span class="math-var">c</span> 是三個不為零的整數。<span class="text-base sm:text-2xl text-slate-500 ml-1">（註：通常只討論正整數）</span></p>
+              </div>
+            </div>
+            <!-- 右欄：多項式 -->
+            <div class="p-2 sm:p-3">
+              <div class="text-center font-bold text-2xl sm:text-4xl pb-1 mb-1.5 border-b-2 border-slate-800 tracking-widest leading-tight">
+                <span class="text-lg sm:text-2xl font-normal">多項</span>式
+              </div>
+              <div class="space-y-1 text-xl sm:text-3xl text-slate-800 leading-tight">
+                <p class="font-semibold text-indigo-900">☆ 八年級：(公)因式、(公)倍式</p>
+                <p>已知 <span class="math-var">A</span>、<span class="math-var">B</span>、<span class="math-var">C</span> 是三個不為 <span class="math-num">0</span> 的多項式。</p>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // 類型 2：觀念對照（二）因數分解 vs 因式分解
+      if (page.type === 'concept-table-2') {
+        questionContainer.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-12 border-2 border-slate-800 rounded-xl overflow-hidden bg-white shadow-xs">
+            <!-- 左欄：因數分解（上下三列左側完全對齊） -->
+            <div class="md:col-span-5 p-2.5 sm:p-3.5 border-b-2 md:border-b-0 md:border-r-2 border-slate-800 flex flex-col justify-between">
+              <div class="text-lg sm:text-2xl lg:text-3xl font-medium text-slate-800 leading-snug space-y-1">
+                <div class="whitespace-nowrap">「因數分解」</div>
+                <div class="whitespace-nowrap">九九乘法表、樹狀圖、短除法</div>
+              </div>
+              <div class="mt-3 text-lg sm:text-2xl lg:text-3xl font-medium flex items-baseline whitespace-nowrap leading-tight">
+                <span>集大成：</span>
+                <span class="blank-slot min-w-[7rem] sm:min-w-[9rem]" data-action="toggle-answer">${isRevealed ? page.blank1Answer : '&nbsp;'}</span>
+              </div>
+            </div>
+            <!-- 右欄：因式分解（算式與下方箭頭說明採用雙列 Grid 確保同一水平基準線對齊） -->
+            <div class="md:col-span-7 p-2.5 sm:p-3.5 flex flex-col justify-between">
+              <div class="text-lg sm:text-2xl lg:text-3xl font-medium text-slate-800 leading-snug space-y-1">
+                <div class="whitespace-nowrap">「因式分解」</div>
+                <div class="whitespace-nowrap flex items-baseline">
+                  <span>將二次多項式，寫成兩個一次式</span>
+                  <span class="blank-slot min-w-[5.5rem] sm:min-w-[7rem]" data-action="toggle-answer">${isRevealed ? page.blank2Answer : '&nbsp;'}</span><span>。</span>
+                </div>
+              </div>
+              <div class="mt-2 flex justify-center">
+                <div class="inline-grid grid-cols-[auto_auto_auto_auto] items-baseline whitespace-nowrap leading-tight">
+                  <!-- 第一列：算式本體 -->
+                  <div class="text-xl sm:text-3xl lg:text-4xl xl:text-5xl math-expr font-bold text-slate-900 tracking-wide text-center">
+                    <span class="math-num">6</span><span class="math-var">x</span><span class="math-sup">2</span><span class="math-op">+</span><span class="math-num">5</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">6</span>
+                  </div>
+                  <div class="text-xl sm:text-3xl lg:text-4xl xl:text-5xl math-expr font-bold text-slate-900 px-1.5 sm:px-2.5 text-center">
+                    <span class="math-op">=</span>
+                  </div>
+                  <div class="text-xl sm:text-3xl lg:text-4xl xl:text-5xl math-expr font-bold text-slate-900 tracking-wide text-center">
+                    (<span class="math-num">2</span><span class="math-var">x</span><span class="math-op">+</span><span class="math-num">3</span>)
+                  </div>
+                  <div class="text-xl sm:text-3xl lg:text-4xl xl:text-5xl math-expr font-bold text-slate-900 tracking-wide text-center">
+                    (<span class="math-num">3</span><span class="math-var">x</span><span class="math-op">−</span><span class="math-num">2</span>)
+                  </div>
+                  <!-- 第二列：下方藍色箭頭標註（同一水平列對齊，且「↑ 二次多項式」微調左移對齊如圖2） -->
+                  <div class="text-sm sm:text-xl lg:text-2xl font-semibold text-indigo-700 mt-1 whitespace-nowrap justify-self-center -translate-x-2 sm:-translate-x-3">
+                    ↑ 二次多項式
+                  </div>
+                  <div></div>
+                  <div class="text-sm sm:text-xl lg:text-2xl font-semibold text-indigo-700 mt-1 whitespace-nowrap justify-self-center">
+                    ↑ 一次
+                  </div>
+                  <div class="text-sm sm:text-xl lg:text-2xl font-semibold text-indigo-700 mt-1 whitespace-nowrap justify-self-center">
+                    ↑ 一次
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // 類型 3：選擇題 (Page 3 & Page 4)
+      if (page.type === 'mcq') {
+        if (!selectedMcqOptions[page.id]) {
+          selectedMcqOptions[page.id] = new Set();
+        }
+        const chosenSet = selectedMcqOptions[page.id];
+        const chosenText = chosenSet.size > 0
+          ? Array.from(chosenSet).sort().map(k => `(${k})`).join('、')
+          : '';
+        const blankDisplay = isRevealed ? page.answerText : (chosenText || '&nbsp;');
+        const isLongMcq = page.id === 4;
+        const optionFontStyle = isLongMcq
+          ? 'font-size: clamp(0.82rem, 1.32vw, 1.45rem);'
+          : 'font-size: clamp(1rem, 1.65vw, 1.75rem);';
+
+        const optionsGridHtml = page.options.map(opt => {
+          const isSelected = chosenSet.has(opt.key);
+          return `
+            <button data-action="toggle-mcq" data-key="${opt.key}" style="${optionFontStyle}" class="px-2 sm:px-2.5 py-1.5 rounded-xl border text-left transition flex items-center gap-1.5 cursor-pointer leading-tight whitespace-nowrap ${
+              isSelected
+                ? 'border-indigo-600 bg-indigo-50 text-indigo-900 font-bold shadow-xs'
+                : 'border-slate-300 bg-white hover:bg-slate-100 text-slate-800'
+            }">
+              <span class="inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs sm:text-base font-bold shrink-0 ${
+                isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-700'
+              }">(${opt.key})</span>
+              <span class="whitespace-nowrap">${opt.html}</span>
+            </button>
+          `;
+        }).join('');
+
+        questionContainer.innerHTML = `
+          <div class="flex flex-col gap-1.5">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <div class="text-xl sm:text-3xl lg:text-4xl font-semibold text-slate-900 leading-tight">
+                ${page.questionHtml}
+              </div>
+              <div class="text-xl sm:text-3xl lg:text-4xl font-semibold text-slate-800 shrink-0 whitespace-nowrap leading-tight">
+                答：<span class="blank-slot min-w-[7rem] sm:min-w-[9rem]" data-action="toggle-answer" title="點擊顯示或隱藏參考答案">${blankDisplay}</span>。
+              </div>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-1.5 sm:gap-2 pt-0.5">
+              ${optionsGridHtml}
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // 類型 4：直接除是非問答題 (Page 5 & Page 6)
+      if (page.type === 'qa-blank') {
+        questionContainer.innerHTML = `
+          <div class="flex flex-col gap-1 py-0.5">
+            <span class="text-sm sm:text-xl lg:text-2xl font-bold text-indigo-700 tracking-wide leading-tight">${page.category}</span>
+            <div class="flex flex-wrap items-baseline justify-between gap-4 pt-0.5">
+              <div class="text-2xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 leading-tight whitespace-nowrap">
+                ${page.questionHtml}
+              </div>
+              <div class="text-2xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 shrink-0 leading-tight whitespace-nowrap">
+                答：<span class="blank-slot min-w-[7rem] sm:min-w-[9rem]" data-action="toggle-answer" title="點擊顯示或隱藏解答">${isRevealed ? page.answerText : '&nbsp;'}</span>。
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // 類型 5：因式分解計算題 (1) ~ (22)
+      if (page.type === 'factor-problem') {
+        const isLongFormula = page.id >= 8 && page.id <= 16 && page.id !== 10 && page.id !== 12;
+        const formulaSizeClass = isLongFormula
+          ? 'text-xl sm:text-3xl lg:text-5xl'
+          : 'text-3xl sm:text-5xl lg:text-6xl';
+        const qNumSizeClass = isLongFormula
+          ? 'text-xl sm:text-3xl lg:text-4xl'
+          : 'text-2xl sm:text-4xl lg:text-5xl';
+        const blankWidthClass = isLongFormula
+          ? 'min-w-[8rem] sm:min-w-[13rem] lg:min-w-[16rem]'
+          : 'min-w-[10rem] sm:min-w-[15rem] lg:min-w-[18rem]';
+
+        const blankPartHtml = page.hasBlankLine
+          ? `<span class="math-op">=</span><span class="blank-slot ${blankWidthClass} math-expr" data-action="toggle-answer" title="點擊顯示或隱藏答案">${isRevealed ? page.answerText : '&nbsp;'}</span>。`
+          : (isRevealed
+              ? `<span class="ml-3 px-3 py-0.5 rounded-xl bg-red-50 border border-red-200 text-red-600 text-3xl sm:text-5xl math-expr font-bold">＝ ${page.answerText}</span>`
+              : '');
+
+        questionContainer.innerHTML = `
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="text-sm sm:text-xl lg:text-2xl font-bold text-indigo-700 tracking-wide leading-tight">${page.category}</span>
+            </div>
+            <div class="flex flex-wrap items-baseline gap-2 sm:gap-3 pt-0.5 whitespace-nowrap">
+              <span class="${qNumSizeClass} font-bold text-slate-700 math-num leading-none">${page.qNum}</span>
+              <div class="${formulaSizeClass} font-bold text-slate-900 math-expr tracking-wide leading-tight whitespace-nowrap">
+                ${page.formulaHtml}
+                ${blankPartHtml}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // ==================== 題目互動控制函式 ====================
+    window.togglePageAnswer = function() {
+      const page = PAGES_DATA[currentPageIndex];
+      revealedState[page.id] = !revealedState[page.id];
+      renderNavigationUI();
+      renderCurrentQuestion();
+      resizeCanvas(true);
+    };
+
+    window.toggleMcqOption = function(key) {
+      const page = PAGES_DATA[currentPageIndex];
+      if (!selectedMcqOptions[page.id]) {
+        selectedMcqOptions[page.id] = new Set();
+      }
+      const set = selectedMcqOptions[page.id];
+      if (set.has(key)) {
+        set.delete(key);
+      } else {
+        // 第 4 題為單選，第 3 題為複選
+        if (page.id === 4) set.clear();
+        set.add(key);
+      }
+      renderCurrentQuestion();
+    };
+
+    function goToPage(index) {
+      if (index < 0 || index >= PAGES_DATA.length) return;
+      currentPageIndex = index;
+      renderNavigationUI();
+      renderCurrentQuestion();
+      // 校正全區域畫布尺寸並重繪該頁專屬筆跡
+      requestAnimationFrame(() => resizeCanvas(true));
+    }
+
+    // ==================== HTML5 Canvas 全區域手寫白板系統（含圈選物件刪除與歷史復原） ====================
+    function resizeCanvas(redraw = true) {
+      const rect = writingAreaWrapper.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      draftCanvas.width = Math.floor(rect.width * dpr);
+      draftCanvas.height = Math.floor(rect.height * dpr);
+      draftCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      if (redraw) {
+        redrawCurrentPageStrokes();
+      }
+    }
+
+    function getCurrentPageStrokes() {
+      const pageId = PAGES_DATA[currentPageIndex].id;
+      if (!pageDrawingHistory[pageId]) {
+        pageDrawingHistory[pageId] = [];
+      }
+      return pageDrawingHistory[pageId];
+    }
+
+    function getCurrentPageUndoStack() {
+      const pageId = PAGES_DATA[currentPageIndex].id;
+      if (!pageUndoStack[pageId]) {
+        pageUndoStack[pageId] = [];
+      }
+      return pageUndoStack[pageId];
+    }
+
+    // 儲存當前頁面的筆跡快照，供復原（Undo）使用
+    function saveHistorySnapshot() {
+      const strokes = getCurrentPageStrokes();
+      const stack = getCurrentPageUndoStack();
+      const cloned = strokes.map(s => ({
+        ...s,
+        points: s.points.map(p => ({ x: p.x, y: p.y }))
+      }));
+      stack.push(cloned);
+      if (stack.length > 50) stack.shift();
+    }
+
+    function redrawCurrentPageStrokes() {
+      const rect = writingAreaWrapper.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      draftCtx.clearRect(0, 0, rect.width, rect.height);
+
+      const strokes = getCurrentPageStrokes();
+      for (const stroke of strokes) {
+        drawSingleStroke(ctx, stroke);
+      }
+    }
+
+    function drawSingleStroke(targetCtx, stroke) {
+      if (!stroke || stroke.points.length === 0) return;
+      targetCtx.save();
+      targetCtx.lineCap = 'round';
+      targetCtx.lineJoin = 'round';
+      targetCtx.lineWidth = stroke.size;
+
+      if (stroke.isEraser) {
+        targetCtx.globalCompositeOperation = 'destination-out';
+        targetCtx.globalAlpha = 1.0;
+        targetCtx.strokeStyle = 'rgba(0,0,0,1)';
+      } else {
+        targetCtx.globalCompositeOperation = 'source-over';
+        targetCtx.globalAlpha = stroke.opacity !== undefined ? stroke.opacity : 1.0;
+        targetCtx.strokeStyle = stroke.color;
+      }
+
+      const pts = stroke.points;
+      targetCtx.beginPath();
+      if (pts.length === 1) {
+        targetCtx.arc(pts[0].x, pts[0].y, stroke.size / 2, 0, Math.PI * 2);
+        targetCtx.fillStyle = stroke.isEraser ? 'rgba(0,0,0,1)' : stroke.color;
+        targetCtx.fill();
+      } else {
+        targetCtx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length - 1; i++) {
+          const midX = (pts[i].x + pts[i + 1].x) / 2;
+          const midY = (pts[i].y + pts[i + 1].y) / 2;
+          targetCtx.quadraticCurveTo(pts[i].x, pts[i].y, midX, midY);
+        }
+        const last = pts[pts.length - 1];
+        targetCtx.lineTo(last.x, last.y);
+        targetCtx.stroke();
+      }
+      targetCtx.restore();
+    }
+
+    // 繪製圈選刪除（Lasso）的預覽虛線與半透明選取範圍
+    function drawLassoPreview(points) {
+      const rect = writingAreaWrapper.getBoundingClientRect();
+      draftCtx.clearRect(0, 0, rect.width, rect.height);
+      if (!points || points.length < 2) return;
+
+      draftCtx.save();
+      draftCtx.beginPath();
+      draftCtx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        draftCtx.lineTo(points[i].x, points[i].y);
+      }
+      draftCtx.closePath();
+      draftCtx.fillStyle = 'rgba(239, 68, 68, 0.14)';
+      draftCtx.fill();
+
+      draftCtx.lineWidth = 2;
+      draftCtx.setLineDash([6, 4]);
+      draftCtx.strokeStyle = '#dc2626';
+      draftCtx.stroke();
+      draftCtx.restore();
+    }
+
+    // 幾何演算法：判斷點是否在多邊形內部（Ray-Casting 射線法）
+    function isPointInPolygon(pt, polygon) {
+      if (polygon.length < 3) return false;
+      let inside = false;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].x, yi = polygon[i].y;
+        const xj = polygon[j].x, yj = polygon[j].y;
+        const intersect = ((yi > pt.y) !== (yj > pt.y)) &&
+          (pt.x < (xj - xi) * (pt.y - yi) / ((yj - yi) || 1e-9) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    // 幾何演算法：判斷兩線段 AB 與 CD 是否相交
+    function doSegmentsIntersect(p1, p2, p3, p4) {
+      function ccw(A, B, C) {
+        return (C.y - A.y) * (B.x - A.x) > (B.y - A.y) * (C.x - A.x);
+      }
+      return (ccw(p1, p3, p4) !== ccw(p2, p3, p4)) && (ccw(p1, p2, p3) !== ccw(p1, p2, p4));
+    }
+
+    // 幾何演算法：點 P 到線段 AB 的最短距離
+    function distToSegment(p, v, w) {
+      const l2 = (v.x - w.x) ** 2 + (v.y - w.y) ** 2;
+      if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
+      let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+      t = Math.max(0, Math.min(1, t));
+      return Math.hypot(p.x - (v.x + t * (w.x - v.x)), p.y - (v.y + t * (w.y - v.y)));
+    }
+
+    // 判斷單筆物件（stroke）是否被圈選路徑包圍或劃過
+    function isStrokeHitByLasso(stroke, lassoPts) {
+      if (!stroke || !stroke.points || stroke.points.length === 0 || stroke.isEraser) return false;
+      const threshold = Math.max((stroke.size || 2) / 2 + 4, 6);
+
+      // 1. 檢查筆跡的任一頂點是否在圈選多邊形內部，或距離圈選路徑夠近
+      for (const pt of stroke.points) {
+        if (lassoPts.length >= 3 && isPointInPolygon(pt, lassoPts)) {
+          return true;
+        }
+        for (let i = 0; i < lassoPts.length; i++) {
+          const nextIdx = (i + 1) % lassoPts.length;
+          if (distToSegment(pt, lassoPts[i], lassoPts[nextIdx]) <= threshold) {
+            return true;
+          }
+        }
+      }
+
+      // 2. 檢查筆跡的線段是否與圈選路徑線段相交
+      for (let i = 0; i < stroke.points.length - 1; i++) {
+        const a = stroke.points[i];
+        const b = stroke.points[i + 1];
+        for (let j = 0; j < lassoPts.length; j++) {
+          const c = lassoPts[j];
+          const d = lassoPts[(j + 1) % lassoPts.length];
+          if (doSegmentsIntersect(a, b, c, d)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    function getPointerPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+    // 檢查輕點位置是否落在底層題目區的填空欄或選擇題選項上
+    function checkUnderlyingInteractiveTap(clientX, clientY) {
+      const elements = document.elementsFromPoint(clientX, clientY);
+      for (const el of elements) {
+        const actionEl = el.closest && el.closest('[data-action]');
+        if (actionEl) {
+          const action = actionEl.getAttribute('data-action');
+          if (action === 'toggle-answer') {
+            window.togglePageAnswer();
+            return true;
+          } else if (action === 'toggle-mcq') {
+            const key = actionEl.getAttribute('data-key');
+            if (key) window.toggleMcqOption(key);
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      canvas.setPointerCapture(e.pointerId);
+      isDrawing = true;
+      pointerDownClientPos = { x: e.clientX, y: e.clientY };
+      const pos = getPointerPos(e);
+
+      if (isLassoMode) {
+        currentStroke = {
+          isLasso: true,
+          points: [pos]
+        };
+        return;
+      }
+
+      currentStroke = {
+        color: currentPenColor,
+        opacity: colorOpacities[currentPenColor] ?? 1.0,
+        size: isEraserMode ? 24 : currentPenSize,
+        isEraser: isEraserMode,
+        points: [pos]
+      };
+
+      if (isEraserMode) {
+        saveHistorySnapshot();
+        getCurrentPageStrokes().push(currentStroke);
+        drawSingleStroke(ctx, currentStroke);
+      } else {
+        const rect = writingAreaWrapper.getBoundingClientRect();
+        draftCtx.clearRect(0, 0, rect.width, rect.height);
+        drawSingleStroke(draftCtx, currentStroke);
+      }
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (!isDrawing || !currentStroke) return;
+      const pos = getPointerPos(e);
+      currentStroke.points.push(pos);
+
+      if (currentStroke.isLasso) {
+        drawLassoPreview(currentStroke.points);
+      } else if (isEraserMode) {
+        redrawCurrentPageStrokes();
+      } else {
+        const rect = writingAreaWrapper.getBoundingClientRect();
+        draftCtx.clearRect(0, 0, rect.width, rect.height);
+        drawSingleStroke(draftCtx, currentStroke);
+      }
+    });
+
+    function finishStroke(e) {
+      if (!isDrawing || !currentStroke) return;
+      isDrawing = false;
+
+      // 判斷是否為單純輕點（位移小於 5px），若點在填空底線或選擇題選項上則觸發互動而不留下墨點
+      if (pointerDownClientPos && e && e.clientX !== undefined) {
+        const dist = Math.hypot(e.clientX - pointerDownClientPos.x, e.clientY - pointerDownClientPos.y);
+        if (dist < 5 && currentStroke.points.length <= 3) {
+          const triggered = checkUnderlyingInteractiveTap(e.clientX, e.clientY);
+          if (triggered) {
+            if (isEraserMode && !currentStroke.isLasso) {
+              const stack = getCurrentPageUndoStack();
+              const pageId = PAGES_DATA[currentPageIndex].id;
+              if (stack.length > 0) {
+                pageDrawingHistory[pageId] = stack.pop();
+              }
+              redrawCurrentPageStrokes();
+            } else {
+              const rect = writingAreaWrapper.getBoundingClientRect();
+              draftCtx.clearRect(0, 0, rect.width, rect.height);
+            }
+            currentStroke = null;
+            pointerDownClientPos = null;
+            return;
+          }
+        }
+      }
+
+      // 處理「圈選刪除」放開後的整條筆跡物件移除
+      if (currentStroke.isLasso) {
+        const rect = writingAreaWrapper.getBoundingClientRect();
+        draftCtx.clearRect(0, 0, rect.width, rect.height);
+
+        const lassoPts = currentStroke.points;
+        const pageId = PAGES_DATA[currentPageIndex].id;
+        const strokes = getCurrentPageStrokes();
+
+        if (strokes.length > 0 && lassoPts.length >= 1) {
+          const remaining = strokes.filter(st => !isStrokeHitByLasso(st, lassoPts));
+          if (remaining.length !== strokes.length) {
+            saveHistorySnapshot();
+            pageDrawingHistory[pageId] = remaining;
+            redrawCurrentPageStrokes();
+          }
+        }
+        currentStroke = null;
+        pointerDownClientPos = null;
+        return;
+      }
+
+      if (!isEraserMode) {
+        saveHistorySnapshot();
+        getCurrentPageStrokes().push(currentStroke);
+        const rect = writingAreaWrapper.getBoundingClientRect();
+        draftCtx.clearRect(0, 0, rect.width, rect.height);
+        drawSingleStroke(ctx, currentStroke);
+      }
+      currentStroke = null;
+      pointerDownClientPos = null;
+    }
+
+    canvas.addEventListener('pointerup', finishStroke);
+    canvas.addEventListener('pointercancel', finishStroke);
+
+    // ==================== 工具列與按鈕事件綁定 ====================
+    const opacitySlider = document.getElementById('opacitySlider');
+    const opacityValueText = document.getElementById('opacityValueText');
+    const opacityPreviewDot = document.getElementById('opacityPreviewDot');
+    const activeColorLabel = document.getElementById('activeColorLabel');
+    const eraserBtn = document.getElementById('eraserBtn');
+    const lassoDeleteBtn = document.getElementById('lassoDeleteBtn');
+
+    function updateToolButtonsUI() {
+      if (isEraserMode) {
+        eraserBtn.classList.add('bg-indigo-100', 'text-indigo-700', 'ring-1', 'ring-indigo-400');
+      } else {
+        eraserBtn.classList.remove('bg-indigo-100', 'text-indigo-700', 'ring-1', 'ring-indigo-400');
+      }
+
+      if (isLassoMode) {
+        lassoDeleteBtn.classList.add('bg-rose-100', 'text-rose-700', 'ring-1', 'ring-rose-400', 'font-bold');
+      } else {
+        lassoDeleteBtn.classList.remove('bg-rose-100', 'text-rose-700', 'ring-1', 'ring-rose-400', 'font-bold');
+      }
+
+      if (isEraserMode || isLassoMode) {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('ring-2', 'ring-offset-1', 'ring-indigo-500'));
+      } else {
+        document.querySelectorAll('.color-btn').forEach(b => {
+          if (b.dataset.color === currentPenColor) {
+            b.classList.add('ring-2', 'ring-offset-1', 'ring-indigo-500');
+          } else {
+            b.classList.remove('ring-2', 'ring-offset-1', 'ring-indigo-500');
+          }
+        });
+      }
+    }
+
+    // 同步更新當前顏色的透明度 UI 與圓點預覽
+    function syncOpacityUI() {
+      const alpha = colorOpacities[currentPenColor] ?? 1.0;
+      const pct = Math.round(alpha * 100);
+      opacitySlider.value = pct;
+      opacityValueText.textContent = `${pct}%`;
+      opacityPreviewDot.style.backgroundColor = currentPenColor;
+      opacityPreviewDot.style.opacity = alpha;
+      activeColorLabel.textContent = currentPenName;
+
+      // 同步讓各顏色按鈕本身也反映各自設定的透明度
+      document.querySelectorAll('.color-btn').forEach(b => {
+        const c = b.dataset.color;
+        b.style.opacity = colorOpacities[c] ?? 1.0;
+      });
+    }
+
+    // 畫筆顏色切換（黑、紅、藍、黃、紫、橘）
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        isEraserMode = false;
+        isLassoMode = false;
+        currentPenColor = btn.dataset.color;
+        currentPenName = btn.dataset.name || '';
+        updateToolButtonsUI();
+        syncOpacityUI();
+      });
+    });
+
+    // 調整當前所選顏色的透明度滑桿
+    opacitySlider.addEventListener('input', (e) => {
+      isEraserMode = false;
+      isLassoMode = false;
+      const pct = parseInt(e.target.value, 10);
+      colorOpacities[currentPenColor] = pct / 100;
+      updateToolButtonsUI();
+      syncOpacityUI();
+    });
+
+    // 筆畫粗細切換（細、中、粗、特粗）
+    document.querySelectorAll('.size-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        isEraserMode = false;
+        isLassoMode = false;
+        currentPenSize = parseFloat(btn.dataset.size);
+        updateToolButtonsUI();
+        document.querySelectorAll('.size-btn').forEach(b => {
+          b.className = 'size-btn px-2 py-1 text-xs rounded-md text-slate-600 hover:bg-slate-100 font-medium cursor-pointer';
+        });
+        btn.className = 'size-btn px-2 py-1 text-xs rounded-md bg-indigo-50 text-indigo-700 font-bold cursor-pointer';
+      });
+    });
+
+    // 橡皮擦切換
+    eraserBtn.addEventListener('click', () => {
+      isEraserMode = !isEraserMode;
+      if (isEraserMode) isLassoMode = false;
+      updateToolButtonsUI();
+    });
+
+    // 圈選物件刪除切換
+    lassoDeleteBtn.addEventListener('click', () => {
+      isLassoMode = !isLassoMode;
+      if (isLassoMode) isEraserMode = false;
+      updateToolButtonsUI();
+    });
+
+    // 復原上一步（支援畫筆、橡皮擦、圈選刪除與清除本頁的復原）
+    document.getElementById('undoBtn').addEventListener('click', () => {
+      const pageId = PAGES_DATA[currentPageIndex].id;
+      const stack = getCurrentPageUndoStack();
+      if (stack.length > 0) {
+        pageDrawingHistory[pageId] = stack.pop();
+        redrawCurrentPageStrokes();
+      } else if (getCurrentPageStrokes().length > 0) {
+        getCurrentPageStrokes().pop();
+        redrawCurrentPageStrokes();
+      }
+    });
+
+    // 清除本頁手寫（僅位於右下角工具列，且支援復原）
+    document.getElementById('clearCanvasBtn').addEventListener('click', () => {
+      const pageId = PAGES_DATA[currentPageIndex].id;
+      if (getCurrentPageStrokes().length > 0) {
+        saveHistorySnapshot();
+        pageDrawingHistory[pageId] = [];
+        redrawCurrentPageStrokes();
+      }
+    });
+
+    // 背景格線切換
+    document.getElementById('gridToggleBtn').addEventListener('click', (e) => {
+      writingAreaWrapper.classList.remove(GRID_MODES[gridModeIndex].className);
+      gridModeIndex = (gridModeIndex + 1) % GRID_MODES.length;
+      writingAreaWrapper.classList.add(GRID_MODES[gridModeIndex].className);
+      e.currentTarget.textContent = GRID_MODES[gridModeIndex].label;
+    });
+
+    // 收合/展開右下角工具列
+    document.getElementById('collapseToolbarBtn').addEventListener('click', () => {
+      const bar = document.getElementById('drawingToolbar');
+      bar.classList.toggle('hidden');
+    });
+
+    // 上一題 / 下一題 / 顯示解答
+    prevBtn.addEventListener('click', () => goToPage(currentPageIndex - 1));
+    nextBtn.addEventListener('click', () => goToPage(currentPageIndex + 1));
+    toggleHintBtn.addEventListener('click', () => window.togglePageAnswer());
+
+    // 選題總覽 Modal 開關
+    const questionModal = document.getElementById('questionModal');
+    function openQuestionModal() {
+      buildModalGrid();
+      questionModal.classList.remove('hidden');
+      questionModal.classList.add('flex');
+    }
+    function closeQuestionModal() {
+      questionModal.classList.add('hidden');
+      questionModal.classList.remove('flex');
+    }
+    document.getElementById('openModalBtn').addEventListener('click', openQuestionModal);
+    document.getElementById('closeModalBtn').addEventListener('click', closeQuestionModal);
+    questionModal.addEventListener('click', (e) => {
+      if (e.target === questionModal) closeQuestionModal();
+    });
+
+    // 鍵盤左右方向鍵快速換題
+    window.addEventListener('keydown', (e) => {
+      if (!questionModal.classList.contains('hidden')) {
+        if (e.key === 'Escape') closeQuestionModal();
+        return;
+      }
+      if (e.key === 'ArrowLeft') {
+        goToPage(currentPageIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        goToPage(currentPageIndex + 1);
+      }
+    });
+
+    // 視窗縮放時自動調整畫布並重繪筆跡
+    window.addEventListener('resize', () => resizeCanvas(true));
+
+    // 初始化啟動
+    window.onload = function() {
+      renderNavigationUI();
+      renderCurrentQuestion();
+      resizeCanvas(true);
+    };
+  </script>
+</body>
+</html>
