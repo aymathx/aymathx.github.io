@@ -10,6 +10,8 @@ const LVN = ['精熟', '穩定', '待加強', '需補強'], LVC = ['ok', 'st', '
 const TERM_KEY = ROLE === 'teacher' ? 't.term' : 'd.term';
 CUR_TERM = store.get(TERM_KEY, null);
 const filePre = () => GRADE_NAME + (D.config.termShort || '');
+/** 老師端 PDF 的浮水印與頁尾，照學生端：LOGO 看網站設定；頁尾左邊「學號 姓名｜（報告編號｜）警語」 */
+const pdfOpt = who => ({ logo: !!(D.config && D.config.logo), note: `${who ? who + '｜' : ''}僅供本班學生個人練習，請勿轉傳或公開` });
 { const h = $('#loginForm h2'); if (h && GRADE_NAME && h.textContent.indexOf(GRADE_NAME) !== 0) h.textContent = GRADE_NAME + '－' + h.textContent; }
 
 function show(name) { $$('.screen').forEach(s => { s.hidden = s.id !== 's-' + name; }); scrollTo({ top: 0 }); }
@@ -347,7 +349,7 @@ $('#tBody').addEventListener('click', async e => {
     const list = D.students.filter(x => DSEL.has(x.id));
     if (!list.length) return;
     return run(`產生 PDF 中（${list.length} 人）…`, () => savePdf(`<div>${list.map((x, k) => `<div class="${k ? 'pb' : ''}">${studentPage(x.id)}</div>`).join('')}</div>`,
-      `${filePre()}_學習報告_${list.length === 1 ? list[0].id + list[0].name : '勾選' + list.length + '人'}_${dshort(Date.now()).replace('/', '')}.pdf`)).catch(() => { });
+      `${filePre()}_學習報告_${list.length === 1 ? list[0].id + list[0].name : '勾選' + list.length + '人'}_${dshort(Date.now()).replace('/', '')}.pdf`, pdfOpt(list.length === 1 ? list[0].id + ' ' + list[0].name : ''))).catch(() => { });
   }
   const mp = t.closest('[data-mockpdf]');
   if (mp) return mockPdf(mp.dataset.mockpdf);
@@ -371,11 +373,11 @@ $('#tBody').addEventListener('click', async e => {
   const ap = t.closest('[data-apdf]');
   if (ap) return attemptPdf(ap.dataset.apdf);
   const sp = t.closest('[data-spdf]');
-  if (sp) return run('產生 PDF 中…', () => savePdf(`<div>${studentPage(sp.dataset.spdf)}</div>`, `${filePre()}_學習報告_${sp.dataset.spdf}${D.students.find(s => s.id === sp.dataset.spdf).name}.pdf`)).catch(() => { });
+  if (sp) return run('產生 PDF 中…', () => { const st = D.students.find(s => s.id === sp.dataset.spdf); return savePdf(`<div>${studentPage(st.id)}</div>`, `${filePre()}_學習報告_${st.id}${st.name}.pdf`, pdfOpt(st.id + ' ' + st.name)); }).catch(() => { });
   const sc = t.closest('[data-secpdf]');
   if (sc) return sectionPdf(sc.dataset.secpdf);
-  if (t.id === 'exStuBtn') { const id = $('#exStu').value; return run('產生 PDF 中…', () => savePdf(`<div>${studentPage(id)}</div>`, `${filePre()}_學習報告_${id}${D.students.find(s => s.id === id).name}.pdf`)).catch(() => { }); }
-  if (t.id === 'exAllPdf') return run('產生 PDF 中（人數多會比較久）…', () => savePdf(`<div>${D.students.map((s, i) => `<div class="${i ? 'pb' : ''}">${studentPage(s.id)}</div>`).join('')}</div>`, `${filePre()}_全體學生報告_${dshort(Date.now()).replace('/', '')}.pdf`)).catch(() => { });
+  if (t.id === 'exStuBtn') { const id = $('#exStu').value, st = D.students.find(s => s.id === id); return run('產生 PDF 中…', () => savePdf(`<div>${studentPage(id)}</div>`, `${filePre()}_學習報告_${id}${st.name}.pdf`, pdfOpt(id + ' ' + st.name))).catch(() => { }); }
+  if (t.id === 'exAllPdf') return run('產生 PDF 中（人數多會比較久）…', () => savePdf(`<div>${D.students.map((s, i) => `<div class="${i ? 'pb' : ''}">${studentPage(s.id)}</div>`).join('')}</div>`, `${filePre()}_全體學生報告_${dshort(Date.now()).replace('/', '')}.pdf`, pdfOpt(''))).catch(() => { });
   if (t.id === 'exAllXlsx') return exportXlsx();
   if (t.id === 'exSecBtn') return sectionPdf($('#exSec').value);
   if (t.id === 'copyDir') { try { await navigator.clipboard.writeText(location.href.replace(/teacher\.html.*$/, 'director.html')); toast('已複製主任網址'); } catch (err) { toast('不能自動複製，請手動選取網址'); } return; }
@@ -400,7 +402,7 @@ async function attemptPdf(aid) {
     await run('產生 PDF 中…', async () => {
       const r = (await api(ROLE === 'teacher' ? 'tReport' : 'dReport', { token: TOKEN, aid })).report;
       if (ROLE !== 'teacher') r.items = [];             // 主任只看分數與觀念分析，不給題目、正解、解析
-      await savePdf(reportPdfHtml(r, D.config || {}, '全部'), reportFileName(r), { logo: !!(D.config && D.config.logo), note: `${r.uid} ${r.name}｜報告編號 ${r.aid}` });
+      await savePdf(reportPdfHtml(r, D.config || {}, '全部'), reportFileName(r), pdfOpt(`${r.uid} ${r.name}｜報告編號 ${r.aid}`));
     });
   } catch (e) { /* 已提示 */ }
 }
@@ -443,7 +445,7 @@ function sectionPdf(no) {
     <div class="box"><h2>最常錯的題目</h2>${s.miss.map(m => `<div style="margin-bottom:8px">${hbar(`${m.qid}（${m.src}）`, pct(m.c, m.n), colorFor(pct(m.c, m.n)), `${m.c}／${m.n}`)}<div class="small" style="color:#5E6E80">${fmt(m.stem)}…</div></div>`).join('') || '資料還不夠。'}</div>
     <div class="box"><h2>需要關心的學生</h2>${s.watch.map(w => `${esc(w.name)}（${w.score} 分）`).join('、') || '目前沒有'}</div>
     <div class="box"><h2>學生最高分</h2><table><thead><tr><th>學號</th><th>姓名</th><th>練習次數</th><th>最高分</th></tr></thead><tbody>${D.students.map(st => { const i = D.units.findIndex(u => u.no === no); return `<tr><td>${esc(st.id)}</td><td>${esc(st.name)}</td><td>${st.cnt[i]}</td><td>${st.best[i] === null ? '—' : st.best[i]}</td></tr>`; }).join('')}</tbody></table></div></div>`;
-  return run('產生 PDF 中…', () => savePdf(html, `${filePre()}_小節報告_${no}.pdf`)).catch(() => { });
+  return run('產生 PDF 中…', () => savePdf(html, `${filePre()}_小節報告_${no}.pdf`, pdfOpt(''))).catch(() => { });
 }
 
 function mockPdf(L) {
@@ -456,7 +458,7 @@ function mockPdf(L) {
     <div class="box"><h2>各小節答對率</h2>${bars((m.secs || []).map(x => Object.assign({ label: `${x.no} ${x.name}` }, x)), x => `${x.c}／${x.n}`)}</div>
     <div class="box"><h2>最常錯的題目</h2>${m.miss.map(q => `<div style="margin-bottom:8px">${hbar(`${q.qid}（${q.src}）`, pct(q.c, q.n), colorFor(pct(q.c, q.n)), `${q.c}／${q.n}`)}<div class="small" style="color:#5E6E80">${fmt(q.stem)}…</div></div>`).join('') || '資料還不夠。'}</div>
     <div class="box"><h2>需要關心的學生</h2>${m.watch.map(w => `${esc(w.name)}（${w.score} 分）`).join('、') || '目前沒有'}</div></div>`;
-  return run('產生 PDF 中…', () => savePdf(html, `${filePre()}_模擬卷報告_${m.L}卷.pdf`)).catch(() => { });
+  return run('產生 PDF 中…', () => savePdf(html, `${filePre()}_模擬卷報告_${m.L}卷.pdf`, pdfOpt(''))).catch(() => { });
 }
 
 function exportXlsx() {
