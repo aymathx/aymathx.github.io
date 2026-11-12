@@ -10,7 +10,7 @@ const LVN = ['精熟', '穩定', '待加強', '需補強'], LVC = ['ok', 'st', '
 const TERM_KEY = ROLE === 'teacher' ? 't.term' : 'd.term';
 CUR_TERM = store.get(TERM_KEY, null);
 const filePre = () => GRADE_NAME + (D.config.termShort || '');
-{ const h = $('#loginForm h2'); if (h && GRADE_NAME) h.textContent = GRADE_NAME + '－' + h.textContent; }
+{ const h = $('#loginForm h2'); if (h && GRADE_NAME && h.textContent.indexOf(GRADE_NAME) !== 0) h.textContent = GRADE_NAME + '－' + h.textContent; }
 
 function show(name) { $$('.screen').forEach(s => { s.hidden = s.id !== 's-' + name; }); scrollTo({ top: 0 }); }
 const unitName = no => { const u = (D.units || []).find(x => x.no === no); return u ? `${u.no} ${u.name}` : no; };

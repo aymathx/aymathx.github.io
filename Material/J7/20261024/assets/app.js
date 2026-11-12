@@ -494,6 +494,20 @@ $('#mocks').addEventListener('click', e => { const b = e.target.closest('.mock')
 $('#paper').addEventListener('click', e => { const b = e.target.closest('[data-mstart]'); if (b) startMock(b.dataset.mstart); });
 $('#mockBack').onclick = () => show('home');
 
+/* 作答中先離開：這份維持「進行中」、時間照走，回首頁後按「繼續作答」接回（答案已存在這台裝置） */
+async function leaveAttempt(kind) {
+  const att = kind === 'm' ? M : Q;
+  if (att && !att.done) { if (kind === 'q') commitTime(); saveLocal(att); }
+  stopTimer();
+  if (kind === 'm') M = null; else Q = null;     // 清掉，之後逾時才不會被當成另一種測驗
+  store.del('cur');
+  $('#confirmBox').innerHTML = ''; $('#mconfirm').innerHTML = '';
+  await run('載入中…', loadHome).catch(() => { });
+  show('home');
+}
+$('#qLeave').onclick = () => leaveAttempt('q');
+$('#mLeave').onclick = () => leaveAttempt('m');
+
 /* ---------- 段考模擬：作答 ---------- */
 async function startMock(L, silent) {
   let r;

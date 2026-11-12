@@ -69,6 +69,8 @@ async function run(msg, fn) {
 // 分子、分母：一串數字字母、一組括號，或已排好的根號（佔位字元，前面可帶係數）；後面可帶次方
 const ATOM = '(?:\\([^()]*\\)|[0-9]*\\d+|[0-9A-Za-zα-ω甲乙丙丁戊□△○☆？?.]+)(?:\\^\\{[^{}]*\\})?';
 const FRAC_RE = new RegExp('(' + ATOM + ')／(' + ATOM + ')', 'g');
+// 分子是單獨一項、分母是 {..}（例：1／{3－√{2}}、5／{√{2}}）
+const BARE_FRAC_RE = new RegExp('(' + ATOM + ')／\\{((?:[^{}]|\\{[^{}]*\\})+)\\}', 'g');
 const sup = s => s.replace(/\^\{([^{}]*)\}/g, '<sup>$1</sup>').replace(/_\{([^{}]*)\}/g, '<sub>$1</sub>');
 /** 根號、分數、上下標（h 已跳脫）。排好的根號、分數先換成佔位字元，最後再換回，避免被後面的規則拆壞 */
 function mathCore(h) {
@@ -84,6 +86,7 @@ function mathCore(h) {
     h = h.slice(0, i) + hold(`<span class="rt${tall ? ' tall' : ''}"><span class="rs">√</span><span class="rd">${inner}</span></span>`) + h.slice(j + 1);
   }
   h = h.replace(/\{((?:[^{}]|\{[^{}]*\})+)\}／\{((?:[^{}]|\{[^{}]*\})+)\}/g, (m, a, b) => hold(`<span class="frac"><span>${sup(a)}</span><span>${sup(b)}</span></span>`))
+    .replace(BARE_FRAC_RE, (m, a, b) => hold(`<span class="frac"><span>${sup(a)}</span><span>${sup(b)}</span></span>`))
     .replace(FRAC_RE, (m, a, b) => hold(`<span class="frac"><span>${sup(a)}</span><span>${sup(b)}</span></span>`));
   h = sup(sup(h));
   while (/\d+/.test(h)) h = h.replace(/(\d+)/g, (m, n) => box[n]);
@@ -338,7 +341,7 @@ function reviewItem(it, no, showSrc) {
 }
 
 function goalRow(g) {
-  return `<div class="goal"><span class="ic st-${g.status}">${ST_ICON[g.status]}</span><span class="nm">${esc(g.name)}</span><span class="badge st-${g.status}">${g.status}<span>答對 ${g.c}／${g.n} 題</span></span>${g.status !== '掌握' && g.tip ? `<span class="tip">${esc(g.tip)}</span>` : ''}</div>`;
+  return `<div class="goal"><span class="ic st-${g.status}">${ST_ICON[g.status]}</span><span class="nm">${esc(g.name)}</span><span class="badge st-${g.status}">${g.status}<span>答對 ${g.c}／${g.n} 題</span></span>${g.status !== '掌握' && g.tip ? `<span class="tip">${fmt(g.tip)}</span>` : ''}</div>`;
 }
 
 const hbar = (label, p, cls, val) => `<div class="hb"><span class="lb" title="${esc(label)}">${esc(label)}</span><span class="tr"><i class="${cls}" style="width:${Math.max(0, Math.min(100, p))}%"></i></span><span class="v">${val === undefined ? p + '%' : val}</span></div>`;
@@ -412,7 +415,7 @@ function rpDiag(r) {
   return `<table class="rp-diag"><thead><tr><th></th><th>學習目標</th><th style="width:48px">答對</th><th style="width:96px">錯的題號</th><th style="width:118px">錯的原因</th></tr></thead><tbody>${r.goals.map(g => {
     const wr = items.map((it, i) => ({ it, no: i + 1 })).filter(x => !x.it.right && !x.it.missing && x.it.tgt === g.code), tags = {};
     wr.forEach(x => (x.it.why || []).forEach(w => { tags[w] = (tags[w] || 0) + 1; }));
-    return `<tr><td class="ic st-${g.status}">${ST_ICON[g.status]}</td><td><span class="nm">${esc(g.name)}</span>${g.status !== '掌握' && g.tip ? `<div class="tip">${esc(g.tip)}</div>` : ''}</td><td class="mono">${g.c}／${g.n}</td><td>${wr.length ? '第 ' + wr.map(x => x.no).join('、') + ' 題' : '—'}</td><td>${Object.keys(tags).map(k => rpTag(`${k} ${tags[k]}`, TAGC[k] || 'gray')).join('') || '—'}</td></tr>`;
+    return `<tr><td class="ic st-${g.status}">${ST_ICON[g.status]}</td><td><span class="nm">${esc(g.name)}</span>${g.status !== '掌握' && g.tip ? `<div class="tip">${fmt(g.tip)}</div>` : ''}</td><td class="mono">${g.c}／${g.n}</td><td>${wr.length ? '第 ' + wr.map(x => x.no).join('、') + ' 題' : '—'}</td><td>${Object.keys(tags).map(k => rpTag(`${k} ${tags[k]}`, TAGC[k] || 'gray')).join('') || '—'}</td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
