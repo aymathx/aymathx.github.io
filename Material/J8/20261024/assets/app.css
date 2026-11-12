@@ -353,6 +353,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100% }
 #pdfStage th, #pdfStage td { padding: 6px 8px; white-space: normal }
 #pdfStage .rv { padding: 10px 0; page-break-inside: avoid }
 #pdfStage .expl { font-size: 13px }
+#pdfStage .fig, #pdfStage .fig.small { margin: 6px 0 4px 0; width: auto; height: auto; max-width: 250px; max-height: 220px; border-radius: 0 }   /* 報告 PDF 的題目附圖：適中大小、靠左（Aaron 2026-11-12） */
 #pdfStage .pb { page-break-before: always }
 
 /* 2026-10-27：附圖點了放大、PDF 觀念名稱換行、回顧選項不從中間斷開 */
