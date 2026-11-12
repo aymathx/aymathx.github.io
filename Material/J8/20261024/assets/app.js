@@ -45,8 +45,13 @@ async function boot() {
       const cur = store.get('cur', null);                  // 作答到一半：回到那一段
       if (cur && cur.term) CUR_TERM = cur.term;
       await loadHome();
-      if (cur && cur.kind === 'q') return startQuiz(cur.unit, true);
-      if (cur && cur.kind === 'm') return startMock(cur.L, true);
+      // 只有後端確實還有「進行中、沒逾時」的那份才自動回去；殘留的舊記錄（已逾時）清掉，不要再自動開一份新的
+      const u = cur && cur.kind === 'q' ? (HOME.units || []).find(x => x.no === cur.unit) : null;
+      const p = cur && cur.kind === 'm' ? (HOME.papers || []).find(x => x.L === cur.L) : null;
+      const live = (u || p) && (u || p).active && leftOf((u || p).active.deadline, HOME.offset) > 0;
+      if (cur && !live) store.del('cur');
+      if (live && u) return startQuiz(cur.unit, true);
+      if (live && p) return startMock(cur.L, true);
       show('home');
       return openPending();
     } catch (e) {
