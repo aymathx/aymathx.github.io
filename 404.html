@@ -5,41 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AY's Shortened URL</title>
 </head>
-
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; text-align: center; padding-top: 60px;">
-
 <script>
-// 你的 Google Apps Script API 網址
 const API_URL = "https://script.google.com/macros/s/AKfycby9ngTy00VPXNN5cBiZkR-NeYEBS9JSNee-_eKWU9OEQ9Zxw0NX5ZIca6zrqdYNcv3Dvg/exec";
 
-// 原本固定的常用短網址（優先比對，秒速跳轉）
+// 固定的短網址
 const links = {
   
   // Aaron & Yvonne 's Google Drive
   "ay520": "https://drive.google.com/drive/folders/1kKxMuzYn6CBdndIWWHLN1ZmTFJltC5Km?usp=drive_link",
   
-  // Shopping
-
   // Travel
-  "X'mas": "https://aymathx.github.io/Aaron/Travel/Kobe/20261224/index.html",
+  "X'mas": "https://aymathx.github.io/Aaron/Travel/Japan/Kobe/20261224/index.html",
   
   // Trading System
   "PivotZone": "https://aymathx.github.io/Stock/Pivot Zone/index.html",
   
-  // Print
-  "Print": "https://www.dropbox.com/scl/fo/qyzk9cfrlgno5p2nwr0pd/ANwgVYamLf7R-62-Nbthbvs?rlkey=zjvs4cp4dw7w4q1f4zr8ljma7&st=kmby23y5&dl=0",
+  // iCloud Print
+  "print": "https://www.dropbox.com/scl/fo/qyzk9cfrlgno5p2nwr0pd/ANwgVYamLf7R-62-Nbthbvs?rlkey=zjvs4cp4dw7w4q1f4zr8ljma7&st=kmby23y5&dl=0",
 
   // BDSH
   "BDSH": "https://www.dropbox.com/scl/fo/siq10rcg608hwmn2a41cg/ALxRzxjAM_F9PAnjU5gZPxw?rlkey=lnezxc9z64z3za94as8qefiws&st=5oiog4wr&dl=0h",
-  "BDSH-ANSWER": "https://www.dropbox.com/scl/fo/bzasggiyj01u7t847ra96/AHtlXQBlRfNWRRyTcZm6mj8?rlkey=xi3vd2k3an320e5guayb9rv2e&st=w7kwpext&dl=0",
+  "BDSHANSWER": "https://www.dropbox.com/scl/fo/bzasggiyj01u7t847ra96/AHtlXQBlRfNWRRyTcZm6mj8?rlkey=xi3vd2k3an320e5guayb9rv2e&st=w7kwpext&dl=0",
   "指數函數圖形": "https://aymathx.github.io/BDSH/J11/20261020/index.html",
   "因式分解": "https://aymathx.github.io/BDSH/J8/20261112/index.html",
   "十字交乘": "https://aymathx.github.io/BDSH/J8/20261113/index.html",
   
-  "BDSHJ8": "https://aymathx.github.io/BDSH/J8/index.html",
-  "BDSHJ9": "https://aymathx.github.io/BDSH/J9/index.html",
-  "BDSHGM7": "https://aymathx.github.io/BDSH/GiftedMath/20260916/J7/index.html",
-  "BDSHGM8": "https://aymathx.github.io/BDSH/GiftedMath/20260916/J8/index.html",
+  // "BDSHJ8": "https://aymathx.github.io/BDSH/J8/index.html",
+  // "BDSHJ9": "https://aymathx.github.io/BDSH/J9/index.html",
+  // "BDSHGM7": "https://aymathx.github.io/BDSH/GiftedMath/20260916/J7/index.html",
+  // "BDSHGM8": "https://aymathx.github.io/BDSH/GiftedMath/20260916/J8/index.html",
 
   // 科普閱讀
   "科普閱讀09-21": "https://drive.google.com/drive/folders/1lBRwRFXDF0mCZbThPAg1aRm60Ffqp6V7?usp=drive_link",
@@ -67,46 +62,39 @@ const links = {
   // 愛英樂
   "AiYinYue": "https://drive.google.com/drive/folders/1yGCwZGPiWfPPD51nU0BYi91-hVMx_QIH?usp=drive_link",
   
-  "課堂影片08-09": "https://drive.google.com/drive/folders/1OxaibK7D0llWjcoS10m6w31i4Tz3lfl9?usp=drive_link",
-  "課堂影片08-23": "https://drive.google.com/drive/folders/1N58sKo_QJoLuhoQBTjc7tvwLzKr29Mq1?usp=drive_link",
-  "課堂影片08-30": "https://drive.google.com/drive/folders/15i3qLLy_gxOeBIXUYX0d4YMx2UNrnWNh?usp=drive_link",
-  "課堂影片09-06": "https://drive.google.com/drive/folders/1O4iU1FxL-jbLgmXZiB2FVZPU-YFpvvWc?usp=drive_link",
-  "課堂影片09-20": "https://drive.google.com/drive/folders/1efAg9lwzZ8jYYBk1EfwHVWOEIvH7fCRq?usp=drive_link",
-  "課堂影片10-04": "https://drive.google.com/drive/folders/1PW-pWXuyvmUPCYEsNDKxz9U6fRmYcZWV?usp=drive_link",
-  "課堂影片10-18": "https://drive.google.com/drive/folders/1Uuz8PcrxWPuaqBW0FWtb1XnTOFEPu30Y?usp=drive_link",
-  "課堂影片10-25": "https://drive.google.com/drive/folders/1IEtQSFvBLzNtpPZ3_j_Le5y5ExL4tK0F?usp=drive_link",
-  "課堂影片11-01": "https://drive.google.com/drive/folders/1OZDYh5iQ70XzAK8OAaMMa2_uQtrVrzwD?usp=drive_link",
+  // "課堂影片08-09": "https://drive.google.com/drive/folders/1OxaibK7D0llWjcoS10m6w31i4Tz3lfl9?usp=drive_link",
+  // "課堂影片08-23": "https://drive.google.com/drive/folders/1N58sKo_QJoLuhoQBTjc7tvwLzKr29Mq1?usp=drive_link",
+  // "課堂影片08-30": "https://drive.google.com/drive/folders/15i3qLLy_gxOeBIXUYX0d4YMx2UNrnWNh?usp=drive_link",
+  // "課堂影片09-06": "https://drive.google.com/drive/folders/1O4iU1FxL-jbLgmXZiB2FVZPU-YFpvvWc?usp=drive_link",
+  // "課堂影片09-20": "https://drive.google.com/drive/folders/1efAg9lwzZ8jYYBk1EfwHVWOEIvH7fCRq?usp=drive_link",
+  // "課堂影片10-04": "https://drive.google.com/drive/folders/1PW-pWXuyvmUPCYEsNDKxz9U6fRmYcZWV?usp=drive_link",
+  // "課堂影片10-18": "https://drive.google.com/drive/folders/1Uuz8PcrxWPuaqBW0FWtb1XnTOFEPu30Y?usp=drive_link",
+  // "課堂影片10-25": "https://drive.google.com/drive/folders/1IEtQSFvBLzNtpPZ3_j_Le5y5ExL4tK0F?usp=drive_link",
+  // "課堂影片11-01": "https://drive.google.com/drive/folders/1OZDYh5iQ70XzAK8OAaMMa2_uQtrVrzwD?usp=drive_link",
   
   // Other
-  "洗衣機": "https://aymathx.github.io/Aaron/Shopping/washing-machine/index.html",
   "矩陣的旋轉與鏡射": "https://aymathx.github.io/Tutor/J11/Matrix/index.html",
-  "士倬-上學期。線上題庫(期中)": "https://claude.ai/artifact/G49WHjNBRdoeSLHkrRDQwC#no_universal_links",
+  // "士倬-上學期。線上題庫(期中)": "https://claude.ai/artifact/G49WHjNBRdoeSLHkrRDQwC#no_universal_links",
 };
 
-// 取得網址路徑中的代碼
-const code = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, "");
 
+const code = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, "");
 function renderNotFound() {
   document.body.innerHTML = `
     <h2>找不到這個短網址</h2>
     <p>請確認網址是否輸入正確。</p>
   `;
 }
-
 if (!code) {
   renderNotFound();
 } else if (links[code]) {
-  // 1. 如果原本的 links 裡面有，秒速直接跳轉
   window.location.replace(links[code]);
 } else {
-  // 2. 如果原本清單沒有，顯示提示並向 Google 試算表查詢
   document.body.innerHTML = `<h2>短網址轉址中，請稍候...</h2>`;
-
   fetch(`${API_URL}?action=get&code=${encodeURIComponent(code)}`)
     .then(res => res.json())
     .then(data => {
       if (data.status === "success" && data.url) {
-        // 在試算表查到了，自動跳轉！
         window.location.replace(data.url);
       } else {
         renderNotFound();
@@ -120,6 +108,5 @@ if (!code) {
     });
 }
 </script>
-
 </body>
 </html>
