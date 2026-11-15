@@ -291,6 +291,25 @@ main { max-width: 640px; margin: 0 auto; padding: 4px 16px calc(var(--safe-b) + 
 .pack-prog b { font-family: var(--num); font-size: 18px; color: var(--navy); }
 .ring { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--blue) calc(var(--p) * 1%), var(--chip) 0); }
 .ring span { width: 34px; height: 34px; border-radius: 50%; background: var(--card); display: grid; place-items: center; font-family: var(--num); font-size: 11px; font-weight: 800; color: var(--blue); }
+.pk-seg { display: flex; gap: 6px; margin: 0 0 10px; }
+.pk-seg button { flex: 1; padding: 8px 4px; border-radius: 10px; background: var(--chip); color: var(--ink-2); font-size: 14px; font-weight: 700; }
+.pk-seg button.on { background: var(--blue); color: #fff; }
+.pk-grp { display: flex; align-items: baseline; gap: 8px; margin: 14px 0 2px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13px; font-weight: 800; color: var(--blue); letter-spacing: .04em; }
+.pk-grp:first-of-type { border-top: 0; margin-top: 4px; padding-top: 0; }
+.pk-grp small { font-family: var(--num); font-weight: 700; color: var(--muted); }
+.pk-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); width: 100%; text-align: left; }
+.pk-grp + .pk-row, .pk-grp + .le-row { border-top: 0; }
+.pk-row.done .ttl { color: var(--muted); text-decoration: line-through; }
+.pk-row .grow { flex: 1; min-width: 0; }
+.pk-row .ttl { font-weight: 700; }
+.pk-chips { display: flex; gap: 6px; flex: none; }
+.pk-chip { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 999px; border: 1.5px solid var(--card-bd); background: transparent; color: var(--ink-2); font-size: 13px; font-weight: 700; }
+.pk-chip.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+.pk-who { font-size: 11.5px; font-weight: 700; color: var(--blue); background: var(--chip); border-radius: 6px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px; }
+.pf-th.pdf { font-size: 12px; font-weight: 800; color: var(--blue); }
+.menu-who { display: flex; gap: 6px; margin: 10px 0 4px; }
+.menu-who button { flex: 1; padding: 8px 4px; border-radius: 10px; background: var(--chip); color: var(--ink-2); font-size: 14px; font-weight: 700; }
+.menu-who button.on { background: var(--blue); color: #fff; }
 .day-note { margin-top: 14px; }
 .day-map .map-frame { height: 240px; margin-top: 0; }
 /* 舊版「現在」浮動按鈕 */
@@ -855,7 +874,32 @@ const TODOS = [
 ];
 
 /* 打包清單、伴手禮清單（舊版內容；可在 APP 裡改） */
-const PACK_ITEMS = ['護照／機票確認', '現金＆信用卡', '手機 ICOCA／Apple Pay', '常備藥＆個人藥', '暖暖包', '口罩', '保暖外套／發熱衣', '圍巾・手套・毛帽', '雨傘／雨具', '行動電源＆充電線', '保濕・護唇膏', '隱形眼鏡／眼鏡', '環保購物袋'];
+/* 打包清單（2026-11-15 分組＋分人）：who＝each 兩人各帶一份、A／Y 只有那個人、share 共用一份。
+   pk0–pk12 是原本的 13 項（id 不變，打勾紀錄保留）；pk13 以後是新增的建議項目，可自行刪改。 */
+const PACK_GROUPS = ['證件與付款', '電子用品', '衣物保暖', '藥品盥洗', 'USJ・外出', '回程伴手禮'];
+const PACK_DEFAULT = [
+  { id: 'pk0', text: '護照／機票確認', grp: '證件與付款', who: 'each' },
+  { id: 'pk13', text: 'Visit Japan Web QR 截圖', sub: '入境前存好，資訊頁也能放', grp: '證件與付款', who: 'each' },
+  { id: 'pk14', text: '海外旅行保險資料', sub: '保單號碼＋24 小時電話（截圖或紙本）', grp: '證件與付款', who: 'each' },
+  { id: 'pk1', text: '現金＆信用卡', grp: '證件與付款', who: 'each' },
+  { id: 'pk15', text: '日圓零錢包', sub: 'みなと軒只收現金或 PayPay', grp: '證件與付款', who: 'each' },
+  { id: 'pk2', text: '手機 ICOCA／Apple Pay', grp: '證件與付款', who: 'each' },
+  { id: 'pk9', text: '行動電源＆充電線', grp: '電子用品', who: 'each' },
+  { id: 'pk16', text: '網路方案（eSIM／SIM／漫遊）', sub: '出發前確認已開通', grp: '電子用品', who: 'each' },
+  { id: 'pk4', text: '暖暖包', grp: '衣物保暖', who: 'each' },
+  { id: 'pk6', text: '保暖外套／發熱衣', grp: '衣物保暖', who: 'each' },
+  { id: 'pk7', text: '圍巾・手套・毛帽', grp: '衣物保暖', who: 'each' },
+  { id: 'pk3', text: '常備藥＆個人藥', grp: '藥品盥洗', who: 'each' },
+  { id: 'pk5', text: '口罩', grp: '藥品盥洗', who: 'each' },
+  { id: 'pk10', text: '保濕・護唇膏', grp: '藥品盥洗', who: 'each' },
+  { id: 'pk11', text: '隱形眼鏡／眼鏡', grp: '藥品盥洗', who: 'each' },
+  { id: 'pk17', text: 'USJ 入場券（截圖或列印）', grp: 'USJ・外出', who: 'share' },
+  { id: 'pk18', text: '小背包', sub: 'USJ 當天輕裝用', grp: 'USJ・外出', who: 'share' },
+  { id: 'pk8', text: '雨傘／雨具', grp: 'USJ・外出', who: 'share' },
+  { id: 'pk12', text: '環保購物袋', grp: '回程伴手禮', who: 'share' }
+];
+const PACK_NEW_IDS = ['pk13', 'pk14', 'pk15', 'pk16', 'pk17', 'pk18'];
+const PACK_WHO = [['each', '兩人各一份'], ['share', '共用一份'], ['A', '只有 Aaron'], ['Y', '只有 Yvonne']];
 const SOUV_ITEMS = ['白色戀人／Royce 生巧', '薯條三兄弟', '面膜（LuLuLun）', '藥妝（合力他命／休足時間／蒸氣眼罩）', '神戸布丁／甜點', '抹茶點心', '神戸・元町ケーキ', '神戸フランツ 魔法の壺プリン'];
 
 const EMERGENCY = [
@@ -1141,7 +1185,7 @@ const K = {
   trip: 'ox26.trip2', tripVer: 'ox26.tripVer', exp: 'ox26.exp', rate: 'ox26.rate', wx: 'ox26.wx2',
   rit: 'ox26.rit2', todo: 'ox26.todo', res: 'ox26.res', shows: 'ox26.usjShows', usjSeen: 'ox26.usjSeen',
   map: 'ox26.map', contacts: 'ox26.contacts', ui: 'ox26.ui',
-  budget: 'ox26.budget', check: 'ox26.check', med: 'ox26.med', disp: 'ox26.disp'
+  budget: 'ox26.budget', check: 'ox26.check', med: 'ox26.med', disp: 'ox26.disp', packVer: 'ox26.packVer'
 };
 const OLD_KEYS = ['ox26.trip', 'ox26.rit', 'ox26.sr', 'ox26.wx'];
 const $ = (s, r = document) => r.querySelector(s);
@@ -1302,6 +1346,50 @@ function readImage(file, max = 1600, type = 'image/jpeg', q = 0.82) {
   });
 }
 
+/* PDF 憑證（2026-11-15）：用 pdf.js 把每一頁轉成圖片再存，之後跟截圖一樣存在手機、離線可看、可全螢幕出示。
+   pdf.js 只在「加入 PDF」那一刻從 cdnjs 下載（沒有網路時會提示改用截圖），PDF 內容不會傳到任何地方。 */
+const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+let pdfjsP = null;
+function loadPdfJs() {
+  if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+  return pdfjsP || (pdfjsP = (async () => {
+    await new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = PDFJS_URL;
+      s.onload = res;
+      s.onerror = () => rej(new Error('pdfjs-load'));
+      document.head.appendChild(s);
+    });
+    const code = await (await fetch(PDFJS_WORKER)).text();
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(new Blob([code], { type: 'text/javascript' }));
+    return window.pdfjsLib;
+  })().catch(err => { pdfjsP = null; throw err; }));
+}
+const isPdf = f => f.type === 'application/pdf' || /\.pdf$/i.test(f.name || '');
+async function pdfToImages(file, maxPages = 12, max = 1800) {
+  const lib = await loadPdfJs();
+  const doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+  const total = doc.numPages;
+  const pages = [];
+  for (let i = 1; i <= Math.min(total, maxPages); i++) {
+    const page = await doc.getPage(i);
+    const v0 = page.getViewport({ scale: 1 });
+    const vp = page.getViewport({ scale: Math.min(3, max / Math.max(v0.width, v0.height)) });
+    const c = document.createElement('canvas');
+    c.width = Math.round(vp.width);
+    c.height = Math.round(vp.height);
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    await page.render({ canvasContext: ctx, viewport: vp }).promise;
+    pages.push(c.toDataURL('image/jpeg', 0.85));
+    page.cleanup();
+  }
+  doc.destroy();
+  return { pages, total };
+}
+
 function download(name, text, mime) {
   const blob = new Blob([text], { type: mime });
   const a = document.createElement('a');
@@ -1342,7 +1430,7 @@ try {
 } catch (e) { /* 私密模式 */ }
 OLD_KEYS.forEach(k => store.del(k));
 let trip = loadTrip();
-const ui = Object.assign({ view: 'trip', day: 'd1', branch: {}, phraseCat: '餐廳', editing: false }, store.get(K.ui, {}));
+const ui = Object.assign({ view: 'trip', day: 'd1', branch: {}, phraseCat: '餐廳', editing: false, packView: 'all' }, store.get(K.ui, {}));
 const saveUi = () => store.set(K.ui, ui);
 
 function loadTrip() {
@@ -1453,7 +1541,7 @@ const LIST_DEFAULTS = {
   phrase: () => Object.entries(PHRASES).flatMap(([cat, arr]) => arr.map(([zh, ja], i) => ({ id: `ph-${cat}-${i}`, cat, zh, ja }))),
   light: () => LIGHTS.map((l, i) => ({ id: 'lt' + i, ...l })),
   transit: () => TRANSIT.map(([k, v], i) => ({ id: 'tr' + i, k, v })),
-  pack: () => PACK_ITEMS.map((text, i) => ({ id: 'pk' + i, text })),
+  pack: () => PACK_DEFAULT,
   souv: () => SOUV_ITEMS.map((text, i) => ({ id: 'sv' + i, text }))
 };
 const RES_ICONS = [['flight', '✈️ 航班'], ['boat', '⛴️ 船'], ['taxi', '🚕 車'], ['train', '🚃 電車'], ['hotel', '🏨 住宿'], ['food', '🍴 餐廳'], ['cafe', '☕ 咖啡'], ['ticket', '🎟️ 票券'], ['place', '📍 地點']];
@@ -1469,15 +1557,31 @@ const LIST_FIELDS = {
   phrase: [F('cat', '分類（選既有的或打新的）', 'cat', true), F('zh', '中文', 'textarea', true), F('ja', '日文（給對方看）', 'textarea', true)],
   light: [F('name', '名稱', 'text', true), F('place', '地點'), F('time', '時間'), F('status', '狀態／備註', 'textarea'), F('dates', '顯示在哪幾天的行程頁', 'days'), F('url', '來源網址', 'url')],
   transit: [F('k', '項目', 'text', true), F('v', '內容', 'textarea', true)],
-  pack: [F('text', '要帶的東西', 'text', true), F('sub', '補充（可空）')],
+  pack: [F('text', '要帶的東西', 'text', true), F('sub', '補充（可空）'), F('grp', '分組（選既有的或打新的）', 'pcat', true), F('who', '誰要帶', 'select', true, PACK_WHO)],
   souv: [F('text', '要買的東西', 'text', true), F('sub', '在哪買、幫誰買（可空）')]
 };
-const LIST_GROUP = { rit: 'who', phrase: 'cat' };
+const LIST_GROUP = { rit: 'who', phrase: 'cat', pack: 'grp' };
 let listEdit = null;
 
+/* 打包清單：舊版存在手機裡的項目沒有分組、分人，讀出來時用預設補上（id 對得上就用預設的，其他歸「其他」「共用」） */
+const packNorm = it => {
+  const d = PACK_DEFAULT.find(p => p.id === it.id) || {};
+  return Object.assign({}, it, { grp: it.grp || d.grp || '其他', who: it.who || d.who || 'share' });
+};
 function getList(name) {
   const v = store.get(LIST_KEY + name, null);
-  return Array.isArray(v) ? v : structuredClone(LIST_DEFAULTS[name]());
+  const arr = Array.isArray(v) ? v : structuredClone(LIST_DEFAULTS[name]());
+  return name === 'pack' ? arr.map(packNorm) : arr;
+}
+/* 打包清單 v2：已經改過清單的手機，一次性補進新增的預設項目（舊項目不動、刪掉的不會復活） */
+function migratePack() {
+  if (store.get(K.packVer, 0) >= 2) return;
+  const saved = store.get(LIST_KEY + 'pack', null);
+  if (Array.isArray(saved)) {
+    const have = new Set(saved.map(x => x.id));
+    saveList('pack', saved.map(packNorm).concat(structuredClone(PACK_DEFAULT.filter(p => PACK_NEW_IDS.includes(p.id) && !have.has(p.id)))));
+  }
+  store.set(K.packVer, 2);
 }
 function saveList(name, arr) { store.set(LIST_KEY + name, arr); }
 const itemTitle = it => it.label || it.name || it.text || it.zh || it.k || '這一項';
@@ -1539,6 +1643,7 @@ function openItemForm(name, item, isNew, onSave) {
     if (f.type === 'textarea') return `<textarea name="${f.k}" ${req}>${esc(v)}</textarea>`;
     if (f.type === 'select') return `<select name="${f.k}">${f.opts.map(([val, lab]) => `<option value="${esc(val)}" ${val === v ? 'selected' : ''}>${esc(lab)}</option>`).join('')}</select>`;
     if (f.type === 'days') return `<div class="days-pick">${days.map(d => `<label><input type="checkbox" name="${f.k}" value="${esc(d.date)}" ${(Array.isArray(v) ? v : []).includes(d.date) ? 'checked' : ''}>${md(d.date)}（${wd(d.date)}）</label>`).join('')}</div>`;
+    if (f.type === 'pcat') return `<input name="${f.k}" list="lePack" value="${esc(v)}" ${req}><datalist id="lePack">${[...new Set([...PACK_GROUPS, ...getList('pack').map(p => p.grp)])].map(c => `<option value="${esc(c)}">`).join('')}</datalist>`;
     if (f.type === 'cat') return `<input name="${f.k}" list="leCats" value="${esc(v)}" ${req}><datalist id="leCats">${[...new Set(getList('phrase').map(p => p.cat))].map(c => `<option value="${esc(c)}">`).join('')}</datalist>`;
     const type = { tel: 'tel', url: 'url', date: 'date' }[f.type] || 'text';
     return `<input name="${f.k}" type="${type}" value="${esc(v)}" ${req}>`;
@@ -1623,11 +1728,13 @@ function renderTodo() {
         : `<button class="list-row ${ok ? 'done' : ''}" data-todo="${esc(t.id)}" style="width:100%;text-align:left"><span class="chk ${ok ? 'on' : ''}">${ok ? '✓' : ''}</span><span class="grow"><div class="ttl">${esc(t.text)}</div>${due}</span></button>`;
     }).join('') || '<div class="empty">沒有待辦</div>'}
     ${ed ? leAdd('todo', { due: today }) : ''}</div>
-    ${checkSec('pack', 'PACKING 打包')}
+    ${packSec()}
     ${checkSec('souv', 'SOUVENIRS 伴手禮')}`;
   updateTabDots();
   v.onclick = async e => {
     if (await listClick(e, renderTodo)) return;
+    const pv = e.target.closest('[data-pkview]');
+    if (pv) { ui.packView = pv.dataset.pkview; saveUi(); return renderTodo(); }
     const td = e.target.closest('[data-todo]');
     const ck = e.target.closest('[data-chk]');
     if (!td && !ck) return;
@@ -1640,7 +1747,50 @@ function renderTodo() {
   };
 }
 
-/* 打包、伴手禮：可以打勾、可以編輯（8-4） */
+/* 打包清單（2026-11-15）：分組＋分人。每一項有幾個「格子」要打勾：
+   各一份＝Aaron、Yvonne 兩格（Aaron 的格子沿用舊的 id，舊打勾紀錄不會掉）；共用／只有一人＝一格。
+   上方切換：全部（兩人都看）／Aaron／Yvonne（只看自己要帶的）。 */
+const PNAME = { A: 'Aaron', Y: 'Yvonne' };
+function packSlots(it, view) {
+  const A = { key: it.id, p: 'A' }, Y = { key: it.id + '~Y', p: 'Y' };
+  const all = it.who === 'each' ? [A, Y] : it.who === 'A' ? [A] : it.who === 'Y' ? [{ key: it.id, p: 'Y' }] : [{ key: it.id, p: null }];
+  return view === 'all' ? all : all.filter(s => !s.p || s.p === view);
+}
+function packSec() {
+  const done = store.get(K.check, {});
+  const list = getList('pack');
+  const ed = listEdit === 'pack';
+  const view = ['all', 'A', 'Y'].includes(ui.packView) ? ui.packView : 'all';
+  const rows = list.map(it => ({ it, slots: packSlots(it, view) })).filter(r => r.slots.length);
+  const shown = ed ? list.map(it => ({ it, slots: [] })) : rows;
+  const total = rows.reduce((s, r) => s + r.slots.length, 0);
+  const n = rows.reduce((s, r) => s + r.slots.filter(sl => done[sl.key]).length, 0);
+  const pct = total ? Math.round(n / total * 100) : 0;
+  const groups = [...new Set([...PACK_GROUPS, ...list.map(x => x.grp)])].filter(g => shown.some(r => r.it.grp === g));
+  const txt = (it, badge) => `<span class="grow"><div class="ttl">${esc(it.text)}${badge ? `<span class="pk-who">${badge}</span>` : ''}</div>${it.sub ? `<div class="small muted">${esc(it.sub)}</div>` : ''}</span>`;
+  const whoLbl = it => ({ each: '各一份', share: '共用', A: 'Aaron', Y: 'Yvonne' })[it.who] || '';
+  const row = ({ it, slots }) => {
+    if (ed) return `<div class="le-row">${txt(it, whoLbl(it))}${leTools('pack', it.id)}</div>`;
+    if (slots.length === 2) {
+      return `<div class="pk-row ${slots.every(s => done[s.key]) ? 'done' : ''}">${txt(it)}<span class="pk-chips">${slots.map(s => `<button class="pk-chip ${done[s.key] ? 'on' : ''}" data-chk="${esc(s.key)}" aria-pressed="${!!done[s.key]}" aria-label="${esc(it.text)}・${PNAME[s.p]}">${done[s.key] ? '✓ ' : ''}${PNAME[s.p]}</button>`).join('')}</span></div>`;
+    }
+    const s = slots[0];
+    const badge = view === 'all' ? (it.who === 'share' ? '共用' : whoLbl(it)) : (it.who === 'share' ? '共用' : '');
+    return `<button class="pk-row ${done[s.key] ? 'done' : ''}" data-chk="${esc(s.key)}"><span class="chk ${done[s.key] ? 'on' : ''}">${done[s.key] ? '✓' : ''}</span>${txt(it, badge)}</button>`;
+  };
+  const seg = ed ? '' : `<div class="pk-seg" role="group" aria-label="看誰的清單">${[['all', '全部'], ['A', 'Aaron'], ['Y', 'Yvonne']].map(([k, l]) => `<button data-pkview="${k}" class="${k === view ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+  const prog = !ed && total ? `<div class="pack-prog"><span class="ring" style="--p:${pct}"><span>${pct}%</span></span><span>${view === 'all' ? '兩人合計' : PNAME[view]} 已打包 <b>${n}</b> / ${total} 件</span></div>` : '';
+  return `<div class="sec-row"><div class="sec-title">PACKING 打包${ed ? '' : ` ${n}/${total}`}</div>${leToggle('pack')}</div>
+    <div class="card">${seg}${prog}${groups.map(g => {
+      const rs = shown.filter(r => r.it.grp === g);
+      const gn = rs.reduce((s, r) => s + r.slots.filter(sl => done[sl.key]).length, 0);
+      const gt = rs.reduce((s, r) => s + r.slots.length, 0);
+      return `<div class="pk-grp">${esc(g)}${ed ? '' : ` <small>${gn}/${gt}</small>`}</div>${rs.map(row).join('')}`;
+    }).join('') || '<div class="empty">還沒有項目</div>'}
+    ${ed ? leAdd('pack', { grp: PACK_GROUPS[0], who: 'each' }) : ''}</div>`;
+}
+
+/* 伴手禮：可以打勾、可以編輯（8-4） */
 function checkSec(name, title) {
   const done = store.get(K.check, {});
   const list = getList(name);
@@ -2066,7 +2216,7 @@ function openEventDetail(day, id) {
     <div class="btn-row">
       ${e.map || e.addr ? `<a class="btn btn-primary" href="${mapUrl(e.map || e.addr)}" target="_blank" rel="noopener">${ic('map')} Google Maps</a>` : ''}
       ${safeUrl(e.url) ? `<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">${ic('link')} 官網／預約</a>` : ''}
-      ${isFood ? `<button class="btn btn-red" data-act="redline">${ic('block')} 紅線卡</button>` : ''}
+      ${isFood ? `<button class="btn btn-red" data-act="redline">${ic('block')} 紅線卡</button><button class="btn" data-act="menu">${ic('food')} 菜單翻譯</button>` : ''}
     </div>
     <div class="btn-row"><button class="btn btn-ghost" data-act="edit">${ic('edit')} 編輯</button><button class="btn btn-danger" data-act="del">${ic('trash')} 刪除</button></div>`,
   (body, entry) => {
@@ -2076,6 +2226,7 @@ function openEventDetail(day, id) {
       const a = ev.target.closest('[data-act]');
       if (!a) return;
       if (a.dataset.act === 'redline') openRedLine();
+      else if (a.dataset.act === 'menu') openMenuHelper();
       else if (a.dataset.act === 'proof') showProofs([e.res], e.res);
       else if (a.dataset.act === 'edit') { closeSheet(entry); openEventEditor(day, raw); }
       else if (a.dataset.act === 'del') { if (await deleteEvent(day, e.id)) closeSheet(entry); }
@@ -2680,9 +2831,10 @@ function renderTools() {
     ['usj', 'globe', 'USJ 聖誕', '聖誕亮點、演出場次、官方 App'],
     ['sun', 'sunset', '日落・點燈', '每日日落時刻＋燈飾時間'],
     ['phrase', 'chat', '指差し会話', '點一下放大給店員看'],
+    ['menu', 'food', '菜單・看板翻譯', '拍照請 AI 翻譯，並標出玉ねぎ／芋頭／生食'],
     ['taxi', 'taxi', '交通卡片', '給司機看的目的地＋付款日語'],
     ['maps', 'map', '離線地圖截圖', '先存截圖，沒網路也能看'],
-    ['proofs', 'ticket', '憑證夾', pfN ? `${pfRes.length} 筆預約・${pfN} 張，依日期排好` : '訂位確認、電子票截圖，依日期排好'],
+    ['proofs', 'ticket', '憑證夾', pfN ? `${pfRes.length} 筆預約・${pfN} 張，依日期排好` : '訂位確認、電子票（截圖或 PDF），依日期排好'],
     ['transit', 'boat', '交通速查', '高速船、Port Liner、USJ 路線']
   ];
   v.innerHTML = `<div class="sec-title">TOOLS</div><div class="tiles">${tiles.map(([k, icon, nm, ds, cls = '']) =>
@@ -2690,8 +2842,58 @@ function renderTools() {
   v.onclick = e => {
     const t = e.target.closest('[data-t]');
     if (!t) return;
-    ({ redline: openRedLine, med: openMedical, rituals: openRituals, usj: openUsj, sun: openSunLights, phrase: openPhrases, taxi: openTaxi, maps: openMapShots, proofs: openProofFolder, transit: openTransit })[t.dataset.t]();
+    ({ redline: openRedLine, med: openMedical, rituals: openRituals, usj: openUsj, sun: openSunLights, phrase: openPhrases, menu: openMenuHelper, taxi: openTaxi, maps: openMapShots, proofs: openProofFolder, transit: openTransit })[t.dataset.t]();
   };
+}
+
+/* 菜單・看板翻譯（2026-11-15）：跟收據 AI 同一個做法——複製提示詞，連同照片貼給 ChatGPT／Gemini／Claude，
+   不放金鑰、不連外部服務。紅線內容取自過敏紅線卡（openRedLine／FOOD_PREFS）。 */
+const MENU_RULES = {
+  A: '- Aaron：玉ねぎ（洋蔥）完全不能吃，包含オニオンソース、オニオンエキス，以及醬汁、高湯、配菜裡的洋蔥。',
+  Y: '- Yvonne：里芋・タロイモ（芋頭）完全不能吃；不吃刺身・生もの（生魚片及生食）。例外：すき焼き的生蛋液可以。'
+};
+function menuPrompt(who) {
+  const rules = who === 'all' ? `${MENU_RULES.A}\n${MENU_RULES.Y}` : MENU_RULES[who];
+  const who2 = who === 'all' ? 'Aaron／Yvonne／兩人' : PNAME[who];
+  return `我在日本餐廳。請讀取這張菜單／看板／標示的照片，整理成下面這個 Markdown 表格：
+
+| 日文原文 | 中文翻譯 | 價格 | 可能的食材 | 紅線判定 | 說明 |
+
+我的飲食紅線：
+${rules}
+
+規則：
+1. 照菜單順序，一道菜一列。日文原文照抄，不要改寫。
+2. 中文翻成台灣繁體中文。價格保留日圓原樣，含稅或未含稅照菜單標示。
+3. 「可能的食材」只寫菜名或照片上看得出來的，不要靠經驗推測。
+4. 「紅線判定」只能寫：🚫（菜名或說明明確含紅線食材）、⚠️（常見做法可能含，例如醬汁、高湯、炸物、咖哩、附餐沙拉，或字看不清楚）、✅（沒有看到紅線食材）。後面用括號標明是誰的紅線（${who2}）。
+5. 蔥（ねぎ）不是洋蔥（玉ねぎ），不要判成 🚫；有蔥類就寫在「說明」欄讓我自己判斷。
+6. 看不清楚的文字或數字，那一格寫「待確認」，不要自行猜測。
+7. 表格後面另外列出所有 🚫 和 ⚠️ 的品項，並用日文寫一句我可以直接問店員的話。`;
+}
+function openMenuHelper() {
+  let who = 'all';
+  const draw = body => {
+    body.innerHTML = `<div class="ai-warn">AI 看得到菜名，看不到醬汁、高湯、鐵板裡藏的食材，也可能看錯小字。<b>過敏相關一律以問店員為準</b>，下面可以直接開紅線卡。</div>
+      <ol class="small" style="margin:10px 0 0 18px;color:var(--ink-2)"><li>選這次要避開誰的紅線，按「複製提示詞」。</li><li>打開 ChatGPT、Gemini 或 Claude，貼上提示詞，再附上菜單或看板的照片。</li><li>看 AI 回的表格；🚫、⚠️ 的品項點餐前用紅線卡或指差し会話跟店員確認。</li></ol>
+      <div class="chip-lbl" style="margin-top:12px">這次要避開誰的紅線</div>
+      <div class="menu-who">${[['all', '兩人'], ['A', 'Aaron'], ['Y', 'Yvonne']].map(([k, l]) => `<button data-who="${k}" class="${k === who ? 'on' : ''}">${l}</button>`).join('')}</div>
+      <button class="btn btn-primary btn-block" data-m="copy" style="margin-top:10px">📋 複製菜單翻譯提示詞</button>
+      <div class="btn-row"><button class="btn btn-red" data-m="redline">${ic('block')} 紅線卡</button><button class="btn" data-m="phrase">${ic('chat')} 指差し会話</button></div>
+      <details class="menu-prev" style="margin-top:12px"><summary class="small muted" style="cursor:pointer">看提示詞內容</summary><pre class="small" style="white-space:pre-wrap;margin:8px 0 0;color:var(--ink-2)">${esc(menuPrompt(who))}</pre></details>`;
+  };
+  openSheet('菜單・看板翻譯', '', body => {
+    draw(body);
+    body.onclick = async e => {
+      const w = e.target.closest('[data-who]');
+      if (w) { who = w.dataset.who; return draw(body); }
+      const m = e.target.closest('[data-m]');
+      if (!m) return;
+      if (m.dataset.m === 'copy') { await copyText(menuPrompt(who)); toast('已複製提示詞，貼給 AI 時記得附上菜單照片'); }
+      else if (m.dataset.m === 'redline') openRedLine();
+      else if (m.dataset.m === 'phrase') openPhrases();
+    };
+  });
 }
 
 /* 緊急醫療卡（8-3）：全螢幕給醫護人員看；個人資料只存在手機 */
@@ -3311,7 +3513,7 @@ function openProofFolder() {
       last = d;
       return h + `<button class="res-row" data-pf-res="${esc(r.id)}"><span class="ico">${ic(r.icon || 'ticket')}</span><span class="grow"><div class="res-name">${esc(r.name)}</div><div class="res-when">${esc(r.when || '')}</div></span><span class="pf-n">${proofCount(r.id, local)} 張 ›</span></button>`;
     }).join('')}</div>`
-    : '<div class="empty">還沒有憑證照片。<br>到「資訊 → 預約」點一筆，就能加訂位確認或電子票的截圖。</div>', (body, entry) => {
+    : '<div class="empty">還沒有憑證照片。<br>到「資訊 → 預約」點一筆，就能加訂位確認或電子票的截圖、PDF。</div>', (body, entry) => {
     const again = () => { closeSheet(entry); openProofFolder(); };
     body.onclick = e => {
       if (e.target.closest('[data-pf-all]')) return showProofs(ids, ids[0], null, again);
@@ -3332,7 +3534,7 @@ function openResDetail(id) {
     ${r.how ? `<div class="small" style="margin-top:6px;color:var(--ink-2)">${esc(r.how)}</div>` : ''}
     <label class="field" style="margin-top:14px"><span>狀態</span><select id="rdStatus">${RES_STATUSES.map(s => `<option ${s === status ? 'selected' : ''}>${s}</option>`).join('')}</select></label>
     <div class="field"><span>確認號／訂位代號</span><div class="conf-row" style="margin:0"><input id="rdConf" value="${esc(typeof loc.conf === 'string' ? loc.conf : '')}" placeholder="還沒有填" autocomplete="off" autocapitalize="characters"><button type="button" class="btn btn-sm" data-a="copy">複製</button></div></div>
-    <div class="field"><span>🎫 憑證照片（訂位確認、電子票截圖）</span><div class="pf-thumbs" id="rdProofs"></div></div>
+    <div class="field"><span>🎫 憑證（訂位確認、電子票截圖或 PDF）</span><div class="pf-thumbs" id="rdProofs"></div></div>
     <label class="field"><span>私人備註（座位、訂位人…）</span><textarea id="rdNote" placeholder="只存在這支手機">${esc(typeof loc.note === 'string' ? loc.note : '')}</textarea></label>
     <div class="small muted">🔒 只存在這支手機，改了就自動存。</div>
     ${r.url || r.phone ? `<div class="btn-row">${r.url ? `<a class="btn btn-ghost" href="${esc(r.url)}" target="_blank" rel="noopener">${ic('link')} 預約頁</a>` : ''}${r.phone ? `<a class="btn btn-ghost" href="${telHref(r.phone)}">${ic('phone')} ${esc(r.phone)}</a>` : ''}</div>` : ''}`, body => {
@@ -3352,14 +3554,32 @@ function openResDetail(id) {
         return val ? copyText(val) : toast('還沒有填確認號');
       }
       if (e.target.closest('[data-a=addproof]')) {
-        const files = await pickFile('image/*', true);
+        const files = await pickFile('image/*,application/pdf,.pdf', true);
         if (!files.length) return;
         const arr = await getProofs(id);
-        for (const f of files) arr.push({ pid: uid('p'), dataUrl: await readImage(f, 1800, 'image/jpeg', 0.85), name: f.name, ts: Date.now() });
-        await setProofs(id, arr);
-        drawProofs();
-        refreshBehind();
-        return toast(`已存 ${files.length} 張憑證`);
+        let added = 0, cut = 0, failed = 0;
+        for (const f of files) {
+          try {
+            if (isPdf(f)) {
+              toast('正在轉換 PDF…');
+              const r = await pdfToImages(f);
+              r.pages.forEach((u, k) => arr.push({ pid: uid('p'), dataUrl: u, name: r.total > 1 ? `${f.name} 第${k + 1}頁` : f.name, ts: Date.now() }));
+              added += r.pages.length;
+              cut += r.total - r.pages.length;
+            } else {
+              arr.push({ pid: uid('p'), dataUrl: await readImage(f, 1800, 'image/jpeg', 0.85), name: f.name, ts: Date.now() });
+              added++;
+            }
+          } catch (err) {
+            failed++;
+            console.warn('憑證加入失敗', f.name, err);
+            if (isPdf(f)) toast(/Password/i.test(String(err && err.name)) ? 'PDF 有設密碼，請先解除再加入' : '這個 PDF 轉不了（要有網路，或改用截圖）');
+          }
+        }
+        if (added) { await setProofs(id, arr); drawProofs(); refreshBehind(); }
+        if (!failed) toast(`已存 ${added} 張憑證${cut ? `（PDF 超過 12 頁，只存前 12 頁）` : ''}`);
+        else if (added) toast(`已存 ${added} 張，${failed} 個檔案失敗`);
+        return;
       }
       const th = e.target.closest('[data-pid]');
       if (th) showProofs([id], id, th.dataset.pid, drawProofs);
@@ -3617,6 +3837,7 @@ function applyDisp() {
    啟動
    ========================================================= */
 function init() {
+  migratePack();
   applyDisp();
   const n = jstTripNow();
   const todayDay = trip.days.find(d => d.date === n.date);
