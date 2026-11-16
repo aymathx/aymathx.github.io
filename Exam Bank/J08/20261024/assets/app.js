@@ -167,7 +167,39 @@ function renderHome() {
     <span class="meter">${[1, 2, 3, 4, 5].map(k => `<i class="${k <= p.lv ? 'on' : ''}"></i>`).join('')}</span></button>`).join('');
   $('#histPanel').hidden = g || none;
   renderHist();
+  renderGoalBar(g || none);
+  renderTrack(g || none);
 }
+
+/** 段考倒數＋我的目標分（目標只存在這台裝置：學號＋段考代碼） */
+const goalKey = () => 'goal.' + (HOME.user && HOME.user.id) + '.' + CUR_TERM;
+function renderGoalBar(hide) {
+  const p = $('#goalBar'), d = CFG.daysLeft, last = (HOME.history || []).find(h => h.status === '完成' && h.type !== '訂正');
+  const goal = Number(store.get(goalKey(), 0)) || 0;
+  if (hide || (d === null || d === undefined) && !last) { p.hidden = true; return; }
+  p.hidden = false;
+  const cd = d === null || d === undefined ? '' : d === 0 ? '<b class="cd">今天段考，加油！</b>' : `距離段考還有 <b class="cd mono">${d}</b> 天`;
+  const gap = !goal ? '想訂個目標嗎？' : !last ? '' : last.score >= goal ? `最近一次 ${last.score} 分，已達到目標，繼續保持。` : `最近一次 ${last.score} 分，離目標還有 ${goal - last.score} 分。`;
+  p.innerHTML = `<div class="row between" style="gap:10px;flex-wrap:wrap"><span>${cd}</span><label class="small" style="display:flex;gap:6px;align-items:center">我的目標 <input id="goalIn" type="number" inputmode="numeric" min="1" max="100" value="${goal || ''}" placeholder="例：85" style="width:70px"> 分</label></div><p class="small muted" style="margin:4px 0 0" id="goalGap">${gap}</p>`;
+}
+$('#goalBar').addEventListener('change', e => {
+  if (e.target.id !== 'goalIn') return;
+  const v = Math.max(0, Math.min(100, Math.round(Number(e.target.value) || 0)));
+  store.set(goalKey(), v); renderGoalBar(false);
+});
+
+/** 觀念過關追蹤：還沒過關的（3 天沒練標「該再練了」）、曾經錯過又補起來的 */
+function renderTrack(hide) {
+  const p = $('#trackPanel'), tr = HOME.track || [];
+  if (hide || !tr.length) { p.hidden = true; return; }
+  p.hidden = false;
+  const no = tr.filter(t => t.status === '還沒過關'), ok = tr.filter(t => t.status === '已過關');
+  const chip = t => { const u = (HOME.units || []).find(x => x.no === t.sec && x.ready); return `<div class="trk${t.due ? ' due' : ''}"><span>${esc(t.name)}${t.due ? ' <b class="duetag">該再練了</b>' : ''}</span>${u ? `<button class="btn ghost sm" data-start="${esc(t.sec)}">練 ${esc(t.sec)}</button>` : ''}</div>`; };
+  p.innerHTML = `<div class="row between"><h2>觀念過關追蹤</h2><span class="small muted">連續兩次練習都答對（題目要換）才算過關</span></div>
+    ${no.length ? `<div class="trk-list">${no.map(chip).join('')}</div>` : '<p class="small muted">目前沒有待過關的觀念。</p>'}
+    ${ok.length ? `<p class="small" style="margin-top:8px">✓ 已過關：${ok.map(t => esc(t.name)).join('、')}</p>` : ''}`;
+}
+$('#trackPanel').addEventListener('click', e => { const b = e.target.closest('[data-start]'); if (b) startQuiz(b.dataset.start); });
 
 /** 段考分類：只顯示開放的段考；只開一段時不用選，整排收起來 */
 function renderTerms() {
@@ -200,10 +232,10 @@ function renderHist() {
   $('#histTabs').innerHTML = tabs.map(t => `<button type="button" data-ht="${esc(t)}" aria-pressed="${t === histSel}">${esc(t)}</button>`).join('');
   const list = HOME.history.filter(h => histSel === '全部' || (histSel === '模擬卷' ? h.type === '模擬' : h.type !== '模擬' && h.scope === histSel));
   $('#hist').innerHTML = list.length ? list.map(h => {
-    const label = h.type === '模擬' ? `模擬${h.scope}卷` : h.scope;
+    const label = h.type === '模擬' ? `模擬${h.scope}卷` : h.type === '訂正' ? `錯題重做（${h.scope}）` : h.scope;
     const ok = h.status === '完成';
     return `<div class="h">
-      <div><b>${esc(label)}</b>　<span class="mono small muted">${dt(h.start)}</span><br><span class="small ${ok ? '' : 'x'}">${ok ? h.score + ' 分・' + h.level : '逾時，沒有報告'}</span></div>
+      <div><b>${esc(label)}</b>　<span class="mono small muted">${dt(h.start)}</span><br><span class="small ${ok ? '' : 'x'}">${ok ? h.score + ' 分・' + h.level : '逾時，沒有報告'}</span>${h.fixed ? ' <span class="small fix-ok">✓ 已訂正</span>' : ''}</div>
       ${ok ? `<div class="row" style="gap:6px;flex-wrap:nowrap"><button class="btn ghost sm" data-view="${h.aid}">查看</button><button class="btn ghost sm" data-pdf="${h.aid}">${ICON.down}PDF</button></div>` : ''}
     </div>`;
   }).join('') : `<p class="muted small" style="padding:8px 0">${HOME.history.length ? '這個範圍還沒有報告。' : '完成第一次測驗後，報告會列在這裡。'}</p>`;
@@ -242,24 +274,25 @@ function openPending() {
 }
 
 /* ---------- 小節測驗 ---------- */
-async function startQuiz(unit, silent) {
+/** retrySrc＝錯題重做：從那次測驗的錯題出 5 題小測（api retryStart）；不記進「作答到一半回到那一段」，重新整理後回首頁，再按「錯題重做」會接回同一份 */
+async function startQuiz(unit, silent, retrySrc) {
   let r;
-  try { r = await run(silent ? '回到作答中…' : '抽題中…', () => api('start', { token: TOKEN, unit })); } catch (e) {
+  try { r = await run(silent ? '回到作答中…' : retrySrc ? '出錯題重做中…' : '抽題中…', () => retrySrc ? api('retryStart', { token: TOKEN, src: retrySrc }) : api('start', { token: TOKEN, unit })); } catch (e) {
     store.del('cur'); if (HOME) { show('home'); loadHome().catch(() => { }); } return;   // 可能剛被老師關閉：首頁跟著更新
   }
   const saved = store.get('att.' + r.aid, null);
   const n = r.questions.length;
   Q = {
-    aid: r.aid, unit, deadline: r.deadline, offset: r.now - Date.now(), questions: r.questions,
+    aid: r.aid, unit, retry: retrySrc || '', deadline: r.deadline, offset: r.now - Date.now(), questions: r.questions,
     answers: saved && saved.answers && saved.answers.length === n ? saved.answers : Array(n).fill(null),
     times: saved && saved.times && saved.times.length === n ? saved.times : Array(n).fill(0),
     cur: 0, enter: Date.now(), done: false
   };
-  store.set('cur', { kind: 'q', unit, term: CUR_TERM });
+  if (retrySrc) store.del('cur'); else store.set('cur', { kind: 'q', unit, term: CUR_TERM });
   const un = (CFG.units || []).find(x => x.no === unit);
-  $('#qSec').textContent = un ? `${un.no} ${un.name}` : unit;
+  $('#qSec').textContent = retrySrc ? '錯題重做' : un ? `${un.no} ${un.name}` : unit;
   show('quiz');
-  if (r.resumed && !silent) toast('這一節還在作答中，接著上次的進度。');
+  if (r.resumed && !silent) toast(retrySrc ? '這份錯題重做還在作答中，接著上次的進度。' : '這一節還在作答中，接著上次的進度。');
   renderQ();
   runTimer('#timer', () => Q && leftOf(Q.deadline, Q.offset), timeUp);
 }
@@ -421,7 +454,7 @@ function timeUp() {
 }
 $('#retry').onclick = () => {
   $('#timeout').hidden = true;
-  if ($('#timeout').dataset.kind === 'm') startMock(M.L); else startQuiz(Q.unit);
+  if ($('#timeout').dataset.kind === 'm') startMock(M.L); else startQuiz(Q.unit, false, Q.retry);
 };
 $('#toHome2').onclick = async () => { $('#timeout').hidden = true; await run('載入中…', loadHome).catch(() => { }); show('home'); };
 
@@ -453,9 +486,25 @@ function renderReport() {
   $('#rvAll').textContent = `全部 ${r.n} 題`;
   $$('#rvSeg button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.rv === rvMode)));
   renderReview();
-  $('#again').innerHTML = ICON.redo + (r.type === '模擬' ? '再寫一次這份' : '再練 10 題');
+  $('#again').innerHTML = ICON.redo + (r.type === '模擬' ? '再寫一次這份' : r.type === '訂正' ? '回原本那次的報告' : '再練 10 題');
   $('#dl').hidden = !!guest;
+  renderFix();
 }
+/** 錯題重做：按鈕、已訂正狀態（訪客不記紀錄，不顯示） */
+function renderFix() {
+  const r = REPORT, p = $('#rFixPanel'), guest = HOME && HOME.user.guest;
+  const wrongN = (r.items || []).filter(it => !it.right && !it.missing).length;
+  if (guest || (!r.canFix && !r.fixOf)) { p.hidden = true; return; }
+  p.hidden = false;
+  if (r.fixOf) {
+    p.innerHTML = `<h2>這是「錯題重做」小測</h2><p class="small muted">來源：${esc(r.fixOf.title)}。完成後，那次測驗就算已訂正，不用在紙本打勾。連續兩次練習都答對（題目要換），觀念才算過關。</p>`;
+    return;
+  }
+  p.innerHTML = `<div class="row between"><h2>錯題重做</h2><span class="small ${r.fix ? 'fix-ok' : 'muted'}">${r.fix ? `✓ 已訂正・重做 ${r.fix.n} 題答對 ${r.fix.right} 題` : `有 ${wrongN} 題可以訂正`}</span></div>
+    <p class="small muted">看完解析後，從錯題挑最多 3 題，加上同一觀念的新題，共 5 題小測。做完就自動記為「已訂正」。</p>
+    <button class="btn" id="retryBtn" data-src="${esc(r.aid)}">${ICON.redo}${r.fix ? '再做一次錯題重做' : '開始錯題重做（5 題）'}</button>`;
+}
+$('#rFixPanel').addEventListener('click', e => { const b = e.target.closest('#retryBtn'); if (b) startQuiz('錯題重做', false, b.dataset.src); });
 function renderReview() {
   const r = REPORT;
   $('#rvList').style.backgroundImage = wmBg((r.uid.indexOf('G-') === 0 ? '訪客試用' : r.uid + ' ' + r.name) + '　' + dshort(Date.now()));
@@ -472,7 +521,7 @@ $('#rvSeg').addEventListener('click', e => {
 function pdfOpt(r) {
   return { logo: !!(CFG && CFG.logo), note: `${r.uid && r.uid.indexOf('G-') !== 0 ? r.uid + ' ' + r.name + '｜' : ''}報告編號 ${r.aid}｜僅供本班學生個人練習，請勿轉傳或公開` };
 }
-$('#again').onclick = () => { if (REPORT.type === '模擬') startMock(REPORT.scope); else startQuiz(REPORT.scope); };
+$('#again').onclick = () => { if (REPORT.type === '模擬') startMock(REPORT.scope); else if (REPORT.type === '訂正') openReport(REPORT.fixOf.aid); else startQuiz(REPORT.scope); };
 $('#dl').onclick = async () => {
   try { await run('產生 PDF 中…', () => savePdf(reportPdfHtml(REPORT, CFG), reportFileName(REPORT), pdfOpt(REPORT))); } catch (e) { /* run 已提示 */ }
 };

@@ -341,7 +341,7 @@ function reviewItem(it, no, showSrc) {
 }
 
 function goalRow(g) {
-  return `<div class="goal"><span class="ic st-${g.status}">${ST_ICON[g.status]}</span><span class="nm">${esc(g.name)}</span><span class="badge st-${g.status}">${g.status}<span>答對 ${g.c}／${g.n} 題</span></span>${g.status !== '掌握' && g.tip ? `<span class="tip">${fmt(g.tip)}</span>` : ''}</div>`;
+  return `<div class="goal"><span class="ic st-${g.status}">${ST_ICON[g.status]}</span><span class="nm">${esc(g.name)}${g.pass ? ` <span class="pass p-${g.pass === '已過關' ? 'ok' : 'no'}">${g.pass}</span>` : ''}</span><span class="badge st-${g.status}">${g.status}<span>答對 ${g.c}／${g.n} 題</span></span>${g.status !== '掌握' && g.tip ? `<span class="tip">${fmt(g.tip)}</span>` : ''}</div>`;
 }
 
 const hbar = (label, p, cls, val) => `<div class="hb"><span class="lb" title="${esc(label)}">${esc(label)}</span><span class="tr"><i class="${cls}" style="width:${Math.max(0, Math.min(100, p))}%"></i></span><span class="v">${val === undefined ? p + '%' : val}</span></div>`;
@@ -448,7 +448,7 @@ function reportPdfHtml(r, brand, qmode) {
   const sec = (t, s) => `<div class="rp-sec">${t}<small>${s}</small></div>`;
   const box = (h, body, cls) => `<div class="box${cls ? ' ' + cls : ''}">${h ? `<h2>${h}</h2>` : ''}${body}</div>`;
   const mk = r.type === '模擬', prev = r.trend && r.trend.length > 1 ? r.trend[r.trend.length - 2].score : null;
-  const cmp = `<div class="rp-cmp"><div>和上次比　<b>${prev === null ? (mk ? '第一次寫這份' : '第一次練這一節') : r.score > prev ? `進步 ${r.score - prev} 分 ↑` : r.score < prev ? `退步 ${prev - r.score} 分 ↓` : '一樣'}</b></div>${r.cls && r.cls.n >= 3 ? `<div>全班${mk ? '這份' : '這一節'}平均　<b>${r.cls.avg} 分</b></div><div>${mk ? '寫過' : '練過'}的同學　<b>${r.cls.n} 人</b></div>` : ''}</div>`;
+  const cmp = `<div class="rp-cmp"><div>和上次比　<b>${prev === null ? (mk ? '第一次寫這份' : '第一次練這一節') : r.score > prev ? `進步 ${r.score - prev} 分 ↑` : r.score < prev ? `少 ${prev - r.score} 分 ↓` : '一樣'}</b></div>${r.cls && r.cls.n >= 3 ? `<div>全班${mk ? '這份' : '這一節'}平均　<b>${r.cls.avg} 分</b></div><div>${mk ? '寫過' : '練過'}的同學　<b>${r.cls.n} 人</b></div>` : ''}</div>`;
   const top = `<div class="box rp-top"><div class="big">${r.score}<small style="font-size:15px;color:#5E6E80">／100</small></div>
     <div><div style="font-size:16px;font-weight:700">${esc(r.title)}　<span class="level lv-${r.level}" style="font-size:13px">${r.level}</span></div><div class="small" style="color:#5E6E80">答對 ${r.nRight}／${r.n}・用時 ${mmss(r.used)}（限時 ${r.limit} 分鐘）</div></div>${cmp}${rpScale(r.score)}</div>`;
   const cls = rpClass(r);
@@ -457,7 +457,7 @@ function reportPdfHtml(r, brand, qmode) {
     `<div class="rp-row${cls ? '' : ' one'}">${box('各難度答對', rpTiers(r) + '<p class="rp-note">易題要全對，基礎才算穩。</p>')}${cls ? box(`在全班的位置 <small>${mk ? '寫過這份' : '這一節練過'}的 ${r.cls.n} 位同學，各取最近一次</small>`, cls) : ''}</div>`,
     r.secs ? box('各小節答對率', `<div class="secbars">${r.secs.map(s => hbar(`${s.no} ${s.name}`, pct(s.c, s.n), colorFor(pct(s.c, s.n)), `${s.c}／${s.n}`)).join('')}</div>`) : '',
     r.goals && r.goals.length ? box(`觀念診斷 <small>依學習目標整理${items.length ? '；完整題目和解析請上網站「我的測驗報告」→「查看」' : ''}</small>`, rpDiag(r)) : '',
-    `<div class="rp-row wide">${box('段考準備度 <small>整個段考範圍，到目前為止</small>', rpProg(r))}${box(`${esc(mk ? '模擬' + r.scope + '卷' : r.scope)} 分數走勢`, rpTrend(r))}</div>`].join('');
+    `<div class="rp-row wide">${box('段考準備度 <small>整個段考範圍，到目前為止</small>', rpProg(r))}${box(`${esc(mk ? '模擬' + r.scope + '卷' : r.type === '訂正' ? '錯題重做' : r.scope)} 分數走勢`, rpTrend(r))}</div>`].join('');
   if (!items.length) return `<div><div class="pg">${p1}</div></div>`;
   const wrong = items.map((it, i) => it.right || it.missing ? 0 : i + 1).filter(Boolean);
   const qs = qmode === '全部' ? items.map((it, i) => reviewItem(it, i + 1, r.src)).join('')
@@ -466,14 +466,32 @@ function reportPdfHtml(r, brand, qmode) {
     box(`逐題作答 <small>${esc(r.title)}・${r.n} 題${qs ? '' : '・不印題目'}</small>`, rpItems(r)),
     qs ? box(qmode === '全部' ? '題目回顧與解析' : '錯題與解析', qs) : '',
     box('下一步 <small>照順序做</small>', `<ol class="rp-next">${(r.next || []).map(s => `<li>${rich(s)}</li>`).join('')}</ol>${r.parent ? `<p class="rp-parent">給家長：${esc(r.parent)}</p>` : ''}`),
-    box('訂正紀錄 <small>看完解析、自己重算一次就打勾</small>', wrong.length ? `<div class="rp-fix">${wrong.map(n => `<span>第 ${n} 題</span>`).join('')}</div>` : '<p class="rp-p">這次全對，不用訂正。</p>'),
+    box('訂正紀錄 <small>' + (r.fix ? '已在網站完成錯題重做；紙本打勾也可以保留' : '在網站按「錯題重做」，做完自動記錄；或看完解析、自己重算一次就打勾') + '</small>',
+      (r.fix ? `<p class="rp-p"><b>✓ 已線上訂正</b>　${dt(r.fix.end, true)}・重做 ${r.fix.n} 題答對 ${r.fix.right} 題</p>` : '') +
+      (wrong.length ? `<div class="rp-fix">${wrong.map(n => `<span>第 ${n} 題</span>`).join('')}</div>` : '<p class="rp-p">這次全對，不用訂正。</p>')),
     box('老師評語', '<div class="rp-lines"><div></div><div></div></div><div class="rp-sign"><span>訂正完成日期<i></i></span><span>家長簽名<i></i></span><span>老師簽名<i></i></span></div>'),
     `<div class="rp-row about">${box('測驗說明', rpAbout(r))}<div class="box rp-qrbox"><div data-qr="${esc(reportLink(r.aid))}"></div>掃描看這一次的<br>完整題目與解析<br><small>（要先登入）</small></div></div>`].join('');
   return `<div><div class="pg">${p1}</div><div class="pb">${p2}</div></div>`;
 }
 
+/** 老師端一鍵加強卷：題目頁（留作答空白）＋解答頁（正解與解析）。d＝api tDrill 的回傳，題目與解答分成兩頁以上 */
+function drillPdfHtml(d, brand) {
+  const head = t => `<div class="ph"><div><div style="font-size:12px;color:#E8692A;font-weight:700;letter-spacing:.08em">${esc(brand.term || '')}｜${esc(d.title)}</div><h1>${esc(brand.site || SITE_NAME)}<span class="rp-doc">${t}</span></h1></div>
+    <div class="r">${brand.logo ? `<img src="${BRAND_LOGO}" alt="">` : ''}${brand.brand ? `<b style="color:#1D63B8;letter-spacing:.08em">${esc(brand.brandName)}</b><br>` : ''}製表 ${dt(Date.now(), true)}</div></div>`;
+  const box = body => `<div class="box">${body}</div>`;
+  const qs = d.items.map(it => {
+    const opts = it.type === 'mc' ? `<div class="small muted">${it.opts.map((o, j) => `<span class="op">(${LETTERS.charAt(j)}) ${fmt(o)}</span>`).join('　')}</div>` : '';
+    const aline = it.type === 'fill' ? `<div class="small muted">${it.aline && it.aline !== '{U}' ? alineText(it.aline) : '答：＿＿＿＿＿＿＿＿'}</div>` : '';
+    return box(`<div class="qhead" style="margin:0"><b>第 ${it.no} 題</b>${tierChip(it.tier, false)}<span class="small muted">${esc(it.goal)}</span></div>
+      <div class="stem" style="font-size:15px">${fmt(it.stem)}</div>${it.fig ? `<img class="fig small" src="assets/fig/${esc(it.fig)}" alt="題目附圖" crossorigin="anonymous">` : ''}${opts}${aline}`);
+  }).join('');
+  const as = d.items.map(it => box(`<div><b>第 ${it.no} 題</b>　正解 <span class="o">${rightText(it)}</span></div><div class="expl"><b>解析</b>　${it.ex ? fmt(it.ex) : '<span class="ex-pending">解析整理中。</span>'}</div>`)).join('');
+  const goals = `<p class="rp-p">加強觀念：${d.goals.map(g => '「' + esc(g.name) + '」').join('、')}（共 ${d.items.length} 題）　班級＿＿＿＿　姓名＿＿＿＿＿＿　得分＿＿＿＿</p>`;
+  return `<div><div class="pg">${head('加強卷')}${goals}${qs}</div><div class="pb">${head('加強卷・解答')}${as}</div></div>`;
+}
+
 function reportFileName(r) {
   const d = new Date(r.start);
   const who = r.uid && r.uid.indexOf('G-') !== 0 ? r.uid + r.name : '訪客';
-  return `${GRADE_NAME}${r.termShort || ''}_${r.type === '模擬' ? '模擬' + r.scope + '卷' : r.scope}_${who}_${pad2(d.getMonth() + 1)}${pad2(d.getDate())}-${pad2(d.getHours())}${pad2(d.getMinutes())}.pdf`;
+  return `${GRADE_NAME}${r.termShort || ''}_${r.type === '模擬' ? '模擬' + r.scope + '卷' : r.type === '訂正' ? '錯題重做' : r.scope}_${who}_${pad2(d.getMonth() + 1)}${pad2(d.getDate())}-${pad2(d.getHours())}${pad2(d.getMinutes())}.pdf`;
 }

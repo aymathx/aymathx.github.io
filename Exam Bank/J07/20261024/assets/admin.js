@@ -122,6 +122,44 @@ const fAtts = (list, key) => list.filter(a => FSEL[key] === '全部' || (FSEL[ke
 const secCards = (s, base) => `<div class="cards4">${D.units.map((u, i) => `<button class="card" data-tv="${base}:${s.id}:${u.no}"><span class="small muted">${u.no} ${esc(u.name)}</span>${s.cnt ? `<b>${s.cnt[i]} 次</b>` : ''}${s.best ? `<span class="small">${s.best[i] === null ? '還沒完成' : '最高 ' + s.best[i] + ' 分'}</span>` : ''}<span class="small" style="color:var(--primary);font-weight:700">${ROLE === 'teacher' ? '看觀念分析與錯題' : '看觀念分析'} ›</span></button>`).join('')}</div>`;
 
 /** 一位學生在某一小節的分析：各觀念答對率、等第分布；老師另外看得到答錯過的題目 */
+/** 總覽：這週教學建議（規則式文字）、本班錯因比例、一鍵加強卷（2026-11-16） */
+const ERR_ORDER = [['觀念', '觀念'], ['太快', '太快（不到 10 秒）'], ['格式', '答案格式'], ['正負號', '正負號'], ['沒化簡', '沒化簡'], ['沒作答', '沒作答']];
+function adviceHtml() {
+  if (ROLE !== 'teacher') return '';
+  return `<div class="panel"><h3>這週教學建議</h3><ul class="advice">${(D.advice || []).map(s => `<li>${rich(s)}</li>`).join('')}</ul>
+    <p class="small muted" style="margin-top:6px">依本班作答資料用規則自動寫成，不是 AI 判斷；數據不足時只列有資料的部分。</p></div>`;
+}
+const distHtml = m => {
+  if (!m.dist) return '';
+  const keys = ['A', 'B', 'C', 'D', '—'].filter(k => m.dist[k]), isKey = k => m.key.indexOf(k) >= 0;
+  const top = keys.filter(k => !isKey(k)).sort((a, b) => m.dist[b] - m.dist[a])[0];
+  return `<div class="dist">${keys.map(k => `<span class="${isKey(k) ? 'key' : k === top && m.dist[k] >= 2 ? 'trap' : ''}">${k}${isKey(k) ? '✓' : ''} ${m.dist[k]} 人次</span>`).join('')}</div>`;
+};
+function errHtml() {
+  if (ROLE !== 'teacher') return '';
+  const e =D.err || { total: 0, by: {} };
+  return `<div class="panel"><h3>本班錯因比例 <small class="muted">共 ${e.total} 題次，一題可有兩個原因</small></h3><div style="margin-top:8px">${e.total ? ERR_ORDER.map(([k, lab]) => `<div class="errbar"><span>${lab}</span><span class="tr"><i style="width:${pct(e.by[k] || 0, e.total)}%"></i></span><span class="mono">${pct(e.by[k] || 0, e.total)}%</span></div>`).join('') : '<p class="muted">資料還不夠。</p>'}</div>
+    <p class="small muted" style="margin-top:6px">「觀念」＝不是沒作答、太快、格式、正負號、沒化簡的錯。</p></div>`;
+}
+function drillHtml() {
+  if (ROLE !== 'teacher') return '';
+  const weak = (D.overview.weakest || []).map(w => w.name);
+  return `<div class="panel" style="display:grid;gap:8px;align-content:start"><h3>一鍵加強卷</h3>
+    <p class="small muted">依全班最弱的觀念${weak.length ? '（' + weak.map(esc).join('、') + '）' : ''}，從練習題庫組一份題目＋解答分開的 PDF。</p>
+    <div class="row" style="flex-wrap:wrap"><select id="drillN" aria-label="題數"><option>10</option><option selected>12</option><option>15</option></select><span class="small">題</span><button class="btn sm" id="drillAuto">用全班最弱的 3 個觀念</button></div>
+    <details><summary class="small" style="cursor:pointer">自己選觀念</summary><div style="display:grid;gap:4px;margin:8px 0;max-height:220px;overflow:auto">${(D.goals || []).map(g => `<label class="small"><input type="checkbox" data-drill-goal="${esc(g.code)}"> ${esc(g.sec)} ${esc(g.name)}</label>`).join('')}</div><button class="btn ghost sm" id="drillPick">用勾選的觀念組卷</button></details></div>`;
+}
+async function drillGo(codes) {
+  try {
+    const d = await run('組加強卷中…', () => api('tDrill', { token: TOKEN, goals: codes, n: Number($('#drillN').value) || 12 }));
+    await run('產生 PDF 中…', () => savePdf(drillPdfHtml(d, D.config || {}), `${filePre()}_加強卷.pdf`, pdfOpt('')));
+  } catch (e) { /* run 已提示 */ }
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('#drillAuto')) return drillGo([]);
+  if (e.target.closest('#drillPick')) { const c = $$('[data-drill-goal]').filter(x => x.checked).map(x => x.dataset.drillGoal); return c.length ? drillGo(c) : toast('先勾選要加強的觀念'); }
+});
+
 function secPage(id, no, base) {
   const s = D.students.find(x => x.id === id);
   if (!s) return '<p class="muted">找不到這位學生。</p>';
@@ -151,7 +189,7 @@ function groupBody(s, kind) {
     </div>
     ${kind === 'mock' ? `<div class="panel"><h3>各小節答對率</h3><div style="margin-top:8px">${(s.secs || []).map(x => hbar(`${x.no} ${x.name}`, pct(x.c, x.n), colorFor(pct(x.c, x.n)), `${pct(x.c, x.n)}%`)).join('') || '<p class="muted">資料還不夠。</p>'}</div></div>` : ''}
     <div class="cols">
-      <div class="panel"><h3>最常錯的題目</h3><div style="margin-top:8px;display:grid;gap:10px">${s.miss.map(m => `<div>${hbar(`${m.qid}（${m.src}）`, pct(m.c, m.n), colorFor(pct(m.c, m.n)), `${m.c}／${m.n}`)}<div class="small muted">${fmt(m.stem)}…</div></div>`).join('') || '<p class="muted">資料還不夠（每題至少 2 人次才列）。</p>'}</div></div>
+      <div class="panel"><h3>最常錯的題目</h3><div style="margin-top:8px;display:grid;gap:10px">${s.miss.map(m => `<div>${hbar(`${m.qid}（${m.src}）`, pct(m.c, m.n), colorFor(pct(m.c, m.n)), `${m.c}／${m.n}`)}<div class="small muted">${fmt(m.stem)}…</div>${distHtml(m)}</div>`).join('') || '<p class="muted">資料還不夠（每題至少 2 人次才列）。</p>'}</div></div>
       <div class="panel"><h3>需要關心的學生</h3><p class="small muted">最近一次${kind === 'mock' ? '這份模擬卷' : '這節練習'}不到 60 分</p><div class="weak" style="margin-top:10px">${s.watch.map(w => `<button class="chip t-中" style="border:0" data-tv="student:${w.id}">${esc(w.name)}（${w.score} 分）</button>`).join('') || '<span class="muted">目前沒有</span>'}</div></div>
     </div>`;
 }
@@ -163,7 +201,7 @@ const VIEWS = {
     const o = D.overview;
     const recent = D.attempts.slice().sort((a, b) => b.start - a.start).slice(0, 8);
     const nNew = D.students.filter(s => s.isNew).length;
-    return `${nNew ? `<div class="panel row between"><span><b>${nNew}</b> 位新同學第一次登入，已自動加入名單。</span><button class="btn ghost sm" data-tv="students">到學生頁確認</button></div>` : ''}<div class="kpis">
+    return `${nNew ? `<div class="panel row between"><span><b>${nNew}</b> 位新同學第一次登入，已自動加入名單。</span><button class="btn ghost sm" data-tv="students">到學生頁確認</button></div>` : ''}${adviceHtml()}<div class="kpis">
       <div class="kpi"><b>${o.weekTries}</b><span>近 7 天測驗人次</span></div>
       <div class="kpi"><b>${o.avg === null ? '—' : o.avg}</b><span>小節練習平均分數</span></div>
       <div class="kpi"><b>${o.weekTimeouts}</b><span>近 7 天逾時次數</span></div>
@@ -172,6 +210,7 @@ const VIEWS = {
       <div class="panel"><h3>各小節平均分數</h3><div style="margin-top:8px">${D.unitStats.map(s => hbar(`${s.no} ${s.name}`, s.avg || 0, colorFor(s.avg || 0), s.avg === null ? '—' : s.avg + ' 分')).join('')}</div></div>
       <div class="panel"><h3>全班最弱的 3 個觀念</h3><div style="margin-top:8px">${o.weakest.map(w => hbar(`${w.name}（${w.sec}）`, pct(w.c, w.n), colorFor(pct(w.c, w.n)))).join('') || '<p class="muted">資料還不夠。</p>'}</div></div>
     </div>
+    <div class="cols">${errHtml()}${drillHtml()}</div>
     <div class="panel" style="display:grid;gap:4px"><h3>最近的測驗</h3>${recent.length ? `<div class="hist">${recent.map(a => `<div class="h"><div><b>${esc(a.name)}</b> <span class="mono small muted">${esc(a.uid)}</span>　${esc(scopeLabel(a))}　<span class="mono small muted">${dt(a.start)}</span></div><span class="small ${a.status === '逾時' ? 'x' : ''}">${a.status === '逾時' ? '逾時' : a.score + ' 分'}</span></div>`).join('')}</div>` : '<p class="muted small">還沒有學生作答。</p>'}</div>`;
   },
 
@@ -281,6 +320,7 @@ const VIEWS = {
         <td><div class="row" style="gap:8px;flex-wrap:nowrap"><button class="sw" role="switch" aria-checked="${on}" data-term-open="${t.code}" aria-label="開放${esc(t.name)}"${t.count && can ? '' : ' disabled'}></button><span class="state${on ? '' : ' muted'}"${on ? ' style="color:var(--ok)"' : ''}>${on ? '開放中' : t.count && can ? '關閉中' : '沒有題庫'}</span></div></td>
         <td class="mono">${esc(t.range) || '—'}</td>
         <td class="mono">${t.count ? t.count + ' 題' : '—'}</td>
+        <td><input type="date" data-term-exam="${t.code}" value="${esc(t.exam || '')}" aria-label="${esc(t.name)}段考日期"></td>
         <td><div class="termops">${can ? `<button class="btn ghost sm" data-term-go="${t.code}">查看與匯入題庫</button>` : `<button class="btn ghost sm" data-term-new="${t.code}">建立試算表</button>`}
           ${on && t !== def ? `<button class="btn ghost sm" data-term-def="${t.code}">設成預設</button>` : ''}
           ${t.book ? `<a class="btn ghost sm" href="https://docs.google.com/spreadsheets/d/${esc(t.book)}" target="_blank" rel="noopener">開試算表</a>` : ''}</div></td></tr>`;
@@ -289,7 +329,8 @@ const VIEWS = {
       <p class="state" style="${open.length ? 'color:var(--ok)' : 'color:var(--warn)'}">${open.length ? `目前開放 ${open.length} 個：${open.map(t => esc(t.short)).join('、')}` : '目前全部關閉：學生登入後看不到任何段考'}</p>
       <p class="small muted">按開關馬上生效，可以全部開放，也可以全部關閉。學生只看得到開放的段考；關閉的段考從學生畫面消失，正在作答的人還可以交卷，紀錄都會留著，老師端和主任端照樣看得到資料。</p>
       <p class="small muted">每一段的題庫和作答紀錄各存一本試算表，名單和設定共用。新的一段：建立試算表、匯入題庫、再打開開關。標 ★ 的是學生登入後預設看到的那一段。</p>
-      <div class="tbl"><table><thead><tr><th>段考</th><th>開放</th><th>範圍</th><th>題庫</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+      <div class="tbl"><table><thead><tr><th>段考</th><th>開放</th><th>範圍</th><th>題庫</th><th>段考日期</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="small muted">填了段考日期，學生首頁和報告的「下一步」會顯示「距離段考還有 N 天」；段考過後自動不再顯示。留空＝不顯示。</p></div>`;
   },
 
   bank: () => {
@@ -553,6 +594,15 @@ async function termOpen(code, on) {
     toast(`已${on ? '開放' : '關閉'}${D.termsAdmin.find(t => t.code === code).name}，${n ? `目前開放 ${n} 個` : '目前全部關閉'}`);
   } catch (e) { /* run 已提示 */ }
 }
+document.addEventListener('change', async e => {
+  const x = e.target.closest('[data-term-exam]');
+  if (!x) return;
+  try {
+    D.termsAdmin = (await run('儲存中…', () => api('tTerm', { token: TOKEN, code: x.dataset.termExam, patch: { exam: x.value } }))).terms;
+    toast(x.value ? '已設定段考日期' : '已清除段考日期');
+  } catch (err) { /* run 已提示 */ }
+  render();
+});
 document.addEventListener('click', e => {
   const o = e.target.closest('[data-term-open]');
   if (o) return termOpen(o.dataset.termOpen, o.getAttribute('aria-checked') !== 'true');
