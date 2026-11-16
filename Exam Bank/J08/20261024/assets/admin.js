@@ -132,7 +132,7 @@ function adviceHtml() {
 const distHtml = m => {
   if (!m.dist) return '';
   const keys = ['A', 'B', 'C', 'D', '—'].filter(k => m.dist[k]), isKey = k => m.key.indexOf(k) >= 0;
-  const top = keys.filter(k => !isKey(k)).sort((a, b) => m.dist[b] - m.dist[a])[0];
+  const top = keys.filter(k => !isKey(k) && k !== '—').sort((a, b) => m.dist[b] - m.dist[a])[0];   // 沒作答（—）不算「掉進的陷阱」
   return `<div class="dist">${keys.map(k => `<span class="${isKey(k) ? 'key' : k === top && m.dist[k] >= 2 ? 'trap' : ''}">${k}${isKey(k) ? '✓' : ''} ${m.dist[k]} 人次</span>`).join('')}</div>`;
 };
 function errHtml() {
